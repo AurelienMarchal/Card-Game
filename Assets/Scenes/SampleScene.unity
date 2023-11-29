@@ -516,6 +516,7 @@ MonoBehaviour:
   boardWidth: 8
   healthUIDisplay: {fileID: 1630216492}
   movementUIDisplay: {fileID: 481878610}
+  playerTextMesh: {fileID: 822436858}
 --- !u!4 &229934141
 Transform:
   m_ObjectHideFlags: 0
