@@ -59,7 +59,7 @@ public class Entity
 
         var distance = tile.Distance(currentTile);
 
-        if(!player.TryToUseMouvement(distance)){
+        if(!player.TryToUseMovement(distance)){
             return false;
         }
         
@@ -93,7 +93,7 @@ public class Entity
             return false;
         }
 
-        if(!player.TryToUseMouvement(atk)){
+        if(!player.TryToUseMovement(atk)){
             return false;
         }
 

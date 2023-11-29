@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,6 +37,15 @@ public class GameManager : MonoBehaviour
 
     TileManager currentTileSelected;
 
+    [SerializeField]
+    HealthUIDisplay healthUIDisplay;
+    
+    [SerializeField]
+    MovementUIDisplay movementUIDisplay;
+
+    [SerializeField]
+    TextMeshProUGUI playerTextMesh;
+
     
     // Start is called before the first frame update
     void Start()
@@ -66,7 +76,25 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(currentEntitySelected != null){
+            healthUIDisplay.health = currentEntitySelected.entity.health;
+        }
+
+        else if(healthUIDisplay.health!=null){
+            healthUIDisplay.health = null;
+        }
+
+        if(game.currentPlayer != null){
+            movementUIDisplay.player = game.currentPlayer;
+            playerTextMesh.text = game.currentPlayer.ToString();
+        }
         
+        else{
+            playerTextMesh.text = "";
+            if(movementUIDisplay.player!= null){
+                movementUIDisplay.player = null;
+            }
+        }
     }
 
     void OnEntitySelected(EntityManager entityManager){

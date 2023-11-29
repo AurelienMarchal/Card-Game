@@ -12,12 +12,12 @@ public class Player{
         private set;
     }
 
-    public int mouvementLeft{
+    public int movementLeft{
         get;
         private set;
     }
 
-    public int maxMouvement{
+    public int maxMovement{
         get;
         private set;
     }
@@ -27,8 +27,8 @@ public class Player{
         playerColor = color;
     }
 
-    private void ResetMouvement(){
-        mouvementLeft = maxMouvement;
+    private void ResetMovement(){
+        movementLeft = maxMovement;
     }
 
     public virtual void OnStartGame(){
@@ -39,8 +39,8 @@ public class Player{
     }
 
     public virtual void OnStartPlayerTurn(){
-        maxMouvement ++;
-        ResetMouvement();
+        maxMovement ++;
+        ResetMovement();
     }
 
     public virtual void OnEndTurn(){
@@ -51,15 +51,15 @@ public class Player{
         
     }
 
-    public bool TryToUseMouvement(int mouvement){
-        if(mouvement > mouvementLeft){
-            Debug.Log($"{this} cannot use {mouvement} mouvement. {mouvementLeft} mouvement left");
+    public bool TryToUseMovement(int movement){
+        if(movement > movementLeft){
+            Debug.Log($"{this} cannot use {movement} movement. {movementLeft} movement left");
             return false;
         }
         
-        mouvementLeft -= mouvement;
+        movementLeft -= movement;
 
-        Debug.Log($"{this} using {mouvement} mouvement. {mouvementLeft} mouvement left");
+        Debug.Log($"{this} using {movement} movement. {movementLeft} movement left");
 
         return true;
     }
