@@ -99,7 +99,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f880252973d52144397d592f615439bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileRenderer: {fileID: 8485997298062769732}
+  standardTileMat: {fileID: 2100000, guid: 5be4574eab12e0947916522788510801, type: 2}
+  natureTileMat: {fileID: 2100000, guid: 55285b96a290f7345b65e23d55757cac, type: 2}
+  cursedTileMat: {fileID: 2100000, guid: 9076355a050b31d43a4d62650a64ebca, type: 2}
   selectedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  clickedEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7085895210408258742

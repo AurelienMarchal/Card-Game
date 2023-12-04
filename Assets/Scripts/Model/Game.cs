@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Game{
+public sealed class Game{
 
     public Board board{
         get;
@@ -24,11 +24,26 @@ public class Game{
         private set;
     }
 
-    public Game(int numberOfPlayer, int boardHeight, int boardWidth){
+    private Game(){
+        
+    }
+
+    static Game currentGame_;
+
+    public static Game currentGame{
+        get{
+            if(currentGame_ == null){
+                currentGame_ = new Game();
+            }
+            return currentGame_;
+        }
+    }
+
+    public void SetUpGame(int numberOfPlayer, int boardHeight, int boardWidth){
         board = new Board(boardHeight, boardWidth);
-        players = new Player[numberOfPlayer];
+        players = new Player[2];
         for(var i = 0; i < numberOfPlayer; i++){
-            players[i] = new Player(i, i);
+            players[i] = new Player(i + 1, i);
         }
     }
 
@@ -41,6 +56,7 @@ public class Game{
             foreach(Entity entity in board.entities){
                 if(entity.player == player){
                     entity.OnStartGame();
+                    OnEntityMoving(entity);
                 }
             }
         }
@@ -94,8 +110,23 @@ public class Game{
         }
     }
 
+    public void OnEntityMoving(Entity movingEntity){
+        foreach (var entity_ in board.entities){
+            foreach (var effect in entity_.effects){
+                effect.OnEntityMoving(movingEntity);
+            }
+        }
+
+        foreach (var tile in board.tiles){
+            foreach (var effect in tile.effects){
+                effect.OnEntityMoving(movingEntity);
+            }
+        }
+    }
+
+
     private bool GoToNextPlayer(){
-        var nextPlayerIndex = currentPlayer.playerNum + 1;
+        var nextPlayerIndex = currentPlayer.playerNum;
         if(nextPlayerIndex >= players.Length){
             currentPlayer = players[0];
             return true;

@@ -36,6 +36,10 @@ public class BoardManager : MonoBehaviour
     public EntityManagerEvent entitySelectedEvent = new EntityManagerEvent();
 
     public TileManagerEvent tileSelectedEvent = new TileManagerEvent();
+
+    public EntityManagerEvent entityClickedEvent = new EntityManagerEvent();
+
+    public TileManagerEvent tileClickedEvent = new TileManagerEvent();
     
     // Start is called before the first frame update
     void Start(){
@@ -52,6 +56,14 @@ public class BoardManager : MonoBehaviour
 
     void OnEntitySelected(EntityManager entityManager){
         entitySelectedEvent.Invoke(entityManager);
+    }
+
+    void OnTileClicked(TileManager tileManager){
+        tileClickedEvent.Invoke(tileManager);
+    }
+
+    void OnEntityClicked(EntityManager entityManager){
+        entityClickedEvent.Invoke(entityManager);
     }
 
 
@@ -83,6 +95,7 @@ public class BoardManager : MonoBehaviour
         var tileInstance = Instantiate(tilePrefab, pos, Quaternion.identity, transform);
         var tileManager = tileInstance.GetComponent<TileManager>();
         tileManager.selectedEvent.AddListener(OnTileSelected);
+        tileManager.clickedEvent.AddListener(OnTileClicked);
         return tileManager;
     }
 
@@ -96,6 +109,7 @@ public class BoardManager : MonoBehaviour
 
         entityManager.entity = entity;
         entityManager.selectedEvent.AddListener(OnEntitySelected);
+        entityManager.clickedEvent.AddListener(OnEntityClicked);
         AddEntity(entityManager);
     }
 

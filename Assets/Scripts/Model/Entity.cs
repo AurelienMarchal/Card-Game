@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Entity
@@ -38,6 +39,8 @@ public class Entity
         protected set;
     }
 
+    public List<Effect> effects;
+
     public Entity(string name, Tile startingTile, Health startingHealth, Player player, int starttingAtk = 0, Direction startingDirection = Direction.North){
         this.name = name;
         currentTile = startingTile;
@@ -45,6 +48,7 @@ public class Entity
         atk = starttingAtk;
         direction = startingDirection;
         this.player = player;
+        effects = new List<Effect>();
     }
 
     public virtual bool TryToMove(Tile tile){
@@ -58,6 +62,10 @@ public class Entity
         }
 
         var distance = tile.Distance(currentTile);
+
+        if(distance > 1){
+            return false;
+        }
 
         if(!player.TryToUseMovement(distance)){
             return false;
@@ -123,9 +131,6 @@ public class Entity
     public virtual void OnEndPlayerTurn(){
         
     }
-
-    
-
 
     public override string ToString()
     {

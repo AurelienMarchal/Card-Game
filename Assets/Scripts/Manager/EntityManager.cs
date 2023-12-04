@@ -34,7 +34,7 @@ public class EntityManager : MonoBehaviour
         get{
             return selected_;
         }
-        private set{
+        set{
             selected_ = value;
 
             if(selected){
@@ -66,6 +66,8 @@ public class EntityManager : MonoBehaviour
     }
 
     public EntityManagerEvent selectedEvent = new EntityManagerEvent();
+
+    public EntityManagerEvent clickedEvent = new EntityManagerEvent();
     
     // Start is called before the first frame update
     void Start()
@@ -76,10 +78,9 @@ public class EntityManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         if(entityNameCanvasInstance != null){
-            entityNameCanvasInstance.SetActive(hovered);
+            entityNameCanvasInstance.SetActive(hovered || selected);
             if(entity != null){
                 entityNameCanvasInstance.GetComponentInChildren<TextMeshProUGUI>().text = entity.name;
             }
@@ -87,8 +88,7 @@ public class EntityManager : MonoBehaviour
     }
 
     void OnMouseDown(){
-        UnselectEveryEntity();
-        selected = hovered;
+        clickedEvent.Invoke(this);
     }
 
     
@@ -100,7 +100,7 @@ public class EntityManager : MonoBehaviour
         hovered = false;
     }
 
-    void UnselectEveryEntity(){
+    public static void UnselectEveryEntity(){
         foreach(GameObject entity in GameObject.FindGameObjectsWithTag("Entity")){
             var entityManager = entity.GetComponent<EntityManager>();
             if(entityManager != null){

@@ -31,7 +31,7 @@ public class TileManager : MonoBehaviour
         get{
             return selected_;
         }
-        private set{
+        set{
             selected_ = value;
 
             if(selected){
@@ -62,7 +62,21 @@ public class TileManager : MonoBehaviour
         }
     }
 
+    [SerializeField]
+    Renderer tileRenderer; 
+
+    [SerializeField]
+    Material standardTileMat;
+
+    [SerializeField]
+    Material natureTileMat;
+
+    [SerializeField]
+    Material cursedTileMat;
+
     public TileManagerEvent selectedEvent = new TileManagerEvent();
+
+    public TileManagerEvent clickedEvent = new TileManagerEvent();
     
     // Start is called before the first frame update
     void Start()
@@ -72,14 +86,12 @@ public class TileManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    void Update(){
+        UpdateAccordingToTile();
     }
 
     void OnMouseDown(){
-        UnselectEveryTile();
-        selected = hovered;
+        clickedEvent.Invoke(this);
     }
 
     
@@ -92,7 +104,7 @@ public class TileManager : MonoBehaviour
     }
 
 
-    void UnselectEveryTile(){
+    public static void UnselectEveryTile(){
         foreach(GameObject tile in GameObject.FindGameObjectsWithTag("Tile")){
             var tileManager = tile.GetComponent<TileManager>();
             if(tileManager != null){
@@ -101,8 +113,16 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    
     void UpdateAccordingToTile(){
+        Material[] matArray = tileRenderer.materials;
+                
+        switch (tile.tileType){
+            case TileType.Standard: matArray[1] = standardTileMat ; break;
+            case TileType.Nature: matArray[1] = natureTileMat; break;
+            case TileType.Cursed: matArray[1] = cursedTileMat; break;
+            default: matArray[1] = standardTileMat; break;
+        }
 
+        tileRenderer.materials = matArray;
     }
 }

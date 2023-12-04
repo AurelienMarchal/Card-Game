@@ -1,23 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    private Game game_;
-
-    public Game game{
-        get{
-            return game_;
-        }
-
-        set{
-            game_ = value;
-            UpdateAccordingToGame();
-        }
-    }
-    
 
     [SerializeField]
     BoardManager boardManager;
@@ -46,36 +34,68 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI playerTextMesh;
 
+    bool entityWasClickedThisFrame;
+
+    bool tileWasClickedThisFrame;
+
     
     // Start is called before the first frame update
     void Start()
     {
-        game = new Game(2, boardHeight, boardWidth);
+        
+        Game.currentGame.SetUpGame(2, boardHeight, boardWidth);
+        boardManager.board = Game.currentGame.board;
 
         currentTileSelected = null;
         currentEntitySelected = null;
 
+        entityWasClickedThisFrame = false;
+        tileWasClickedThisFrame = false;
+
         boardManager.entitySelectedEvent.AddListener(OnEntitySelected);
         boardManager.tileSelectedEvent.AddListener(OnTileSelected);
+        boardManager.entityClickedEvent.AddListener(OnEntityClicked);
+        boardManager.tileClickedEvent.AddListener(OnTileClicked);
 
         var health = new Health(new Heart[]{new Heart(HeartType.Red, HeartType.Red), new Heart(HeartType.Red, HeartType.Red), new Heart(HeartType.Red, HeartType.Red)});
         var startingTile = boardManager.board.GetTileAt(4, 4);
         var direction = Direction.East;
+        var hero1 = new Hero("Hero 1", startingTile, health, Game.currentGame.players[0], 1, direction);
+        hero1.effects.Add(new TestEffect(hero1, TileType.Nature));
 
-        boardManager.SpawnEntity(heroPrefab, new Hero("Hero 1", startingTile, health, game.players[0], 1, direction));
+        boardManager.SpawnEntity(heroPrefab, hero1);
 
         var health2 = new Health(new Heart[]{new Heart(HeartType.Red, HeartType.Red), new Heart(HeartType.Red, HeartType.Red), new Heart(HeartType.Red, HeartType.Red)});
         var startingTile2 = boardManager.board.GetTileAt(4, 5);
         var direction2 = Direction.West;
+        var hero2 = new Hero("Hero 2", startingTile2, health2, Game.currentGame.players[1], 1, direction2);
+        hero2.effects.Add(new TestEffect(hero2, TileType.Cursed));
 
-        boardManager.SpawnEntity(heroPrefab, new Hero("Hero 2", startingTile2, health2, game.players[1], 1, direction2));
+        boardManager.SpawnEntity(heroPrefab, hero2);
 
-        game.StartGame();
+        Game.currentGame.StartGame();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if(Mouse.current.leftButton.wasPressedThisFrame){
+            if(!entityWasClickedThisFrame && !tileWasClickedThisFrame){
+                EntityManager.UnselectEveryEntity();
+                TileManager.UnselectEveryTile();
+                currentEntitySelected = null;
+                currentTileSelected = null;
+            }
+        }
+
+        if (Mouse.current.rightButton.wasPressedThisFrame){
+            EntityManager.UnselectEveryEntity();
+            TileManager.UnselectEveryTile();
+            currentEntitySelected = null;
+            currentTileSelected = null;
+        }
+
         if(currentEntitySelected != null){
             healthUIDisplay.health = currentEntitySelected.entity.health;
         }
@@ -84,25 +104,24 @@ public class GameManager : MonoBehaviour
             healthUIDisplay.health = null;
         }
 
-        if(game.currentPlayer != null){
-            movementUIDisplay.player = game.currentPlayer;
-            playerTextMesh.text = game.currentPlayer.ToString();
+        if(Game.currentGame.currentPlayer != null){
+            movementUIDisplay.player = Game.currentGame.currentPlayer;
+            playerTextMesh.text = Game.currentGame.currentPlayer.ToString();
         }
-        
+
         else{
             playerTextMesh.text = "";
             if(movementUIDisplay.player!= null){
                 movementUIDisplay.player = null;
             }
         }
+
+
+        entityWasClickedThisFrame = false;
+        tileWasClickedThisFrame = false;
     }
 
     void OnEntitySelected(EntityManager entityManager){
-        if(currentEntitySelected != null){
-            if(currentEntitySelected.entity.player == game.currentPlayer){
-                currentEntitySelected.entity.TryToAttack(entityManager.entity);
-            }
-        }
 
         currentEntitySelected = entityManager;
     }
@@ -112,21 +131,43 @@ public class GameManager : MonoBehaviour
         if(currentEntitySelected == null){
             return;
         }
+    }
 
-        if(currentEntitySelected.entity.player != game.currentPlayer){
-            return;
+    void OnEntityClicked(EntityManager entityManager){
+        entityWasClickedThisFrame = true;
+
+        if(currentEntitySelected == null){
+            EntityManager.UnselectEveryEntity();
+            TileManager.UnselectEveryTile();
+            entityManager.selected = entityManager.hovered;
         }
-
-        currentEntitySelected.TryToMove(currentTileSelected);
+        else{
+            if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
+                //currentEntitySelected.entity.TryToAttack(entityManager.entity);
+            }
+        }
     }
 
-    void UpdateAccordingToGame(){
+    void OnTileClicked(TileManager tileManager){
+        tileWasClickedThisFrame = true;
 
-        boardManager.board = game.board;
-
+        if(currentEntitySelected == null){
+            EntityManager.UnselectEveryEntity();
+            TileManager.UnselectEveryTile();
+            tileManager.selected = tileManager.hovered;
+        }
+        else{
+            if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
+                var didMove = currentEntitySelected.TryToMove(tileManager);
+                if(didMove){
+                    Game.currentGame.OnEntityMoving(currentEntitySelected.entity);
+                }
+            }
+        }
     }
+
 
     public void OnEndTurnPressed(){
-        game.EndPlayerTurn();
+        Game.currentGame.EndPlayerTurn();
     }
 }
