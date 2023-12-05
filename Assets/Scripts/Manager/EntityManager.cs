@@ -126,7 +126,7 @@ public class EntityManager : MonoBehaviour
 
         var result = entity.TryToMove(tileManager.tile);
         if(result){
-            UpdateAccordingToEntity();
+            //UpdateAccordingToEntity();
         }
 
         return result;

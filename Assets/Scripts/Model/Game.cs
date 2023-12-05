@@ -4,6 +4,8 @@ using UnityEngine;
 
 public sealed class Game{
 
+    public const int maxPileCount = 100;
+
     public Board board{
         get;
         private set;
@@ -24,6 +26,10 @@ public sealed class Game{
         private set;
     }
 
+    private List<Action> actionPile;
+
+    private List<Action> actionPerformedPile;
+
     private Game(){
         
     }
@@ -42,6 +48,8 @@ public sealed class Game{
     public void SetUpGame(int numberOfPlayer, int boardHeight, int boardWidth){
         board = new Board(boardHeight, boardWidth);
         players = new Player[2];
+        actionPile = new List<Action>();
+        actionPerformedPile = actionPile;
         for(var i = 0; i < numberOfPlayer; i++){
             players[i] = new Player(i + 1, i);
         }
@@ -56,7 +64,7 @@ public sealed class Game{
             foreach(Entity entity in board.entities){
                 if(entity.player == player){
                     entity.OnStartGame();
-                    OnEntityMoving(entity);
+                    //OnEntityMoving(entity);
                 }
             }
         }
@@ -110,20 +118,6 @@ public sealed class Game{
         }
     }
 
-    public void OnEntityMoving(Entity movingEntity){
-        foreach (var entity_ in board.entities){
-            foreach (var effect in entity_.effects){
-                effect.OnEntityMoving(movingEntity);
-            }
-        }
-
-        foreach (var tile in board.tiles){
-            foreach (var effect in tile.effects){
-                effect.OnEntityMoving(movingEntity);
-            }
-        }
-    }
-
 
     private bool GoToNextPlayer(){
         var nextPlayerIndex = currentPlayer.playerNum;
@@ -133,6 +127,71 @@ public sealed class Game{
         }
         currentPlayer = players[nextPlayerIndex];
         return false;
+    }
+
+    
+
+    public void PileAction(Action action, bool depile = true){
+        if(actionPile.Count < maxPileCount){
+            actionPile.Add(action);
+            Debug.Log($"Piling {action}");
+        }
+        else{
+            Debug.Log($"Reached pile action maximum");
+        }
+
+        if(depile){
+            DepileActionPile();
+        }
+    }
+
+    private void DepileActionPile(){
+        var c = 0;
+
+        while(actionPile.Count > 0 && c < 1000){
+            var action = actionPile[^1];
+
+            CheckTriggers(action);
+            
+
+            var newAction = actionPile[^1];
+
+            if(action == newAction){
+                action.Perform();
+                actionPerformedPile.Add(action);
+                actionPile.Remove(action);
+                CheckTriggers(action);
+            }
+            else{
+                c ++;
+            }
+        }
+
+        Debug.Log(actionPerformedPile);
+    }
+
+    void CheckTriggers(Action action){
+
+        foreach(Player player in players){
+
+            }
+
+            foreach(Entity entity in board.entities){
+                foreach(Effect effect in entity.effects){
+                    if(effect.Trigger(action)){
+                        effect.Activate(false);
+                    }
+                }
+            }
+
+            foreach(Tile tile in board.tiles){
+                foreach(Effect effect in tile.effects){
+                    if(effect.Trigger(action)){
+                        effect.Activate(false);
+                    }
+                }
+            }
+
     }
 
     

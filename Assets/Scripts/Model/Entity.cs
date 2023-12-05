@@ -39,6 +39,8 @@ public class Entity
         protected set;
     }
 
+    public const Entity noEntity = null;
+
     public List<Effect> effects;
 
     public Entity(string name, Tile startingTile, Health startingHealth, Player player, int starttingAtk = 0, Direction startingDirection = Direction.North){
@@ -51,7 +53,7 @@ public class Entity
         effects = new List<Effect>();
     }
 
-    public virtual bool TryToMove(Tile tile){
+    public virtual bool CanMove(Tile tile){
         if(tile == currentTile){
             return false;
         }
@@ -67,15 +69,23 @@ public class Entity
             return false;
         }
 
-        if(!player.TryToUseMovement(distance)){
-            return false;
+        return true;
+    }
+
+    public virtual bool TryToMove(Tile tile){
+
+        var result = CanMove(tile);
+        if(result){
+            Game.currentGame.PileAction(new EntityMoveAction(this, currentTile, tile));
         }
-        
+
+        return result;
+
+    }
+
+    public virtual void Move(Tile tile){
         direction = DirectionsExtensions.FromCoordinateDifference(tile.gridX - currentTile.gridX, tile.gridY - currentTile.gridY);
         currentTile = tile;
-
-        
-        return true;
     }
 
 

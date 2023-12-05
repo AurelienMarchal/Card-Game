@@ -22,6 +22,8 @@ public class Tile {
         set;
     }
 
+    public const Tile noTile = null;
+
     public List<Effect> effects;
 
     public Tile(int gridX, int gridY, int num, TileType tileType = TileType.Standard){
@@ -36,8 +38,8 @@ public class Tile {
         return Math.Abs(gridX - tile.gridX) + Math.Abs(gridY - tile.gridY);
     }
 
-    
-
 }
+
+
 
 

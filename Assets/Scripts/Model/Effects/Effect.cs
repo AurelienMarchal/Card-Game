@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,31 +13,15 @@ public class Effect{
         this.player = player;
     }
 
-    public virtual void OnActivate(){
-
+    public virtual bool CanBeActivated(){
+        return false;
     }
 
-    public virtual void OnStartGame(){
-        
+    public virtual void Activate(bool depile){
+        Game.currentGame.PileAction(new EffectActivatedAction(this), depile);
     }
 
-    public virtual void OnStartTurn(){
+    public virtual bool Trigger(Action action){
+        return false;
     }
-
-    public virtual void OnStartPlayerTurn(Player player){
-
-    }
-
-    public virtual void OnEndTurn(){
-        
-    }
-
-    public virtual void OnEndPlayerTurn(Player player){
-        
-    }
-
-    public virtual void OnEntityMoving(Entity entity){
-
-    }
-
 }

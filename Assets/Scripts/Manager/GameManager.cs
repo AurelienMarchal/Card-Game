@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
         var startingTile = boardManager.board.GetTileAt(4, 4);
         var direction = Direction.East;
         var hero1 = new Hero("Hero 1", startingTile, health, Game.currentGame.players[0], 1, direction);
-        hero1.effects.Add(new TestEffect(hero1, TileType.Nature));
+        hero1.effects.Add(new MoveToChangeTileTypeEffect(hero1, TileType.Nature));
 
         boardManager.SpawnEntity(heroPrefab, hero1);
 
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
         var startingTile2 = boardManager.board.GetTileAt(4, 5);
         var direction2 = Direction.West;
         var hero2 = new Hero("Hero 2", startingTile2, health2, Game.currentGame.players[1], 1, direction2);
-        hero2.effects.Add(new TestEffect(hero2, TileType.Cursed));
+        hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.Cursed));
 
         boardManager.SpawnEntity(heroPrefab, hero2);
 
@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
             if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
                 var didMove = currentEntitySelected.TryToMove(tileManager);
                 if(didMove){
-                    Game.currentGame.OnEntityMoving(currentEntitySelected.entity);
+                    
                 }
             }
         }
