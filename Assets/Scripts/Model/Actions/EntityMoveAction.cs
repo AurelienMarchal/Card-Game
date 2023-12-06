@@ -5,18 +5,23 @@ using UnityEngine;
 public class EntityMoveAction : EntityAction
 {
     
-    public Tile startTile;
+    public Tile startTile{
+        get;
+        protected set;
+    }
 
-    public Tile endTile;
+    public Tile endTile{
+        get;
+        protected set;
+    }
 
-    public EntityMoveAction(Entity entity, Tile startTile, Tile endTile) : base(entity)
+    public EntityMoveAction(Entity entity, Tile startTile, Tile endTile,  Action requiredAction = null) : base(entity, requiredAction)
     {
         this.startTile = startTile;
         this.endTile = endTile;
     }
 
-    public override void Perform(){
-        base.Perform();
-        entity.Move(endTile);
+    protected override bool Perform(){
+        return entity.TryToMove(endTile);
     }
 }

@@ -123,13 +123,14 @@ public class EntityManager : MonoBehaviour
     }
 
     public bool TryToMove(TileManager tileManager){
-
-        var result = entity.TryToMove(tileManager.tile);
-        if(result){
-            //UpdateAccordingToEntity();
+        
+        entity.player.TryToCreateUseMovementAction(tileManager.tile.Distance(entity.currentTile), out UseMovementAction useMovementAction);
+        entity.TryToCreateEntityMoveAction(tileManager.tile, useMovementAction, out EntityMoveAction entityMoveAction);
+        if(entityMoveAction.wasPerformed){
+            UpdateAccordingToEntity();
         }
 
-        return result;
+        return entityMoveAction.wasPerformed;
 
     }
 }

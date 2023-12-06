@@ -25,7 +25,7 @@ public class MoveToChangeTileTypeEffect : Effect
     {
         switch(action){
             case EntityMoveAction entityMoveAction: 
-                if(entityMoveAction.wasPerfomed && entityMoveAction.entity == associatedEntity){
+                if(entityMoveAction.wasPerformed && entityMoveAction.entity == associatedEntity){
                     return true;
                 }
                 return false;

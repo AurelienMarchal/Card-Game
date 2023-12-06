@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class TileChangeTypeAction : TileAction
 {
-    public TileType newType;
+    public TileType newType{
+        get;
+        protected set;
+    }
 
-    public TileChangeTypeAction(Tile tile, TileType tileType) : base(tile){
+    public TileChangeTypeAction(Tile tile, TileType tileType, Action requiredAction = null) : base(tile, requiredAction){
         newType = tileType;
     }
 
-    public override void Perform(){
+    protected override bool Perform(){
+        //Check si c'est possible avant blablabla
         tile.tileType = newType;
+        return true;
     }
 }

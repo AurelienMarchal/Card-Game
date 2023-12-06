@@ -28,7 +28,7 @@ public sealed class Game{
 
     private List<Action> actionPile;
 
-    private List<Action> actionPerformedPile;
+    private List<Action> depiledActionList;
 
     private Game(){
         
@@ -49,7 +49,7 @@ public sealed class Game{
         board = new Board(boardHeight, boardWidth);
         players = new Player[2];
         actionPile = new List<Action>();
-        actionPerformedPile = actionPile;
+        depiledActionList = new List<Action>();
         for(var i = 0; i < numberOfPlayer; i++){
             players[i] = new Player(i + 1, i);
         }
@@ -151,23 +151,48 @@ public sealed class Game{
         while(actionPile.Count > 0 && c < 1000){
             var action = actionPile[^1];
 
+            Debug.Log("Depile start");
+            Debug.Log($"action : {action}");
+
+            Debug.Log("Checking Trigger");
+
             CheckTriggers(action);
-            
+
+            Debug.Log($"Action pile : {string.Join( ",", actionPile)}");
 
             var newAction = actionPile[^1];
 
+            Debug.Log($"newAction : {newAction}");
+
             if(action == newAction){
-                action.Perform();
-                actionPerformedPile.Add(action);
+
+                Debug.Log("Trying to perform action");
+                var wasPerformed = action.TryToPerform();
+
+                if(wasPerformed){
+                    Debug.Log("Action was performed");
+                }
+                else{
+                    Debug.Log("Action was not performed");
+                }
+
+                depiledActionList.Add(action);
                 actionPile.Remove(action);
-                CheckTriggers(action);
+
+                if(wasPerformed){
+                    Debug.Log("Checking Trigger");
+                    CheckTriggers(action);
+                }
             }
+
             else{
-                c ++;
+                c++;
             }
+
+            Debug.Log($"Action pile : {string.Join( ",", actionPile)}");
         }
 
-        Debug.Log(actionPerformedPile);
+        Debug.Log($"Action performed pile : {string.Join( ",", depiledActionList)}");
     }
 
     void CheckTriggers(Action action){

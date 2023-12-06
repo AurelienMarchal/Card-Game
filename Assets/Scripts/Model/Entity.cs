@@ -53,6 +53,27 @@ public class Entity
         effects = new List<Effect>();
     }
 
+    public virtual bool TryToCreateEntityMoveAction(Tile tile, Action requiredAction, out EntityMoveAction entityMoveAction){
+        entityMoveAction = new EntityMoveAction(this, currentTile, tile, requiredAction);
+        var result = CanMove(tile);
+        if(result){
+            Game.currentGame.PileAction(entityMoveAction);
+        }
+
+        return result;
+    }
+
+    public virtual bool TryToMove(Tile tile){
+
+        var result = CanMove(tile);
+        if(result){
+            Move(tile);
+        }
+
+        return result;
+
+    }
+
     public virtual bool CanMove(Tile tile){
         if(tile == currentTile){
             return false;
@@ -72,56 +93,11 @@ public class Entity
         return true;
     }
 
-    public virtual bool TryToMove(Tile tile){
-
-        var result = CanMove(tile);
-        if(result){
-            Game.currentGame.PileAction(new EntityMoveAction(this, currentTile, tile));
-        }
-
-        return result;
-
-    }
-
-    public virtual void Move(Tile tile){
+    protected virtual void Move(Tile tile){
         direction = DirectionsExtensions.FromCoordinateDifference(tile.gridX - currentTile.gridX, tile.gridY - currentTile.gridY);
         currentTile = tile;
     }
 
-
-    public virtual bool TryToAttack(Entity entity){
-        var tile = entity.currentTile;
-        if(tile == currentTile){
-            return false;
-        }
-
-        //Check move condition
-        if(tile.gridX != currentTile.gridX && tile.gridY != currentTile.gridY){
-            return false;
-        }
-
-        var distance = tile.Distance(currentTile);
-        if(distance > 1){
-            Debug.Log($"{this} is too far away from {entity} to attack");
-            return false;
-        }
-
-        if(hasAttacked){
-            Debug.Log($"{this} has already attacked");
-            return false;
-        }
-
-        if(!player.TryToUseMovement(atk)){
-            return false;
-        }
-
-        entity.TakeDamage(atk);
-        hasAttacked = true;
-        
-        direction = DirectionsExtensions.FromCoordinateDifference(tile.gridX - currentTile.gridX, tile.gridY - currentTile.gridY);
-        
-        return true;
-    }
 
     public virtual void OnStartGame(){
         

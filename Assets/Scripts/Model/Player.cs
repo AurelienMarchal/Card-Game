@@ -51,17 +51,39 @@ public class Player{
         
     }
 
+    public bool TryToCreateUseMovementAction(int movement, out UseMovementAction useMovementAction){
+        useMovementAction = new UseMovementAction(this, movement);
+        var canUseMovement =  CanUseMovement(movement);
+        if(canUseMovement){
+            Game.currentGame.PileAction(useMovementAction);
+        }
+
+        return canUseMovement;
+    }
+
     public bool TryToUseMovement(int movement){
+        
+        var canUseMovement =  CanUseMovement(movement);
+
+        if(canUseMovement){
+            UseMouvement(movement);
+        }
+
+        return canUseMovement;
+    }
+
+    private bool CanUseMovement(int movement){
         if(movement > movementLeft){
             Debug.Log($"{this} cannot use {movement} movement. {movementLeft} movement left");
             return false;
         }
-        
-        movementLeft -= movement;
-
-        Debug.Log($"{this} using {movement} movement. {movementLeft} movement left");
 
         return true;
+    }
+
+    private void UseMouvement(int movement){
+        movementLeft -= movement;
+        Debug.Log($"{this} using {movement} movement. {movementLeft} movement left");
     }
 
     public override string ToString(){

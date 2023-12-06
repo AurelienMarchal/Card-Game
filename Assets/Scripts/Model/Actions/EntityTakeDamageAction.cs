@@ -6,7 +6,7 @@ public class EntityTakeDamageAction : EntityAction
 {   
 
     //Damage type
-    public EntityTakeDamageAction(Entity entity, int damage) : base(entity)
+    public EntityTakeDamageAction(Entity entity, int damage,  Action requiredAction = null) : base(entity, requiredAction)
     {
     }
 }

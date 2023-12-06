@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EntitySpawnAction : EntityAction
 {
-    public EntitySpawnAction(Entity entity, Tile spawnTile) : base(entity){
+    public EntitySpawnAction(Entity entity, Tile spawnTile,  Action requiredAction = null) : base(entity, requiredAction){
         
     }
 }
