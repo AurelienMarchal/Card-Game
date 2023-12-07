@@ -28,7 +28,10 @@ public sealed class Game{
 
     private List<Action> actionPile;
 
-    private List<Action> depiledActionList;
+    public List<Action> depiledActionQueue{
+        get;
+        private set;
+    }
 
     private Game(){
         
@@ -49,7 +52,7 @@ public sealed class Game{
         board = new Board(boardHeight, boardWidth);
         players = new Player[2];
         actionPile = new List<Action>();
-        depiledActionList = new List<Action>();
+        depiledActionQueue = new List<Action>();
         for(var i = 0; i < numberOfPlayer; i++){
             players[i] = new Player(i + 1, i);
         }
@@ -64,7 +67,6 @@ public sealed class Game{
             foreach(Entity entity in board.entities){
                 if(entity.player == player){
                     entity.OnStartGame();
-                    //OnEntityMoving(entity);
                 }
             }
         }
@@ -176,7 +178,7 @@ public sealed class Game{
                     Debug.Log("Action was not performed");
                 }
 
-                depiledActionList.Add(action);
+                depiledActionQueue.Add(action);
                 actionPile.Remove(action);
 
                 if(wasPerformed){
@@ -192,32 +194,43 @@ public sealed class Game{
             Debug.Log($"Action pile : {string.Join( ",", actionPile)}");
         }
 
-        Debug.Log($"Action performed pile : {string.Join( ",", depiledActionList)}");
+        Debug.Log($"Action performed pile : {string.Join( ",", depiledActionQueue)}");
     }
 
     void CheckTriggers(Action action){
 
         foreach(Player player in players){
 
-            }
+        }
 
-            foreach(Entity entity in board.entities){
-                foreach(Effect effect in entity.effects){
-                    if(effect.Trigger(action)){
-                        effect.Activate(false);
-                    }
+        foreach(Entity entity in board.entities){
+            foreach(Effect effect in entity.effects){
+                if(effect.Trigger(action)){
+                    effect.Activate(false);
                 }
             }
+        }
 
-            foreach(Tile tile in board.tiles){
-                foreach(Effect effect in tile.effects){
-                    if(effect.Trigger(action)){
-                        effect.Activate(false);
-                    }
+        foreach(Tile tile in board.tiles){
+            foreach(Effect effect in tile.effects){
+                if(effect.Trigger(action)){
+                    effect.Activate(false);
                 }
             }
-
+        }
     }
+
+    public Action DequeueDepiledActionQueue(){
+        if(depiledActionQueue.Count == 0){
+            return null;
+        }
+        var action = depiledActionQueue[0];
+        depiledActionQueue.RemoveAt(0);
+
+        return action;
+    }
+
+
 
     
 }

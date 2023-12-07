@@ -122,10 +122,15 @@ public class EntityManager : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, entity.direction.ToAngle(), 0f);
     }
 
-    public bool TryToMove(TileManager tileManager){
+    public bool TryToMove(Tile tile){
+
+
+        if(!entity.CanMove(tile)){
+            return false;
+        }
         
-        entity.player.TryToCreateUseMovementAction(tileManager.tile.Distance(entity.currentTile), out UseMovementAction useMovementAction);
-        entity.TryToCreateEntityMoveAction(tileManager.tile, useMovementAction, out EntityMoveAction entityMoveAction);
+        entity.player.TryToCreatePlayerUseMovementAction(tile.Distance(entity.currentTile), out PlayerUseMovementAction useMovementAction);
+        entity.TryToCreateEntityMoveAction(tile, useMovementAction, out EntityMoveAction entityMoveAction);
         if(entityMoveAction.wasPerformed){
             UpdateAccordingToEntity();
         }

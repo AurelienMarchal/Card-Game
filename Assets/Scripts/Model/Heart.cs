@@ -1,6 +1,6 @@
 using System;
 
-public class Heart: IEquatable<Heart>{
+public struct Heart: IEquatable<Heart>{
     public HeartType firstHalfHeartType;
 
     public HeartType secondHalfHeartType;
@@ -25,11 +25,7 @@ public class Heart: IEquatable<Heart>{
     }
 
     public bool Equals(Heart other){
-        if(other == null)
-            return false;
-
         return firstHalfHeartType == other.firstHalfHeartType && secondHalfHeartType == other.secondHalfHeartType;
-
     }
 
     //return damage taken

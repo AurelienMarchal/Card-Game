@@ -1,11 +1,11 @@
-public class UseMovementAction : PlayerAction{
+public class PlayerUseMovementAction : PlayerAction{
 
     public int numberOfMovement{
         get;
         protected set;
     }
 
-    public UseMovementAction(Player player, int numberOfMovement, Action requiredAction = null) : base(player, requiredAction){
+    public PlayerUseMovementAction(Player player, int numberOfMovement, Action requiredAction = null) : base(player, requiredAction){
         this.numberOfMovement = numberOfMovement;
     }
 

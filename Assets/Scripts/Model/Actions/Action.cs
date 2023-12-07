@@ -51,7 +51,7 @@ public class Action{
 
 
     protected virtual bool Perform(){
-        return false;
+        return true;
     }
 
     public virtual bool Cancel(){

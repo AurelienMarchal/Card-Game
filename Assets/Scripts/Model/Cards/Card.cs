@@ -17,17 +17,28 @@ public class Card{
         protected set;
     }
 
-    public Card(bool needsTileTarget = false, bool needsEntityTarget = false){
+    public Cost cost{
+        get;
+        protected set;
+    }
+
+    public Card(Player player, Cost cost, bool needsTileTarget = false, bool needsEntityTarget = false){
+        this.player = player;
+        this.cost = cost;
         this.needsTileTarget = needsTileTarget;
         this.needsEntityTarget = needsEntityTarget;
     }
 
-    public virtual bool TryToActivate(Player player, Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
+    public bool TryToActivate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
         
         return false;
     }
 
-public virtual bool CanBeActivated(Player player){
+    public virtual bool Activate(){
+        return true;
+    }
+
+    public virtual bool CanBeActivated(Player player){
         
         return false;
     }

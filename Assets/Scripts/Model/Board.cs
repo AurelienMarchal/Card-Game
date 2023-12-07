@@ -19,8 +19,19 @@ public class Board {
     }
 
     public List<Entity> entities{
-        get;
-        private set;
+        get{
+            List<Entity> entities_ = new List<Entity>();
+            if(Game.currentGame != null){
+                foreach(Player player in Game.currentGame.players){
+                    foreach(Entity entity in player.entities){
+                        entities_.Add(entity);
+                    }
+                }
+            }
+
+            return entities_;
+        }
+        
     }
 
 
@@ -35,8 +46,6 @@ public class Board {
                 tiles[i*gridHeight + j] = new Tile(i, j, i*gridHeight + j);
             }
         }
-
-        entities = new List<Entity>();
     }
 
     public Tile GetTileAt(int gridX, int gridY){

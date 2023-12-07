@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class GameManager : MonoBehaviour
     GameObject heroPrefab;
 
     PlayerManager[] playerManagers;
+
+    bool blockInputs;
 
     [SerializeField]
     int boardHeight;
@@ -45,6 +48,8 @@ public class GameManager : MonoBehaviour
         
         Game.currentGame.SetUpGame(2, boardHeight, boardWidth);
         boardManager.board = Game.currentGame.board;
+
+        blockInputs = false;
 
         currentTileSelected = null;
         currentEntitySelected = null;
@@ -80,21 +85,44 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
-        if(Mouse.current.leftButton.wasPressedThisFrame){
-            if(!entityWasClickedThisFrame && !tileWasClickedThisFrame){
+
+        if(Game.currentGame.depiledActionQueue.Count > 0){
+            blockInputs = true;
+            DequeueDepiledActionQueue();
+        }
+
+
+        else{
+            //if no animation
+            blockInputs = false;
+        }
+
+        if(blockInputs){
+            EntityManager.UnselectEveryEntity();
+            TileManager.UnselectEveryTile();
+            currentEntitySelected = null;
+            currentTileSelected = null;
+        }
+        else{
+            
+            if(Mouse.current.leftButton.wasPressedThisFrame){
+                if(!entityWasClickedThisFrame && !tileWasClickedThisFrame){
+                    EntityManager.UnselectEveryEntity();
+                    TileManager.UnselectEveryTile();
+                    currentEntitySelected = null;
+                    currentTileSelected = null;
+                }
+            }
+
+            if (Mouse.current.rightButton.wasPressedThisFrame){
                 EntityManager.UnselectEveryEntity();
                 TileManager.UnselectEveryTile();
                 currentEntitySelected = null;
                 currentTileSelected = null;
             }
         }
-
-        if (Mouse.current.rightButton.wasPressedThisFrame){
-            EntityManager.UnselectEveryEntity();
-            TileManager.UnselectEveryTile();
-            currentEntitySelected = null;
-            currentTileSelected = null;
-        }
+        
+        
 
         if(currentEntitySelected != null){
             healthUIDisplay.health = currentEntitySelected.entity.health;
@@ -121,6 +149,23 @@ public class GameManager : MonoBehaviour
         tileWasClickedThisFrame = false;
     }
 
+    private void DequeueDepiledActionQueue(){
+        Action action = Game.currentGame.DequeueDepiledActionQueue();
+        while(!action.wasCancelled && !action.wasPerformed && Game.currentGame.depiledActionQueue.Count > 0){
+            action = Game.currentGame.DequeueDepiledActionQueue();
+        }
+
+        if(action.wasCancelled){
+            Debug.Log($"Playing cancel animation for action {action}");
+        }
+    
+        else if(action.wasPerformed){
+            Debug.Log($"Playing perform animation for action {action}");
+        }
+        
+    }
+
+
     void OnEntitySelected(EntityManager entityManager){
 
         currentEntitySelected = entityManager;
@@ -134,21 +179,22 @@ public class GameManager : MonoBehaviour
     }
 
     void OnEntityClicked(EntityManager entityManager){
-        entityWasClickedThisFrame = true;
+        if(blockInputs){
+            return;
+        }
 
-        if(currentEntitySelected == null){
-            EntityManager.UnselectEveryEntity();
-            TileManager.UnselectEveryTile();
-            entityManager.selected = entityManager.hovered;
-        }
-        else{
-            if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
-                //currentEntitySelected.entity.TryToAttack(entityManager.entity);
-            }
-        }
+        entityWasClickedThisFrame = true;
+        EntityManager.UnselectEveryEntity();
+        TileManager.UnselectEveryTile();
+        entityManager.selected = entityManager.hovered;
+        
     }
 
     void OnTileClicked(TileManager tileManager){
+        if(blockInputs){
+            return;
+        }
+
         tileWasClickedThisFrame = true;
 
         if(currentEntitySelected == null){
@@ -158,7 +204,7 @@ public class GameManager : MonoBehaviour
         }
         else{
             if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
-                var didMove = currentEntitySelected.TryToMove(tileManager);
+                var didMove = currentEntitySelected.TryToMove(tileManager.tile);
                 if(didMove){
                     
                 }
