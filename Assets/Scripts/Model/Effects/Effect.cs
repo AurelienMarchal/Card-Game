@@ -18,7 +18,12 @@ public class Effect{
     }
 
     public virtual void Activate(bool depile){
-        Game.currentGame.PileAction(new EffectActivatedAction(this), depile);
+    }
+
+    protected EffectActivatedAction PileEffectActivatedAction(bool depile){
+        var effectActivatedAction = new EffectActivatedAction(this);
+        Game.currentGame.PileAction(effectActivatedAction, depile);
+        return effectActivatedAction;
     }
 
     public virtual bool Trigger(Action action){

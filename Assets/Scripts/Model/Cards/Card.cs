@@ -22,9 +22,21 @@ public class Card{
         protected set;
     }
 
-    public Card(Player player, Cost cost, bool needsTileTarget = false, bool needsEntityTarget = false){
+    public string name{
+        get;
+        protected set;
+    }
+
+    public string text{
+        get;
+        protected set;
+    }
+
+    public Card(Player player, Cost cost, string name, string text, bool needsTileTarget = false, bool needsEntityTarget = false){
         this.player = player;
         this.cost = cost;
+        this.name = name;
+        this.text = text;
         this.needsTileTarget = needsTileTarget;
         this.needsEntityTarget = needsEntityTarget;
     }

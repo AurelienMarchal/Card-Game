@@ -12,8 +12,8 @@ public class MoveToChangeTileTypeEffect : Effect
     }
 
     public override void Activate(bool depile){
-        base.Activate(depile);
-        Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType), depile);
+        var effectActivatedAction = PileEffectActivatedAction(true);
+        Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType, effectActivatedAction), depile);
     }
 
     public override bool CanBeActivated()
