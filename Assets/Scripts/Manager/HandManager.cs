@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HandManager : MonoBehaviour
@@ -34,20 +35,31 @@ public class HandManager : MonoBehaviour
             Transform child = transform.GetChild(i);
 
             // Calculate the angle based on the current time and speed
-            var angle = i * degreeRange * (Mathf.PI/180) / childCount;
+            var angle = (i - childCount/2) * degreeRange * (Mathf.PI/180) / childCount;
 
             // Calculate the position on the circle
-            var x = Mathf.Cos(angle) * radius + transform.position.x;
+            var x = Mathf.Sin(angle) * radius + transform.position.x;
             var y = transform.position.y;
-            var z = Mathf.Sin(angle) * radius + transform.position.z;
+            var z = Mathf.Cos(angle) * radius + transform.position.z - radius;
 
             // Set the position of the child
-            child.position = new Vector3(x, 0f, z);
+            child.position = new Vector3(x, y, z);
+
+            var circleCenter = new Vector3(transform.position.x, transform.position.y, transform.position.z - radius);
 
             // Orient the child's rotation
-            Quaternion rotation = Quaternion.LookRotation(-Vector3.up, -(transform.position - child.position));
+            Quaternion rotation = Quaternion.LookRotation(-Vector3.up, -(circleCenter - child.position));
             child.rotation = rotation;
-            child.Rotate(transform.rotation.eulerAngles);
+
+        }
+    }
+
+    void OnDestroy(){
+        var childCount = transform.childCount;
+
+        for (var i = 0; i < childCount; i++){
+            Transform child = transform.GetChild(i);
+            Destroy(child.gameObject);
         }
     }
 }

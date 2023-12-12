@@ -1,0 +1,92 @@
+public class ThrowProjectileEffect : Effect
+{
+    public Entity casterEntity{
+        get;
+        protected set;
+    }
+
+    public Direction direction{
+        get;
+        protected set;
+    }
+
+    public Damage damage{
+        get;
+        protected set;
+    }
+
+    public int range{
+        get;
+        protected set;
+    }
+    
+    public Entity entityHit{
+        get;
+        protected set;
+    }
+
+    public Tile tileReached{
+        get;
+        protected set;
+    }
+
+    
+
+    public ThrowProjectileEffect(Entity casterEntity, Direction direction, Damage damage, int range) : base(casterEntity.player){
+        this.casterEntity = casterEntity;
+        this.direction = direction;
+        this.damage = damage;
+        this.range = range;
+        entityHit = Entity.noEntity;
+        tileReached = casterEntity.currentTile;
+    }
+
+    protected override void Activate(bool depile){
+        var effectActivatedAction = PileEffectActivatedAction(true);
+        var tileChecked = Game.currentGame.board.NextTileInDirection(casterEntity.currentTile, direction);
+        var lastTileChecked = tileChecked;
+        var entityFound = Game.currentGame.board.GetEntityAtTile(tileChecked);
+
+        var counter = Game.currentGame.board.gridHeight * Game.currentGame.board.gridWidth;
+        while(counter > 0){
+            counter --;
+            if(entityFound != Entity.noEntity){
+                break;
+            }
+            if(tileChecked == Tile.noTile){
+                break;
+            }
+
+            if(tileChecked.Distance(casterEntity.currentTile) > range){
+                break;
+            }
+
+            lastTileChecked = tileChecked;
+            tileChecked = Game.currentGame.board.NextTileInDirection(tileChecked, direction);
+            entityFound = Game.currentGame.board.GetEntityAtTile(tileChecked);
+        }
+
+        if(entityFound != Entity.noEntity){
+            entityHit = entityFound;
+            tileReached = entityHit.currentTile;
+        }
+
+        else if(tileChecked == Tile.noTile){
+            entityHit = Entity.noEntity;
+            tileReached = lastTileChecked;
+        }
+
+        else if(tileChecked != Tile.noTile){
+            entityHit = Entity.noEntity;
+            tileReached = tileChecked;
+        }
+
+        if(entityHit != Entity.noEntity){
+            Game.currentGame.PileAction(new EntityTakeDamageAction(entityHit, damage, effectActivatedAction));
+        }
+    }
+
+    public override bool CanBeActivated(){
+        return Game.currentGame.board.NextTileInDirection(casterEntity.currentTile, casterEntity.direction) != Tile.noTile;
+    }
+}

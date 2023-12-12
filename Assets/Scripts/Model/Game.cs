@@ -206,7 +206,7 @@ public sealed class Game{
         foreach(Entity entity in board.entities){
             foreach(Effect effect in entity.effects){
                 if(effect.Trigger(action)){
-                    effect.Activate(false);
+                    effect.TryToActivate(false);
                 }
             }
         }
@@ -214,7 +214,7 @@ public sealed class Game{
         foreach(Tile tile in board.tiles){
             foreach(Effect effect in tile.effects){
                 if(effect.Trigger(action)){
-                    effect.Activate(false);
+                    effect.TryToActivate(false);
                 }
             }
         }

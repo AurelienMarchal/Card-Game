@@ -39,18 +39,20 @@ public class Health{
         return toReturn + $" vide {IsEmpty()}";
     }
 
-    public bool TakeDamage(int damage){
+    public bool TakeDamage(Damage damage){
         if(IsEmpty()){
             return true;
         }
 
         var currentHeartIndex = hearts.Length - 1;
 
-        while(damage > 0 && currentHeartIndex >= 0){
+        var damageLeft = damage.amount;
+
+        while(damageLeft > 0 && currentHeartIndex >= 0){
             //Debug.Log($"Damage left to be taken {damage}");
-            var damageTaken = hearts[currentHeartIndex].TakeDamage(damage);
+            var damageTaken = hearts[currentHeartIndex].TakeDamage(damageLeft);
             //Debug.Log($"Damage taken on heart with index {currentHeartIndex} : {damageTaken}");
-            damage -= damageTaken;
+            damageLeft -= damageTaken;
 
             if(damageTaken == 0){
                 currentHeartIndex --;

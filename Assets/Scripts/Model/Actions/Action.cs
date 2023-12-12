@@ -54,7 +54,7 @@ public class Action{
         return true;
     }
 
-    public virtual bool Cancel(){
+    public bool Cancel(){
         if(!wasPerformed){
             wasCancelled = true;
         }

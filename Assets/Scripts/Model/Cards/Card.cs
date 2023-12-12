@@ -1,5 +1,7 @@
 
 
+using System.Collections.Generic;
+
 public class Card{
 
     public bool needsEntityTarget{
@@ -43,15 +45,28 @@ public class Card{
 
     public bool TryToActivate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
         
-        return false;
+        return Activate();
     }
 
-    public virtual bool Activate(){
+    protected virtual bool Activate(){
+        // Add action card activated
         return true;
     }
 
-    public virtual bool CanBeActivated(Player player){
+    public virtual bool CanBeActivated(){
         
         return false;
+    }
+
+    public virtual List<Tile> PossibleTileTargets(){
+        var tileTargetList = new List<Tile>();
+
+        return tileTargetList;
+    }
+
+    public virtual List<Entity> PossibleEntityTargets(){
+        var entityTargetList = new List<Entity>();
+
+        return entityTargetList;
     }
 }

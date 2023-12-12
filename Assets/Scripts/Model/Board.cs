@@ -50,10 +50,58 @@ public class Board {
 
     public Tile GetTileAt(int gridX, int gridY){
         if(gridX*gridHeight + gridY >= tiles.Length || gridX < 0 || gridY < 0){
-            return null;
+            return Tile.noTile;
         }
 
         return tiles[gridX*gridHeight + gridY];
     }
+
+    public Tile NextTileInDirection(Tile startingTile, Direction direction){
+        
+        var incrementX = 0;
+        var incrementY = 0;
+
+        switch (direction)
+        {
+
+            case Direction.North:
+                incrementX = 0;
+                incrementY = 1;
+                break;
+
+            case Direction.South:
+                incrementX = 0;
+                incrementY = -1;
+                break;
+
+            case Direction.East:
+                incrementX = 1;
+                incrementY = 0;
+                break;
+
+            case Direction.West:
+                incrementX = -1;
+                incrementY = 0;
+                break;
+
+            default:
+                break;
+        }
+
+        return GetTileAt(startingTile.gridX + incrementX, startingTile.gridY + incrementY);
+
+    }
+
+    public Entity GetEntityAtTile(Tile tile){
+        
+        foreach (var entity in entities){
+            if(entity.currentTile == tile){
+                return entity;
+            }
+        }
+
+        return Entity.noEntity;
+    }
+
     
 }

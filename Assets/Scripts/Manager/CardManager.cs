@@ -28,8 +28,6 @@ public class CardManager : MonoBehaviour
         }
     }
 
-
-
     void UpdateAccordingToCard(){
 
     }
