@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HandManager : MonoBehaviour
@@ -9,7 +8,6 @@ public class HandManager : MonoBehaviour
         get;
         set;
     }
-
 
     [SerializeField]
     GameObject cardPrefab;
@@ -23,6 +21,23 @@ public class HandManager : MonoBehaviour
 
     void Update(){
         MoveChildrenInCircle();
+        // Update according to hand ?
+
+        // TEST
+        hand.cards.Clear();
+        var childCount = transform.childCount;
+
+        for (var i = 0; i < childCount; i++){
+            Transform child = transform.GetChild(i);
+            var cardManager = child.gameObject.GetComponent<CardManager>();
+            if(cardManager != null){
+                if(cardManager.card != null){
+                    hand.cards.Add(cardManager.card);
+                }
+            }
+        }
+
+        //TEST
     }
 
 

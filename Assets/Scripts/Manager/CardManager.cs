@@ -1,11 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class CardManager : MonoBehaviour
 {
+    [SerializeField]
+    ScriptableCard scriptableCard;
 
+    ScriptableCard lastScriptableCard;
 
     [SerializeField]
     TextMeshProUGUI cardNameTextMeshProUGUI;
@@ -14,7 +16,12 @@ public class CardManager : MonoBehaviour
     TextMeshProUGUI cardTextTextMeshProUGUI;
 
     [SerializeField]
-    TextMeshProUGUI cardCostTextMeshProUGUI;
+    Image cardImage;
+
+    //[SerializeField]
+    //TextMeshProUGUI cardCostTextMeshProUGUI;
+
+    Player player;
 
     private Card card_;
 
@@ -28,7 +35,52 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    void UpdateAccordingToCard(){
-
+    void Start(){
+        // TEST
+        var handManager = transform.parent.gameObject.GetComponent<HandManager>();
+        if(handManager != null){
+            player = handManager.hand.player;
+        }
+        // TEST
+        UpdateAccordingToScriptableCard();
+        lastScriptableCard = scriptableCard;
     }
+
+    void Update(){
+        if(scriptableCard != lastScriptableCard){
+            UpdateAccordingToScriptableCard();
+        }
+        lastScriptableCard = scriptableCard;
+    }
+
+    void UpdateAccordingToCard(){
+        if(card != null){
+            //cardCostTextMeshProUGUI.text = $"{card.cost.movementCost}";
+            cardTextTextMeshProUGUI.text = card.text;
+            cardNameTextMeshProUGUI.text = card.cardName;
+        }
+    }
+
+    //TEST
+    void UpdateAccordingToScriptableCard(){
+        if(scriptableCard != null){
+            cardImage.sprite = scriptableCard.sprite;
+        }
+
+        switch (scriptableCard)
+        {
+            case ScriptableMinionCard scriptableMinionCard:
+                card = new Card(player, scriptableMinionCard); break;
+
+            case ScriptableThrowProjectileCard scriptableThrowProjectileCard:
+                card = new ThrowProjectileSpellCard(player, scriptableThrowProjectileCard); break;
+
+            case ScriptableSpellCard scriptableSpellCard:
+                card = new SpellCard(player, scriptableSpellCard); break;
+
+            default: 
+                card = new Card(player, Cost.noCost, "No card", "No card loaded"); break;
+        }
+    }
+    //TEST
 }

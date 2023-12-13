@@ -1,13 +1,10 @@
-
-
+using System;
 using UnityEngine;
 
-public class Health{
-    public Heart[] hearts{
-        get;
-        private set;
-    }
 
+[Serializable]
+public class Health{
+    public Heart[] hearts;
 
     public Health(int maxNumberOfHeart = 12){
         hearts = new Heart[maxNumberOfHeart];

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject heroPrefab;
 
+    [SerializeField]
     PlayerManager[] playerManagers;
 
     bool blockInputs;
@@ -46,8 +47,12 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         
-        Game.currentGame.SetUpGame(2, boardHeight, boardWidth);
+        Game.currentGame.SetUpGame(playerManagers.Length, boardHeight, boardWidth);
         boardManager.board = Game.currentGame.board;
+
+        for(var i = 0;  i < playerManagers.Length; i++){
+            playerManagers[i].player = Game.currentGame.players[i];
+        }
 
         blockInputs = false;
 

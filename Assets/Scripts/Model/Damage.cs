@@ -1,9 +1,9 @@
+using System;
+
+[Serializable]
 public struct Damage{
 
-    public int amount{
-        get;
-        private set;
-    }
+    public int amount;
 
     public Damage(int amount){
         this.amount = amount;

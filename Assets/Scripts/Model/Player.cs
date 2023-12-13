@@ -28,16 +28,20 @@ public class Player{
         private set;
     }
 
-    
-
     public Hero hero{
         get;
         set;
     }
 
+    public Hand hand{
+        get;
+        private set;
+    }
+
     public Player(int num, int color){
         playerNum = num;
         playerColor = color;
+        hand = new Hand(this);
         entities = new List<Entity>();
     }
 

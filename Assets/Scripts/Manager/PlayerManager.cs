@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
 
+    [SerializeField]
+    HandManager handManager;
 
     private Player player_;
 
@@ -20,7 +22,10 @@ public class PlayerManager : MonoBehaviour
     }
 
     void UpdateAccordingToPlayer(){
-
+        if(player != null){
+            handManager.hand = player.hand;
+        }
+        
     }
 
 

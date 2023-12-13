@@ -132,7 +132,6 @@ public sealed class Game{
     }
 
     
-
     public void PileAction(Action action, bool depile = true){
         if(actionPile.Count < maxPileCount){
             actionPile.Add(action);

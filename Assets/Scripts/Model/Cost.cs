@@ -1,14 +1,11 @@
+using System;
+
+[Serializable]
 public struct Cost{
     
-    public Heart[] heartCost{
-        get;
-        private set;
-    }
+    public Heart[] heartCost;
 
-    public int movementCost{
-        get;
-        private set;
-    }
+    public int movementCost;
 
     public Cost(Heart[] hearts, int movement){
         heartCost = hearts;
