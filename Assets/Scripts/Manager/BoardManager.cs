@@ -116,6 +116,9 @@ public class BoardManager : MonoBehaviour
     public void AddEntity(EntityManager entityManager){
         entityManagers.Add(entityManager);
         entityManager.entity.player.entities.Add(entityManager.entity);
+        if(entityManager.entity is Hero hero){
+            entityManager.entity.player.hero = hero;
+        }
     }
 
     public void RemoveEntity(EntityManager entityManager){

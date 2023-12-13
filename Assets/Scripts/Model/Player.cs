@@ -28,6 +28,13 @@ public class Player{
         private set;
     }
 
+    
+
+    public Hero hero{
+        get;
+        set;
+    }
+
     public Player(int num, int color){
         playerNum = num;
         playerColor = color;

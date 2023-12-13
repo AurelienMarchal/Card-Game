@@ -123,7 +123,7 @@ public class Entity
         return $"Entity {name} at tile {currentTile}";
     }
 
-    public bool TakeDamage(int damage){
+    public bool TakeDamage(Damage damage){
         Debug.Log($"{this} taking {damage} damage");
         var isDead = health.TakeDamage(damage);
         Debug.Log($"{this} current {health}");

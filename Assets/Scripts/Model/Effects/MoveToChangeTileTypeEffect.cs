@@ -2,18 +2,24 @@ using UnityEngine;
 
 public class MoveToChangeTileTypeEffect : Effect
 {
-    private Entity associatedEntity;
+    public Entity associatedEntity{
+        get;
+        protected set;
+    }
 
-    private TileType tileType;
+    public TileType tileType{
+        get;
+        protected set;
+    }
 
     public MoveToChangeTileTypeEffect(Entity entity, TileType tileType) : base(entity.player){
         associatedEntity = entity;
         this.tileType = tileType;
     }
 
-    public override void Activate(bool depile){
-        base.Activate(depile);
-        Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType), depile);
+    protected override void Activate(bool depile){
+        var effectActivatedAction = PileEffectActivatedAction(true);
+        Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType, effectActivatedAction), depile);
     }
 
     public override bool CanBeActivated()
