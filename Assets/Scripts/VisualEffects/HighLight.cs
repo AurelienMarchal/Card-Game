@@ -20,6 +20,7 @@ public class Highlight : MonoBehaviour
     //Gets all the materials from each renderer
     private void Awake()
     {
+        
         materials = new List<Material>();
         foreach (var renderer in renderers)
         {
@@ -51,4 +52,6 @@ public class Highlight : MonoBehaviour
             }
         }
     }
+
+
 }

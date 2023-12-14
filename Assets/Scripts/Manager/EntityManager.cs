@@ -79,12 +79,14 @@ public class EntityManager : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
+        
         if(entityNameCanvasInstance != null){
             entityNameCanvasInstance.SetActive(hovered || selected);
             if(entity != null){
                 entityNameCanvasInstance.GetComponentInChildren<TextMeshProUGUI>().text = entity.name;
             }
         }
+        
     }
 
     void OnMouseDown(){

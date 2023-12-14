@@ -114,8 +114,8 @@ public class TileManager : MonoBehaviour
     }
 
     void UpdateAccordingToTile(){
-        Material[] matArray = tileRenderer.materials;
-                
+        Material[] matArray = tileRenderer.sharedMaterials;
+        
         switch (tile.tileType){
             case TileType.Standard: matArray[1] = standardTileMat ; break;
             case TileType.Nature: matArray[1] = natureTileMat; break;
@@ -123,6 +123,6 @@ public class TileManager : MonoBehaviour
             default: matArray[1] = standardTileMat; break;
         }
 
-        tileRenderer.materials = matArray;
+        tileRenderer.sharedMaterials = matArray;
     }
 }

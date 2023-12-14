@@ -36,17 +36,20 @@ public class CardManager : MonoBehaviour
     }
 
     void Start(){
-        // TEST
-        var handManager = transform.parent.gameObject.GetComponent<HandManager>();
-        if(handManager != null){
-            player = handManager.hand.player;
-        }
-        // TEST
         UpdateAccordingToScriptableCard();
         lastScriptableCard = scriptableCard;
     }
 
     void Update(){
+        
+        //TEST
+        if(player == null){
+            var handManager = transform.parent.gameObject.GetComponent<HandManager>();
+            if(handManager != null){
+                player = handManager.hand.player;
+            }
+        }
+        //TEST
         if(scriptableCard != lastScriptableCard){
             UpdateAccordingToScriptableCard();
         }

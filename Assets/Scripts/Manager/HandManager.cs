@@ -20,6 +20,7 @@ public class HandManager : MonoBehaviour
 
 
     void Update(){
+        
         MoveChildrenInCircle();
         // Update according to hand ?
 
