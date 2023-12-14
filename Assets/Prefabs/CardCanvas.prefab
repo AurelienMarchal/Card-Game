@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7416956128753575868}
   - component: {fileID: 8694653272665994130}
   - component: {fileID: -8429513816721689143}
+  - component: {fileID: 1639026227801307129}
   m_Layer: 5
   m_Name: CardCanvas
   m_TagString: Untagged
@@ -85,7 +86,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &8694653272665994130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,6 +120,27 @@ MonoBehaviour:
   cardNameTextMeshProUGUI: {fileID: 8730935442102279942}
   cardTextTextMeshProUGUI: {fileID: 6993365604042801738}
   cardImage: {fileID: 3652031138558852826}
+--- !u!65 &1639026227801307129
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2256344958365107060}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 500, y: 800, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3336587481032863106
 GameObject:
   m_ObjectHideFlags: 0

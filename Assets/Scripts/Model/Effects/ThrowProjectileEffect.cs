@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class ThrowProjectileEffect : Effect
 {
     public Entity casterEntity{
@@ -41,8 +43,7 @@ public class ThrowProjectileEffect : Effect
         tileReached = casterEntity.currentTile;
     }
 
-    protected override void Activate(bool depile){
-        var effectActivatedAction = PileEffectActivatedAction(true);
+    protected override void Activate(){
         var tileChecked = Game.currentGame.board.NextTileInDirection(casterEntity.currentTile, direction);
         var lastTileChecked = tileChecked;
         var entityFound = Game.currentGame.board.GetEntityAtTile(tileChecked);
@@ -50,6 +51,7 @@ public class ThrowProjectileEffect : Effect
         var counter = Game.currentGame.board.gridHeight * Game.currentGame.board.gridWidth;
         while(counter > 0){
             counter --;
+            //Debug.Log($"counter {counter}, entityFound {entityFound}, tileChecked {tileChecked}");
             if(entityFound != Entity.noEntity){
                 break;
             }
@@ -82,7 +84,7 @@ public class ThrowProjectileEffect : Effect
         }
 
         if(entityHit != Entity.noEntity){
-            Game.currentGame.PileAction(new EntityTakeDamageAction(entityHit, damage, effectActivatedAction));
+            Game.currentGame.PileAction(new EntityTakeDamageAction(entityHit, damage, effectActivatedAction), false);
         }
     }
 

@@ -13,25 +13,32 @@ public class Effect{
         this.player = player;
     }
 
+    protected EffectActivatedAction effectActivatedAction;
+
     public virtual bool CanBeActivated(){
         return false;
     }
 
-    protected virtual void Activate(bool depile){
+    protected virtual void Activate(){
     }
 
-    public bool TryToActivate(bool depile){
+    public bool TryToActivate(){
         var result = CanBeActivated();
         if(result){
-            Activate(depile);
+            Activate();
         }
         return result;
     }
 
-    protected EffectActivatedAction PileEffectActivatedAction(bool depile){
-        var effectActivatedAction = new EffectActivatedAction(this);
-        Game.currentGame.PileAction(effectActivatedAction, depile);
-        return effectActivatedAction;
+    public bool TryToCreateEffectActivatedAction(bool depile, Action requiredAction, out EffectActivatedAction effectActivatedAction){
+        effectActivatedAction = new EffectActivatedAction(this, requiredAction);
+        var canBeActivated = CanBeActivated();
+        if(canBeActivated){
+            this.effectActivatedAction = effectActivatedAction;
+            Game.currentGame.PileAction(effectActivatedAction, depile);
+        }
+        
+        return canBeActivated;
     }
 
     public virtual bool Trigger(Action action){

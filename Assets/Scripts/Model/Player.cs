@@ -79,9 +79,10 @@ public class Player{
 
             payCostAction = new PlayerPayCostAction(this, cost, payHeartCostAction);
 
+            Game.currentGame.PileAction(payCostAction, false);
             Game.currentGame.PileAction(useMovementAction, false);
-            Game.currentGame.PileAction(payHeartCostAction, false);
-            Game.currentGame.PileAction(payCostAction);
+            Game.currentGame.PileAction(payHeartCostAction, true);
+            
         }
 
         return canPayHeartCost;

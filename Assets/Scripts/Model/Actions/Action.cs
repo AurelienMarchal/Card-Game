@@ -38,10 +38,12 @@ public class Action{
     private bool CanPerform(){
         if(requiredAction != null){
             if(!requiredAction.wasPerformed){
+                Debug.Log("Required action was not performed");
                 return false;
             }
 
             if(requiredAction.wasCancelled){
+                Debug.Log("Required action was cancelled");
                 return false;
             }
         }

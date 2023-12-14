@@ -87,7 +87,9 @@ public class TileManager : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
+        //TEST
         UpdateAccordingToTile();
+        //TEST
     }
 
     void OnMouseDown(){

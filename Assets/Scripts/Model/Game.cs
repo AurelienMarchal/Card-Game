@@ -171,10 +171,10 @@ public sealed class Game{
                 var wasPerformed = action.TryToPerform();
 
                 if(wasPerformed){
-                    Debug.Log("Action was performed");
+                    Debug.Log($"{action} was performed");
                 }
                 else{
-                    Debug.Log("Action was not performed");
+                    Debug.Log($"{action} was not performed");
                 }
 
                 depiledActionQueue.Add(action);
@@ -205,7 +205,7 @@ public sealed class Game{
         foreach(Entity entity in board.entities){
             foreach(Effect effect in entity.effects){
                 if(effect.Trigger(action)){
-                    effect.TryToActivate(false);
+                    effect.TryToCreateEffectActivatedAction(false, action, out _);
                 }
             }
         }
@@ -213,7 +213,7 @@ public sealed class Game{
         foreach(Tile tile in board.tiles){
             foreach(Effect effect in tile.effects){
                 if(effect.Trigger(action)){
-                    effect.TryToActivate(false);
+                    effect.TryToCreateEffectActivatedAction(false, action, out _);
                 }
             }
         }

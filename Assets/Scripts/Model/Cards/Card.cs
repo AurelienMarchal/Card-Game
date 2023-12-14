@@ -1,7 +1,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using UnityEngine;
 
 [Serializable]
 public class Card{
@@ -36,6 +36,8 @@ public class Card{
         protected set;
     }
 
+    protected CardPlayedAction cardPlayedAction;
+
     public Card(Player player, Cost cost, string cardName, string text, bool needsTileTarget = false, bool needsEntityTarget = false){
         this.player = player;
         this.cost = cost;
@@ -54,18 +56,32 @@ public class Card{
         needsEntityTarget = scriptableCard.needsEntityTarget;
     }
 
-    public bool TryToActivate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
+    public bool TryToCreateCardPlayedAction(Action requiredAction, out CardPlayedAction cardPlayedAction, Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
+
+        cardPlayedAction = new CardPlayedAction(this, requiredAction, targetTile, targetEntity);
         
-        return Activate();
+        var canBeActivated = CanBeActivated();
+        if(canBeActivated){
+            this.cardPlayedAction = cardPlayedAction;
+            Game.currentGame.PileAction(cardPlayedAction, true);
+        }
+
+        return canBeActivated;
     }
 
-    protected virtual bool Activate(){
-        // Add action card activated
+    public bool TryToActivate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
+        var canBeActivated = CanBeActivated();
+        if(canBeActivated){
+            return Activate(targetTile, targetEntity);
+        }
+        return canBeActivated;
+    }
+
+    protected virtual bool Activate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
         return true;
     }
 
-    public virtual bool CanBeActivated(){
-        
+    public virtual bool CanBeActivated(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
         return false;
     }
 

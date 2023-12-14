@@ -2,8 +2,19 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+using UnityEngine.Events;
+
+
+[System.Serializable]
+public class CardEvent : UnityEvent<Card>
+{
+
+}
+
 public class CardManager : MonoBehaviour
 {
+    public CardEvent cardClickedEvent = new CardEvent();
+
     [SerializeField]
     ScriptableCard scriptableCard;
 
@@ -17,6 +28,11 @@ public class CardManager : MonoBehaviour
 
     [SerializeField]
     Image cardImage;
+
+    public bool hovered{
+        get;
+        private set;
+    }
 
     //[SerializeField]
     //TextMeshProUGUI cardCostTextMeshProUGUI;
@@ -36,6 +52,13 @@ public class CardManager : MonoBehaviour
     }
 
     void Start(){
+        hovered = false;
+        if(player == null){
+            var handManager = transform.parent.gameObject.GetComponent<HandManager>();
+            if(handManager != null){
+                player = handManager.hand.player;
+            }
+        }
         UpdateAccordingToScriptableCard();
         lastScriptableCard = scriptableCard;
     }
@@ -86,4 +109,21 @@ public class CardManager : MonoBehaviour
         }
     }
     //TEST
+
+
+    void OnMouseOver(){
+        hovered = true;
+    }
+
+    void OnMouseExit(){
+        hovered = false;
+    }
+
+    void OnMouseDown(){
+        
+        if(card != null){
+            
+            cardClickedEvent.Invoke(card);
+        }
+    }
 }
