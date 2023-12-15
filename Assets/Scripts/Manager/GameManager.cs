@@ -5,11 +5,6 @@ using UnityEngine.InputSystem;
 using TMPro;
 using System;
 
-[Serializable]
-public struct PrefabCorrespondingToEntityModel {
-    public EntityModel entityModel;
-    public GameObject prefab;
-}
 
 public class GameManager : MonoBehaviour
 {
@@ -18,7 +13,7 @@ public class GameManager : MonoBehaviour
     BoardManager boardManager;
 
     [SerializeField]
-    PrefabCorrespondingToEntityModel[] prefabCorrespondingToEntityModels;
+    AnimationManager animationManager;
 
     [SerializeField]
     PlayerManager[] playerManagers;
@@ -81,7 +76,7 @@ public class GameManager : MonoBehaviour
         var hero1 = new Hero(EntityModel.MageHero,"Hero 1", startingTile, health, Game.currentGame.players[0], 1, direction);
         hero1.effects.Add(new MoveToChangeTileTypeEffect(hero1, TileType.Nature));
 
-        SpawnEntity(hero1);
+        animationManager.SpawnEntity(hero1);
 
         var health2 = new Health(new Heart[]{new Heart(HeartType.Red, HeartType.Red), new Heart(HeartType.Red, HeartType.Red), new Heart(HeartType.Red, HeartType.Red)});
         var startingTile2 = boardManager.board.GetTileAt(4, 5);
@@ -89,7 +84,7 @@ public class GameManager : MonoBehaviour
         var hero2 = new Hero(EntityModel.MageHero, "Hero 2", startingTile2, health2, Game.currentGame.players[1], 1, direction2);
         hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.Cursed));
 
-        SpawnEntity(hero2);
+        animationManager.SpawnEntity(hero2);
 
         Game.currentGame.StartGame();
     }
@@ -174,24 +169,9 @@ public class GameManager : MonoBehaviour
     
         else if(action.wasPerformed){
             Debug.Log($"Playing perform animation for action {action}");
-            switch(action){
-                case PlayerSpawnEntityAction playerSpawnEntityAction:
-                    SpawnEntity(playerSpawnEntityAction.entitySpawned);
-                    break;
-
-                default:
-                    break;
-            }
+            animationManager.PlayAnimationForAction(action);
         }
         
-    }
-
-    void SpawnEntity(Entity entity){
-        foreach(PrefabCorrespondingToEntityModel prefabCorrespondingToEntityModel in prefabCorrespondingToEntityModels){
-            if(prefabCorrespondingToEntityModel.entityModel == entity.model){
-                boardManager.SpawnEntity(prefabCorrespondingToEntityModel.prefab, entity);
-            }
-        }
     }
 
 

@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 2588226193716518291}
   - component: {fileID: 1069805185511106597}
   - component: {fileID: 3291049527025219285}
+  - component: {fileID: -633309772589260357}
   m_Layer: 3
   m_Name: DuckMinion
   m_TagString: Entity
@@ -203,7 +204,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe4027a0b79a2af4eb6c61faa04f25be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: -633309772589260357}
   entityNameCanvasPrefab: {fileID: 5444561598338858393, guid: 0d9fdf778cc58f14386863f05f6172d5, type: 3}
+  walkingSpeed: 0
+  goalTileManager: {fileID: 0}
   selectedEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -233,6 +237,27 @@ CapsuleCollider:
   m_Height: 1.5648904
   m_Direction: 1
   m_Center: {x: 0, y: 0.75981176, z: -0.035414368}
+--- !u!95 &-633309772589260357
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828033751355200758}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3106219550512834026
 GameObject:
   m_ObjectHideFlags: 0

@@ -511,11 +511,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardManager: {fileID: 1703089466}
-  prefabCorrespondingToEntityModels:
-  - entityModel: 0
-    prefab: {fileID: 7063583469523896447, guid: 4fc92913f9324cc4b8c15d5e27972fa2, type: 3}
-  - entityModel: 1
-    prefab: {fileID: 1828033751355200758, guid: f523666c8b14089418959782c6927bc6, type: 3}
+  animationManager: {fileID: 1768239575}
   playerManagers:
   - {fileID: 1094126359}
   - {fileID: 2112426987}
@@ -2743,6 +2739,57 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5787077580292973559, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
   m_PrefabInstance: {fileID: 1201067235}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1768239574
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1768239576}
+  - component: {fileID: 1768239575}
+  m_Layer: 0
+  m_Name: AnimationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1768239575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768239574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf02876ddbed90458e5696ab4f1ae78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardManager: {fileID: 1703089466}
+  prefabCorrespondingToEntityModels:
+  - entityModel: 0
+    prefab: {fileID: 7063583469523896447, guid: 4fc92913f9324cc4b8c15d5e27972fa2, type: 3}
+  - entityModel: 1
+    prefab: {fileID: 1828033751355200758, guid: f523666c8b14089418959782c6927bc6, type: 3}
+  walkingSpeed: 0
+--- !u!4 &1768239576
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768239574}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1770629971
 GameObject:
   m_ObjectHideFlags: 0
@@ -3612,6 +3659,7 @@ SceneRoots:
   - {fileID: 705507995}
   - {fileID: 229934141}
   - {fileID: 1703089467}
+  - {fileID: 1768239576}
   - {fileID: 1423607621}
   - {fileID: 1770629975}
   - {fileID: 1094126360}

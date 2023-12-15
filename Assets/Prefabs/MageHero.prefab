@@ -1662,6 +1662,7 @@ GameObject:
   - component: {fileID: 7799840082021259778}
   - component: {fileID: 4500134893637160854}
   - component: {fileID: 1028516315398688615}
+  - component: {fileID: 7663199207295091533}
   m_Layer: 3
   m_Name: MageHero
   m_TagString: Entity
@@ -1703,8 +1704,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ddd4e370c7537243b64de3d52d5211b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 7663199207295091533}
   entityNameCanvasPrefab: {fileID: 5444561598338858393, guid: 0d9fdf778cc58f14386863f05f6172d5, type: 3}
+  walkingSpeed: 1
+  goalTileManager: {fileID: 0}
   selectedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  clickedEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &4500134893637160854
@@ -1755,6 +1762,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!95 &7663199207295091533
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7063583469523896447}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8564d1ebad5f22a499296072d44ea2a4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7083669330063439420
 GameObject:
   m_ObjectHideFlags: 0

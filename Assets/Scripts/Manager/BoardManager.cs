@@ -125,4 +125,22 @@ public class BoardManager : MonoBehaviour
         entityManagers.Remove(entityManager);
         board.entities.Remove(entityManager.entity);
     }
+
+    public EntityManager GetEntityManagerFromEntity(Entity entity){
+        foreach (var entityManager in entityManagers){
+            if(entityManager.entity == entity){
+                return entityManager;
+            }
+        }
+
+        return null;
+    }
+
+    public TileManager GetTileManagerFromTile(Tile tile){
+        if(tile.num > 0 && tile.num < tileManagers.Length){
+            return tileManagers[tile.num];
+        }
+
+        return null;
+    }
 }

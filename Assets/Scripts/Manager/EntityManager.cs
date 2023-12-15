@@ -11,6 +11,9 @@ public class EntityManagerEvent : UnityEvent<EntityManager>
 public class EntityManager : MonoBehaviour
 {
     [SerializeField]
+    Animator animator;
+
+    [SerializeField]
     GameObject entityNameCanvasPrefab;
 
     GameObject entityNameCanvasInstance;
@@ -65,9 +68,20 @@ public class EntityManager : MonoBehaviour
         }
     }
 
+    [SerializeField]
+    float walkingSpeed;
+
+    public TileManager goalTileManager;
+
+    BoardManager boardManager;
+
     public EntityManagerEvent selectedEvent = new EntityManagerEvent();
 
     public EntityManagerEvent clickedEvent = new EntityManagerEvent();
+    
+    void Awake(){
+        boardManager = GetComponentInParent<BoardManager>();
+    }
     
     // Start is called before the first frame update
     void Start()
@@ -86,7 +100,21 @@ public class EntityManager : MonoBehaviour
                 entityNameCanvasInstance.GetComponentInChildren<TextMeshProUGUI>().text = entity.name;
             }
         }
-        
+
+        if(goalTileManager != null){
+            float step = walkingSpeed * Time.deltaTime;
+            
+            var actualGoal = new Vector3(goalTileManager.transform.position.x, boardManager.entityY, goalTileManager.transform.position.z);
+            if(Vector3.Distance(transform.position, actualGoal) < step){
+                transform.position = actualGoal;
+                goalTileManager = null;
+            }
+            else{
+                transform.position += (actualGoal - transform.position).normalized * step;
+            }
+        }
+
+        animator.SetBool("isWalking", goalTileManager != null);
     }
 
     void OnMouseDown(){
@@ -112,10 +140,7 @@ public class EntityManager : MonoBehaviour
     }
 
     void UpdateAccordingToEntity(){
-        var boardManager = GetComponentInParent<BoardManager>();
-        if(boardManager == null){
-            return;
-        }
+        
         transform.position = new Vector3(
             entity.currentTile.gridX * boardManager.tileSizeX, 
             boardManager.entityY,  
@@ -134,7 +159,7 @@ public class EntityManager : MonoBehaviour
         entity.player.TryToCreatePlayerUseMovementAction(tile.Distance(entity.currentTile), out PlayerUseMovementAction useMovementAction);
         entity.TryToCreateEntityMoveAction(tile, useMovementAction, out EntityMoveAction entityMoveAction);
         if(entityMoveAction.wasPerformed){
-            UpdateAccordingToEntity();
+            //UpdateAccordingToEntity();
         }
 
         return entityMoveAction.wasPerformed;
