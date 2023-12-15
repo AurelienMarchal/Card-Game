@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Entity
 {
+    public EntityModel model{
+        get;
+        protected set;
+    }
+
     public string name{
         get;
         protected set;
@@ -43,11 +48,12 @@ public class Entity
 
     public List<Effect> effects;
 
-    public Entity(string name, Tile startingTile, Health startingHealth, Player player, int starttingAtk = 0, Direction startingDirection = Direction.North){
+    public Entity(EntityModel model, string name, Tile startingTile, Health startingHealth, Player player, int startingAtk = 0, Direction startingDirection = Direction.North){
+        this.model = model;
         this.name = name;
         currentTile = startingTile;
         health = startingHealth;
-        atk = starttingAtk;
+        atk = startingAtk;
         direction = startingDirection;
         this.player = player;
         effects = new List<Effect>();

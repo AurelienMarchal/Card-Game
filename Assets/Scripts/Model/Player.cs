@@ -69,6 +69,36 @@ public class Player{
         
     }
 
+    public bool TryToCreateSpawnEntityAction(EntityModel model, string name, Tile startingTile, Health startingHealth, int startingAtk, Direction startingDirection,  Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction){
+        playerSpawnEntityAction = new PlayerSpawnEntityAction(this, model, name, startingTile, startingHealth, startingAtk, startingDirection, requiredAction);
+        var canSpawnEntityAt = CanSpawnEntityAt(startingTile);
+        if(canSpawnEntityAt){
+            Game.currentGame.PileAction(playerSpawnEntityAction, false);
+        }
+
+        return canSpawnEntityAt;
+    }
+
+    public bool TryToSpawnEntity(Entity entity){
+        var canSpawnEntity = CanSpawnEntity(entity);
+        if(canSpawnEntity){
+            SpawnEntity(entity);
+        }
+        return canSpawnEntity;
+    }
+
+    private void SpawnEntity(Entity entity){
+        entities.Add(entity);
+    }
+
+    public bool CanSpawnEntity(Entity entity){
+        return Game.currentGame.board.GetEntityAtTile(entity.currentTile) == Entity.noEntity;
+    }
+
+    public bool CanSpawnEntityAt(Tile tile){
+        return Game.currentGame.board.GetEntityAtTile(tile) == Entity.noEntity;
+    }
+
     public bool TryToCreatePayCostAction(Cost cost, out PlayerPayCostAction payCostAction){
         payCostAction = new PlayerPayCostAction(this, cost);
         var canPayHeartCost = CanPayCost(cost);
@@ -84,7 +114,6 @@ public class Player{
             Game.currentGame.PileAction(payHeartCostAction, true);
             
         }
-
         return canPayHeartCost;
     }
 

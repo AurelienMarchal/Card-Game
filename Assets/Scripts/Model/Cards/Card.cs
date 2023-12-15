@@ -71,7 +71,9 @@ public class Card{
 
     public bool TryToActivate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
         var canBeActivated = CanBeActivated();
+        
         if(canBeActivated){
+            
             return Activate(targetTile, targetEntity);
         }
         return canBeActivated;

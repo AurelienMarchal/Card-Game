@@ -96,7 +96,7 @@ public class CardManager : MonoBehaviour
         switch (scriptableCard)
         {
             case ScriptableMinionCard scriptableMinionCard:
-                card = new Card(player, scriptableMinionCard); break;
+                card = new MinionCard(player, scriptableMinionCard); break;
 
             case ScriptableThrowProjectileCard scriptableThrowProjectileCard:
                 card = new ThrowProjectileSpellCard(player, scriptableThrowProjectileCard); break;
@@ -120,9 +120,7 @@ public class CardManager : MonoBehaviour
     }
 
     void OnMouseDown(){
-        
         if(card != null){
-            
             cardClickedEvent.Invoke(card);
         }
     }

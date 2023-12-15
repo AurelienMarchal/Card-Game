@@ -2,7 +2,9 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "NoEffectMinionCard", menuName = "Card/MinionCard/NoEffectMinionCard", order = 0)]
 public class ScriptableMinionCard : ScriptableCard{
-    public Health minionHealth;
 
+    public EntityModel entityModel;
+
+    public Health minionHealth;
 
 }

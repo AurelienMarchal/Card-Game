@@ -1663,7 +1663,7 @@ GameObject:
   - component: {fileID: 4500134893637160854}
   - component: {fileID: 1028516315398688615}
   m_Layer: 3
-  m_Name: Hero
+  m_Name: MageHero
   m_TagString: Entity
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

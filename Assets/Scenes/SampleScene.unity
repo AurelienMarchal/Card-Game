@@ -511,7 +511,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardManager: {fileID: 1703089466}
-  heroPrefab: {fileID: 7063583469523896447, guid: 4fc92913f9324cc4b8c15d5e27972fa2, type: 3}
+  prefabCorrespondingToEntityModels:
+  - entityModel: 0
+    prefab: {fileID: 7063583469523896447, guid: 4fc92913f9324cc4b8c15d5e27972fa2, type: 3}
+  - entityModel: 1
+    prefab: {fileID: 1828033751355200758, guid: f523666c8b14089418959782c6927bc6, type: 3}
   playerManagers:
   - {fileID: 1094126359}
   - {fileID: 2112426987}
@@ -2577,6 +2581,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 328048201}
     m_Modifications:
+    - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
+      propertyPath: scriptableCard
+      value: 
+      objectReference: {fileID: 11400000, guid: 7ca9f4ab695e2a84eb5a8775986be203, type: 2}
     - target: {fileID: 2256344958365107060, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: m_Name
       value: CardCanvas (1)

@@ -27,7 +27,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     private void OnCardClicked(Card card){
-        Debug.Log("On Mouse click");
+        Debug.Log($"Clicked on {card}");
         if(card.CanBeActivated()){
             TryToPlayCard(card);
         }
