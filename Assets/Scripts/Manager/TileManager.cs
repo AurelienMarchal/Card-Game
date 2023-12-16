@@ -87,9 +87,6 @@ public class TileManager : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
-        //TEST
-        UpdateAccordingToTile();
-        //TEST
     }
 
     void OnMouseDown(){
@@ -115,7 +112,7 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    void UpdateAccordingToTile(){
+    public void UpdateAccordingToTile(){
         Material[] matArray = tileRenderer.sharedMaterials;
         
         switch (tile.tileType){

@@ -22,6 +22,4 @@ MonoBehaviour:
   needsTileTarget: 0
   entityModel: 1
   minionHealth:
-    hearts:
-    - firstHalfHeartType: 1
-      secondHalfHeartType: 2
+    hearts: 04000000

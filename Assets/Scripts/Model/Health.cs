@@ -4,22 +4,22 @@ using UnityEngine;
 
 [Serializable]
 public class Health{
-    public Heart[] hearts;
+    public HeartType[] hearts;
 
     public Health(int maxNumberOfHeart = 12){
-        hearts = new Heart[maxNumberOfHeart];
+        hearts = new HeartType[maxNumberOfHeart];
         for(var i = 0; i < maxNumberOfHeart; i++){
-            hearts[i] = new Heart(HeartType.NoHeart, HeartType.NoHeart);
+            hearts[i] = HeartType.NoHeart;
         }
     }
 
-    public Health(Heart[] hearts){
+    public Health(HeartType[] hearts){
         this.hearts = hearts;
     }
 
     public bool IsEmpty(){
-        foreach(Heart heart in hearts){
-            if(!heart.isEmpty){
+        foreach(HeartType heart in hearts){
+            if(heart != HeartType.NoHeart || heart != HeartType.RedEmpty){
                 return false;
             }
         }
@@ -29,7 +29,7 @@ public class Health{
     public override string ToString(){
         var toReturn = "Health : ";
 
-        foreach(Heart heart in hearts){
+        foreach(HeartType heart in hearts){
             toReturn += heart;
         }
 
@@ -47,13 +47,33 @@ public class Health{
 
         while(damageLeft > 0 && currentHeartIndex >= 0){
             //Debug.Log($"Damage left to be taken {damage}");
-            var damageTaken = hearts[currentHeartIndex].TakeDamage(damageLeft);
+            
+            var damageTaken = 0;
+
+            switch(hearts[currentHeartIndex]){
+                case HeartType.Red:
+                    hearts[currentHeartIndex] = HeartType.RedEmpty;
+                    damageTaken = 1;
+                    break;
+
+                case HeartType.RedEmpty:
+                    damageTaken = 1;
+                    break;
+
+                case HeartType.NoHeart: 
+                    break;
+
+                default:
+                    hearts[currentHeartIndex] = HeartType.NoHeart;
+                    damageTaken = 1;
+                    break;
+
+            }
+
             //Debug.Log($"Damage taken on heart with index {currentHeartIndex} : {damageTaken}");
             damageLeft -= damageTaken;
-
-            if(damageTaken == 0){
-                currentHeartIndex --;
-            }
+            currentHeartIndex --;
+            
         }
 
         return IsEmpty();

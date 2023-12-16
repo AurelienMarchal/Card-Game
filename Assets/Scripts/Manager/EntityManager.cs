@@ -102,6 +102,8 @@ public class EntityManager : MonoBehaviour
         }
 
         if(goalTileManager != null){
+            transform.rotation = Quaternion.Euler(0f, entity.direction.ToAngle(), 0f);
+
             float step = walkingSpeed * Time.deltaTime;
             
             var actualGoal = new Vector3(goalTileManager.transform.position.x, boardManager.entityY, goalTileManager.transform.position.z);

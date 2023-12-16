@@ -1,5 +1,5 @@
 using System;
-using UnityEditor.Animations;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -22,39 +22,36 @@ public class AnimationManager : MonoBehaviour
     [SerializeField]
     float walkingSpeed;
 
-    bool animationPlaying;
+    
+    public bool animationPlaying{
+        get;
+        private set;
+    }
 
-    Animator animatorPlaying;
-
+    List<Animator> animatorsPlaying;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        animatorPlaying = null;
+        animatorsPlaying = new List<Animator>();
         animationPlaying = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        animationPlaying = false;
-        if(animatorPlaying != null){
-            if(AnimatorIsPlaying(animatorPlaying)){
-                if(animatorPlaying.GetCurrentAnimatorStateInfo(0).IsName("Idle")){
-                    animatorPlaying = null;
-                }
-                else{
-                    if(animatorPlaying.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0){
-                        Debug.Log("Animation Finished");
-                    }
-                    else{
-                        animationPlaying = true;
-                    }
+        for(var i = 0; i < animatorsPlaying.Count; i++){
+            var animator = animatorsPlaying[i];
+            if(AnimatorIsPlaying(animator)){
+                if(animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")){
+                    animatorsPlaying.Remove(animator);
+                    i--;
                 }
             }
         }
-        
+
+        animationPlaying = animatorsPlaying.Count > 0;
     }
 
 
@@ -66,13 +63,18 @@ public class AnimationManager : MonoBehaviour
                 var goalTileManager = boardManager.GetTileManagerFromTile(entityMoveAction.endTile);
                 if(entityManager != null){
                     var animator = entityManager.gameObject.GetComponent<Animator>();
-                    animationPlaying = animator;
+                    animatorsPlaying.Add(animator);
                     entityManager.goalTileManager = goalTileManager;
                 }
                 break;
 
             case PlayerSpawnEntityAction playerSpawnEntityAction:
                 SpawnEntity(playerSpawnEntityAction.entitySpawned);
+                break;
+
+            case TileChangeTypeAction tileChangeTypeAction:
+                var tileManager = boardManager.GetTileManagerFromTile(tileChangeTypeAction.tile);
+                tileManager.UpdateAccordingToTile();
                 break;
         }
 

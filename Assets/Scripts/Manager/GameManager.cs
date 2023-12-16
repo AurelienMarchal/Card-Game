@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         boardManager.entityClickedEvent.AddListener(OnEntityClicked);
         boardManager.tileClickedEvent.AddListener(OnTileClicked);
 
-        var health = new Health(new Heart[]{new Heart(HeartType.Red, HeartType.Red), new Heart(HeartType.Red, HeartType.Red), new Heart(HeartType.Red, HeartType.Red)});
+        var health = new Health(new HeartType[]{HeartType.Red, HeartType.Red ,HeartType.Cursed, HeartType.Cursed, HeartType.Nature, HeartType.Nature});
         var startingTile = boardManager.board.GetTileAt(4, 4);
         var direction = Direction.East;
         var hero1 = new Hero(EntityModel.MageHero,"Hero 1", startingTile, health, Game.currentGame.players[0], 1, direction);
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
 
         animationManager.SpawnEntity(hero1);
 
-        var health2 = new Health(new Heart[]{new Heart(HeartType.Red, HeartType.Red), new Heart(HeartType.Red, HeartType.Red), new Heart(HeartType.Red, HeartType.Red)});
+        var health2 = new Health(new HeartType[]{HeartType.Red, HeartType.Red ,HeartType.Cursed, HeartType.Nature, HeartType.Blue, HeartType.Blue});
         var startingTile2 = boardManager.board.GetTileAt(4, 5);
         var direction2 = Direction.West;
         var hero2 = new Hero(EntityModel.MageHero, "Hero 2", startingTile2, health2, Game.currentGame.players[1], 1, direction2);
@@ -101,8 +101,7 @@ public class GameManager : MonoBehaviour
 
 
         else{
-            //if no animation
-            blockInputs = false;
+            blockInputs = animationManager.animationPlaying;
         }
 
         if(blockInputs){
@@ -158,7 +157,13 @@ public class GameManager : MonoBehaviour
     }
 
     private void DequeueDepiledActionQueue(){
+
+        if(animationManager.animationPlaying){
+            return;
+        }
+
         Action action = Game.currentGame.DequeueDepiledActionQueue();
+
         while(!action.wasCancelled && !action.wasPerformed && Game.currentGame.depiledActionQueue.Count > 0){
             action = Game.currentGame.DequeueDepiledActionQueue();
         }

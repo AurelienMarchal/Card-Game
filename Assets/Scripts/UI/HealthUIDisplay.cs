@@ -1,5 +1,14 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+
+[Serializable]
+public struct HeartSprite {
+    public HeartType heartType;
+    public Sprite sprite;
+}
 
 public class HealthUIDisplay : MonoBehaviour
 {
@@ -21,24 +30,17 @@ public class HealthUIDisplay : MonoBehaviour
     Image[] images;
 
     [SerializeField]
-    Sprite emptyHeartSprite;
+    HeartSprite[] heartSprites;
 
-    [SerializeField]
-    Sprite emptyRedHeartSprite;
+    Dictionary<HeartType, Sprite> heartSpriteDictionary;
 
-    [SerializeField]
-    Sprite halfRedHeartSprite;
-
-    [SerializeField]
-    Sprite redHeartSprite;
-
-    [SerializeField]
-    Sprite halfBlueHeartSprite;
-
-    [SerializeField]
-    Sprite blueHeartSprite;
 
     void Start(){
+        heartSpriteDictionary = new Dictionary<HeartType, Sprite>();
+        foreach(HeartSprite heartSprite in heartSprites){
+            heartSpriteDictionary.Add(heartSprite.heartType, heartSprite.sprite);
+        }
+
         UpdateFromHealth();
     }
 
@@ -55,31 +57,11 @@ public class HealthUIDisplay : MonoBehaviour
         for (int i = 0; i < health.hearts.Length; i++){
             var heart = health.hearts[i];
 
-            images[i].gameObject.SetActive(true);
-            
-            if(heart.firstHalfHeartType == HeartType.RedEmpty && heart.secondHalfHeartType == HeartType.RedEmpty){
-                images[i].sprite = emptyRedHeartSprite;
-            }
+            images[i].gameObject.SetActive(heart != HeartType.NoHeart);
 
-            else if(heart.firstHalfHeartType == HeartType.Red && heart.secondHalfHeartType == HeartType.RedEmpty){
-                images[i].sprite = halfRedHeartSprite;
-            }
-
-            else if(heart.firstHalfHeartType == HeartType.Red && heart.secondHalfHeartType == HeartType.Red){
-                images[i].sprite = redHeartSprite;
-            }
-
-            else if(heart.firstHalfHeartType == HeartType.Blue && heart.secondHalfHeartType == HeartType.NoHeart){
-                images[i].sprite = halfBlueHeartSprite;
-            }
-
-            else if(heart.firstHalfHeartType == HeartType.Blue && heart.secondHalfHeartType == HeartType.Blue){
-                images[i].sprite = blueHeartSprite;
-            }
-            
-            else{
-                images[i].gameObject.SetActive(false);
-                images[i].sprite = emptyHeartSprite;
+            heartSpriteDictionary.TryGetValue(heart, out Sprite sprite);
+            if(sprite != null){
+                images[i].sprite = sprite;
             }
         }
     }

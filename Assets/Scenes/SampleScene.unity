@@ -2338,12 +2338,19 @@ MonoBehaviour:
   - {fileID: 1821939447}
   - {fileID: 1798067137}
   - {fileID: 1630661468}
-  emptyHeartSprite: {fileID: 1517231219, guid: 46ff9071cc9da7e4085cc07fcda79931, type: 3}
-  emptyRedHeartSprite: {fileID: -1955238477, guid: 46ff9071cc9da7e4085cc07fcda79931, type: 3}
-  halfRedHeartSprite: {fileID: 145523317, guid: 46ff9071cc9da7e4085cc07fcda79931, type: 3}
-  redHeartSprite: {fileID: -443627258, guid: 46ff9071cc9da7e4085cc07fcda79931, type: 3}
-  halfBlueHeartSprite: {fileID: -579734002, guid: 46ff9071cc9da7e4085cc07fcda79931, type: 3}
-  blueHeartSprite: {fileID: -1925887465, guid: 46ff9071cc9da7e4085cc07fcda79931, type: 3}
+  heartSprites:
+  - heartType: 0
+    sprite: {fileID: 1483782101, guid: f44e5e79a941d0846bc780013e68fbc3, type: 3}
+  - heartType: 1
+    sprite: {fileID: 2045465172, guid: f44e5e79a941d0846bc780013e68fbc3, type: 3}
+  - heartType: 2
+    sprite: {fileID: 698740364, guid: f44e5e79a941d0846bc780013e68fbc3, type: 3}
+  - heartType: 3
+    sprite: {fileID: 1775067706, guid: f44e5e79a941d0846bc780013e68fbc3, type: 3}
+  - heartType: 4
+    sprite: {fileID: 243152727, guid: f44e5e79a941d0846bc780013e68fbc3, type: 3}
+  - heartType: 5
+    sprite: {fileID: -565538063, guid: f44e5e79a941d0846bc780013e68fbc3, type: 3}
 --- !u!1 &1630661466
 GameObject:
   m_ObjectHideFlags: 0
