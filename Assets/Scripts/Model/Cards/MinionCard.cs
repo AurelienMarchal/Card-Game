@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class MinionCard : Card
 {
-
     public EntityModel entityModel{
         get;
         protected set;
@@ -14,9 +13,15 @@ public class MinionCard : Card
         protected set;
     }
 
-    public MinionCard(Player player, Cost cost, EntityModel entityModel, Health minionHealth, string cardName, string text, bool needsTileTarget = false, bool needsEntityTarget = false) : base(player, cost, cardName, text, needsTileTarget, needsEntityTarget){
+    public Damage atkDamage{
+        get;
+        protected set;
+    }
+
+    public MinionCard(Player player, Cost cost, EntityModel entityModel, Health minionHealth, Damage atkDamage,  string cardName, string text, bool needsTileTarget = false, bool needsEntityTarget = false) : base(player, cost, cardName, text, needsTileTarget, needsEntityTarget){
         this.entityModel = entityModel;
         this.minionHealth = minionHealth;
+        this.atkDamage = atkDamage;
     }
 
 
@@ -29,11 +34,10 @@ public class MinionCard : Card
     {
         if(targetTile == Tile.noTile){
             var spawnTile = Game.currentGame.board.NextTileInDirection(player.hero.currentTile, player.hero.direction);
-            return player.TryToCreateSpawnEntityAction(entityModel, cardName, spawnTile, minionHealth, 0, player.hero.direction, cardPlayedAction, out _);
-
+            return player.TryToCreateSpawnEntityAction(entityModel, cardName, spawnTile, minionHealth, atkDamage, player.hero.direction, cardPlayedAction, out _);
         }
         
-        return player.TryToCreateSpawnEntityAction(entityModel, cardName, targetTile, minionHealth, 0, player.hero.direction, cardPlayedAction, out _);
+        return player.TryToCreateSpawnEntityAction(entityModel, cardName, targetTile, minionHealth, atkDamage, player.hero.direction, cardPlayedAction, out _);
     }
 
     public override bool CanBeActivated(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity)

@@ -14,9 +14,9 @@ public class EntityManager : MonoBehaviour
     Animator animator;
 
     [SerializeField]
-    GameObject entityNameCanvasPrefab;
+    GameObject entityInfoCanvasPrefab;
 
-    GameObject entityNameCanvasInstance;
+    GameObject entityInfoCanvasInstance;
 
     private Entity entity_;
 
@@ -88,16 +88,17 @@ public class EntityManager : MonoBehaviour
     {
         hovered = false;
         selected = false;
-        entityNameCanvasInstance = Instantiate(entityNameCanvasPrefab, transform);
+        entityInfoCanvasInstance = Instantiate(entityInfoCanvasPrefab, transform);
     }
 
     // Update is called once per frame
     void Update(){
         
-        if(entityNameCanvasInstance != null){
-            entityNameCanvasInstance.SetActive(hovered || selected);
+        if(entityInfoCanvasInstance != null){
+            entityInfoCanvasInstance.SetActive(hovered || selected);
             if(entity != null){
-                entityNameCanvasInstance.GetComponentInChildren<TextMeshProUGUI>().text = entity.name;
+                entityInfoCanvasInstance.GetComponentInChildren<TextMeshProUGUI>().text = entity.name;
+                entityInfoCanvasInstance.GetComponentInChildren<HealthUIDisplay>().health = entity.health;
             }
         }
 

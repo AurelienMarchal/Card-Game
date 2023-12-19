@@ -34,26 +34,26 @@ public class Entity
         protected set;
     }
 
-    public int atk{
+    public Damage atkDamage{
         get;
         protected set;
     }
 
     public bool hasAttacked{
         get;
-        protected set;
+        set;
     }
 
     public const Entity noEntity = null;
 
     public List<Effect> effects;
 
-    public Entity(EntityModel model, string name, Tile startingTile, Health startingHealth, Player player, int startingAtk = 0, Direction startingDirection = Direction.North){
+    public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingAtkDamage, Direction startingDirection = Direction.North){
         this.model = model;
         this.name = name;
         currentTile = startingTile;
         health = startingHealth;
-        atk = startingAtk;
+        atkDamage = startingAtkDamage;
         direction = startingDirection;
         this.player = player;
         effects = new List<Effect>();
@@ -85,6 +85,10 @@ public class Entity
             return false;
         }
 
+        if(Game.currentGame.board.GetEntityAtTile(tile) != Entity.noEntity){
+            return false;
+        }
+
         //Check move condition
         if(tile.gridX != currentTile.gridX && tile.gridY != currentTile.gridY){
             return false;
@@ -102,6 +106,55 @@ public class Entity
     protected virtual void Move(Tile tile){
         direction = DirectionsExtensions.FromCoordinateDifference(tile.gridX - currentTile.gridX, tile.gridY - currentTile.gridY);
         currentTile = tile;
+    }
+
+    public virtual bool TryToTeleport(Tile tile){
+
+        var result = CanTeleport(tile);
+        if(result){
+            Teleport(tile);
+        }
+
+        return result;
+
+    }
+
+    public virtual bool CanTeleport(Tile tile){
+        if(tile == currentTile){
+            return false;
+        }
+
+        if(Game.currentGame.board.GetEntityAtTile(tile) != Entity.noEntity){
+            return false;
+        }
+
+        return true;
+    }
+
+    protected virtual void Teleport(Tile tile){
+        currentTile = tile;
+    }
+
+    public bool TryToCreateEntityAttackAction(Entity entity,  out EntityAttackAction entityAttackAction, Action requiredAction = null){
+        entityAttackAction = new EntityAttackAction(this, entity, requiredAction);
+        var canAttack = CanAttack(entity);
+        if(canAttack){
+            Game.currentGame.PileAction(entityAttackAction);
+        }
+
+        return canAttack;
+    }
+
+    public bool CanAttack(Entity entity){
+        if(hasAttacked){
+            return false;
+        }
+
+        if(entity.currentTile.Distance(currentTile) > 1){
+            return false;
+        }
+
+        return true;
     }
 
 

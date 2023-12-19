@@ -1,6 +1,6 @@
 public class Hero : Entity{
 
-    public Hero(EntityModel model, string name, Tile startingTile, Health startingHealth, Player player, int starttingAtk = 0, Direction startingDirection = Direction.North) : base(model, name, startingTile, startingHealth, player, starttingAtk, startingDirection){
+    public Hero(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage starttingAtkDamage, Direction startingDirection = Direction.North) : base(player, model, name, startingTile, startingHealth,  starttingAtkDamage, startingDirection){
     }
 
     public override bool TryToMove(Tile tile){

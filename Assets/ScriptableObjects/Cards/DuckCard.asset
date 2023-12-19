@@ -23,3 +23,5 @@ MonoBehaviour:
   entityModel: 1
   minionHealth:
     hearts: 04000000
+  atkDamage:
+    amount: 1

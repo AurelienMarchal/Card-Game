@@ -29,9 +29,6 @@ public class GameManager : MonoBehaviour
     EntityManager currentEntitySelected;
 
     TileManager currentTileSelected;
-
-    [SerializeField]
-    HealthUIDisplay healthUIDisplay;
     
     [SerializeField]
     MovementUIDisplay movementUIDisplay;
@@ -73,7 +70,7 @@ public class GameManager : MonoBehaviour
         var health = new Health(new HeartType[]{HeartType.Red, HeartType.Red ,HeartType.Cursed, HeartType.Cursed, HeartType.Nature, HeartType.Nature});
         var startingTile = boardManager.board.GetTileAt(4, 4);
         var direction = Direction.East;
-        var hero1 = new Hero(EntityModel.MageHero,"Hero 1", startingTile, health, Game.currentGame.players[0], 1, direction);
+        var hero1 = new Hero( Game.currentGame.players[0], EntityModel.MageHero,"Hero 1", startingTile, health, new Damage(1), direction);
         hero1.effects.Add(new MoveToChangeTileTypeEffect(hero1, TileType.Nature));
 
         animationManager.SpawnEntity(hero1);
@@ -81,7 +78,7 @@ public class GameManager : MonoBehaviour
         var health2 = new Health(new HeartType[]{HeartType.Red, HeartType.Red ,HeartType.Cursed, HeartType.Nature, HeartType.Blue, HeartType.Blue});
         var startingTile2 = boardManager.board.GetTileAt(4, 5);
         var direction2 = Direction.West;
-        var hero2 = new Hero(EntityModel.MageHero, "Hero 2", startingTile2, health2, Game.currentGame.players[1], 1, direction2);
+        var hero2 = new Hero(Game.currentGame.players[1], EntityModel.MageHero, "Hero 2", startingTile2, health2, new Damage(1), direction2);
         hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.Cursed));
 
         animationManager.SpawnEntity(hero2);
@@ -127,16 +124,6 @@ public class GameManager : MonoBehaviour
                 currentEntitySelected = null;
                 currentTileSelected = null;
             }
-        }
-        
-        
-
-        if(currentEntitySelected != null){
-            healthUIDisplay.health = currentEntitySelected.entity.health;
-        }
-
-        else if(healthUIDisplay.health!=null){
-            healthUIDisplay.health = null;
         }
 
         if(Game.currentGame.currentPlayer != null){
@@ -195,6 +182,12 @@ public class GameManager : MonoBehaviour
     void OnEntityClicked(EntityManager entityManager){
         if(blockInputs){
             return;
+        }
+
+        if(currentEntitySelected != null){
+            if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
+                currentEntitySelected.entity.TryToCreateEntityAttackAction(entityManager.entity, out _);
+            }
         }
 
         entityWasClickedThisFrame = true;

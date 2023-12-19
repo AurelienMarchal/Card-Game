@@ -30,7 +30,7 @@ public class PlayerSpawnEntityAction : PlayerAction
         protected set;
     }
 
-    public int atk{
+    public Damage damageAtk{
         get;
         protected set;
     }
@@ -40,18 +40,18 @@ public class PlayerSpawnEntityAction : PlayerAction
         protected set;
     }
 
-    public PlayerSpawnEntityAction(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int starttingAtk = 0, Direction startingDirection = Direction.North,  Action requiredAction = null) : base(player, requiredAction){
+    public PlayerSpawnEntityAction(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingDamageAtk, Direction startingDirection = Direction.North,  Action requiredAction = null) : base(player, requiredAction){
         tile = startingTile;
         this.model = model;
         this.name = name;
         health = startingHealth;
-        atk = starttingAtk;
+        damageAtk = startingDamageAtk;
         direction = startingDirection;
         entitySpawned = Entity.noEntity;
     }
 
     protected override bool Perform(){
-        entitySpawned = new Entity(model, name, tile, health, player, atk, direction);
+        entitySpawned = new Entity(player, model, name, tile, health, damageAtk, direction);
         return player.TryToSpawnEntity(entitySpawned);
     }
 }

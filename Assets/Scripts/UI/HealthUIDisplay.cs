@@ -35,7 +35,7 @@ public class HealthUIDisplay : MonoBehaviour
     Dictionary<HeartType, Sprite> heartSpriteDictionary;
 
 
-    void Start(){
+    void Awake(){
         heartSpriteDictionary = new Dictionary<HeartType, Sprite>();
         foreach(HeartSprite heartSprite in heartSprites){
             heartSpriteDictionary.Add(heartSprite.heartType, heartSprite.sprite);

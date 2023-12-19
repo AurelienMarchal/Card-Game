@@ -24,9 +24,11 @@ public class Highlight : MonoBehaviour
         materials = new List<Material>();
         foreach (var renderer in renderers)
         {
+            foreach(var material in renderer.materials){
+                materials.Add(material);
+            }
             //A single child-object might have mutliple materials on it
             //that is why we need to all materials with "s"
-            materials.AddRange(new List<Material>(renderer.materials));
         }
     }
 

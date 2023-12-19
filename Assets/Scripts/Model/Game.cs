@@ -33,6 +33,8 @@ public sealed class Game{
         private set;
     }
 
+    private bool depileStarted;
+
     private Game(){
         
     }
@@ -53,6 +55,7 @@ public sealed class Game{
         players = new Player[2];
         actionPile = new List<Action>();
         depiledActionQueue = new List<Action>();
+        depileStarted = false;
         for(var i = 0; i < numberOfPlayer; i++){
             players[i] = new Player(i + 1, i);
         }
@@ -141,14 +144,14 @@ public sealed class Game{
             Debug.Log($"Reached pile action maximum");
         }
 
-        if(depile){
+        if(!depileStarted && depile){
             DepileActionPile();
         }
     }
 
     private void DepileActionPile(){
         var c = 0;
-
+        depileStarted = true;
         while(actionPile.Count > 0 && c < 1000){
             var action = actionPile[^1];
 
@@ -194,6 +197,8 @@ public sealed class Game{
         }
 
         Debug.Log($"Action performed pile : {string.Join( ",", depiledActionQueue)}");
+
+        depileStarted = false;
     }
 
     void CheckTriggers(Action action){

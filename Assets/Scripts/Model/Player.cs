@@ -69,8 +69,8 @@ public class Player{
         
     }
 
-    public bool TryToCreateSpawnEntityAction(EntityModel model, string name, Tile startingTile, Health startingHealth, int startingAtk, Direction startingDirection,  Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction){
-        playerSpawnEntityAction = new PlayerSpawnEntityAction(this, model, name, startingTile, startingHealth, startingAtk, startingDirection, requiredAction);
+    public bool TryToCreateSpawnEntityAction(EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingDamageAtk, Direction startingDirection,  Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction){
+        playerSpawnEntityAction = new PlayerSpawnEntityAction(this, model, name, startingTile, startingHealth, startingDamageAtk, startingDirection, requiredAction);
         var canSpawnEntityAt = CanSpawnEntityAt(startingTile);
         if(canSpawnEntityAt){
             Game.currentGame.PileAction(playerSpawnEntityAction, false);

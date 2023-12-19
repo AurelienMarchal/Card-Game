@@ -7,4 +7,6 @@ public class ScriptableMinionCard : ScriptableCard{
 
     public Health minionHealth;
 
+    public Damage atkDamage;
+
 }

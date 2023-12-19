@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: -633309772589260357}
-  entityNameCanvasPrefab: {fileID: 5444561598338858393, guid: 0d9fdf778cc58f14386863f05f6172d5, type: 3}
+  entityInfoCanvasPrefab: {fileID: 1849537066013517146, guid: f9d3e209bdd28804d99ba427be786297, type: 3}
   walkingSpeed: 1
   goalTileManager: {fileID: 0}
   selectedEvent:
