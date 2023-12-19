@@ -46,7 +46,10 @@ public class Entity
 
     public const Entity noEntity = null;
 
-    public List<Effect> effects;
+    public List<Effect> effects{
+        get;
+        protected set;
+    }
 
     public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingAtkDamage, Direction startingDirection = Direction.North){
         this.model = model;
@@ -57,6 +60,7 @@ public class Entity
         direction = startingDirection;
         this.player = player;
         effects = new List<Effect>();
+        SetupPermanentEffects();
     }
 
     public virtual bool TryToCreateEntityMoveAction(Tile tile, Action requiredAction, out EntityMoveAction entityMoveAction){
@@ -163,5 +167,9 @@ public class Entity
         var isDead = health.TakeDamage(damage);
         Debug.Log($"{this} current {health}");
         return isDead;
+    }
+
+    protected void SetupPermanentEffects(){
+
     }
 }

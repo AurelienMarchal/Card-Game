@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +22,16 @@ public sealed class Game{
     }
 
     public int turn{
+        get;
+        private set;
+    }
+
+    public System.Random random{
+        get;
+        private set;
+    }
+
+    public List<Effect> effects{
         get;
         private set;
     }
@@ -55,6 +65,9 @@ public sealed class Game{
         players = new Player[2];
         actionPile = new List<Action>();
         depiledActionQueue = new List<Action>();
+        random = new System.Random(0);
+        effects = new List<Effect>();
+        SetupPermanentEffects();
         depileStarted = false;
         for(var i = 0; i < numberOfPlayer; i++){
             players[i] = new Player(i + 1, i);
@@ -164,11 +177,27 @@ public sealed class Game{
 
     void CheckTriggers(Action action){
 
-        foreach(Player player in players){
-
+        foreach(Effect effect in currentGame.effects){
+            if(effect.Trigger(action)){
+                effect.TryToCreateEffectActivatedAction(false, action, out _);
+            }
         }
 
-        foreach(Entity entity in board.entities){
+        foreach(Effect effect in currentGame.board.effects){
+            if(effect.Trigger(action)){
+                effect.TryToCreateEffectActivatedAction(false, action, out _);
+            }
+        }
+
+        foreach(Player player in players){
+            foreach(Effect effect in player.effects){
+                if(effect.Trigger(action)){
+                    effect.TryToCreateEffectActivatedAction(false, action, out _);
+                }
+            }
+        }
+
+        foreach(Entity entity in currentGame.board.entities){
             foreach(Effect effect in entity.effects){
                 if(effect.Trigger(action)){
                     effect.TryToCreateEffectActivatedAction(false, action, out _);
@@ -176,7 +205,7 @@ public sealed class Game{
             }
         }
 
-        foreach(Tile tile in board.tiles){
+        foreach(Tile tile in currentGame.board.tiles){
             foreach(Effect effect in tile.effects){
                 if(effect.Trigger(action)){
                     effect.TryToCreateEffectActivatedAction(false, action, out _);
@@ -193,6 +222,10 @@ public sealed class Game{
         depiledActionQueue.RemoveAt(0);
 
         return action;
+    }
+
+    private void SetupPermanentEffects(){
+
     }
 
 

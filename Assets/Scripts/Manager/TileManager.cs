@@ -74,6 +74,14 @@ public class TileManager : MonoBehaviour
     [SerializeField]
     Material cursedTileMat;
 
+    [SerializeField]
+    Material willGetCursedTileMat;
+
+    [SerializeField]
+    Material curseSourceTileMat;
+
+
+
     public TileManagerEvent selectedEvent = new TileManagerEvent();
 
     public TileManagerEvent clickedEvent = new TileManagerEvent();
@@ -119,6 +127,8 @@ public class TileManager : MonoBehaviour
             case TileType.Standard: matArray[1] = standardTileMat ; break;
             case TileType.Nature: matArray[1] = natureTileMat; break;
             case TileType.Cursed: matArray[1] = cursedTileMat; break;
+            case TileType.CurseSource: matArray[1] = curseSourceTileMat; break;
+            case TileType.WillGetCursed: matArray[1] = willGetCursedTileMat; break;
             default: matArray[1] = standardTileMat; break;
         }
 

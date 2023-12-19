@@ -18,6 +18,11 @@ public class Board {
         private set;
     }
 
+    public List<Effect> effects{
+        get;
+        protected set;
+    }
+
     public List<Entity> entities{
         get{
             List<Entity> entities_ = new List<Entity>();
@@ -40,6 +45,8 @@ public class Board {
         this.gridWidth = gridWidth;
 
         tiles = new Tile[gridHeight * gridWidth];
+        effects = new List<Effect>();
+        SetupPermanentEffects();
 
         for(var i = 0; i < gridWidth; i++){
             for(var j = 0; j < gridHeight; j++){
@@ -101,6 +108,10 @@ public class Board {
         }
 
         return Entity.noEntity;
+    }
+
+    private void SetupPermanentEffects(){
+
     }
 
     

@@ -34,7 +34,7 @@ public class ThrowProjectileEffect : Effect
 
     
 
-    public ThrowProjectileEffect(Entity casterEntity, Direction direction, Damage damage, int range) : base(casterEntity.player){
+    public ThrowProjectileEffect(Entity casterEntity, Direction direction, Damage damage, int range){
         this.casterEntity = casterEntity;
         this.direction = direction;
         this.damage = damage;

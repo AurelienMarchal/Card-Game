@@ -24,7 +24,10 @@ public class Tile {
 
     public const Tile noTile = null;
 
-    public List<Effect> effects;
+    public List<Effect> effects{
+        get;
+        protected set;
+    }
 
     public Tile(int gridX, int gridY, int num, TileType tileType = TileType.Standard){
         this.gridX = gridX;
@@ -32,10 +35,16 @@ public class Tile {
         this.num = num;
         this.tileType = tileType;
         effects = new List<Effect>();
+        SetupPermanentEffects();
     }
 
     public int Distance(Tile tile){
         return Math.Abs(gridX - tile.gridX) + Math.Abs(gridY - tile.gridY);
+    }
+
+    private void SetupPermanentEffects(){
+        effects.Add(new PickNextCursedTileOnStartPlayerTurnEffect(this));
+        effects.Add(new ChangeWillGetCurseTypeIntoCursedTileEffect(this));
     }
 
 }

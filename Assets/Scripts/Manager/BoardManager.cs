@@ -137,7 +137,7 @@ public class BoardManager : MonoBehaviour
     }
 
     public TileManager GetTileManagerFromTile(Tile tile){
-        if(tile.num > 0 && tile.num < tileManagers.Length){
+        if(tile.num >= 0 && tile.num < tileManagers.Length){
             return tileManagers[tile.num];
         }
 

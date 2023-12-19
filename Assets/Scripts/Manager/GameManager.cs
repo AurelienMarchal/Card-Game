@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
         var startingTile2 = boardManager.board.GetTileAt(4, 5);
         var direction2 = Direction.West;
         var hero2 = new Hero(Game.currentGame.players[1], EntityModel.MageHero, "Hero 2", startingTile2, health2, new Damage(1), direction2);
-        hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.Cursed));
+        hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
 
         animationManager.SpawnEntity(hero2);
 

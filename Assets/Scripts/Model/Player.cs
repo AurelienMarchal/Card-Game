@@ -41,11 +41,18 @@ public class Player{
         private set;
     }
 
+    public List<Effect> effects{
+        get;
+        protected set;
+    }
+
     public Player(int num, int color){
         playerNum = num;
         playerColor = color;
         hand = new Hand(this);
         entities = new List<Entity>();
+        effects = new List<Effect>();
+        SetupPermanentEffects();
     }
 
     public void ResetMovement(){
@@ -181,6 +188,10 @@ public class Player{
 
     private void PayHeartCost(Heart[] hearts){
         Debug.Log($"{this} paying {hearts}");
+    }
+
+    private void SetupPermanentEffects(){
+
     }
 
     public override string ToString(){

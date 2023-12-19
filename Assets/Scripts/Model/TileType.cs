@@ -1,5 +1,5 @@
 public enum TileType{
 
-    Standard, Nature, Cursed,
+    Standard, Nature, Cursed, CurseSource, WillGetCursed
     
 }

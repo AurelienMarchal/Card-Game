@@ -12,7 +12,7 @@ public class MoveToChangeTileTypeEffect : Effect
         protected set;
     }
 
-    public MoveToChangeTileTypeEffect(Entity entity, TileType tileType) : base(entity.player){
+    public MoveToChangeTileTypeEffect(Entity entity, TileType tileType){
         associatedEntity = entity;
         this.tileType = tileType;
     }

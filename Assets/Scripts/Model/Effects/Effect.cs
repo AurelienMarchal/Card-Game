@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class Effect{
 
-    public Player player{
-        get;
-        protected set;
-    }
 
-    public Effect(Player player){
-        this.player = player;
+
+    public Effect(){
+        
     }
 
     protected EffectActivatedAction effectActivatedAction;
