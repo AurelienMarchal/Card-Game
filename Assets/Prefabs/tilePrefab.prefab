@@ -103,6 +103,8 @@ MonoBehaviour:
   standardTileMat: {fileID: 2100000, guid: 5be4574eab12e0947916522788510801, type: 2}
   natureTileMat: {fileID: 2100000, guid: 55285b96a290f7345b65e23d55757cac, type: 2}
   cursedTileMat: {fileID: 2100000, guid: 9076355a050b31d43a4d62650a64ebca, type: 2}
+  willGetCursedTileMat: {fileID: 2100000, guid: c1db317c17e5f1c489c15719f051c6f4, type: 2}
+  curseSourceTileMat: {fileID: 2100000, guid: 45db1d82c3fe2314d9264d26405c9cdf, type: 2}
   selectedEvent:
     m_PersistentCalls:
       m_Calls: []
