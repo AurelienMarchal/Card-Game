@@ -158,30 +158,6 @@ public class Entity
     }
 
 
-    public virtual void OnStartGame(){
-        
-    }
-
-    public virtual void OnStartTurn(){
-    }
-
-    public virtual void OnStartPlayerTurn(){
-        hasAttacked = false;
-    }
-
-    public virtual void OnEndTurn(){
-        
-    }
-
-    public virtual void OnEndPlayerTurn(){
-        
-    }
-
-    public override string ToString()
-    {
-        return $"Entity {name} at tile {currentTile}";
-    }
-
     public bool TakeDamage(Damage damage){
         Debug.Log($"{this} taking {damage} damage");
         var isDead = health.TakeDamage(damage);

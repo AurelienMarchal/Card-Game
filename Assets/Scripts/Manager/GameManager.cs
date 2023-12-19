@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
 
         animationManager.SpawnEntity(hero2);
 
-        Game.currentGame.StartGame();
+        Game.currentGame.PileAction(new StartGameAction(), true);
     }
 
     // Update is called once per frame
@@ -221,6 +221,6 @@ public class GameManager : MonoBehaviour
 
 
     public void OnEndTurnPressed(){
-        Game.currentGame.EndPlayerTurn();
+        Game.currentGame.PileAction(new EndPlayerTurnAction(Game.currentGame.currentPlayer), true);
     }
 }

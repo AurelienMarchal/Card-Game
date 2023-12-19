@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EndPlayerTurnAction : MonoBehaviour
+public class EndPlayerTurnAction : PlayerAction
 {
-    // Start is called before the first frame update
-    void Start()
+    public EndPlayerTurnAction(Player player, Action requiredAction = null) : base(player, requiredAction)
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override bool Perform()
     {
+        var changeTurn = Game.currentGame.EndPlayerTurn();
+        if(changeTurn){
+            Game.currentGame.PileAction(new StartTurnAction(this), false);
+        }
+        else{
+            Game.currentGame.PileAction(new StartPlayerTurnAction(Game.currentGame.currentPlayer, this), false);
+        }
         
+        return true;
     }
 }

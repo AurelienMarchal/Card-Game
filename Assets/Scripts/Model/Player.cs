@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,6 +29,8 @@ public class Player{
         private set;
     }
 
+    public const int maxMovementCap = 10;
+
     public Hero hero{
         get;
         set;
@@ -45,27 +48,20 @@ public class Player{
         entities = new List<Entity>();
     }
 
-    private void ResetMovement(){
+    public void ResetMovement(){
         movementLeft = maxMovement;
     }
 
-    public virtual void OnStartGame(){
-        
-    }
-
-    public virtual void OnStartTurn(){
-    }
-
-    public virtual void OnStartPlayerTurn(){
-        maxMovement ++;
-        ResetMovement();
-    }
-
-    public virtual void OnEndTurn(){
-        
-    }
-
-    public virtual void OnEndPlayerTurn(){
+    public bool TryToIncreaseMaxMovement(){
+        if(maxMovement >= maxMovementCap){
+            maxMovement = Math.Clamp(maxMovement, 0, maxMovementCap);
+            return false;
+        }
+        else{
+            maxMovement ++;
+            maxMovement = Math.Clamp(maxMovement, 0, maxMovementCap);
+            return true;
+        }
         
     }
 

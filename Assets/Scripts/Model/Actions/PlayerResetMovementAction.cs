@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerResetMovementAction : MonoBehaviour
+public class PlayerResetMovementAction : PlayerAction
 {
-    // Start is called before the first frame update
-    void Start()
+    public PlayerResetMovementAction(Player player, Action requiredAction = null) : base(player, requiredAction)
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override bool Perform()
     {
-        
+        player.ResetMovement();
+        return true;
     }
 }

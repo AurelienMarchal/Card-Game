@@ -2,17 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIncreaseMaxMouvementAction : MonoBehaviour
+public class PlayerIncreaseMaxMouvementAction : PlayerAction
 {
-    // Start is called before the first frame update
-    void Start()
+    public PlayerIncreaseMaxMouvementAction(Player player, Action requiredAction = null) : base(player, requiredAction)
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override bool Perform()
     {
-        
+        return player.TryToIncreaseMaxMovement();
     }
 }

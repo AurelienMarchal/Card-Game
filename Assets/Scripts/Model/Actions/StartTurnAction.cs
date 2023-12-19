@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StartTurnAction : MonoBehaviour
+public class StartTurnAction : Action
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+
+    public StartTurnAction(Action requiredAction = null): base(requiredAction){
+
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override bool Perform()
     {
-        
+        Game.currentGame.StartTurn();
+        Game.currentGame.PileAction(new StartPlayerTurnAction(Game.currentGame.currentPlayer, this), false);
+        return true;
     }
 }
