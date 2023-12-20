@@ -154,6 +154,10 @@ public class Entity
             return false;
         }
 
+        if(entity == this){
+            return false;
+        }
+
         if(entity.currentTile.Distance(currentTile) > 1){
             return false;
         }
@@ -171,5 +175,10 @@ public class Entity
 
     protected void SetupPermanentEffects(){
 
+    }
+
+    public override string ToString()
+    {
+        return $"Entity {name}";
     }
 }

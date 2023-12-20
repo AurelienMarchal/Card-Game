@@ -59,6 +59,18 @@ public class Player{
         movementLeft = maxMovement;
     }
 
+    public bool TryToPlayCard(Card card, Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
+        TryToCreatePayCostAction(card.cost, out PlayerPayCostAction playerPayCostAction);
+        card.TryToCreateCardPlayedAction(playerPayCostAction, out CardPlayedAction cardPlayedAction, targetTile, targetEntity);
+        return cardPlayedAction.wasPerformed;
+    }
+
+    public bool TryToActivateActivableEffect(ActivableEffect activableEffect){
+        TryToCreatePayCostAction(activableEffect.cost, out PlayerPayCostAction playerPayCostAction);
+        activableEffect.TryToCreateEffectActivatedAction(true, playerPayCostAction, out EffectActivatedAction effectActivatedAction);
+        return effectActivatedAction.wasPerformed;
+    }
+
     public bool TryToIncreaseMaxMovement(){
         if(maxMovement >= maxMovementCap){
             maxMovement = Math.Clamp(maxMovement, 0, maxMovementCap);
@@ -120,7 +132,7 @@ public class Player{
         return canPayHeartCost;
     }
 
-    private bool CanPayCost(Cost cost){
+    public bool CanPayCost(Cost cost){
         //TODO
         return CanPayHeartCost(cost.heartCost) && CanUseMovement(cost.movementCost);
     }
@@ -160,7 +172,7 @@ public class Player{
         Debug.Log($"{this} using {movement} movement. {movementLeft} movement left");
     }
 
-    public bool TryToCreatePayHeartCostAction(Heart[] hearts, out PlayerPayHeartCostAction payHeartCostAction){
+    public bool TryToCreatePayHeartCostAction(HeartType[] hearts, out PlayerPayHeartCostAction payHeartCostAction){
         payHeartCostAction = new PlayerPayHeartCostAction(this, hearts);
         var canPayHeartCost = CanPayHeartCost(hearts);
         if(canPayHeartCost){
@@ -170,7 +182,7 @@ public class Player{
         return canPayHeartCost;
     }
 
-    public bool TryToPayHeartCost(Heart[] hearts){
+    public bool TryToPayHeartCost(HeartType[] hearts){
         
         var canPayHeartCost = CanPayHeartCost(hearts);
 
@@ -181,12 +193,12 @@ public class Player{
         return canPayHeartCost;
     }
 
-    private bool CanPayHeartCost(Heart[] hearts){
+    private bool CanPayHeartCost(HeartType[] hearts){
         //TODO
         return true;
     }
 
-    private void PayHeartCost(Heart[] hearts){
+    private void PayHeartCost(HeartType[] hearts){
         Debug.Log($"{this} paying {hearts}");
     }
 

@@ -5,12 +5,12 @@ using UnityEngine;
 public class PlayerPayHeartCostAction : PlayerAction
 {
     
-    public Heart[] hearts{
+    public HeartType[] hearts{
         get;
         private set;
     }
 
-    public PlayerPayHeartCostAction(Player player, Heart[] hearts, Action requiredAction = null) : base(player, requiredAction){
+    public PlayerPayHeartCostAction(Player player, HeartType[] hearts, Action requiredAction = null) : base(player, requiredAction){
         this.hearts = hearts;
     }
 

@@ -39,5 +39,9 @@ public class MoveToChangeTileTypeEffect : Effect
         }
     }
 
+    public override string GetEffectText(){
+        return $"Every time this entity moves, the tile under it is transformed into a{tileType.ToTileString()}";
+    }
+
     
 }

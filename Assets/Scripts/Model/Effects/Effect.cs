@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Effect{
 
-
-
     public Effect(){
         
     }
@@ -19,7 +17,7 @@ public class Effect{
     protected virtual void Activate(){
     }
 
-    public bool TryToActivate(){
+    public virtual bool TryToActivate(){
         var result = CanBeActivated();
         if(result){
             Activate();
@@ -27,7 +25,7 @@ public class Effect{
         return result;
     }
 
-    public bool TryToCreateEffectActivatedAction(bool depile, Action requiredAction, out EffectActivatedAction effectActivatedAction){
+    public virtual bool TryToCreateEffectActivatedAction(bool depile, Action requiredAction, out EffectActivatedAction effectActivatedAction){
         effectActivatedAction = new EffectActivatedAction(this, requiredAction);
         var canBeActivated = CanBeActivated();
         if(canBeActivated){
@@ -40,5 +38,9 @@ public class Effect{
 
     public virtual bool Trigger(Action action){
         return false;
+    }
+
+    public virtual string GetEffectText(){
+        return "";
     }
 }

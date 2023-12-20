@@ -29,7 +29,7 @@ public class PlayerManager : MonoBehaviour
     private void OnCardClicked(Card card){
         Debug.Log($"Clicked on {card}");
         if(card.CanBeActivated()){
-            TryToPlayCard(card);
+            player.TryToPlayCard(card);
         }
     }
 
@@ -38,12 +38,5 @@ public class PlayerManager : MonoBehaviour
             handManager.hand = player.hand;
         }
         
-    }
-
-
-    public bool TryToPlayCard(Card card, Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
-        player.TryToCreatePayCostAction(card.cost, out PlayerPayCostAction playerPayCostAction);
-        card.TryToCreateCardPlayedAction(playerPayCostAction, out CardPlayedAction cardPlayedAction, targetTile, targetEntity);
-        return cardPlayedAction.wasPerformed;
     }
 }

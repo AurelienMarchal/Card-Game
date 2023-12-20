@@ -42,12 +42,17 @@ public class EntityManager : MonoBehaviour
 
             if(selected){
                 selectedEvent.Invoke(this);
+                GameManager.SetGameLayerRecursive(gameObject, LayerMask.NameToLayer("UICamera"));
             }
-            
+            else{
+                GameManager.SetGameLayerRecursive(gameObject, LayerMask.NameToLayer("Entity"));
+            }
+            /*
             var highlight = GetComponent<Highlight>();
             if(highlight != null){
                 highlight.ToggleHighlight(selected, true);
             }
+            */
         }
     }
 
@@ -59,12 +64,12 @@ public class EntityManager : MonoBehaviour
         }
         private set{
             hovered_ = value;
-            if(!selected){
-                var highlight = GetComponent<Highlight>();
-                if(highlight != null){
-                    highlight.ToggleHighlight(hovered);
-                }
+            
+            var highlight = GetComponent<Highlight>();
+            if(highlight != null){
+                highlight.ToggleHighlight(hovered);
             }
+            
         }
     }
 
@@ -88,7 +93,7 @@ public class EntityManager : MonoBehaviour
     {
         hovered = false;
         selected = false;
-        entityInfoCanvasInstance = Instantiate(entityInfoCanvasPrefab, transform);
+        //entityInfoCanvasInstance = Instantiate(entityInfoCanvasPrefab, transform);
     }
 
     // Update is called once per frame
@@ -118,6 +123,7 @@ public class EntityManager : MonoBehaviour
         }
 
         animator.SetBool("isWalking", goalTileManager != null);
+
     }
 
     void OnMouseDown(){

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 using TMPro;
 using System;
 
@@ -34,12 +35,19 @@ public class GameManager : MonoBehaviour
     MovementUIDisplay movementUIDisplay;
 
     [SerializeField]
+    EntityInfoUI entityInfoUI;
+
+    [SerializeField]
     TextMeshProUGUI playerTextMesh;
+
+    [SerializeField]
+    CameraFollowingSelectedEntity cameraFollowingSelectedEntity;
 
     bool entityWasClickedThisFrame;
 
     bool tileWasClickedThisFrame;
 
+    int UILayer;
     
 
     
@@ -61,6 +69,8 @@ public class GameManager : MonoBehaviour
 
         entityWasClickedThisFrame = false;
         tileWasClickedThisFrame = false;
+
+        UILayer = LayerMask.NameToLayer("UI");
 
         boardManager.entitySelectedEvent.AddListener(OnEntitySelected);
         boardManager.tileSelectedEvent.AddListener(OnTileSelected);
@@ -102,27 +112,35 @@ public class GameManager : MonoBehaviour
         }
 
         if(blockInputs){
+            /*
             EntityManager.UnselectEveryEntity();
             TileManager.UnselectEveryTile();
             currentEntitySelected = null;
             currentTileSelected = null;
+            */
         }
         else{
             
             if(Mouse.current.leftButton.wasPressedThisFrame){
-                if(!entityWasClickedThisFrame && !tileWasClickedThisFrame){
+                if(!IsPointerOverUIElement()){
+                    if(!entityWasClickedThisFrame && !tileWasClickedThisFrame){
+                        EntityManager.UnselectEveryEntity();
+                        TileManager.UnselectEveryTile();
+                        currentEntitySelected = null;
+                        currentTileSelected = null;
+                    }
+                }
+            }
+
+            
+
+            if (Mouse.current.rightButton.wasPressedThisFrame){
+                if(!IsPointerOverUIElement()){
                     EntityManager.UnselectEveryEntity();
                     TileManager.UnselectEveryTile();
                     currentEntitySelected = null;
                     currentTileSelected = null;
                 }
-            }
-
-            if (Mouse.current.rightButton.wasPressedThisFrame){
-                EntityManager.UnselectEveryEntity();
-                TileManager.UnselectEveryTile();
-                currentEntitySelected = null;
-                currentTileSelected = null;
             }
         }
 
@@ -137,6 +155,15 @@ public class GameManager : MonoBehaviour
                 movementUIDisplay.player = null;
             }
         }
+        
+        if(currentEntitySelected != null){
+            boardManager.ResetAllTileLayer();
+            var tileManager = boardManager.GetTileManagerFromTile(currentEntitySelected.entity.currentTile);
+            SetGameLayerRecursive(tileManager.gameObject, LayerMask.NameToLayer("UICamera"));
+        }
+
+        entityInfoUI.gameObject.SetActive(currentEntitySelected != null);
+        entityInfoUI.entityManager = currentEntitySelected;
 
 
         entityWasClickedThisFrame = false;
@@ -222,5 +249,42 @@ public class GameManager : MonoBehaviour
 
     public void OnEndTurnPressed(){
         Game.currentGame.PileAction(new EndPlayerTurnAction(Game.currentGame.currentPlayer), true);
+    }
+
+    //Returns 'true' if we touched or hovering on Unity UI element.
+    public bool IsPointerOverUIElement()
+    {
+        return IsPointerOverUIElement(GetEventSystemRaycastResults());
+    }
+
+    //Returns 'true' if we touched or hovering on Unity UI element.
+    private bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+    {
+        for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+        {
+            RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+            if (curRaysastResult.gameObject.layer == UILayer)
+                return true;
+        }
+        return false;
+    }
+
+    //Gets all event system raycast results of current mouse or touch position.
+    static List<RaycastResult> GetEventSystemRaycastResults()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raysastResults);
+        return raysastResults;
+    }
+
+    public static void SetGameLayerRecursive(GameObject gameObject, int layer)
+    {
+        gameObject.layer = layer;
+        foreach (Transform child in gameObject.transform)
+        {
+            SetGameLayerRecursive(child.gameObject, layer);
+        }
     }
 }

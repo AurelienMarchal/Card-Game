@@ -37,11 +37,12 @@ public class TileManager : MonoBehaviour
             if(selected){
                 selectedEvent.Invoke(this);
             }
-            
+            /*
             var highlight = GetComponent<Highlight>();
             if(highlight != null){
                 highlight.ToggleHighlight(selected, true);
             }
+            */
         }
     }
 
@@ -53,12 +54,11 @@ public class TileManager : MonoBehaviour
         }
         private set{
             hovered_ = value;
-            if(!selected){
-                var highlight = GetComponent<Highlight>();
-                if(highlight != null){
-                    highlight.ToggleHighlight(hovered);
-                }
+            var highlight = GetComponent<Highlight>();
+            if(highlight != null){
+                highlight.ToggleHighlight(hovered);
             }
+            
         }
     }
 

@@ -143,4 +143,10 @@ public class BoardManager : MonoBehaviour
 
         return null;
     }
+
+    public void ResetAllTileLayer(){
+        foreach (var tileManager in tileManagers){
+            GameManager.SetGameLayerRecursive(tileManager.gameObject, LayerMask.NameToLayer("Tile"));
+        }
+    }
 }

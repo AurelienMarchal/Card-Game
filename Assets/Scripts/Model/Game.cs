@@ -129,36 +129,36 @@ public sealed class Game{
         while(actionPile.Count > 0 && c < 1000){
             var action = actionPile[^1];
 
-            Debug.Log("Depile start");
-            Debug.Log($"action : {action}");
+            //Debug.Log("Depile start");
+            //Debug.Log($"action : {action}");
 
-            Debug.Log("Checking Trigger");
+            //Debug.Log("Checking Trigger");
 
             CheckTriggers(action);
 
-            Debug.Log($"Action pile : {string.Join( ",", actionPile)}");
+            //Debug.Log($"Action pile : {string.Join( ",", actionPile)}");
 
             var newAction = actionPile[^1];
 
-            Debug.Log($"newAction : {newAction}");
+            //Debug.Log($"newAction : {newAction}");
 
             if(action == newAction){
 
-                Debug.Log("Trying to perform action");
+                //Debug.Log("Trying to perform action");
                 var wasPerformed = action.TryToPerform();
 
                 if(wasPerformed){
-                    Debug.Log($"{action} was performed");
+                    //Debug.Log($"{action} was performed");
                 }
                 else{
-                    Debug.Log($"{action} was not performed");
+                    //Debug.Log($"{action} was not performed");
                 }
 
                 depiledActionQueue.Add(action);
                 actionPile.Remove(action);
 
                 if(wasPerformed){
-                    Debug.Log("Checking Trigger");
+                    //Debug.Log("Checking Trigger");
                     CheckTriggers(action);
                 }
             }
@@ -167,10 +167,10 @@ public sealed class Game{
                 c++;
             }
 
-            Debug.Log($"Action pile : {string.Join( ",", actionPile)}");
+            //Debug.Log($"Action pile : {string.Join( ",", actionPile)}");
         }
 
-        Debug.Log($"Action performed pile : {string.Join( ",", depiledActionQueue)}");
+        //Debug.Log($"Action performed pile : {string.Join( ",", depiledActionQueue)}");
 
         depileStarted = false;
     }
