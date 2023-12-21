@@ -46,21 +46,35 @@ public class Entity
 
     public const Entity noEntity = null;
 
-    public List<Effect> effects{
+    public List<EntityEffect> effects{
         get;
         protected set;
     }
 
-    public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingAtkDamage, Direction startingDirection = Direction.North){
+    public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingAtkDamage, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North){
+        this.player = player;
         this.model = model;
         this.name = name;
         currentTile = startingTile;
         health = startingHealth;
         atkDamage = startingAtkDamage;
         direction = startingDirection;
+        effects = new List<EntityEffect>();
+        AddEffectList(permanentEffects);
+        AddDefaultPermanentEffects();
+    }
+
+    public Entity(Player player, ScriptableEntity scriptableEntity, Tile startingTile, Direction startingDirection = Direction.North){
         this.player = player;
-        effects = new List<Effect>();
-        SetupPermanentEffects();
+        model = scriptableEntity.entityModel;
+        name = scriptableEntity.entityName;
+        currentTile = startingTile;
+        health = scriptableEntity.health;
+        atkDamage = scriptableEntity.atkDamage;
+        direction = startingDirection;
+        effects = new List<EntityEffect>();
+        AddEffectList(scriptableEntity.scriptableEffects);
+        AddDefaultPermanentEffects();
     }
 
     public virtual bool TryToCreateEntityMoveAction(Tile tile, Action requiredAction, out EntityMoveAction entityMoveAction){
@@ -173,7 +187,31 @@ public class Entity
         return isDead;
     }
 
-    protected void SetupPermanentEffects(){
+    public void AddEffectList(List<ScriptableEffect> scriptableEffects){
+        foreach (var scriptableEffect in scriptableEffects){
+            AddEffect(scriptableEffect);
+        }
+    }
+
+    public void AddEffect(ScriptableEffect scriptableEffect){
+        var entityEffect = scriptableEffect.GetEffect() as EntityEffect;
+        if(entityEffect != null){
+            AddEffect(entityEffect);
+        }
+    }
+
+    public void AddEffect(EntityEffect entityEffect){
+        entityEffect.associatedEntity = this;
+        effects.Add(entityEffect);
+    }
+
+    public void AddEffectList(List<EntityEffect> entityEffects){
+        foreach (var effect in entityEffects){
+            AddEffect(effect);
+        }
+    }
+
+    protected void AddDefaultPermanentEffects(){
 
     }
 

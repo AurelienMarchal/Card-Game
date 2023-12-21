@@ -18,8 +18,8 @@ public class ThrowProjectileSpellCard : SpellCard
     }
 
     public ThrowProjectileSpellCard(Player player, ScriptableThrowProjectileCard scriptableThrowProjectileCard) : base(player, scriptableThrowProjectileCard){
-        damage = scriptableThrowProjectileCard.damage;
-        maxRange = scriptableThrowProjectileCard.maxRange;
+        damage = scriptableThrowProjectileCard.scriptableThrowProjectileEffect.damage;
+        maxRange = scriptableThrowProjectileCard.scriptableThrowProjectileEffect.range;
     }
 
     protected override bool Activate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){

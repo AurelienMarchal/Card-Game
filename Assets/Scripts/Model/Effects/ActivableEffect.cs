@@ -1,13 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class ActivableEffect : Effect
+public class ActivableEffect : EntityEffect
 {
-    public Entity entity{
-        get;
-        protected set;
-    }
 
     public Cost cost{
         get;
@@ -19,13 +11,12 @@ public class ActivableEffect : Effect
         protected set;
     }
 
-    public ActivableEffect(Entity associatedEntity, Cost cost){
-        entity = associatedEntity;
+    public ActivableEffect(Entity entity, Cost cost) : base(entity){
         this.cost = cost;
     }
 
     public override bool CanBeActivated(){
-        return entity.player.CanPayCost(cost) || costPaid;
+        return base.CanBeActivated() && associatedEntity.player.CanPayCost(cost) || costPaid;
     }
 
     public override bool TryToCreateEffectActivatedAction(bool depile, Action costAction, out EffectActivatedAction effectActivatedAction){

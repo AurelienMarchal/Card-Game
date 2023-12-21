@@ -11,6 +11,12 @@ public class GameManager : MonoBehaviour
 {
 
     [SerializeField]
+    ScriptableHero scriptableHero1;
+
+    [SerializeField]
+    ScriptableHero scriptableHero2;
+
+    [SerializeField]
     BoardManager boardManager;
 
     [SerializeField]
@@ -28,6 +34,8 @@ public class GameManager : MonoBehaviour
     int boardWidth;
 
     EntityManager currentEntitySelected;
+
+    EntityManager lastEntitySelected;
 
     TileManager currentTileSelected;
     
@@ -66,6 +74,7 @@ public class GameManager : MonoBehaviour
 
         currentTileSelected = null;
         currentEntitySelected = null;
+        lastEntitySelected = null;
 
         entityWasClickedThisFrame = false;
         tileWasClickedThisFrame = false;
@@ -77,19 +86,17 @@ public class GameManager : MonoBehaviour
         boardManager.entityClickedEvent.AddListener(OnEntityClicked);
         boardManager.tileClickedEvent.AddListener(OnTileClicked);
 
-        var health = new Health(new HeartType[]{HeartType.Red, HeartType.Red ,HeartType.Cursed, HeartType.Cursed, HeartType.Nature, HeartType.Nature});
-        var startingTile = boardManager.board.GetTileAt(4, 4);
-        var direction = Direction.East;
-        var hero1 = new Hero( Game.currentGame.players[0], EntityModel.MageHero,"Hero 1", startingTile, health, new Damage(1), direction);
+        var startingTile1 = boardManager.board.GetTileAt(4, 4);
+        var direction1 = Direction.East;
+        var hero1 = new Hero(Game.currentGame.players[0], scriptableHero1, startingTile1, direction1);
         hero1.effects.Add(new MoveToChangeTileTypeEffect(hero1, TileType.Nature));
 
         animationManager.SpawnEntity(hero1);
 
-        var health2 = new Health(new HeartType[]{HeartType.Red, HeartType.Red ,HeartType.Cursed, HeartType.Nature, HeartType.Blue, HeartType.Blue});
         var startingTile2 = boardManager.board.GetTileAt(4, 5);
         var direction2 = Direction.West;
-        var hero2 = new Hero(Game.currentGame.players[1], EntityModel.MageHero, "Hero 2", startingTile2, health2, new Damage(1), direction2);
-        hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
+        var hero2 = new Hero(Game.currentGame.players[1], scriptableHero2, startingTile2, direction2);
+        //hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
 
         animationManager.SpawnEntity(hero2);
 
@@ -132,8 +139,6 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            
-
             if (Mouse.current.rightButton.wasPressedThisFrame){
                 if(!IsPointerOverUIElement()){
                     EntityManager.UnselectEveryEntity();
@@ -163,8 +168,12 @@ public class GameManager : MonoBehaviour
         }
 
         entityInfoUI.gameObject.SetActive(currentEntitySelected != null);
-        entityInfoUI.entityManager = currentEntitySelected;
 
+        if(lastEntitySelected != currentEntitySelected){
+            entityInfoUI.entityManager = currentEntitySelected;
+        }
+
+        lastEntitySelected = currentEntitySelected;
 
         entityWasClickedThisFrame = false;
         tileWasClickedThisFrame = false;
@@ -195,8 +204,8 @@ public class GameManager : MonoBehaviour
 
 
     void OnEntitySelected(EntityManager entityManager){
-
         currentEntitySelected = entityManager;
+        
     }
 
     void OnTileSelected(TileManager tileManager){

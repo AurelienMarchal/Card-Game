@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChangeWillGetCurseTypeIntoCursedTileEffect : Effect
+public class ChangeWillGetCurseTypeIntoCursedTileEffect : TileEffect
 {
 
     public Tile tile{
@@ -10,7 +10,7 @@ public class ChangeWillGetCurseTypeIntoCursedTileEffect : Effect
         protected set;
     }
 
-    public ChangeWillGetCurseTypeIntoCursedTileEffect(Tile tile){
+    public ChangeWillGetCurseTypeIntoCursedTileEffect(Tile tile) : base(tile){
         this.tile = tile;
     }
 
@@ -21,7 +21,7 @@ public class ChangeWillGetCurseTypeIntoCursedTileEffect : Effect
 
     public override bool CanBeActivated()
     {
-        return tile.tileType == TileType.WillGetCursed;
+        return base.CanBeActivated() && tile.tileType == TileType.WillGetCursed;
     }
 
 

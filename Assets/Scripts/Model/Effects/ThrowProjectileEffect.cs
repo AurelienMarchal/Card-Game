@@ -1,12 +1,7 @@
 using UnityEngine;
 
-public class ThrowProjectileEffect : Effect
+public class ThrowProjectileEffect : EntityEffect
 {
-    public Entity casterEntity{
-        get;
-        protected set;
-    }
-
     public Direction direction{
         get;
         protected set;
@@ -33,9 +28,7 @@ public class ThrowProjectileEffect : Effect
     }
 
     
-
-    public ThrowProjectileEffect(Entity casterEntity, Direction direction, Damage damage, int range){
-        this.casterEntity = casterEntity;
+    public ThrowProjectileEffect(Entity casterEntity, Direction direction, Damage damage, int range) : base(casterEntity){
         this.direction = direction;
         this.damage = damage;
         this.range = range;
@@ -44,7 +37,7 @@ public class ThrowProjectileEffect : Effect
     }
 
     protected override void Activate(){
-        var tileChecked = Game.currentGame.board.NextTileInDirection(casterEntity.currentTile, direction);
+        var tileChecked = Game.currentGame.board.NextTileInDirection(associatedEntity.currentTile, direction);
         var lastTileChecked = tileChecked;
         var entityFound = Game.currentGame.board.GetEntityAtTile(tileChecked);
 
@@ -59,7 +52,7 @@ public class ThrowProjectileEffect : Effect
                 break;
             }
 
-            if(tileChecked.Distance(casterEntity.currentTile) > range){
+            if(tileChecked.Distance(associatedEntity.currentTile) > range){
                 break;
             }
 
@@ -89,6 +82,6 @@ public class ThrowProjectileEffect : Effect
     }
 
     public override bool CanBeActivated(){
-        return Game.currentGame.board.NextTileInDirection(casterEntity.currentTile, casterEntity.direction) != Tile.noTile;
+        return Game.currentGame.board.NextTileInDirection(associatedEntity.currentTile, associatedEntity.direction) != Tile.noTile;
     }
 }

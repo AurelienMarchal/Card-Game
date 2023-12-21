@@ -67,33 +67,10 @@ public class EntityInfoUI : MonoBehaviour
 
     void AddEffectCanvasFromEffect(Effect effect){
         var effectCanvas = Instantiate(effectCanvasPrefab, effectScrollViewContent.transform);
-        var healthUIDisplay = effectCanvas.GetComponentInChildren<HealthUIDisplay>();
-        var effectTextMeshPro = effectCanvas.GetComponentInChildren<TextMeshProUGUI>();
-        var button = effectCanvas.GetComponent<Button>();
-        
-        if(effectTextMeshPro != null){
-            effectTextMeshPro.text = effect.GetEffectText();
+        var effectUIDisplay = effectCanvas.GetComponent<EffectUIDisplay>();
+
+        if(effectUIDisplay != null){
+            effectUIDisplay.effect = effect;
         }
-
-        if(button != null){
-            button.interactable = true;
-        }
-
-        switch(effect){
-            case ActivableEffect activableEffect:
-                if(healthUIDisplay != null){
-                    healthUIDisplay.health = new Health(activableEffect.cost.heartCost);
-                }
-                if(button != null){
-                    button.interactable = true;
-                }
-                break;
-            default: 
-            
-            break;
-        }
-
-        
-
     }
 }

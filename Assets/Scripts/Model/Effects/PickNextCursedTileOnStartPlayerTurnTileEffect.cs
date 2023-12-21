@@ -2,15 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickNextCursedTileOnStartPlayerTurnEffect : Effect {
+public class PickNextCursedTileOnStartPlayerTurnTileEffect : TileEffect {
 
-    public Tile tile{
-        get;
-        protected set;
-    }
-
-    public PickNextCursedTileOnStartPlayerTurnEffect(Tile tile){
-        this.tile = tile;
+    public PickNextCursedTileOnStartPlayerTurnTileEffect(Tile tile) : base(tile){
+    
     }
 
     protected override void Activate(){
@@ -22,7 +17,7 @@ public class PickNextCursedTileOnStartPlayerTurnEffect : Effect {
 
     public override bool CanBeActivated()
     {
-        return tile.tileType == TileType.CurseSource && GetEveryPossibleTile().Count > 0;
+        return base.CanBeActivated() && associatedTile.tileType == TileType.CurseSource && GetEveryPossibleTile().Count > 0;
     }
 
     public override bool Trigger(Action action)

@@ -1,18 +1,14 @@
 using UnityEngine;
 
-public class MoveToChangeTileTypeEffect : Effect
+public class MoveToChangeTileTypeEffect : EntityEffect
 {
-    public Entity associatedEntity{
-        get;
-        protected set;
-    }
 
     public TileType tileType{
         get;
         protected set;
     }
 
-    public MoveToChangeTileTypeEffect(Entity entity, TileType tileType){
+    public MoveToChangeTileTypeEffect(Entity entity, TileType tileType) : base(entity){
         associatedEntity = entity;
         this.tileType = tileType;
     }
@@ -23,7 +19,7 @@ public class MoveToChangeTileTypeEffect : Effect
 
     public override bool CanBeActivated()
     {
-        return true;
+        return base.CanBeActivated();
     }
 
     public override bool Trigger(Action action)
@@ -40,7 +36,7 @@ public class MoveToChangeTileTypeEffect : Effect
     }
 
     public override string GetEffectText(){
-        return $"Every time this entity moves, the tile under it is transformed into a{tileType.ToTileString()}";
+        return $"Every time {associatedEntity} moves, the tile under it is transformed into a {tileType.ToTileString()}";
     }
 
     

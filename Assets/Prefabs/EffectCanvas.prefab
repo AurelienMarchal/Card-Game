@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 5048846629603947816}
   - component: {fileID: 7570840693483944814}
   - component: {fileID: 7254012993527469610}
+  - component: {fileID: 2163655375507861602}
   m_Layer: 5
   m_Name: EffectCanvas
   m_TagString: Untagged
@@ -224,6 +225,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2163655375507861602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4315714916159830859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77162c991d7704842bc0a4f85e19cd86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 4540647110478733669}
+  effectTextMeshProUGUI: {fileID: 8744487440698956328}
+  healthUIDisplay: {fileID: 724396534491132278}
 --- !u!1 &5336017473720879701
 GameObject:
   m_ObjectHideFlags: 0
@@ -747,6 +763,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 932d5607fd68367409560da155322ffd, type: 3}
+--- !u!114 &724396534491132278 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6569856698704213517, guid: 932d5607fd68367409560da155322ffd, type: 3}
+  m_PrefabInstance: {fileID: 5846027547663533947}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cb0a7afbab7b6b4fb05ca93ebf41dc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1497214459123903667 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5036835874055826376, guid: 932d5607fd68367409560da155322ffd, type: 3}
