@@ -16,7 +16,7 @@ public class ChangeWillGetCurseTypeIntoCursedTileEffect : TileEffect
 
     protected override void Activate()
     {
-        Game.currentGame.PileAction(new TileChangeTypeAction(tile, TileType.Cursed, effectActivatedAction), false);
+        Game.currentGame.PileAction(new TileChangeTypeAction(tile, TileType.Cursed, effectActivatedAction));
     }
 
     public override bool CanBeActivated()

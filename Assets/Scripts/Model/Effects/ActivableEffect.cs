@@ -6,27 +6,27 @@ public class ActivableEffect : EntityEffect
         protected set;
     }
 
-    public bool costPaid{
-        get;
-        protected set;
-    }
+    protected bool costPaid;
 
     public ActivableEffect(Entity entity, Cost cost) : base(entity){
         this.cost = cost;
+        costPaid = false;
     }
 
     public override bool CanBeActivated(){
         return base.CanBeActivated() && associatedEntity.player.CanPayCost(cost) || costPaid;
     }
 
-    public override bool TryToCreateEffectActivatedAction(bool depile, Action costAction, out EffectActivatedAction effectActivatedAction){
+    public override bool TryToCreateEffectActivatedAction(Action costAction, out EffectActivatedAction effectActivatedAction){
         effectActivatedAction = new EffectActivatedAction(this, costAction);
         costPaid = costAction.wasPerformed;
         var canBeActivated = CanBeActivated();
         if(canBeActivated){
             this.effectActivatedAction = effectActivatedAction;
-            Game.currentGame.PileAction(effectActivatedAction, depile);
+            Game.currentGame.PileAction(effectActivatedAction);
         }
+
+        costPaid = false;
         
         return canBeActivated;
     }

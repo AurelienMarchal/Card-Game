@@ -63,7 +63,7 @@ public class Card{
         var canBeActivated = CanBeActivated();
         if(canBeActivated){
             this.cardPlayedAction = cardPlayedAction;
-            Game.currentGame.PileAction(cardPlayedAction, true);
+            Game.currentGame.PileAction(cardPlayedAction);
         }
 
         return canBeActivated;

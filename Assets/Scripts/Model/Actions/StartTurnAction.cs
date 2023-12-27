@@ -12,7 +12,7 @@ public class StartTurnAction : Action
     protected override bool Perform()
     {
         Game.currentGame.StartTurn();
-        Game.currentGame.PileAction(new StartPlayerTurnAction(Game.currentGame.currentPlayer, this), false);
+        Game.currentGame.PileAction(new StartPlayerTurnAction(Game.currentGame.currentPlayer, this));
         return true;
     }
 }

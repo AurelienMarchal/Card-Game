@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Entity
@@ -69,7 +70,7 @@ public class Entity
         model = scriptableEntity.entityModel;
         name = scriptableEntity.entityName;
         currentTile = startingTile;
-        health = scriptableEntity.health;
+        health = scriptableEntity.health.Clone() as Health;
         atkDamage = scriptableEntity.atkDamage;
         direction = startingDirection;
         effects = new List<EntityEffect>();

@@ -67,7 +67,7 @@ public class Player{
 
     public bool TryToActivateActivableEffect(ActivableEffect activableEffect){
         TryToCreatePayCostAction(activableEffect.cost, out PlayerPayCostAction playerPayCostAction);
-        activableEffect.TryToCreateEffectActivatedAction(true, playerPayCostAction, out EffectActivatedAction effectActivatedAction);
+        activableEffect.TryToCreateEffectActivatedAction(playerPayCostAction, out EffectActivatedAction effectActivatedAction);
         return effectActivatedAction.wasPerformed;
     }
 
@@ -88,7 +88,7 @@ public class Player{
         playerSpawnEntityAction = new PlayerSpawnEntityAction(this, model, name, startingTile, startingHealth, startingDamageAtk, permanentEffects, startingDirection,  requiredAction);
         var canSpawnEntityAt = CanSpawnEntityAt(startingTile);
         if(canSpawnEntityAt){
-            Game.currentGame.PileAction(playerSpawnEntityAction, false);
+            Game.currentGame.PileAction(playerSpawnEntityAction);
         }
 
         return canSpawnEntityAt;
@@ -98,7 +98,7 @@ public class Player{
         playerSpawnEntityAction = new PlayerSpawnEntityAction(this, scriptableEntity,  startingTile, startingDirection,  requiredAction);
         var canSpawnEntityAt = CanSpawnEntityAt(startingTile);
         if(canSpawnEntityAt){
-            Game.currentGame.PileAction(playerSpawnEntityAction, false);
+            Game.currentGame.PileAction(playerSpawnEntityAction);
         }
 
         return canSpawnEntityAt;
@@ -134,9 +134,7 @@ public class Player{
 
             payCostAction = new PlayerPayCostAction(this, cost, payHeartCostAction);
 
-            Game.currentGame.PileAction(payCostAction, false);
-            Game.currentGame.PileAction(useMovementAction, false);
-            Game.currentGame.PileAction(payHeartCostAction, true);
+            Game.currentGame.PileActions(new Action[]{payCostAction, useMovementAction, payHeartCostAction});
             
         }
         return canPayHeartCost;
@@ -193,23 +191,12 @@ public class Player{
     }
 
     public bool TryToPayHeartCost(HeartType[] hearts){
-        
-        var canPayHeartCost = CanPayHeartCost(hearts);
-
-        if(canPayHeartCost){
-            PayHeartCost(hearts);
-        }
-
-        return canPayHeartCost;
+        return hero.health.TryToPayHeartCost(hearts);
     }
 
     private bool CanPayHeartCost(HeartType[] hearts){
         //TODO
-        return true;
-    }
-
-    private void PayHeartCost(HeartType[] hearts){
-        Debug.Log($"{this} paying {hearts}");
+        return hero.health.CanPayHeartCost(hearts);
     }
 
     private void SetupPermanentEffects(){

@@ -14,7 +14,7 @@ public class MoveToChangeTileTypeEffect : EntityEffect
     }
 
     protected override void Activate(){
-        Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType, effectActivatedAction), false);
+        Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType, effectActivatedAction));
     }
 
     public override bool CanBeActivated()

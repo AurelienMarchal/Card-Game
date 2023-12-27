@@ -20,8 +20,8 @@ public class EntityAttackAction : EntityAction
             return false;
         }
 
-        Game.currentGame.PileAction(new EntityTakeDamageAction(attackedEntity, entity.atkDamage, this), false);
-        Game.currentGame.PileAction(new EntityTakeDamageAction(entity, attackedEntity.atkDamage, this), false);
+        Game.currentGame.PileAction(new EntityTakeDamageAction(attackedEntity, entity.atkDamage, this));
+        Game.currentGame.PileAction(new EntityTakeDamageAction(entity, attackedEntity.atkDamage, this));
 
         entity.hasAttacked = true;
 

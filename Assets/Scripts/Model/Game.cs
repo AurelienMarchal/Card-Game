@@ -108,8 +108,22 @@ public sealed class Game{
         return false;
     }
 
+    public void PileActions(Action[] actions){
+        foreach(var action in actions){
+            if(actionPile.Count < maxPileCount){
+            actionPile.Add(action);
+            Debug.Log($"Piling {action}");
+        }
+            else{
+                Debug.Log($"Reached pile action maximum");
+            }
+        }
+
+        TryToDepileActionPile();
+    }
+
     
-    public void PileAction(Action action, bool depile = true){
+    public void PileAction(Action action){
         if(actionPile.Count < maxPileCount){
             actionPile.Add(action);
             Debug.Log($"Piling {action}");
@@ -118,9 +132,16 @@ public sealed class Game{
             Debug.Log($"Reached pile action maximum");
         }
 
-        if(!depileStarted && depile){
+        TryToDepileActionPile();
+    }
+
+    public bool TryToDepileActionPile(){
+        var canDepile = !depileStarted;
+        if(canDepile){
             DepileActionPile();
         }
+
+        return canDepile;
     }
 
     private void DepileActionPile(){
@@ -179,20 +200,20 @@ public sealed class Game{
 
         foreach(Effect effect in currentGame.effects){
             if(effect.Trigger(action)){
-                effect.TryToCreateEffectActivatedAction(false, action, out _);
+                effect.TryToCreateEffectActivatedAction(action, out _);
             }
         }
 
         foreach(Effect effect in currentGame.board.effects){
             if(effect.Trigger(action)){
-                effect.TryToCreateEffectActivatedAction(false, action, out _);
+                effect.TryToCreateEffectActivatedAction(action, out _);
             }
         }
 
         foreach(Player player in players){
             foreach(Effect effect in player.effects){
                 if(effect.Trigger(action)){
-                    effect.TryToCreateEffectActivatedAction(false, action, out _);
+                    effect.TryToCreateEffectActivatedAction(action, out _);
                 }
             }
         }
@@ -200,7 +221,7 @@ public sealed class Game{
         foreach(Entity entity in currentGame.board.entities){
             foreach(Effect effect in entity.effects){
                 if(effect.Trigger(action)){
-                    effect.TryToCreateEffectActivatedAction(false, action, out _);
+                    effect.TryToCreateEffectActivatedAction(action, out _);
                 }
             }
         }
@@ -208,7 +229,7 @@ public sealed class Game{
         foreach(Tile tile in currentGame.board.tiles){
             foreach(Effect effect in tile.effects){
                 if(effect.Trigger(action)){
-                    effect.TryToCreateEffectActivatedAction(false, action, out _);
+                    effect.TryToCreateEffectActivatedAction(action, out _);
                 }
             }
         }

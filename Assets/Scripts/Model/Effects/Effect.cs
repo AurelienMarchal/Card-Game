@@ -25,12 +25,12 @@ public class Effect{
         return result;
     }
 
-    public virtual bool TryToCreateEffectActivatedAction(bool depile, Action requiredAction, out EffectActivatedAction effectActivatedAction){
+    public virtual bool TryToCreateEffectActivatedAction(Action requiredAction, out EffectActivatedAction effectActivatedAction){
         effectActivatedAction = new EffectActivatedAction(this, requiredAction);
         var canBeActivated = CanBeActivated();
         if(canBeActivated){
             this.effectActivatedAction = effectActivatedAction;
-            Game.currentGame.PileAction(effectActivatedAction, depile);
+            Game.currentGame.PileAction(effectActivatedAction);
         }
         
         return canBeActivated;

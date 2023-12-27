@@ -11,7 +11,7 @@ public class StartGameAction : Action
     protected override bool Perform()
     {
         Game.currentGame.StartGame();
-        Game.currentGame.PileAction(new StartTurnAction(this), false);
+        Game.currentGame.PileAction(new StartTurnAction(this));
 
         return true;
     }

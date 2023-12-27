@@ -12,7 +12,7 @@ public class PickNextCursedTileOnStartPlayerTurnTileEffect : TileEffect {
 
         var possibleTiles = GetEveryPossibleTile();
         var randomIndex = Game.currentGame.random.Next(possibleTiles.Count);
-        Game.currentGame.PileAction(new TileChangeTypeAction(possibleTiles[randomIndex], TileType.WillGetCursed, effectActivatedAction), false);
+        Game.currentGame.PileAction(new TileChangeTypeAction(possibleTiles[randomIndex], TileType.WillGetCursed, effectActivatedAction));
     }
 
     public override bool CanBeActivated()

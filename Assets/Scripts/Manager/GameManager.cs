@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
 
         animationManager.SpawnEntity(hero2);
 
-        Game.currentGame.PileAction(new StartGameAction(), true);
+        Game.currentGame.PileAction(new StartGameAction());
     }
 
     // Update is called once per frame
@@ -257,7 +257,7 @@ public class GameManager : MonoBehaviour
 
 
     public void OnEndTurnPressed(){
-        Game.currentGame.PileAction(new EndPlayerTurnAction(Game.currentGame.currentPlayer), true);
+        Game.currentGame.PileAction(new EndPlayerTurnAction(Game.currentGame.currentPlayer));
     }
 
     //Returns 'true' if we touched or hovering on Unity UI element.

@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 
 [Serializable]
-public class Health{
+public class Health : ICloneable{
     public HeartType[] hearts;
 
     public Health(int maxNumberOfHeart = 12){
@@ -36,6 +37,19 @@ public class Health{
         return toReturn + $" vide {IsEmpty()}";
     }
 
+    public void RemoveHeartAt(int heartInd){
+
+        if(heartInd < 0 || heartInd >= hearts.Length){
+            return;
+        }
+
+        hearts[hearts.Length - 1] = HeartType.NoHeart;
+
+        for (int i = heartInd; i < hearts.Length - 1; i++){
+            hearts[i] = hearts[i+1];
+        }
+    }
+
     public bool TakeDamage(Damage damage){
         if(IsEmpty()){
             return true;
@@ -57,7 +71,6 @@ public class Health{
                     break;
 
                 case HeartType.RedEmpty:
-                    damageTaken = 1;
                     break;
 
                 case HeartType.NoHeart: 
@@ -79,8 +92,71 @@ public class Health{
         return IsEmpty();
     }
 
+    public bool TryToPayHeartCost(HeartType[] heartCost){
+        
+        var canPayHeartCost = CanPayHeartCost(heartCost);
+
+        if(canPayHeartCost){
+            PayHeartCost(heartCost);
+        }
+
+        return canPayHeartCost;
+    }
+
+    public bool CanPayHeartCost(HeartType[] heartCost){
+
+        if(IsEmpty()){
+            return false;
+        }
+        
+        var heartCostCopy = new List<HeartType>(heartCost);
+
+        foreach(HeartType heartType in hearts){
+            if(heartCostCopy.Contains(heartType)){
+                heartCostCopy.Remove(heartType);
+            }
+        }
+
+        return heartCostCopy.Count == 0;
+    }
+
+    private bool PayHeartCost(HeartType[] heartCost){
+        if(IsEmpty()){
+            return true;
+        }
+
+        var heartCostCopy = new List<HeartType>(heartCost);
+
+        var currentHeartIndex = hearts.Length - 1;
 
 
+
+        while(heartCostCopy.Count > 0 && currentHeartIndex >= 0){
+            if(hearts[currentHeartIndex] == HeartType.Red || hearts[currentHeartIndex] == HeartType.RedEmpty){
+                if(heartCostCopy.Contains(HeartType.Red)){
+                    heartCostCopy.Remove(HeartType.Red);
+                    RemoveHeartAt(currentHeartIndex);
+                }
+            }
+            else if(heartCostCopy.Contains(hearts[currentHeartIndex])){
+                heartCostCopy.Remove(hearts[currentHeartIndex]);
+                RemoveHeartAt(currentHeartIndex);
+            }
+
+            else{
+                currentHeartIndex --;
+            }
+        }
+
+        return IsEmpty();
+    }
+
+    public object Clone()
+    {
+        var heartsClone = hearts.Clone() as HeartType[];
+        var healthClone = new Health(heartsClone);
+        return healthClone;
+    }
 }
 
 

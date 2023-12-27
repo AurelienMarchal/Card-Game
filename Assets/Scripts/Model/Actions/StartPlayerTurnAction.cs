@@ -11,8 +11,8 @@ public class StartPlayerTurnAction : PlayerAction
 
     protected override bool Perform()
     {
-        Game.currentGame.PileAction(new PlayerResetMovementAction(player, this), false);
-        Game.currentGame.PileAction(new PlayerIncreaseMaxMouvementAction(player, this), false);
+        Game.currentGame.PileAction(new PlayerResetMovementAction(player, this));
+        Game.currentGame.PileAction(new PlayerIncreaseMaxMouvementAction(player, this));
         return true;
     }
 }

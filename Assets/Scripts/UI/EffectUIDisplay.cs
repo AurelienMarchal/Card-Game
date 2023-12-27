@@ -78,7 +78,12 @@ public class EffectUIDisplay : MonoBehaviour
         }
         
         effectTextMeshProUGUI.text = effect.GetEffectText();
-        button.interactable = effect is ActivableEffect;
+        if(effect is ActivableEffect activableEffect)
+        {
+            button.interactable = activableEffect.associatedEntity.player.CanPayCost(activableEffect.cost);
+        }
+        
+        
 
     }
 }

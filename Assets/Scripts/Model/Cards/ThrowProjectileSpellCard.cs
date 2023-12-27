@@ -24,7 +24,7 @@ public class ThrowProjectileSpellCard : SpellCard
 
     protected override bool Activate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
         var projectileEffect = new ThrowProjectileEffect(player.hero, player.hero.direction, damage, maxRange);
-        return projectileEffect.TryToCreateEffectActivatedAction(false, cardPlayedAction, out _);
+        return projectileEffect.TryToCreateEffectActivatedAction(cardPlayedAction, out _);
     }
 
     public override bool CanBeActivated(Tile targetTile = null, Entity targetEntity = null){

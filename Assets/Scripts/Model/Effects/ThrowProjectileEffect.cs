@@ -77,7 +77,7 @@ public class ThrowProjectileEffect : EntityEffect
         }
 
         if(entityHit != Entity.noEntity){
-            Game.currentGame.PileAction(new EntityTakeDamageAction(entityHit, damage, effectActivatedAction), false);
+            Game.currentGame.PileAction(new EntityTakeDamageAction(entityHit, damage, effectActivatedAction));
         }
     }
 
