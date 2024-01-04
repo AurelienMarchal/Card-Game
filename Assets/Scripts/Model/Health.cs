@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 
 [Serializable]
@@ -151,8 +152,7 @@ public class Health : ICloneable{
         return IsEmpty();
     }
 
-    public object Clone()
-    {
+    public object Clone(){
         var heartsClone = hearts.Clone() as HeartType[];
         var healthClone = new Health(heartsClone);
         return healthClone;

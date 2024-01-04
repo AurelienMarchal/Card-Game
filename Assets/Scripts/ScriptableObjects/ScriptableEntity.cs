@@ -12,6 +12,8 @@ public class ScriptableEntity : ScriptableObject
 
     public Damage atkDamage;
 
+    public int maxMovement;
+
     public List<ScriptableEffect> scriptableEffects;
     
 }

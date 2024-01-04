@@ -35,6 +35,11 @@ public class PlayerSpawnEntityAction : PlayerAction
         protected set;
     }
 
+    public int maxMovement{
+        get;
+        protected set;
+    }
+
     public ScriptableEntity scriptableEntity{
         get;
         protected set;
@@ -50,12 +55,13 @@ public class PlayerSpawnEntityAction : PlayerAction
         protected set;
     }
 
-    public PlayerSpawnEntityAction(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingDamageAtk, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Action requiredAction = null) : base(player, requiredAction){
+    public PlayerSpawnEntityAction(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingDamageAtk, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Action requiredAction = null) : base(player, requiredAction){
         tile = startingTile;
         this.model = model;
         this.name = name;
         health = startingHealth;
         damageAtk = startingDamageAtk;
+        maxMovement = startingMaxMovement;
         direction = startingDirection;
         this.permanentEffects = permanentEffects;
         entitySpawned = Entity.noEntity;
@@ -71,11 +77,12 @@ public class PlayerSpawnEntityAction : PlayerAction
         direction = startingDirection;
         permanentEffects = new List<EntityEffect>();
         entitySpawned = Entity.noEntity;
+        this.scriptableEntity = scriptableEntity;
     }
 
     protected override bool Perform(){
         if(scriptableEntity == null){
-            entitySpawned = new Entity(player, model, name, tile, health, damageAtk, permanentEffects, direction);
+            entitySpawned = new Entity(player, model, name, tile, health, damageAtk, maxMovement, permanentEffects, direction);
         }
         else{
             entitySpawned = new Entity(player, scriptableEntity, tile, direction);

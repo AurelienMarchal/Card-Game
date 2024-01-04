@@ -21,6 +21,9 @@ public class CardManager : MonoBehaviour
     ScriptableCard lastScriptableCard;
 
     [SerializeField]
+    CostUIDisplay costUIDisplay;
+
+    [SerializeField]
     TextMeshProUGUI cardNameTextMeshProUGUI;
 
     [SerializeField]
@@ -53,12 +56,14 @@ public class CardManager : MonoBehaviour
 
     void Start(){
         hovered = false;
+        
         if(player == null){
             var handManager = transform.parent.gameObject.GetComponent<HandManager>();
             if(handManager != null){
                 player = handManager.hand.player;
             }
         }
+        
         UpdateAccordingToScriptableCard();
         lastScriptableCard = scriptableCard;
     }
@@ -84,6 +89,7 @@ public class CardManager : MonoBehaviour
             //cardCostTextMeshProUGUI.text = $"{card.cost.movementCost}";
             cardTextTextMeshProUGUI.text = card.text;
             cardNameTextMeshProUGUI.text = card.cardName;
+            costUIDisplay.cost = card.cost;
         }
     }
 

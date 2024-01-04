@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     TileManager currentTileSelected;
     
     [SerializeField]
-    MovementUIDisplay movementUIDisplay;
+    ManaUIDisplay manaUIDisplay;
 
     [SerializeField]
     EntityInfoUI entityInfoUI;
@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
             */
         }
         else{
-            
+
             if(Mouse.current.leftButton.wasPressedThisFrame){
                 if(!IsPointerOverUIElement()){
                     if(!entityWasClickedThisFrame && !tileWasClickedThisFrame){
@@ -150,14 +150,14 @@ public class GameManager : MonoBehaviour
         }
 
         if(Game.currentGame.currentPlayer != null){
-            movementUIDisplay.player = Game.currentGame.currentPlayer;
+            manaUIDisplay.player = Game.currentGame.currentPlayer;
             playerTextMesh.text = Game.currentGame.currentPlayer.ToString();
         }
 
         else{
             playerTextMesh.text = "";
-            if(movementUIDisplay.player!= null){
-                movementUIDisplay.player = null;
+            if(manaUIDisplay.player!= null){
+                manaUIDisplay.player = null;
             }
         }
         

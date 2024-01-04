@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Hero2
   m_EditorClassIdentifier: 
   health:
-    hearts: 010000000100000001000000040000000400000000000000
+    hearts: 010000000100000001000000
   entityName: Hero 2
   entityModel: 0
   atkDamage:
     amount: 1
+  maxMovement: 3
   scriptableEffects:
   - {fileID: 11400000, guid: 5137f9f5b6b557246a620209b66bcda0, type: 2}

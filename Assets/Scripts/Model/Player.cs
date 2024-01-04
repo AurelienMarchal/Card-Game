@@ -19,17 +19,17 @@ public class Player{
         private set;
     }
 
-    public int movementLeft{
+    public int manaLeft{
         get;
         private set;
     }
 
-    public int maxMovement{
+    public int maxMana{
         get;
         private set;
     }
 
-    public const int maxMovementCap = 10;
+    public const int maxManaCap = 10;
 
     public Hero hero{
         get;
@@ -55,8 +55,8 @@ public class Player{
         SetupPermanentEffects();
     }
 
-    public void ResetMovement(){
-        movementLeft = maxMovement;
+    public void ResetMana(){
+        manaLeft = maxMana;
     }
 
     public bool TryToPlayCard(Card card, Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
@@ -71,21 +71,25 @@ public class Player{
         return effectActivatedAction.wasPerformed;
     }
 
-    public bool TryToIncreaseMaxMovement(){
-        if(maxMovement >= maxMovementCap){
-            maxMovement = Math.Clamp(maxMovement, 0, maxMovementCap);
-            return false;
+    public bool TryToIncreaseMaxMana(){
+        var canIncreaseMaxMana = CanIncreaseMaxMana();
+        if(canIncreaseMaxMana){
+            IncreaseMaxMana();
         }
-        else{
-            maxMovement ++;
-            maxMovement = Math.Clamp(maxMovement, 0, maxMovementCap);
-            return true;
-        }
-        
+
+        return canIncreaseMaxMana;
     }
 
-    public bool TryToCreateSpawnEntityAction(EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingDamageAtk, Direction startingDirection, List<EntityEffect> permanentEffects, Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction){
-        playerSpawnEntityAction = new PlayerSpawnEntityAction(this, model, name, startingTile, startingHealth, startingDamageAtk, permanentEffects, startingDirection,  requiredAction);
+    public bool CanIncreaseMaxMana(){
+        return maxMana < maxManaCap;
+    }
+
+    private void IncreaseMaxMana(){
+        maxMana = Math.Clamp(maxMana+1, 0, maxManaCap);
+    }
+
+    public bool TryToCreateSpawnEntityAction(EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingDamageAtk, int startingMaxMovement, Direction startingDirection, List<EntityEffect> permanentEffects, Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction){
+        playerSpawnEntityAction = new PlayerSpawnEntityAction(this, model, name, startingTile, startingHealth, startingDamageAtk, startingMaxMovement, permanentEffects, startingDirection,  requiredAction);
         var canSpawnEntityAt = CanSpawnEntityAt(startingTile);
         if(canSpawnEntityAt){
             Game.currentGame.PileAction(playerSpawnEntityAction);
@@ -129,12 +133,12 @@ public class Player{
         var canPayHeartCost = CanPayCost(cost);
         if(canPayHeartCost){
 
-            var useMovementAction = new PlayerUseMovementAction(this, cost.movementCost);
+            var useManaAction = new PlayerUseManaAction(this, cost.manaCost);
             var payHeartCostAction = new PlayerPayHeartCostAction(this, cost.heartCost);
 
             payCostAction = new PlayerPayCostAction(this, cost, payHeartCostAction);
 
-            Game.currentGame.PileActions(new Action[]{payCostAction, useMovementAction, payHeartCostAction});
+            Game.currentGame.PileActions(new Action[]{payCostAction, useManaAction, payHeartCostAction});
             
         }
         return canPayHeartCost;
@@ -142,42 +146,37 @@ public class Player{
 
     public bool CanPayCost(Cost cost){
         //TODO
-        return CanPayHeartCost(cost.heartCost) && CanUseMovement(cost.movementCost);
+        return CanPayHeartCost(cost.heartCost) && CanUseMana(cost.manaCost);
     }
 
-    public bool TryToCreatePlayerUseMovementAction(int movement, out PlayerUseMovementAction useMovementAction){
-        useMovementAction = new PlayerUseMovementAction(this, movement);
-        var canUseMovement =  CanUseMovement(movement);
-        if(canUseMovement){
-            Game.currentGame.PileAction(useMovementAction);
+    public bool TryToCreatePlayerUseManaAction(int mana, out PlayerUseManaAction useManaAction){
+        useManaAction = new PlayerUseManaAction(this, mana);
+        var canUseMana =  CanUseMana(mana);
+        if(canUseMana){
+            Game.currentGame.PileAction(useManaAction);
         }
 
-        return canUseMovement;
+        return canUseMana;
     }
 
-    public bool TryToUseMovement(int movement){
+    public bool TryToUseMana(int mana){
         
-        var canUseMovement = CanUseMovement(movement);
+        var canUseMana = CanUseMana(mana);
 
-        if(canUseMovement){
-            UseMouvement(movement);
+        if(canUseMana){
+            UseMouvement(mana);
         }
 
-        return canUseMovement;
+        return canUseMana;
     }
 
-    private bool CanUseMovement(int movement){
-        if(movement > movementLeft){
-            Debug.Log($"{this} cannot use {movement} movement. {movementLeft} movement left");
-            return false;
-        }
-
-        return true;
+    private bool CanUseMana(int mana){
+        return mana <= manaLeft && mana >= 0;
     }
 
-    private void UseMouvement(int movement){
-        movementLeft -= movement;
-        Debug.Log($"{this} using {movement} movement. {movementLeft} movement left");
+    private void UseMouvement(int mana){
+        manaLeft = Math.Clamp(manaLeft - mana, 0, maxMana);
+        Debug.Log($"{this} using {mana} mana. {manaLeft} mana left");
     }
 
     public bool TryToCreatePayHeartCostAction(HeartType[] hearts, out PlayerPayHeartCostAction payHeartCostAction){
@@ -195,7 +194,6 @@ public class Player{
     }
 
     private bool CanPayHeartCost(HeartType[] hearts){
-        //TODO
         return hero.health.CanPayHeartCost(hearts);
     }
 

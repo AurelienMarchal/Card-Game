@@ -1,6 +1,6 @@
 
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Entity
@@ -45,20 +45,33 @@ public class Entity
         set;
     }
 
+    public int movementLeft{
+        get;
+        protected set;
+    }
+
+    public int maxMovement{
+        get;
+        protected set;
+    }
+
     public const Entity noEntity = null;
+    public const int maxMovementCap = 10;
 
     public List<EntityEffect> effects{
         get;
         protected set;
     }
 
-    public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingAtkDamage, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North){
+    public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingAtkDamage, int startingMaxMovement,List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North){
         this.player = player;
         this.model = model;
         this.name = name;
         currentTile = startingTile;
-        health = startingHealth;
+        health = startingHealth.Clone() as Health;
         atkDamage = startingAtkDamage;
+        maxMovement = startingMaxMovement;
+        movementLeft = maxMovement;
         direction = startingDirection;
         effects = new List<EntityEffect>();
         AddEffectList(permanentEffects);
@@ -71,7 +84,10 @@ public class Entity
         name = scriptableEntity.entityName;
         currentTile = startingTile;
         health = scriptableEntity.health.Clone() as Health;
+        Debug.Log($"Cloning health successfull : {health != scriptableEntity.health}");
         atkDamage = scriptableEntity.atkDamage;
+        maxMovement = scriptableEntity.maxMovement;
+        movementLeft = maxMovement;
         direction = startingDirection;
         effects = new List<EntityEffect>();
         AddEffectList(scriptableEntity.scriptableEffects);
@@ -188,6 +204,52 @@ public class Entity
         return isDead;
     }
 
+    public bool TryToCreateEntityUseMovementAction(int movement,  out EntityUseMovementAction entityUseMovementAction, Action requiredAction = null){
+        entityUseMovementAction = new EntityUseMovementAction(movement, this, requiredAction);
+        var canUseMovement = CanUseMovement(movement);
+        if(canUseMovement){
+            Game.currentGame.PileAction(entityUseMovementAction);
+        }
+
+        return canUseMovement;
+    }
+
+    public bool TryToUseMovement(int movement){
+        var canUseMovement = CanUseMovement(movement);
+        if(canUseMovement){
+            UseMovement(movement);
+        }
+        return canUseMovement;
+    }
+
+    public bool CanUseMovement(int movement){
+        return movement <= movementLeft && movement >= 0;
+    }
+
+    private void UseMovement(int movement){
+        movementLeft = Math.Clamp(movementLeft - movement, 0, maxMovement);
+    }
+
+    public bool TryToIncreaseMaxMovement(){
+        var canIncreaseMaxMovement = CanIncreaseMaxMovement();
+        if(canIncreaseMaxMovement){
+            IncreaseMaxMovement();
+        }
+        return canIncreaseMaxMovement;
+    }
+
+    public bool CanIncreaseMaxMovement(){
+        return maxMovement < maxMovementCap;
+    }
+
+    private void IncreaseMaxMovement(){
+        maxMovement = Math.Clamp(maxMovement + 1, 0, maxMovementCap);
+    }
+
+    public void ResetMovement(){
+        movementLeft = maxMovement;
+    }
+
     public void AddEffectList(List<ScriptableEffect> scriptableEffects){
         foreach (var scriptableEffect in scriptableEffects){
             AddEffect(scriptableEffect);
@@ -195,8 +257,8 @@ public class Entity
     }
 
     public void AddEffect(ScriptableEffect scriptableEffect){
-        var entityEffect = scriptableEffect.GetEffect() as EntityEffect;
-        if(entityEffect != null){
+        if (scriptableEffect.GetEffect() is EntityEffect entityEffect)
+        {
             AddEffect(entityEffect);
         }
     }

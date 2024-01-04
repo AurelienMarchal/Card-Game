@@ -13,7 +13,7 @@ public class EffectUIDisplay : MonoBehaviour
     TextMeshProUGUI effectTextMeshProUGUI;
 
     [SerializeField]
-    HealthUIDisplay healthUIDisplay;
+    CostUIDisplay costUIDisplay;
 
     private Effect effect_;
     public Effect effect{
@@ -47,12 +47,12 @@ public class EffectUIDisplay : MonoBehaviour
 
         button.interactable = effect is ActivableEffect;
 
-        healthUIDisplay.gameObject.SetActive(effect is ActivableEffect);
+        costUIDisplay.gameObject.SetActive(effect is ActivableEffect);
 
         switch(effect){
             case ActivableEffect activableEffect:
                 
-                healthUIDisplay.health = new Health(activableEffect.cost.heartCost);
+                costUIDisplay.cost = activableEffect.cost;
                 button.onClick.AddListener(OnButtonClick);
                 
                 break;

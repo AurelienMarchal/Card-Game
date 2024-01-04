@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Hero1
   m_EditorClassIdentifier: 
   health:
-    hearts: 010000000100000001000000000000000000000000000000
+    hearts: 010000000100000001000000
   entityName: Hero 1
   entityModel: 0
   atkDamage:
     amount: 1
+  maxMovement: 3
   scriptableEffects: []

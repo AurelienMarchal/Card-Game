@@ -13,6 +13,9 @@ public class EntityInfoUI : MonoBehaviour
     HealthUIDisplay healthUIDisplay;
 
     [SerializeField]
+    MovementUIDisplay movementUIDisplay;
+
+    [SerializeField]
     TextMeshProUGUI entityAtkTextMeshProUGUI;
 
     [SerializeField]
@@ -58,6 +61,7 @@ public class EntityInfoUI : MonoBehaviour
         else{
             cameraFollowingSelectedEntity.entityGameobject = entityManager.gameObject;
             healthUIDisplay.health = entityManager.entity.health;
+            movementUIDisplay.entity = entityManager.entity;
             entityAtkTextMeshProUGUI.text = entityManager.entity.atkDamage.amount.ToString();
             entityNameTextMeshProUGUI.text = entityManager.entity.name;
         }

@@ -11,8 +11,12 @@ public class StartPlayerTurnAction : PlayerAction
 
     protected override bool Perform()
     {
-        Game.currentGame.PileAction(new PlayerResetMovementAction(player, this));
-        Game.currentGame.PileAction(new PlayerIncreaseMaxMouvementAction(player, this));
+        foreach (var entity in player.entities){
+            Game.currentGame.PileAction(new EntityResetMovementAction(entity, this));
+        }
+        
+        Game.currentGame.PileAction(new PlayerResetManaAction(player, this));
+        Game.currentGame.PileAction(new PlayerIncreaseMaxManaAction(player, this));
         return true;
     }
 }

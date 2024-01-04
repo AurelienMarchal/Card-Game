@@ -1,18 +1,20 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MovementUIDisplay : MonoBehaviour
 {
-    Player player_;
+    Entity entity_;
 
-    public Player player{
+    public Entity entity{
         get{
-            return player_;
+            return entity_;
         }
 
         set{
-            player_ = value;
-            UpdateFromPlayer();
+            entity_ = value;
+            UpdateFromEntity();
         }
     }
 
@@ -27,12 +29,12 @@ public class MovementUIDisplay : MonoBehaviour
     
     // Start is called before the first frame update
     void Start(){
-        UpdateFromPlayer();
+        UpdateFromEntity();
     }
 
-    private void UpdateFromPlayer()
+    private void UpdateFromEntity()
     {
-        if(player == null){
+        if(entity == null){
             for (int i = 0; i < images.Length; i++){
                 images[i].gameObject.SetActive(false);
             }
@@ -40,8 +42,8 @@ public class MovementUIDisplay : MonoBehaviour
         }
 
         for (int i = 0; i < images.Length; i++){
-            images[i].gameObject.SetActive(i < player.maxMovement);
-            images[i].sprite = i < player.movementLeft ? spriteMovementFull : spriteMovementEmpty;
+            images[i].gameObject.SetActive(i < entity.maxMovement);
+            images[i].sprite = i < entity.movementLeft ? spriteMovementFull : spriteMovementEmpty;
         }
 
     }

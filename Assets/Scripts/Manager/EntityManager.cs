@@ -165,11 +165,8 @@ public class EntityManager : MonoBehaviour
             return false;
         }
         
-        entity.player.TryToCreatePlayerUseMovementAction(tile.Distance(entity.currentTile), out PlayerUseMovementAction useMovementAction);
+        entity.TryToCreateEntityUseMovementAction(tile.Distance(entity.currentTile), out EntityUseMovementAction useMovementAction);
         entity.TryToCreateEntityMoveAction(tile, useMovementAction, out EntityMoveAction entityMoveAction);
-        if(entityMoveAction.wasPerformed){
-            //UpdateAccordingToEntity();
-        }
 
         return entityMoveAction.wasPerformed;
 

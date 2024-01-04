@@ -18,4 +18,5 @@ MonoBehaviour:
   entityModel: 1
   atkDamage:
     amount: 1
+  maxMovement: 1
   scriptableEffects: []
