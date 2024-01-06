@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Duck
   m_EditorClassIdentifier: 
   health:
-    hearts: 02000000
+    hearts: 01000000
   entityName: Duck
   entityModel: 1
   atkDamage:
