@@ -10,23 +10,30 @@ public class EntityAttackAction : EntityAction
         protected set;
     }
 
-    public EntityAttackAction(Entity attackingEntity, Entity attackedEntity, Action requiredAction = null) : base(attackingEntity, requiredAction){
+    public bool isCounterAttack{
+        get;
+        protected set;
+    }
+
+    public EntityAttackAction(Entity attackingEntity, Entity attackedEntity, bool isCounterAttack = false, Action requiredAction = null) : base(attackingEntity, requiredAction){
         this.attackedEntity = attackedEntity;
     }
 
     protected override bool Perform()
     {
-        if(entity.hasAttacked){
+
+        if(entity.weapon == null){
             return false;
         }
 
-        Game.currentGame.PileAction(new EntityTakeDamageAction(attackedEntity, entity.atkDamage, this));
+        Game.currentGame.PileAction(new EntityTakeDamageAction(attackedEntity, entity.weapon.atkDamage, this));
 
-        if(attackedEntity.CanAttack(entity)){
-            Game.currentGame.PileAction(new EntityTakeDamageAction(entity, attackedEntity.atkDamage, this));
+        if(!isCounterAttack){
+            if(attackedEntity.CanAttack(entity)){
+                Game.currentGame.PileAction(new EntityAttackAction(attackedEntity, entity, false, this));
+            }
         }
         
-        entity.hasAttacked = true;
 
         return true;
     }

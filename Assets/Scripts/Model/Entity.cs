@@ -35,14 +35,9 @@ public class Entity
         protected set;
     }
 
-    public Damage atkDamage{
+    public Weapon weapon{
         get;
         protected set;
-    }
-
-    public bool hasAttacked{
-        get;
-        set;
     }
 
     public int movementLeft{
@@ -63,13 +58,13 @@ public class Entity
         protected set;
     }
 
-    public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingAtkDamage, int startingMaxMovement,List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North){
+    public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Weapon weapon = Weapon.noWeapon){
         this.player = player;
         this.model = model;
         this.name = name;
         currentTile = startingTile;
         health = startingHealth.Clone() as Health;
-        atkDamage = startingAtkDamage;
+        this.weapon = weapon;
         maxMovement = startingMaxMovement;
         movementLeft = maxMovement;
         direction = startingDirection;
@@ -84,8 +79,13 @@ public class Entity
         name = scriptableEntity.entityName;
         currentTile = startingTile;
         health = scriptableEntity.health.Clone() as Health;
-        Debug.Log($"Cloning health successfull : {health != scriptableEntity.health}");
-        atkDamage = scriptableEntity.atkDamage;
+        //Debug.Log($"Cloning health successfull : {health != scriptableEntity.health}");
+        if(scriptableEntity.scriptableWeapon == null){
+            weapon = Weapon.noWeapon;
+        }
+        else{
+            weapon = new Weapon(scriptableEntity.scriptableWeapon);
+        }
         maxMovement = scriptableEntity.maxMovement;
         movementLeft = maxMovement;
         direction = startingDirection;
@@ -234,7 +234,7 @@ public class Entity
     public bool TryToCreateEntityAttackAction(Entity entity,  out EntityAttackAction entityAttackAction, Action requiredAction = null){
         var newdirection = DirectionsExtensions.FromCoordinateDifference(entity.currentTile.gridX - currentTile.gridX, entity.currentTile.gridY - currentTile.gridY);
         TryToCreateEntityChangeDirectionAction(newdirection, requiredAction, out EntityChangeDirectionAction entityChangeDirectionAction);
-        entityAttackAction = new EntityAttackAction(this, entity, entityChangeDirectionAction);
+        entityAttackAction = new EntityAttackAction(this, entity, requiredAction:entityChangeDirectionAction);
         var canAttack = CanAttack(entity);
         if(canAttack){
             Game.currentGame.PileAction(entityAttackAction);
@@ -244,15 +244,16 @@ public class Entity
     }
 
     public bool CanAttack(Entity entity){
-        if(hasAttacked){
-            return false;
-        }
 
         if(entity == this){
             return false;
         }
 
-        if(entity.currentTile.Distance(currentTile) > 1){
+        if(weapon == Weapon.noWeapon){
+            return false;
+        }
+
+        if(entity.currentTile.Distance(currentTile) > weapon.range){
             return false;
         }
 
@@ -267,15 +268,16 @@ public class Entity
     }
 
     public bool CanAttackByChangingDirection(Entity entity){
-        if(hasAttacked){
-            return false;
-        }
 
         if(entity == this){
             return false;
         }
 
-        if(entity.currentTile.Distance(currentTile) > 1){
+        if(weapon == Weapon.noWeapon){
+            return false;
+        }
+
+        if(entity.currentTile.Distance(currentTile) > weapon.range){
             return false;
         }
 

@@ -181,7 +181,8 @@ public class EntityManager : MonoBehaviour
             return false;
         }
 
-        this.entity.TryToCreateEntityAttackAction(entity, out EntityAttackAction entityAttackAction);
+        this.entity.player.TryToCreatePayCostAction(this.entity.weapon.costToUse, out PlayerPayCostAction payCostAction);
+        this.entity.TryToCreateEntityAttackAction(entity, out EntityAttackAction entityAttackAction, payCostAction);
 
         return entityAttackAction.wasPerformed;
     }

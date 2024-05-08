@@ -62,7 +62,10 @@ public class EntityInfoUI : MonoBehaviour
             cameraFollowingSelectedEntity.entityGameobject = entityManager.gameObject;
             healthUIDisplay.health = entityManager.entity.health;
             movementUIDisplay.entity = entityManager.entity;
-            entityAtkTextMeshProUGUI.text = entityManager.entity.atkDamage.amount.ToString();
+            if(entityManager.entity.weapon != null){
+                entityAtkTextMeshProUGUI.text = entityManager.entity.weapon.atkDamage.amount.ToString();
+
+            }
             entityNameTextMeshProUGUI.text = entityManager.entity.name;
         }
     }

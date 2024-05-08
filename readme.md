@@ -19,7 +19,7 @@ Every entity has a certain combinaison of hearts. When they have no more hearts 
 
 ## Weapons 
 
-- Weapons have a range and a attack stat (and a durability ?). Entities can attack with weapons if their target are in the range of their weapon. They deal the amount of attack of the weapon when they successfully attack.
+- Weapons have a range stat, an attack stat (and a durability ?) and cost of utilisation (how much energy is required to attack with it). Entities can attack with weapons if their target are in the range of their weapon. They deal the amount of attack of the weapon when they successfully attack.
 
 
 # Ideas
@@ -64,14 +64,17 @@ Every entity has a certain combinaison of hearts. When they have no more hearts 
 
 ### Toupie Man
 
-  Envoie des toupies
-  Fait la toupie et gagne des buffs en fct du nb de toupies
+- Envoie des toupies
+- Fait la toupie et gagne des buffs en fct du nb de toupies
 
 ## Cards
 
 ## Entities
 
 ## Weapons
+
+- Bow 
+- Sield
 
 ## Mechanics 
 

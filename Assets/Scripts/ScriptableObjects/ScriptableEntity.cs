@@ -10,7 +10,7 @@ public class ScriptableEntity : ScriptableObject
 
     public EntityModel entityModel;
 
-    public Damage atkDamage;
+    public ScriptableWeapon scriptableWeapon;
 
     public int maxMovement;
 

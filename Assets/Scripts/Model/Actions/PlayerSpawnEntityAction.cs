@@ -30,7 +30,7 @@ public class PlayerSpawnEntityAction : PlayerAction
         protected set;
     }
 
-    public Damage damageAtk{
+    public Weapon weapon{
         get;
         protected set;
     }
@@ -55,12 +55,12 @@ public class PlayerSpawnEntityAction : PlayerAction
         protected set;
     }
 
-    public PlayerSpawnEntityAction(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingDamageAtk, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Action requiredAction = null) : base(player, requiredAction){
+    public PlayerSpawnEntityAction(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North,  Weapon weapon = null, Action requiredAction = null) : base(player, requiredAction){
         tile = startingTile;
         this.model = model;
         this.name = name;
         health = startingHealth;
-        damageAtk = startingDamageAtk;
+        this.weapon = weapon;
         maxMovement = startingMaxMovement;
         direction = startingDirection;
         this.permanentEffects = permanentEffects;
@@ -73,7 +73,12 @@ public class PlayerSpawnEntityAction : PlayerAction
         model = scriptableEntity.entityModel;
         name = scriptableEntity.entityName;
         health = scriptableEntity.health;
-        damageAtk = scriptableEntity.atkDamage;
+        if(scriptableEntity.scriptableWeapon == null){
+            weapon = Weapon.noWeapon;
+        }
+        else{
+            weapon = new Weapon(scriptableEntity.scriptableWeapon);
+        }
         direction = startingDirection;
         permanentEffects = new List<EntityEffect>();
         entitySpawned = Entity.noEntity;
@@ -82,7 +87,7 @@ public class PlayerSpawnEntityAction : PlayerAction
 
     protected override bool Perform(){
         if(scriptableEntity == null){
-            entitySpawned = new Entity(player, model, name, tile, health, damageAtk, maxMovement, permanentEffects, direction);
+            entitySpawned = new Entity(player, model, name, tile, health, maxMovement, permanentEffects, direction, weapon);
         }
         else{
             entitySpawned = new Entity(player, scriptableEntity, tile, direction);

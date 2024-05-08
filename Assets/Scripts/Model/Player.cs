@@ -88,8 +88,8 @@ public class Player{
         maxMana = Math.Clamp(maxMana+1, 0, maxManaCap);
     }
 
-    public bool TryToCreateSpawnEntityAction(EntityModel model, string name, Tile startingTile, Health startingHealth, Damage startingDamageAtk, int startingMaxMovement, Direction startingDirection, List<EntityEffect> permanentEffects, Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction){
-        playerSpawnEntityAction = new PlayerSpawnEntityAction(this, model, name, startingTile, startingHealth, startingDamageAtk, startingMaxMovement, permanentEffects, startingDirection,  requiredAction);
+    public bool TryToCreateSpawnEntityAction(EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, Direction startingDirection, List<EntityEffect> permanentEffects, Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction, Weapon weapon=Weapon.noWeapon){
+        playerSpawnEntityAction = new PlayerSpawnEntityAction(this, model, name, startingTile, startingHealth, startingMaxMovement, permanentEffects, startingDirection,  weapon, requiredAction);
         var canSpawnEntityAt = CanSpawnEntityAt(startingTile);
         if(canSpawnEntityAt){
             Game.currentGame.PileAction(playerSpawnEntityAction);
