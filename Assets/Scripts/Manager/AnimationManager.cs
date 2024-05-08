@@ -68,6 +68,11 @@ public class AnimationManager : MonoBehaviour
                 }
                 break;
 
+            case EntityChangeDirectionAction entityChangeDirectionAction:
+                var entityManager_ = boardManager.GetEntityManagerFromEntity(entityChangeDirectionAction.entity);
+                entityManager_.UpdateRotationAccordingToEntity();
+                break;
+
             case PlayerSpawnEntityAction playerSpawnEntityAction:
                 SpawnEntity(playerSpawnEntityAction.entitySpawned);
                 break;

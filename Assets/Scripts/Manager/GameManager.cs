@@ -222,7 +222,7 @@ public class GameManager : MonoBehaviour
 
         if(currentEntitySelected != null){
             if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
-                currentEntitySelected.entity.TryToCreateEntityAttackAction(entityManager.entity, out _);
+                currentEntitySelected.TryToAttack(entityManager.entity);
             }
         }
 

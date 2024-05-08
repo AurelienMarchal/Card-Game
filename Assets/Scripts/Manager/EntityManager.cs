@@ -108,7 +108,7 @@ public class EntityManager : MonoBehaviour
         }
 
         if(goalTileManager != null){
-            transform.rotation = Quaternion.Euler(0f, entity.direction.ToAngle(), 0f);
+            //transform.rotation = Quaternion.Euler(0f, entity.direction.ToAngle(), 0f);
 
             float step = walkingSpeed * Time.deltaTime;
             
@@ -155,13 +155,16 @@ public class EntityManager : MonoBehaviour
             boardManager.entityY,  
             entity.currentTile.gridY * boardManager.tileSizeZ);
 
+        UpdateRotationAccordingToEntity();
+    }
+
+    public void UpdateRotationAccordingToEntity(){
         transform.rotation = Quaternion.Euler(0f, entity.direction.ToAngle(), 0f);
     }
 
     public bool TryToMove(Tile tile){
 
-
-        if(!entity.CanMove(tile)){
+        if(!entity.CanMoveByChangingDirection(tile)){
             return false;
         }
         
@@ -170,5 +173,16 @@ public class EntityManager : MonoBehaviour
 
         return entityMoveAction.wasPerformed;
 
+    }
+
+    public bool TryToAttack(Entity entity){
+
+        if(!this.entity.CanAttackByChangingDirection(entity)){
+            return false;
+        }
+
+        this.entity.TryToCreateEntityAttackAction(entity, out EntityAttackAction entityAttackAction);
+
+        return entityAttackAction.wasPerformed;
     }
 }

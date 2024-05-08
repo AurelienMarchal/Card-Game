@@ -95,7 +95,9 @@ public class Entity
     }
 
     public virtual bool TryToCreateEntityMoveAction(Tile tile, Action requiredAction, out EntityMoveAction entityMoveAction){
-        entityMoveAction = new EntityMoveAction(this, currentTile, tile, requiredAction);
+        var newdirection = DirectionsExtensions.FromCoordinateDifference(tile.gridX - currentTile.gridX, tile.gridY - currentTile.gridY);
+        TryToCreateEntityChangeDirectionAction(newdirection, requiredAction, out EntityChangeDirectionAction entityChangeDirectionAction);
+        entityMoveAction = new EntityMoveAction(this, currentTile, tile, entityChangeDirectionAction);
         var result = CanMove(tile);
         if(result){
             Game.currentGame.PileAction(entityMoveAction);
@@ -129,6 +131,37 @@ public class Entity
             return false;
         }
 
+        if(DirectionsExtensions.FromCoordinateDifference(tile.gridX - currentTile.gridX, tile.gridY - currentTile.gridY) != direction){
+            return false;
+        }
+
+        var distance = tile.Distance(currentTile);
+
+        if(distance > 1){
+            return false;
+        }
+
+        return true;
+    }
+
+    public virtual bool CanMoveByChangingDirection(Tile tile){
+        if(tile == currentTile){
+            return false;
+        }
+
+        if(Game.currentGame.board.GetEntityAtTile(tile) != Entity.noEntity){
+            return false;
+        }
+
+        //Check move condition
+        if(tile.gridX != currentTile.gridX && tile.gridY != currentTile.gridY){
+            return false;
+        }
+
+        if(!CanChangeDirection(DirectionsExtensions.FromCoordinateDifference(tile.gridX - currentTile.gridX, tile.gridY - currentTile.gridY))){
+            return false;
+        }
+
         var distance = tile.Distance(currentTile);
 
         if(distance > 1){
@@ -139,8 +172,36 @@ public class Entity
     }
 
     protected virtual void Move(Tile tile){
-        direction = DirectionsExtensions.FromCoordinateDifference(tile.gridX - currentTile.gridX, tile.gridY - currentTile.gridY);
         currentTile = tile;
+    }
+
+    public virtual bool TryToCreateEntityChangeDirectionAction(Direction newDirection, Action requiredAction, out EntityChangeDirectionAction entityChangeDirectionAction){
+        entityChangeDirectionAction = new EntityChangeDirectionAction(this, newDirection, requiredAction);
+        var result = CanChangeDirection(newDirection);
+        if(result){
+            Game.currentGame.PileAction(entityChangeDirectionAction);
+        }
+
+        return result;
+    }
+
+    public virtual bool TryToChangeDirection(Direction newDirection){
+
+        var result = CanChangeDirection(newDirection);
+        if(result){
+            ChangeDirection(newDirection);
+        }
+
+        return result;
+
+    }
+
+    public virtual bool CanChangeDirection(Direction newDirection){
+        return true;
+    }
+
+    protected virtual void ChangeDirection(Direction newDirection){
+        direction = newDirection;
     }
 
     public virtual bool TryToTeleport(Tile tile){
@@ -171,7 +232,9 @@ public class Entity
     }
 
     public bool TryToCreateEntityAttackAction(Entity entity,  out EntityAttackAction entityAttackAction, Action requiredAction = null){
-        entityAttackAction = new EntityAttackAction(this, entity, requiredAction);
+        var newdirection = DirectionsExtensions.FromCoordinateDifference(entity.currentTile.gridX - currentTile.gridX, entity.currentTile.gridY - currentTile.gridY);
+        TryToCreateEntityChangeDirectionAction(newdirection, requiredAction, out EntityChangeDirectionAction entityChangeDirectionAction);
+        entityAttackAction = new EntityAttackAction(this, entity, entityChangeDirectionAction);
         var canAttack = CanAttack(entity);
         if(canAttack){
             Game.currentGame.PileAction(entityAttackAction);
@@ -191,6 +254,36 @@ public class Entity
 
         if(entity.currentTile.Distance(currentTile) > 1){
             return false;
+        }
+
+        if(DirectionsExtensions.FromCoordinateDifference(
+            entity.currentTile.gridX - currentTile.gridX,
+            entity.currentTile.gridY - currentTile.gridY
+            ) != direction){
+                return false;
+        }
+
+        return true;
+    }
+
+    public bool CanAttackByChangingDirection(Entity entity){
+        if(hasAttacked){
+            return false;
+        }
+
+        if(entity == this){
+            return false;
+        }
+
+        if(entity.currentTile.Distance(currentTile) > 1){
+            return false;
+        }
+
+        if(!CanChangeDirection(DirectionsExtensions.FromCoordinateDifference(
+            entity.currentTile.gridX - currentTile.gridX,
+            entity.currentTile.gridY - currentTile.gridY
+            ))){
+                return false;
         }
 
         return true;

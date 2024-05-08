@@ -21,8 +21,11 @@ public class EntityAttackAction : EntityAction
         }
 
         Game.currentGame.PileAction(new EntityTakeDamageAction(attackedEntity, entity.atkDamage, this));
-        Game.currentGame.PileAction(new EntityTakeDamageAction(entity, attackedEntity.atkDamage, this));
 
+        if(attackedEntity.CanAttack(entity)){
+            Game.currentGame.PileAction(new EntityTakeDamageAction(entity, attackedEntity.atkDamage, this));
+        }
+        
         entity.hasAttacked = true;
 
         return true;
