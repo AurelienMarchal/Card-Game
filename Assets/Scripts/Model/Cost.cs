@@ -6,11 +6,11 @@ public struct Cost{
     
     public HeartType[] heartCost;
 
-    public int manaCost;
+    public int mouvementCost;
 
-    public Cost(HeartType[] hearts, int mana){
+    public Cost(HeartType[] hearts, int mouvement){
         heartCost = hearts;
-        manaCost = mana;
+        mouvementCost = mouvement;
     }
 
     public static Cost noCost = new Cost(new HeartType[0], 0);

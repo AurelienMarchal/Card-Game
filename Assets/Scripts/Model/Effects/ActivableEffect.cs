@@ -14,7 +14,7 @@ public class ActivableEffect : EntityEffect
     }
 
     public override bool CanBeActivated(){
-        return base.CanBeActivated() && associatedEntity.player.CanPayCost(cost) || costPaid;
+        return base.CanBeActivated() && associatedEntity.CanPayHeartCost(cost.heartCost) && associatedEntity.CanUseMovement(cost.mouvementCost) || costPaid;
     }
 
     public override bool TryToCreateEffectActivatedAction(Action costAction, out EffectActivatedAction effectActivatedAction){

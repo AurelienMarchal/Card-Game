@@ -65,11 +65,15 @@ public class EffectUIDisplay : MonoBehaviour
     private void OnButtonClick()
     {
         Debug.Log($"Effect : {effect}");
-        var activableEffect = effect as ActivableEffect;
-        if(activableEffect != null){
-            activableEffect.associatedEntity.player.TryToActivateActivableEffect(activableEffect);
+        if (effect is ActivableEffect activableEffect){
+            activableEffect.associatedEntity.TryToCreateEntityUseMovementAction(activableEffect.cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
+            activableEffect.associatedEntity.TryToCreateEntityPayHeartCostAction(activableEffect.cost.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction, entityUseMovementAction);
+            if(!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed){
+                return;
+            }
+            activableEffect.TryToCreateEffectActivatedAction(entityPayHeartCostAction, out _);
         }
-        
+
     }
 
     void UpdateFromEffect(){
@@ -80,7 +84,7 @@ public class EffectUIDisplay : MonoBehaviour
         effectTextMeshProUGUI.text = effect.GetEffectText();
         if(effect is ActivableEffect activableEffect)
         {
-            button.interactable = activableEffect.associatedEntity.player.CanPayCost(activableEffect.cost);
+            button.interactable = activableEffect.CanBeActivated();
         }
         
         

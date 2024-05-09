@@ -29,7 +29,13 @@ public class PlayerManager : MonoBehaviour
     private void OnCardClicked(Card card){
         Debug.Log($"Clicked on {card}");
         if(card.CanBeActivated()){
-            player.TryToPlayCard(card);
+            var mouvementCostDistribution = new Dictionary<Entity, int>();
+            var heartCostDistribution = new Dictionary<Entity, HeartType[]>();
+
+            mouvementCostDistribution.Add(player.hero, card.cost.mouvementCost);
+            heartCostDistribution.Add(player.hero, card.cost.heartCost);
+
+            player.TryToPlayCard(card, mouvementCostDistribution, heartCostDistribution);
         }
     }
 

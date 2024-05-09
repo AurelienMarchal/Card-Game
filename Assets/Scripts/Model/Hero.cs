@@ -17,5 +17,24 @@ public class Hero : Entity{
         
     }
 
+    public override bool TryToCreateEntityPayHeartCostAction(HeartType[] heartCost, out EntityPayHeartCostAction entityPayHeartCostAction, Action requiredAction = null){
+        entityPayHeartCostAction = new EntityPayHeartCostAction(this, heartCost, requiredAction);
+        var canPayHeartCost = CanPayHeartCost(heartCost);
+        if(canPayHeartCost){
+            Game.currentGame.PileAction(entityPayHeartCostAction);
+        }
+
+        return canPayHeartCost;
+    }
+
+    public override bool TryToPayHeartCost(HeartType[] heartCost){
+        return health.TryToPayHeartCost(heartCost, false);
+    }
+
+    public override bool CanPayHeartCost(HeartType[] heartCost){
+        var result = health.CanPayHeartCost(heartCost, out bool willDie);
+        return result && !willDie;
+    }
+
 }
 

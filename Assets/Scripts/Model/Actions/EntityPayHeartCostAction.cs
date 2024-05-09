@@ -5,12 +5,16 @@ using UnityEngine;
 public class EntityPayHeartCostAction : EntityAction
 {
 
-    public Heart heart{
+    public HeartType[] heartCost{
         get;
         private set;
     }
 
-    public EntityPayHeartCostAction(Entity entity, Heart heart, Action requiredAction = null) : base(entity, requiredAction){
-        this.heart = heart;
+    public EntityPayHeartCostAction(Entity entity, HeartType[] heartCost, Action requiredAction = null) : base(entity, requiredAction){
+        this.heartCost = heartCost;
+    }
+
+    protected override bool Perform(){
+        return entity.TryToPayHeartCost(heartCost);
     }
 }

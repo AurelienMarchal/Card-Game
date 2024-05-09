@@ -56,8 +56,8 @@ public class CostUIDisplay : MonoBehaviour
             heartImages[i].gameObject.SetActive(false);
         }
         
-        manaImage.gameObject.SetActive(cost.manaCost > 0);
-        manaText.text = cost.manaCost.ToString();
+        manaImage.gameObject.SetActive(cost.mouvementCost > 0);
+        manaText.text = cost.mouvementCost.ToString();
 
         var count = 0;
 

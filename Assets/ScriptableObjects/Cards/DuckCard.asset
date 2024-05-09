@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cost:
     heartCost: 01000000
-    manaCost: 0
+    mouvementCost: 1
   cardName: Canard
   text: Il s'agit d'un canard
   sprite: {fileID: 21300000, guid: 74384b106301f074c96d01247b613c32, type: 3}

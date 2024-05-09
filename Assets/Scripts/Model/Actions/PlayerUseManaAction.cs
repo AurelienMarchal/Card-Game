@@ -1,3 +1,7 @@
+
+using System;
+
+[Obsolete]
 public class PlayerUseManaAction : PlayerAction{
 
     public int numberOfMana{

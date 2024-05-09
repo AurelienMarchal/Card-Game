@@ -64,7 +64,9 @@ public class EntityInfoUI : MonoBehaviour
             movementUIDisplay.entity = entityManager.entity;
             if(entityManager.entity.weapon != null){
                 entityAtkTextMeshProUGUI.text = entityManager.entity.weapon.atkDamage.amount.ToString();
-
+            }
+            else{
+                entityAtkTextMeshProUGUI.text = "";
             }
             entityNameTextMeshProUGUI.text = entityManager.entity.name;
         }

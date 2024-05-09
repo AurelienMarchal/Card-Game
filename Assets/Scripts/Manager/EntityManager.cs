@@ -181,8 +181,14 @@ public class EntityManager : MonoBehaviour
             return false;
         }
 
-        this.entity.player.TryToCreatePayCostAction(this.entity.weapon.costToUse, out PlayerPayCostAction payCostAction);
-        this.entity.TryToCreateEntityAttackAction(entity, out EntityAttackAction entityAttackAction, payCostAction);
+        this.entity.TryToCreateEntityUseMovementAction(this.entity.weapon.costToUse.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
+        this.entity.TryToCreateEntityPayHeartCostAction(this.entity.weapon.costToUse.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
+
+        if(!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed){
+            return false;
+        }
+
+        this.entity.TryToCreateEntityAttackAction(entity, out EntityAttackAction entityAttackAction, entityPayHeartCostAction);
 
         return entityAttackAction.wasPerformed;
     }

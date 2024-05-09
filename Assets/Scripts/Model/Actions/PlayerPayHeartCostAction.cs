@@ -10,12 +10,13 @@ public class PlayerPayHeartCostAction : PlayerAction
         private set;
     }
 
-    public PlayerPayHeartCostAction(Player player, HeartType[] hearts, Action requiredAction = null) : base(player, requiredAction){
-        this.hearts = hearts;
+    public Dictionary<Entity, HeartType[]> heartCostDistribution{
+        get;
+        private set;
     }
 
-
-    protected override bool Perform(){
-        return player.TryToPayHeartCost(hearts);
+    public PlayerPayHeartCostAction(Player player, HeartType[] hearts, Dictionary<Entity, HeartType[]> heartCostDistribution, Action requiredAction = null) : base(player, requiredAction){
+        this.hearts = hearts;
+        this.heartCostDistribution = heartCostDistribution;
     }
 }

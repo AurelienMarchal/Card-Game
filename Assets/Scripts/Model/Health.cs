@@ -93,18 +93,20 @@ public class Health : ICloneable{
         return IsEmpty();
     }
 
-    public bool TryToPayHeartCost(HeartType[] heartCost){
+    public bool TryToPayHeartCost(HeartType[] heartCost, bool canDie){
         
-        var canPayHeartCost = CanPayHeartCost(heartCost);
+        var canPayHeartCost = CanPayHeartCost(heartCost, out bool willDie);
 
-        if(canPayHeartCost){
+        if(canPayHeartCost && !(canDie && willDie)){
             PayHeartCost(heartCost);
         }
 
         return canPayHeartCost;
     }
 
-    public bool CanPayHeartCost(HeartType[] heartCost){
+    public bool CanPayHeartCost(HeartType[] heartCost, out bool willDie){
+
+        willDie = false;
 
         if(IsEmpty()){
             return false;
@@ -112,11 +114,19 @@ public class Health : ICloneable{
         
         var heartCostCopy = new List<HeartType>(heartCost);
 
+        var nbHeartsNotPayedAndNotEmpty = 0;
+
         foreach(HeartType heartType in hearts){
             if(heartCostCopy.Contains(heartType)){
                 heartCostCopy.Remove(heartType);
+                
+            }
+            else if(heartType != HeartType.NoHeart && heartType != HeartType.RedEmpty){
+                nbHeartsNotPayedAndNotEmpty++;
             }
         }
+
+        willDie = nbHeartsNotPayedAndNotEmpty == 0;
 
         return heartCostCopy.Count == 0;
     }

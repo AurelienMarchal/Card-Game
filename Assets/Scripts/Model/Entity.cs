@@ -325,6 +325,24 @@ public class Entity
         movementLeft = Math.Clamp(movementLeft - movement, 0, maxMovement);
     }
 
+    public virtual bool TryToCreateEntityPayHeartCostAction(HeartType[] heartCost, out EntityPayHeartCostAction entityPayHeartCostAction, Action requiredAction = null){
+        entityPayHeartCostAction = new EntityPayHeartCostAction(this, heartCost, requiredAction);
+        var canPayHeartCost = CanPayHeartCost(heartCost);
+        if(canPayHeartCost){
+            Game.currentGame.PileAction(entityPayHeartCostAction);
+        }
+
+        return canPayHeartCost;
+    }
+
+    public virtual bool TryToPayHeartCost(HeartType[] heartCost){
+        return health.TryToPayHeartCost(heartCost, true);
+    }
+
+    public virtual bool CanPayHeartCost(HeartType[] heartCost){
+        return health.CanPayHeartCost(heartCost, out _);
+    }
+
     public bool TryToIncreaseMaxMovement(){
         var canIncreaseMaxMovement = CanIncreaseMaxMovement();
         if(canIncreaseMaxMovement){
