@@ -53,51 +53,75 @@ public class AnimationManager : MonoBehaviour
 
 
     public void PlayAnimationForAction(Action action){
-        EntityManager entityManager = null;
+
         switch(action){
             case EntityMoveAction entityMoveAction: 
-                entityManager = boardManager.GetEntityManagerFromEntity(entityMoveAction.entity);
-                var goalTileManager = boardManager.GetTileManagerFromTile(entityMoveAction.endTile);
-                if(entityManager != null){
-                    var animator = entityManager.gameObject.GetComponent<Animator>();
-                    animatorsPlaying.Add(animator);
-                    entityManager.goalTileManager = goalTileManager;
-                }
+                PlayAnimationForAction(entityMoveAction);
                 break;
 
             case EntityTakeDamageAction entityTakeDamageAction: 
-                entityManager = boardManager.GetEntityManagerFromEntity(entityTakeDamageAction.entity);
-                if(entityManager != null){
-                    var animator = entityManager.gameObject.GetComponent<Animator>();
-                    animatorsPlaying.Add(animator);
-                    animator.SetTrigger("hitTrigger");
-                }
+                PlayAnimationForAction(entityTakeDamageAction);
                 break;
 
             case EntityAttackAction entityAttackAction: 
-                entityManager = boardManager.GetEntityManagerFromEntity(entityAttackAction.entity);
-                if(entityManager != null){
-                    var animator = entityManager.gameObject.GetComponent<Animator>();
-                    animatorsPlaying.Add(animator);
-                    animator.SetTrigger("attackTrigger");
-                }
+                PlayAnimationForAction(entityAttackAction);
                 break;
 
             case EntityChangeDirectionAction entityChangeDirectionAction:
-                entityManager = boardManager.GetEntityManagerFromEntity(entityChangeDirectionAction.entity);
-                entityManager.UpdateRotationAccordingToEntity();
+                PlayAnimationForAction(entityChangeDirectionAction);
                 break;
 
             case PlayerSpawnEntityAction playerSpawnEntityAction:
-                SpawnEntity(playerSpawnEntityAction.entitySpawned);
+                PlayAnimationForAction(playerSpawnEntityAction);
                 break;
 
             case TileChangeTypeAction tileChangeTypeAction:
-                var tileManager = boardManager.GetTileManagerFromTile(tileChangeTypeAction.tile);
-                tileManager.UpdateAccordingToTile();
+                PlayAnimationForAction(tileChangeTypeAction);
                 break;
         }
 
+    }
+
+    public void PlayAnimationForAction(EntityMoveAction entityMoveAction){
+        var entityManager = boardManager.GetEntityManagerFromEntity(entityMoveAction.entity);
+        var goalTileManager = boardManager.GetTileManagerFromTile(entityMoveAction.endTile);
+        if(entityManager != null){
+            var animator = entityManager.gameObject.GetComponent<Animator>();
+            animatorsPlaying.Add(animator);
+            entityManager.goalTileManager = goalTileManager;
+        }
+    }
+
+    public void PlayAnimationForAction(EntityTakeDamageAction entityTakeDamageAction){
+        var entityManager = boardManager.GetEntityManagerFromEntity(entityTakeDamageAction.entity);
+        if(entityManager != null){
+            var animator = entityManager.gameObject.GetComponent<Animator>();
+            animatorsPlaying.Add(animator);
+            animator.SetTrigger("hitTrigger");
+        }
+    }
+
+    public void PlayAnimationForAction(EntityAttackAction entityAttackAction){
+        var entityManager = boardManager.GetEntityManagerFromEntity(entityAttackAction.entity);
+        if(entityManager != null){
+            var animator = entityManager.gameObject.GetComponent<Animator>();
+            animatorsPlaying.Add(animator);
+            animator.SetTrigger("attackTrigger");
+        }
+    }
+
+    public void PlayAnimationForAction(EntityChangeDirectionAction entityChangeDirectionAction){
+        var entityManager = boardManager.GetEntityManagerFromEntity(entityChangeDirectionAction.entity);
+        entityManager.UpdateRotationAccordingToEntity();
+    }
+
+    public void PlayAnimationForAction(PlayerSpawnEntityAction playerSpawnEntityAction){
+        SpawnEntity(playerSpawnEntityAction.entitySpawned);
+    }
+
+    public void PlayAnimationForAction(TileChangeTypeAction tileChangeTypeAction){
+        var tileManager = boardManager.GetTileManagerFromTile(tileChangeTypeAction.tile);
+        tileManager.UpdateAccordingToTile();
     }
 
     public void SpawnEntity(Entity entity){
