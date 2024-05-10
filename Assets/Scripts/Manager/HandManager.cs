@@ -73,14 +73,15 @@ public class HandManager : MonoBehaviour
                 var angle = (i - childCount/2) * degreeRange * (Mathf.PI/180) / childCount;
 
                 // Calculate the position on the circle
-                var x = Mathf.Sin(angle) * radius + transform.position.x;
-                var y = transform.position.y;
-                var z = Mathf.Cos(angle) * radius + transform.position.z - radius;
+                var x = Mathf.Sin(angle) * radius;
+                var y = 0;
+                var z = Mathf.Cos(angle) * radius - radius;
 
                 // Set the position of the child
-                child.position = new Vector3(x, y, z) + (cardManager.hovered ? hoveredCardOffset : Vector3.zero);
+                child.localPosition = new Vector3(x, y, z) + (cardManager.hovered ? hoveredCardOffset : Vector3.zero);
 
-                var circleCenter = new Vector3(transform.position.x, transform.position.y, transform.position.z - radius);
+                var circleCenter = transform.position + transform.forward * (-radius);
+                
 
                 // Orient the child's rotation
                 Quaternion rotation = Quaternion.LookRotation(-Vector3.up, -(circleCenter - child.position));

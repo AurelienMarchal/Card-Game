@@ -51,6 +51,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     CameraFollowingSelectedEntity cameraFollowingSelectedEntity;
 
+    [SerializeField]
+    Transform mainCameraTransform;
+
+    [SerializeField]
+    Transform player1CameraTransform;
+
+    [SerializeField]
+    Transform player2CameraTransform;
+
     bool entityWasClickedThisFrame;
 
     bool tileWasClickedThisFrame;
@@ -258,9 +267,22 @@ public class GameManager : MonoBehaviour
 
     public void OnEndTurnPressed(){
         Game.currentGame.PileAction(new EndPlayerTurnAction(Game.currentGame.currentPlayer));
+        
+        if(Game.currentGame.currentPlayer.playerNum == 1){
+            mainCameraTransform.position = player1CameraTransform.position;
+            mainCameraTransform.rotation = player1CameraTransform.rotation;
+        }
+        else if(Game.currentGame.currentPlayer.playerNum == 2){
+            mainCameraTransform.position = player2CameraTransform.position;
+            mainCameraTransform.rotation = player2CameraTransform.rotation;
+        }
+        else{
+
+        }
     }
 
     //Returns 'true' if we touched or hovering on Unity UI element.
+
     public bool IsPointerOverUIElement()
     {
         return IsPointerOverUIElement(GetEventSystemRaycastResults());
