@@ -19,9 +19,6 @@ public class AnimationManager : MonoBehaviour
     [SerializeField]
     PrefabCorrespondingToEntityModel[] prefabCorrespondingToEntityModels;
 
-    [SerializeField]
-    float walkingSpeed;
-
     
     public bool animationPlaying{
         get;
@@ -56,10 +53,10 @@ public class AnimationManager : MonoBehaviour
 
 
     public void PlayAnimationForAction(Action action){
-
+        EntityManager entityManager = null;
         switch(action){
             case EntityMoveAction entityMoveAction: 
-                var entityManager = boardManager.GetEntityManagerFromEntity(entityMoveAction.entity);
+                entityManager = boardManager.GetEntityManagerFromEntity(entityMoveAction.entity);
                 var goalTileManager = boardManager.GetTileManagerFromTile(entityMoveAction.endTile);
                 if(entityManager != null){
                     var animator = entityManager.gameObject.GetComponent<Animator>();
@@ -68,9 +65,27 @@ public class AnimationManager : MonoBehaviour
                 }
                 break;
 
+            case EntityTakeDamageAction entityTakeDamageAction: 
+                entityManager = boardManager.GetEntityManagerFromEntity(entityTakeDamageAction.entity);
+                if(entityManager != null){
+                    var animator = entityManager.gameObject.GetComponent<Animator>();
+                    animatorsPlaying.Add(animator);
+                    animator.SetTrigger("hitTrigger");
+                }
+                break;
+
+            case EntityAttackAction entityAttackAction: 
+                entityManager = boardManager.GetEntityManagerFromEntity(entityAttackAction.entity);
+                if(entityManager != null){
+                    var animator = entityManager.gameObject.GetComponent<Animator>();
+                    animatorsPlaying.Add(animator);
+                    animator.SetTrigger("attackTrigger");
+                }
+                break;
+
             case EntityChangeDirectionAction entityChangeDirectionAction:
-                var entityManager_ = boardManager.GetEntityManagerFromEntity(entityChangeDirectionAction.entity);
-                entityManager_.UpdateRotationAccordingToEntity();
+                entityManager = boardManager.GetEntityManagerFromEntity(entityChangeDirectionAction.entity);
+                entityManager.UpdateRotationAccordingToEntity();
                 break;
 
             case PlayerSpawnEntityAction playerSpawnEntityAction:

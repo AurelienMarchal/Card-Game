@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class EntityLooseHeartAction : EntityAction
 {
-    public Heart heart{
+    public HeartType heartType{
         get;
         private set;
     }
 
-    public EntityLooseHeartAction(Entity entity, Heart heart, Action requiredAction = null) : base(entity, requiredAction)
+    public EntityLooseHeartAction(Entity entity, HeartType heartType, Action requiredAction = null) : base(entity, requiredAction)
     {  
-        this.heart = heart;
+        this.heartType = heartType;
     }
 }

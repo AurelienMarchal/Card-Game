@@ -5,23 +5,17 @@ using UnityEngine;
 public class ChangeWillGetCurseTypeIntoCursedTileEffect : TileEffect
 {
 
-    public Tile tile{
-        get;
-        protected set;
-    }
-
     public ChangeWillGetCurseTypeIntoCursedTileEffect(Tile tile) : base(tile){
-        this.tile = tile;
     }
 
     protected override void Activate()
     {
-        Game.currentGame.PileAction(new TileChangeTypeAction(tile, TileType.Cursed, effectActivatedAction));
+        Game.currentGame.PileAction(new TileChangeTypeAction(associatedTile, TileType.Cursed, effectActivatedAction));
     }
 
     public override bool CanBeActivated()
     {
-        return base.CanBeActivated() && tile.tileType == TileType.WillGetCursed;
+        return base.CanBeActivated() && associatedTile.tileType == TileType.WillGetCursed;
     }
 
 

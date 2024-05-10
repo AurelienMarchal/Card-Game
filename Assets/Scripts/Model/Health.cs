@@ -28,6 +28,15 @@ public class Health : ICloneable{
         return true;
     }
 
+    public bool IsFull(){
+        foreach(HeartType heart in hearts){
+            if(heart == HeartType.NoHeart){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public override string ToString(){
         var toReturn = "Health : ";
 
@@ -108,6 +117,10 @@ public class Health : ICloneable{
 
         willDie = false;
 
+        if(heartCost.Length == 0){
+            return true;
+        }
+
         if(IsEmpty()){
             return false;
         }
@@ -146,6 +159,8 @@ public class Health : ICloneable{
             if(hearts[currentHeartIndex] == HeartType.Red || hearts[currentHeartIndex] == HeartType.RedEmpty){
                 if(heartCostCopy.Contains(HeartType.Red)){
                     heartCostCopy.Remove(HeartType.Red);
+                    //TO DO
+                    //Remplacer par une action
                     RemoveHeartAt(currentHeartIndex);
                 }
             }
@@ -160,6 +175,19 @@ public class Health : ICloneable{
         }
 
         return IsEmpty();
+    }
+
+    public bool TryToGainHeart(HeartType heartType){
+
+        for(var i = 0; i < hearts.Length; i++){
+            if(hearts[i] == HeartType.NoHeart){
+                hearts[i] = heartType;
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     public object Clone(){

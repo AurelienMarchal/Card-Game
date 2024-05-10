@@ -44,6 +44,7 @@ public class Weapon{
     }
 
     public Weapon(ScriptableWeapon scriptableWeapon){
+        name = scriptableWeapon.weaponName;
         atkDamage = scriptableWeapon.atkDamage;
         costToUse = scriptableWeapon.costToUse;
         range = scriptableWeapon.range;

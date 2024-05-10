@@ -17,6 +17,7 @@ public class EntityAttackAction : EntityAction
 
     public EntityAttackAction(Entity attackingEntity, Entity attackedEntity, bool isCounterAttack = false, Action requiredAction = null) : base(attackingEntity, requiredAction){
         this.attackedEntity = attackedEntity;
+        this.isCounterAttack = isCounterAttack;
     }
 
     protected override bool Perform()
@@ -30,7 +31,7 @@ public class EntityAttackAction : EntityAction
 
         if(!isCounterAttack){
             if(attackedEntity.CanAttack(entity)){
-                Game.currentGame.PileAction(new EntityAttackAction(attackedEntity, entity, false, this));
+                Game.currentGame.PileAction(new EntityAttackAction(attackedEntity, entity, true, this));
             }
         }
         

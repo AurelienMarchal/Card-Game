@@ -46,6 +46,9 @@ public class Tile {
     protected void AddDefaultPermanentEffects(){
         effects.Add(new PickNextCursedTileOnStartPlayerTurnTileEffect(this));
         effects.Add(new ChangeWillGetCurseTypeIntoCursedTileEffect(this));
+        effects.Add(new CurseTileGivesCurseHeartEffect(this));
+        effects.Add(new CurseSourceTileGivesCurseHeartEffect(this));
+        effects.Add(new NatureTileGivesNatureHeartEffect(this));
     }
 
 }

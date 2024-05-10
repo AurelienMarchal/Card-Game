@@ -279,6 +279,9 @@ public class GameManager : MonoBehaviour
         else{
 
         }
+
+        EntityManager.UnselectEveryEntity();
+        boardManager.GetEntityManagerFromEntity(Game.currentGame.currentPlayer.hero).selected = true;
     }
 
     //Returns 'true' if we touched or hovering on Unity UI element.

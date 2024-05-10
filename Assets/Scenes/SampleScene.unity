@@ -4735,7 +4735,6 @@ MonoBehaviour:
     prefab: {fileID: 7063583469523896447, guid: 4fc92913f9324cc4b8c15d5e27972fa2, type: 3}
   - entityModel: 1
     prefab: {fileID: 1828033751355200758, guid: f523666c8b14089418959782c6927bc6, type: 3}
-  walkingSpeed: 0
 --- !u!4 &1768239576
 Transform:
   m_ObjectHideFlags: 0

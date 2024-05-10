@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f728855135f87439eb4fc5e13a7e72, type: 3}
   m_Name: Range1Weapon
   m_EditorClassIdentifier: 
+  atkDamage:
+    amount: 2
+  costToUse:
+    heartCost: 
+    mouvementCost: 2
+  range: 1
   scriptableEffects: []
