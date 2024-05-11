@@ -63,6 +63,22 @@ public class AnimationManager : MonoBehaviour
                 PlayAnimationForAction(entityTakeDamageAction);
                 break;
 
+            case EntityGainHeartAction entityGainHeartAction: 
+                PlayAnimationForAction(entityGainHeartAction);
+                break;
+
+            case EntityPayHeartCostAction entityPayHeartCostAction: 
+                PlayAnimationForAction(entityPayHeartCostAction);
+                break;
+
+            case EntityUseMovementAction entityUseMovementAction: 
+                PlayAnimationForAction(entityUseMovementAction);
+                break;
+
+            case EntityResetMovementAction entityResetMovementAction: 
+                PlayAnimationForAction(entityResetMovementAction);
+                break;
+
             case EntityAttackAction entityAttackAction: 
                 PlayAnimationForAction(entityAttackAction);
                 break;
@@ -98,7 +114,28 @@ public class AnimationManager : MonoBehaviour
             var animator = entityManager.gameObject.GetComponent<Animator>();
             animatorsPlaying.Add(animator);
             animator.SetTrigger("hitTrigger");
+            entityManager.UpdateHealthUIDisplay();
         }
+    }
+
+    public void PlayAnimationForAction(EntityGainHeartAction entityGainHeartAction){
+        var entityManager = boardManager.GetEntityManagerFromEntity(entityGainHeartAction.entity);
+        entityManager.UpdateHealthUIDisplay();
+    }
+
+    public void PlayAnimationForAction(EntityPayHeartCostAction entityPayHeartCostAction){
+        var entityManager = boardManager.GetEntityManagerFromEntity(entityPayHeartCostAction.entity);
+        entityManager.UpdateHealthUIDisplay();
+    }
+
+    public void PlayAnimationForAction(EntityUseMovementAction entityUseMovementAction){
+        var entityManager = boardManager.GetEntityManagerFromEntity(entityUseMovementAction.entity);
+        entityManager.UpdateMovementUIDisplay();
+    }
+
+    public void PlayAnimationForAction(EntityResetMovementAction entityResetMovementAction){
+        var entityManager = boardManager.GetEntityManagerFromEntity(entityResetMovementAction.entity);
+        entityManager.UpdateMovementUIDisplay();
     }
 
     public void PlayAnimationForAction(EntityAttackAction entityAttackAction){

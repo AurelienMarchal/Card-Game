@@ -95,14 +95,14 @@ public class GameManager : MonoBehaviour
         boardManager.entityClickedEvent.AddListener(OnEntityClicked);
         boardManager.tileClickedEvent.AddListener(OnTileClicked);
 
-        var startingTile1 = boardManager.board.GetTileAt(4, 4);
+        var startingTile1 = boardManager.board.GetTileAt(2, 2);
         var direction1 = Direction.East;
         var hero1 = new Hero(Game.currentGame.players[0], scriptableHero1, startingTile1, direction1);
         hero1.effects.Add(new MoveToChangeTileTypeEffect(hero1, TileType.Nature));
 
         animationManager.SpawnEntity(hero1);
 
-        var startingTile2 = boardManager.board.GetTileAt(4, 5);
+        var startingTile2 = boardManager.board.GetTileAt(5, 5);
         var direction2 = Direction.West;
         var hero2 = new Hero(Game.currentGame.players[1], scriptableHero2, startingTile2, direction2);
         //hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
@@ -228,18 +228,23 @@ public class GameManager : MonoBehaviour
         if(blockInputs){
             return;
         }
+        
+        entityWasClickedThisFrame = true;
+        var didAttack = false;
 
         if(currentEntitySelected != null){
             if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
-                currentEntitySelected.TryToAttack(entityManager.entity);
+                didAttack = currentEntitySelected.TryToAttack(entityManager.entity);
             }
         }
 
-        entityWasClickedThisFrame = true;
-        EntityManager.UnselectEveryEntity();
-        TileManager.UnselectEveryTile();
-        entityManager.selected = entityManager.hovered;
         
+
+        if(!didAttack){
+            EntityManager.UnselectEveryEntity();
+            TileManager.UnselectEveryTile();
+            entityManager.selected = entityManager.hovered;
+        }
     }
 
     void OnTileClicked(TileManager tileManager){
@@ -248,19 +253,19 @@ public class GameManager : MonoBehaviour
         }
 
         tileWasClickedThisFrame = true;
+        var didMove = false;
 
-        if(currentEntitySelected == null){
+        if(currentEntitySelected != null){
+            if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
+                didMove = currentEntitySelected.TryToMove(tileManager.tile);
+            }
+        }
+
+        else{
             EntityManager.UnselectEveryEntity();
             TileManager.UnselectEveryTile();
+            currentEntitySelected = null;
             tileManager.selected = tileManager.hovered;
-        }
-        else{
-            if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
-                var didMove = currentEntitySelected.TryToMove(tileManager.tile);
-                if(didMove){
-                    
-                }
-            }
         }
     }
 

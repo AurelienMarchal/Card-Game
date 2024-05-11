@@ -218,16 +218,16 @@ public sealed class Game{
             }
         }
 
-        foreach(Entity entity in currentGame.board.entities){
-            foreach(Effect effect in entity.effects){
+        foreach(Tile tile in currentGame.board.tiles){
+            foreach(Effect effect in tile.effects){
                 if(effect.Trigger(action)){
                     effect.TryToCreateEffectActivatedAction(action, out _);
                 }
             }
         }
 
-        foreach(Tile tile in currentGame.board.tiles){
-            foreach(Effect effect in tile.effects){
+        foreach(Entity entity in currentGame.board.entities){
+            foreach(Effect effect in entity.effects){
                 if(effect.Trigger(action)){
                     effect.TryToCreateEffectActivatedAction(action, out _);
                 }

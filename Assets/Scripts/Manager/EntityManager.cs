@@ -76,6 +76,11 @@ public class EntityManager : MonoBehaviour
     [SerializeField]
     float walkingSpeed;
 
+    [SerializeField]
+    float timeToDislayInfoUI = 1f;
+
+    float infoUITimer = 0f;
+
     public TileManager goalTileManager;
 
     BoardManager boardManager;
@@ -86,6 +91,7 @@ public class EntityManager : MonoBehaviour
     
     void Awake(){
         boardManager = GetComponentInParent<BoardManager>();
+        entityInfoCanvasInstance = Instantiate(entityInfoCanvasPrefab, transform);
     }
     
     // Start is called before the first frame update
@@ -93,18 +99,14 @@ public class EntityManager : MonoBehaviour
     {
         hovered = false;
         selected = false;
-        //entityInfoCanvasInstance = Instantiate(entityInfoCanvasPrefab, transform);
+        ResetInfoUITimer();
     }
 
     // Update is called once per frame
     void Update(){
         
         if(entityInfoCanvasInstance != null){
-            entityInfoCanvasInstance.SetActive(hovered || selected);
-            if(entity != null){
-                entityInfoCanvasInstance.GetComponentInChildren<TextMeshProUGUI>().text = entity.name;
-                entityInfoCanvasInstance.GetComponentInChildren<HealthUIDisplay>().health = entity.health;
-            }
+            entityInfoCanvasInstance.SetActive(hovered || infoUITimer > 0f);
         }
 
         if(goalTileManager != null){
@@ -124,13 +126,16 @@ public class EntityManager : MonoBehaviour
 
         animator.SetBool("isWalking", goalTileManager != null);
 
+        if(infoUITimer > 0f){
+            infoUITimer = Mathf.Max(infoUITimer - Time.deltaTime, 0f);
+        }
+
     }
 
     void OnMouseDown(){
         clickedEvent.Invoke(this);
     }
 
-    
     void OnMouseOver(){
         hovered = true;
     }
@@ -150,12 +155,20 @@ public class EntityManager : MonoBehaviour
 
     void UpdateAccordingToEntity(){
         
+        UpdatePositionAccordingToEntity();
+        UpdateRotationAccordingToEntity();
+
+        UpdateHealthUIDisplay();
+        UpdateMovementUIDisplay();
+        UpdateNameUIDisplay();
+    }
+
+    public void UpdatePositionAccordingToEntity(){
         transform.position = new Vector3(
             entity.currentTile.gridX * boardManager.tileSizeX, 
             boardManager.entityY,  
             entity.currentTile.gridY * boardManager.tileSizeZ);
 
-        UpdateRotationAccordingToEntity();
     }
 
     public void UpdateRotationAccordingToEntity(){
@@ -191,5 +204,33 @@ public class EntityManager : MonoBehaviour
         this.entity.TryToCreateEntityAttackAction(entity, out EntityAttackAction entityAttackAction, entityPayHeartCostAction);
 
         return entityAttackAction.wasPerformed;
+    }
+
+    public void UpdateHealthUIDisplay(){
+        var healthUIDisplay = entityInfoCanvasInstance.GetComponentInChildren<HealthUIDisplay>();
+        if(healthUIDisplay!=null){
+            healthUIDisplay.health = entity.health;
+            ResetInfoUITimer();
+        }
+    }
+
+    public void UpdateMovementUIDisplay(){
+        var movementUIDisplay = entityInfoCanvasInstance.GetComponentInChildren<MovementUIDisplay>();
+        if(movementUIDisplay!=null){
+            movementUIDisplay.entity = entity;
+            ResetInfoUITimer();
+        }
+    }
+
+    public void UpdateNameUIDisplay(){
+        var nameUIDisplay = entityInfoCanvasInstance.GetComponentInChildren<TextMeshProUGUI>();
+        if(nameUIDisplay!=null){
+            nameUIDisplay.text = entity.name;
+            ResetInfoUITimer();
+        }
+    }
+
+    void ResetInfoUITimer(){
+        infoUITimer = timeToDislayInfoUI;
     }
 }

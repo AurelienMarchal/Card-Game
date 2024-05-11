@@ -110,6 +110,7 @@ public class BoardManager : MonoBehaviour
         entityManager.entity = entity;
         entityManager.selectedEvent.AddListener(OnEntitySelected);
         entityManager.clickedEvent.AddListener(OnEntityClicked);
+
         AddEntity(entityManager);
     }
 

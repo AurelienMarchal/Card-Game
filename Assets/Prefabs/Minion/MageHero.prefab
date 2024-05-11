@@ -650,7 +650,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6024870234746468465
 Transform:
   m_ObjectHideFlags: 0
@@ -773,7 +773,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2984999149018599022
 Transform:
   m_ObjectHideFlags: 0
@@ -1705,7 +1705,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 7663199207295091533}
-  entityInfoCanvasPrefab: {fileID: 1849537066013517146, guid: f9d3e209bdd28804d99ba427be786297, type: 3}
+  entityInfoCanvasPrefab: {fileID: 6479235720520980047, guid: 4688df96d40664e4695728a5e755fb21, type: 3}
   walkingSpeed: 3
   goalTileManager: {fileID: 0}
   selectedEvent:
@@ -2458,7 +2458,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8082909659977752949
 Transform:
   m_ObjectHideFlags: 0

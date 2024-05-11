@@ -253,6 +253,10 @@ public class Entity
             return false;
         }
 
+        if(entity.currentTile.gridX != currentTile.gridX && entity.currentTile.gridY != currentTile.gridY){
+            return false;
+        }
+
         if(entity.currentTile.Distance(currentTile) > weapon.range){
             return false;
         }
@@ -274,6 +278,10 @@ public class Entity
         }
 
         if(weapon == Weapon.noWeapon){
+            return false;
+        }
+
+        if(entity.currentTile.gridX != currentTile.gridX && entity.currentTile.gridY != currentTile.gridY){
             return false;
         }
 
