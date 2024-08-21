@@ -66,7 +66,7 @@ public class Entity
         health = startingHealth.Clone() as Health;
         this.weapon = weapon;
         maxMovement = startingMaxMovement;
-        movementLeft = maxMovement;
+        movementLeft = 0;
         direction = startingDirection;
         effects = new List<EntityEffect>();
         AddEffectList(permanentEffects);
@@ -87,7 +87,7 @@ public class Entity
             weapon = new Weapon(scriptableEntity.scriptableWeapon);
         }
         maxMovement = scriptableEntity.maxMovement;
-        movementLeft = maxMovement;
+        movementLeft = 0;
         direction = startingDirection;
         effects = new List<EntityEffect>();
         AddEffectList(scriptableEntity.scriptableEffects);

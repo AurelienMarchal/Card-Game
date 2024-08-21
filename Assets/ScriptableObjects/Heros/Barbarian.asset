@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9607df7759ff6f347b57d95e9f34a559, type: 3}
-  m_Name: Hero2
+  m_Name: Barbarian
   m_EditorClassIdentifier: 
   health:
-    hearts: 010000000100000001000000000000000000000000000000000000000000000000000000000000000000000000000000
-  entityName: Hero 2
-  entityModel: 0
-  scriptableWeapon: {fileID: 11400000, guid: 541db44905ffc1c42963b12b6b2080fc, type: 2}
+    hearts: 010000000100000001000000010000000000000000000000000000000000000000000000000000000000000000000000
+  entityName: Barbare
+  entityModel: 1
+  scriptableWeapon: {fileID: 11400000, guid: 438a31ea24144ab43833160c774e8c5e, type: 2}
   maxMovement: 3
   scriptableEffects:
   - {fileID: 11400000, guid: 5137f9f5b6b557246a620209b66bcda0, type: 2}

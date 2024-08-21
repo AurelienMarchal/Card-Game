@@ -15,8 +15,7 @@ MonoBehaviour:
   health:
     hearts: 01000000
   entityName: Duck
-  entityModel: 1
-  atkDamage:
-    amount: 1
+  entityModel: 2
+  scriptableWeapon: {fileID: 0}
   maxMovement: 1
   scriptableEffects: []
