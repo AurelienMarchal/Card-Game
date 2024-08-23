@@ -299,6 +299,14 @@ public class Entity
         return true;
     }
 
+    public bool CanPayWeaponCost(){
+        if(weapon == null){
+            return false;
+        }
+
+        return CanPayHeartCost(weapon.costToUse.heartCost) && CanUseMovement(weapon.costToUse.mouvementCost);
+    }
+
 
     public bool TakeDamage(Damage damage){
         Debug.Log($"{this} taking {damage} damage");
@@ -396,7 +404,7 @@ public class Entity
     }
 
     protected void AddDefaultPermanentEffects(){
-
+        effects.Add(new EntityDiesWhenHealthIsEmpty(this));
     }
 
     public override string ToString()

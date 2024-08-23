@@ -1,6 +1,9 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System;
+using UnityEngine.Events;
 
 
 public class EntityInfoUI : MonoBehaviour
@@ -16,10 +19,12 @@ public class EntityInfoUI : MonoBehaviour
     MovementUIDisplay movementUIDisplay;
 
     [SerializeField]
-    TextMeshProUGUI entityAtkTextMeshProUGUI;
+    TextMeshProUGUI entityNameTextMeshProUGUI;
 
     [SerializeField]
-    TextMeshProUGUI entityNameTextMeshProUGUI;
+    WeaponUIDisplay weaponUIDisplay;
+
+    public UnityEvent weaponUsedUnityEvent = new UnityEvent();
 
     [SerializeField]
     Scrollbar angleScrollbar;
@@ -37,16 +42,9 @@ public class EntityInfoUI : MonoBehaviour
         }
         set{
             entityManager_ = value;
-            ClearScrollView();
-            if(entityManager != null){
-                foreach (var effect in entityManager.entity.effects){
-                    AddEffectCanvasFromEffect(effect);
-                }
-            }
-            
+            UpdateAccordingToEntity();
         }
     }
-
 
     void Start(){
 
@@ -54,22 +52,17 @@ public class EntityInfoUI : MonoBehaviour
 
     void Update(){
         cameraFollowingSelectedEntity.angle = angleScrollbar.value * 2 * Mathf.PI;
-        if(entityManager == null){
-            cameraFollowingSelectedEntity.entityGameobject = null;
-            entityNameTextMeshProUGUI.text = "";
-        }
-        else{
-            cameraFollowingSelectedEntity.entityGameobject = entityManager.gameObject;
+        if(entityManager != null){
             healthUIDisplay.health = entityManager.entity.health;
             movementUIDisplay.entity = entityManager.entity;
-            if(entityManager.entity.weapon != null){
-                entityAtkTextMeshProUGUI.text = entityManager.entity.weapon.atkDamage.amount.ToString();
-            }
-            else{
-                entityAtkTextMeshProUGUI.text = "";
-            }
-            entityNameTextMeshProUGUI.text = entityManager.entity.name;
+            weaponUIDisplay.weapon = entityManager.entity.weapon;
+            weaponUIDisplay.weaponButton.enabled = entityManager.entity.CanPayWeaponCost() && Game.currentGame.currentPlayer == entityManager.entity.player;
         }
+    }
+
+    private void OnWeaponButtonClick()
+    {
+        weaponUsedUnityEvent.Invoke();
     }
 
     void ClearScrollView(){
@@ -84,6 +77,29 @@ public class EntityInfoUI : MonoBehaviour
 
         if(effectUIDisplay != null){
             effectUIDisplay.effect = effect;
+        }
+    }
+
+    void UpdateAccordingToEntity(){
+        ClearScrollView();
+        if(entityManager == null){
+            cameraFollowingSelectedEntity.entityGameobject = null;
+            entityNameTextMeshProUGUI.text = "";
+        }
+        else{
+
+            cameraFollowingSelectedEntity.entityGameobject = entityManager.gameObject;
+            healthUIDisplay.health = entityManager.entity.health;
+            movementUIDisplay.entity = entityManager.entity;
+            
+            weaponUIDisplay.weapon = entityManager.entity.weapon;
+            weaponUIDisplay.weaponButton.enabled = entityManager.entity.CanPayWeaponCost() && Game.currentGame.currentPlayer == entityManager.entity.player;
+            weaponUIDisplay.weaponButton.onClick.AddListener(OnWeaponButtonClick);
+            
+            entityNameTextMeshProUGUI.text = entityManager.entity.name;
+            foreach (var effect in entityManager.entity.effects){
+                AddEffectCanvasFromEffect(effect);
+            }
         }
     }
 }

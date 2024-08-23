@@ -94,6 +94,10 @@ public class AnimationManager : MonoBehaviour
             case TileChangeTypeAction tileChangeTypeAction:
                 PlayAnimationForAction(tileChangeTypeAction);
                 break;
+
+            case EntityDieAction entityDieAction:
+                PlayAnimationForAction(entityDieAction);
+                break;
         }
 
     }
@@ -159,6 +163,15 @@ public class AnimationManager : MonoBehaviour
     public void PlayAnimationForAction(TileChangeTypeAction tileChangeTypeAction){
         var tileManager = boardManager.GetTileManagerFromTile(tileChangeTypeAction.tile);
         tileManager.UpdateAccordingToTile();
+    }
+
+    public void PlayAnimationForAction(EntityDieAction entityDieAction){
+        var entityManager = boardManager.GetEntityManagerFromEntity(entityDieAction.entity);
+        if(entityManager != null){
+            var animator = entityManager.gameObject.GetComponent<Animator>();
+            animatorsPlaying.Add(animator);
+            animator.SetTrigger("deathTrigger");
+        }
     }
 
     public void SpawnEntity(Entity entity){

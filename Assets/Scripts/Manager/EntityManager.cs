@@ -206,6 +206,23 @@ public class EntityManager : MonoBehaviour
         return entityAttackAction.wasPerformed;
     }
 
+    public bool TryToAttack(){
+    
+        var entityInFront = Game.currentGame.board.GetFirstEntityInDirectionWithRange(
+            Game.currentGame.board.NextTileInDirection(entity.currentTile, entity.direction), 
+            entity.direction, 
+            entity.weapon.range
+        );
+
+        Debug.Log($"--------------TryToAttack {entityInFront}");
+
+        if(entityInFront == Entity.noEntity){
+            return false;
+        }
+
+        return TryToAttack(entityInFront);
+    }
+
     public void UpdateHealthUIDisplay(){
         var healthUIDisplay = entityInfoCanvasInstance.GetComponentInChildren<HealthUIDisplay>();
         if(healthUIDisplay!=null){

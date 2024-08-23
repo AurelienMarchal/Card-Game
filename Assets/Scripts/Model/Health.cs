@@ -21,7 +21,7 @@ public class Health : ICloneable{
 
     public bool IsEmpty(){
         foreach(HeartType heart in hearts){
-            if(heart != HeartType.NoHeart || heart != HeartType.RedEmpty){
+            if(heart != HeartType.NoHeart && heart != HeartType.RedEmpty){
                 return false;
             }
         }
@@ -41,7 +41,7 @@ public class Health : ICloneable{
         var toReturn = "Health : ";
 
         foreach(HeartType heart in hearts){
-            toReturn += heart;
+            toReturn += heart + " ";
         }
 
         return toReturn + $" vide {IsEmpty()}";

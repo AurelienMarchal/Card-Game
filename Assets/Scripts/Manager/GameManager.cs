@@ -66,8 +66,6 @@ public class GameManager : MonoBehaviour
 
     int UILayer;
     
-
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -102,12 +100,14 @@ public class GameManager : MonoBehaviour
 
         animationManager.SpawnEntity(hero1);
 
-        var startingTile2 = boardManager.board.GetTileAt(5, 5);
-        var direction2 = Direction.West;
+        var startingTile2 = boardManager.board.GetTileAt(2, 3);
+        var direction2 = Direction.South;
         var hero2 = new Hero(Game.currentGame.players[1], scriptableHero2, startingTile2, direction2);
         //hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
 
         animationManager.SpawnEntity(hero2);
+
+        entityInfoUI.weaponUsedUnityEvent.AddListener(OnWeaponUsed);
 
         Game.currentGame.PileAction(new StartGameAction());
     }
@@ -230,20 +230,15 @@ public class GameManager : MonoBehaviour
         }
         
         entityWasClickedThisFrame = true;
-        var didAttack = false;
-
-        if(currentEntitySelected != null){
-            if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
-                didAttack = currentEntitySelected.TryToAttack(entityManager.entity);
-            }
-        }
-
+        EntityManager.UnselectEveryEntity();
+        TileManager.UnselectEveryTile();
+        entityManager.selected = entityManager.hovered;
         
+    }
 
-        if(!didAttack){
-            EntityManager.UnselectEveryEntity();
-            TileManager.UnselectEveryTile();
-            entityManager.selected = entityManager.hovered;
+    private void OnWeaponUsed(){
+        if(currentEntitySelected != null){
+            currentEntitySelected.TryToAttack();
         }
     }
 

@@ -110,6 +110,23 @@ public class Board {
         return Entity.noEntity;
     }
 
+    public Entity GetFirstEntityInDirectionWithRange(Tile startTile, Direction direction, int range){
+        
+        var tile = startTile;
+
+        while(range > 0 && tile != Tile.noTile){
+            var entityAtTile = GetEntityAtTile(tile);
+            if(entityAtTile != Entity.noEntity){
+                return entityAtTile;
+            }
+
+            tile = NextTileInDirection(startTile, direction);
+            range --;
+        }
+
+        return Entity.noEntity;
+    }
+
     private void SetupPermanentEffects(){
 
     }
