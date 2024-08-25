@@ -4349,6 +4349,9 @@ MonoBehaviour:
   movementUIDisplay: {fileID: 2036360314}
   entityNameTextMeshProUGUI: {fileID: 1085583575}
   weaponUIDisplay: {fileID: 9056693671628862199}
+  weaponUsedUnityEvent:
+    m_PersistentCalls:
+      m_Calls: []
   angleScrollbar: {fileID: 712282075}
   effectScrollViewContent: {fileID: 419234539}
   effectCanvasPrefab: {fileID: 6121943948045473078, guid: 3ee4a99b5aef1ce4791e64882df46fcf, type: 3}

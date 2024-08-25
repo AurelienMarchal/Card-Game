@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Entity
@@ -58,6 +59,11 @@ public class Entity
         protected set;
     }
 
+    public List<EntityBuff> buffs{
+        get;
+        private set;
+    }
+
     public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Weapon weapon = Weapon.noWeapon){
         this.player = player;
         this.model = model;
@@ -69,6 +75,7 @@ public class Entity
         movementLeft = 0;
         direction = startingDirection;
         effects = new List<EntityEffect>();
+        buffs = new List<EntityBuff>(); 
         AddEffectList(permanentEffects);
         AddDefaultPermanentEffects();
     }
@@ -90,6 +97,7 @@ public class Entity
         movementLeft = 0;
         direction = startingDirection;
         effects = new List<EntityEffect>();
+        buffs = new List<EntityBuff>(); 
         AddEffectList(scriptableEntity.scriptableEffects);
         AddDefaultPermanentEffects();
     }
@@ -119,6 +127,10 @@ public class Entity
 
     public virtual bool CanMove(Tile tile){
         if(tile == currentTile){
+            return false;
+        }
+
+        if(CheckBuffCannotMove()){
             return false;
         }
 
@@ -395,6 +407,14 @@ public class Entity
     public void AddEffect(EntityEffect entityEffect){
         entityEffect.associatedEntity = this;
         effects.Add(entityEffect);
+        UpdateBuffsAccordingToEffects();
+    }
+
+    public void RemoveEffect(EntityEffect entityEffect){
+        if(effects.Contains(entityEffect)){
+            effects.Remove(entityEffect);
+            UpdateBuffsAccordingToEffects();
+        }
     }
 
     public void AddEffectList(List<EntityEffect> entityEffects){
@@ -411,4 +431,26 @@ public class Entity
     {
         return $"Entity {name}";
     }
+
+    private void UpdateBuffsAccordingToEffects(){
+
+        buffs.Clear();
+
+        foreach(var effect in effects){
+            foreach (var buff in effect.entityBuffs){
+                buffs.Add(buff);
+            }
+        }
+    }
+
+    private bool CheckBuffCannotMove(){
+        foreach(var buff in buffs){
+            switch(buff){
+                case EntityCannotMoveBuff entityCannotMoveBuff:
+                    return true;
+            }
+        }
+
+        return false;
+    } 
 }
