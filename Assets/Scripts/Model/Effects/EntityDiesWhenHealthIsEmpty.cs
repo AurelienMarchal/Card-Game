@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EntityDiesWhenHealthIsEmpty : EntityEffect
 {
-    public EntityDiesWhenHealthIsEmpty(Entity entity) : base(entity)
+    public EntityDiesWhenHealthIsEmpty(Entity entity) : base(entity, displayOnUI:false)
     {
     
     }

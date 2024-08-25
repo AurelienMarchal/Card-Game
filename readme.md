@@ -69,6 +69,8 @@ Every entity has a certain combinaison of hearts. When they have no more hearts 
 
 ## Cards
 
+- Spider Web : Cast on entity : the entity cannot move until the next turn
+
 ## Entities
 
 ## Weapons

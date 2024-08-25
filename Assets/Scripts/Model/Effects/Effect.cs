@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Effect{
+    
+    public bool displayOnUI{
+        get;
+        private set;
+    }
 
-    public Effect(){
-        
+    public Effect(bool displayOnUI = true){
+        this.displayOnUI = displayOnUI;
     }
 
     protected EffectActivatedAction effectActivatedAction;

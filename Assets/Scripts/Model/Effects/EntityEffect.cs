@@ -10,7 +10,7 @@ public class EntityEffect : Effect
         set;
     }
 
-    public EntityEffect(Entity entity){
+    public EntityEffect(Entity entity, bool displayOnUI = true) : base(displayOnUI:displayOnUI){
         associatedEntity = entity;
     }
 

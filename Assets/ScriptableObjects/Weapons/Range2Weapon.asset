@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f728855135f87439eb4fc5e13a7e72, type: 3}
   m_Name: Range2Weapon
   m_EditorClassIdentifier: 
-  weaponName: Spear
+  weaponName: Blood Spear
   atkDamage:
     amount: 1
   costToUse:
-    heartCost: 
-    mouvementCost: 1
+    heartCost: 01000000
+    mouvementCost: 0
   range: 2
   scriptableEffects: []

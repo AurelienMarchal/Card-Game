@@ -16,6 +16,6 @@ MonoBehaviour:
     hearts: 010000000100000005000000000000000000000000000000000000000000000000000000000000000000000000000000
   entityName: Mage
   entityModel: 0
-  scriptableWeapon: {fileID: 0}
+  scriptableWeapon: {fileID: 11400000, guid: 541db44905ffc1c42963b12b6b2080fc, type: 2}
   maxMovement: 3
   scriptableEffects: []

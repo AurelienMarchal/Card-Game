@@ -72,6 +72,10 @@ public class EntityInfoUI : MonoBehaviour
     }
 
     void AddEffectCanvasFromEffect(Effect effect){
+        if(!effect.displayOnUI){
+            return;
+        }
+
         var effectCanvas = Instantiate(effectCanvasPrefab, effectScrollViewContent.transform);
         var effectUIDisplay = effectCanvas.GetComponent<EffectUIDisplay>();
 
@@ -94,6 +98,7 @@ public class EntityInfoUI : MonoBehaviour
             
             weaponUIDisplay.weapon = entityManager.entity.weapon;
             weaponUIDisplay.weaponButton.enabled = entityManager.entity.CanPayWeaponCost() && Game.currentGame.currentPlayer == entityManager.entity.player;
+            weaponUIDisplay.weaponButton.onClick.RemoveAllListeners();
             weaponUIDisplay.weaponButton.onClick.AddListener(OnWeaponButtonClick);
             
             entityNameTextMeshProUGUI.text = entityManager.entity.name;

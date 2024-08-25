@@ -188,6 +188,13 @@ public class EntityManager : MonoBehaviour
 
     }
 
+    public bool TryToChangeDirection(Direction direction){
+        
+        entity.TryToCreateEntityChangeDirectionAction(direction, null, out EntityChangeDirectionAction entityChangeDirectionAction);
+        return entityChangeDirectionAction.wasPerformed;
+
+    }
+
     public bool TryToAttack(Entity entity){
 
         if(!this.entity.CanAttackByChangingDirection(entity)){
@@ -213,8 +220,6 @@ public class EntityManager : MonoBehaviour
             entity.direction, 
             entity.weapon.range
         );
-
-        Debug.Log($"--------------TryToAttack {entityInFront}");
 
         if(entityInFront == Entity.noEntity){
             return false;

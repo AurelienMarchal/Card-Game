@@ -253,6 +253,12 @@ public class GameManager : MonoBehaviour
         if(currentEntitySelected != null){
             if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
                 didMove = currentEntitySelected.TryToMove(tileManager.tile);
+                if(!didMove){
+                    var direction = DirectionsExtensions.FromCoordinateDifference(
+                        tileManager.tile.gridX - currentEntitySelected.entity.currentTile.gridX,
+                        tileManager.tile.gridY - currentEntitySelected.entity.currentTile.gridY);
+                    currentEntitySelected.TryToChangeDirection(direction);
+                }
             }
         }
 
