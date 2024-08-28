@@ -35,6 +35,9 @@ public class EntityInfoUI : MonoBehaviour
     [SerializeField]
     GameObject effectCanvasPrefab;
 
+    [SerializeField]
+    GameObject buffCanvasPrefab;
+
     private EntityManager entityManager_;
     public EntityManager entityManager{
         get{
@@ -84,6 +87,21 @@ public class EntityInfoUI : MonoBehaviour
         }
     }
 
+    void AddBuffCanvasFromBuff(Buff buff){
+        /*
+        if(!effect.displayOnUI){
+            return;
+        }
+        */
+
+        var buffCanvas = Instantiate(buffCanvasPrefab, effectScrollViewContent.transform);
+        var buffUIDisplay = buffCanvas.GetComponent<BuffUIDisplay>();
+
+        if(buffUIDisplay != null){
+            buffUIDisplay.buff = buff;
+        }
+    }
+
     void UpdateAccordingToEntity(){
         ClearScrollView();
         if(entityManager == null){
@@ -104,6 +122,10 @@ public class EntityInfoUI : MonoBehaviour
             entityNameTextMeshProUGUI.text = entityManager.entity.name;
             foreach (var effect in entityManager.entity.effects){
                 AddEffectCanvasFromEffect(effect);
+            }
+
+            foreach (var buff in entityManager.entity.buffs){
+                AddBuffCanvasFromBuff(buff);
             }
         }
     }

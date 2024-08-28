@@ -927,6 +927,8 @@ MonoBehaviour:
     sprite: {fileID: 243152727, guid: f44e5e79a941d0846bc780013e68fbc3, type: 3}
   - heartType: 5
     sprite: {fileID: -565538063, guid: f44e5e79a941d0846bc780013e68fbc3, type: 3}
+  - heartType: 6
+    sprite: {fileID: 2068126235, guid: f44e5e79a941d0846bc780013e68fbc3, type: 3}
 --- !u!1 &6454578977855296413
 GameObject:
   m_ObjectHideFlags: 0

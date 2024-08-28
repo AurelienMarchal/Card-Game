@@ -30,7 +30,7 @@ Every entity has a certain combinaison of hearts. When they have no more hearts 
 - Nature :green_heart:: 
 - Cursed :purple_heart:: If a cursed heart is damaged, every adjacent cursed heart is destroyed aswell
 - Energy :blue_heart:: Can be substituted for energy
-- Steel :white_heart:: Tanks any amount of damage
+- Stone :white_heart:: Tanks any amount of damage. Weights down the entity
 
 ## Tiles
 
@@ -46,7 +46,7 @@ Every entity has a certain combinaison of hearts. When they have no more hearts 
     - At the start of every turn, chooses a tile to be converted to a curse tile at the end of the turn
   
 - Energy :blue_square:: 
-- Steel :white_large_square::
+- Stone :white_large_square::
     - Cannot be changed
 - Pink :red_square::
   - heals a red heart when entity walk over it
@@ -83,6 +83,7 @@ Every entity has a certain combinaison of hearts. When they have no more hearts 
 ### for entities
 
 - Flight : avoid every tile effect
+- Weighted down : cost 1 more :large_blue_diamond: to move.
 
 ### for heroes
 

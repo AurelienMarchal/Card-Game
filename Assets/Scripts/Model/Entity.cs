@@ -51,6 +51,13 @@ public class Entity
         protected set;
     }
 
+    public Cost costToMove{
+        get{
+            var weightedDownBuffCount = NumberOfBuffs<WeightedDownBuff>();
+            return new Cost(1 + weightedDownBuffCount);
+        }
+    }
+
     public const Entity noEntity = null;
     public const int maxMovementCap = 10;
 
@@ -130,7 +137,7 @@ public class Entity
             return false;
         }
 
-        if(CheckBuffCannotMove()){
+        if(NumberOfBuffs<EntityCannotMoveBuff>() > 0){
             return false;
         }
 
@@ -425,6 +432,7 @@ public class Entity
 
     protected void AddDefaultPermanentEffects(){
         effects.Add(new EntityDiesWhenHealthIsEmpty(this));
+        effects.Add(new EntityIsWeightedDownByStoneHeartEffect(this));
     }
 
     public override string ToString()
@@ -432,7 +440,7 @@ public class Entity
         return $"Entity {name}";
     }
 
-    private void UpdateBuffsAccordingToEffects(){
+    public void UpdateBuffsAccordingToEffects(){
 
         buffs.Clear();
 
@@ -441,16 +449,19 @@ public class Entity
                 buffs.Add(buff);
             }
         }
+
+        Debug.Log($"{this} buffs : [{String.Join(", ", buffs)}]");
     }
 
-    private bool CheckBuffCannotMove(){
+    private int NumberOfBuffs<B>() where B : EntityBuff{
+        var count = 0;
         foreach(var buff in buffs){
             switch(buff){
-                case EntityCannotMoveBuff entityCannotMoveBuff:
-                    return true;
+                case B _:
+                    count += 1; break;
             }
         }
 
-        return false;
-    } 
+        return count;
+    }
 }

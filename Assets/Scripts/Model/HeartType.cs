@@ -1,5 +1,5 @@
 public enum HeartType{
-    NoHeart, Red, RedEmpty, Blue, Nature, Cursed
+    NoHeart, Red, RedEmpty, Blue, Nature, Cursed, Stone
 }
 
 public static class HeartTypeExtensions{
@@ -12,7 +12,8 @@ public static class HeartTypeExtensions{
             case HeartType.Blue: return "BlueHeart";
             case HeartType.Nature: return "NatureHeart";
             case HeartType.Cursed: return "CursedHeart";
-            default: return "NoHeart";
+            case HeartType.Stone: return "StoneHeart";
+            default: return "UnkownHeart";
         }
     }
 }

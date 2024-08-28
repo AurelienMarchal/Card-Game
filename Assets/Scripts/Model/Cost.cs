@@ -13,6 +13,11 @@ public struct Cost{
         mouvementCost = mouvement;
     }
 
+    public Cost(int mouvement){
+        heartCost = new HeartType[0];
+        mouvementCost = mouvement;
+    }
+
     public static Cost noCost = new Cost(new HeartType[0], 0);
 
 
