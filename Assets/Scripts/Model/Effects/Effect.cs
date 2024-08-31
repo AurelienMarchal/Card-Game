@@ -48,4 +48,11 @@ public class Effect{
     public virtual string GetEffectText(){
         return "";
     }
+
+    public virtual void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected){
+
+        tilesAffected = new Tile[0];
+        entitiesAffected = new Entity[0];
+
+    }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityPayHeartCostAction : EntityAction
+public class EntityPayHeartCostAction : EntityCostAction
 {
 
     public HeartType[] heartCost{

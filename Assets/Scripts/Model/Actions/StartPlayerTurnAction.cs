@@ -15,8 +15,8 @@ public class StartPlayerTurnAction : PlayerAction
             Game.currentGame.PileAction(new EntityResetMovementAction(entity, this));
         }
         
-        Game.currentGame.PileAction(new PlayerResetManaAction(player, this));
-        Game.currentGame.PileAction(new PlayerIncreaseMaxManaAction(player, this));
+        //Game.currentGame.PileAction(new PlayerResetManaAction(player, this));
+        //Game.currentGame.PileAction(new PlayerIncreaseMaxManaAction(player, this));
         return true;
     }
 }

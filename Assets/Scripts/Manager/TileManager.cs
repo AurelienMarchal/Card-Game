@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class TileManagerEvent : UnityEvent<TileManager>
@@ -62,6 +63,11 @@ public class TileManager : MonoBehaviour
         }
     }
 
+    public bool displayInfoUI { 
+        set{
+            infoImage.gameObject.SetActive(value);
+        }}
+
     [SerializeField]
     Renderer tileRenderer; 
 
@@ -80,6 +86,8 @@ public class TileManager : MonoBehaviour
     [SerializeField]
     Material curseSourceTileMat;
 
+    [SerializeField]
+    Image infoImage;
 
 
     public TileManagerEvent selectedEvent = new TileManagerEvent();

@@ -46,6 +46,7 @@ public class HealthUIDisplay : MonoBehaviour
 
 
     void UpdateFromHealth(){
+
         for (int i = 0; i < images.Length; i++){
             images[i].gameObject.SetActive(false);
         }

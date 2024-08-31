@@ -129,6 +129,7 @@ public class AnimationManager : MonoBehaviour
 
     public void PlayAnimationForAction(EntityPayHeartCostAction entityPayHeartCostAction){
         var entityManager = boardManager.GetEntityManagerFromEntity(entityPayHeartCostAction.entity);
+        //Debug.Log($"{entityPayHeartCostAction.entity} paid hearts, current health : {entityPayHeartCostAction.entity.health}");
         entityManager.UpdateHealthUIDisplay();
     }
 

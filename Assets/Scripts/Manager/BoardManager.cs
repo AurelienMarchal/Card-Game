@@ -138,11 +138,29 @@ public class BoardManager : MonoBehaviour
     }
 
     public TileManager GetTileManagerFromTile(Tile tile){
+        if(tile == Tile.noTile){
+            return null;
+        }
         if(tile.num >= 0 && tile.num < tileManagers.Length){
             return tileManagers[tile.num];
         }
 
         return null;
+    }
+
+    public void DisplayTilesUI(Tile[] tiles){
+        foreach(var tile in tiles){
+            var tileManager = GetTileManagerFromTile(tile);
+            if(tileManager != null){
+                tileManager.displayInfoUI = true;
+            }
+        }
+    }
+
+    public void ResetAllTileLayerDisplayUI(){
+        foreach (var tileManager in tileManagers){
+            tileManager.displayInfoUI = false;
+        }
     }
 
     public void ResetAllTileLayer(){

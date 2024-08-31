@@ -56,9 +56,9 @@ public class Card{
         needsEntityTarget = scriptableCard.needsEntityTarget;
     }
 
-    public bool TryToCreateCardPlayedAction(Action requiredAction, out CardPlayedAction cardPlayedAction, Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
+    public bool TryToCreateCardPlayedAction(Action costAction, out CardPlayedAction cardPlayedAction, Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
 
-        cardPlayedAction = new CardPlayedAction(this, requiredAction, targetTile, targetEntity);
+        cardPlayedAction = new CardPlayedAction(this, costAction, targetTile, targetEntity);
         
         var canBeActivated = CanBeActivated();
         if(canBeActivated){
@@ -97,5 +97,9 @@ public class Card{
         var entityTargetList = new List<Entity>();
 
         return entityTargetList;
+    }
+
+    public virtual string GetText(){
+        return string.Empty;
     }
 }

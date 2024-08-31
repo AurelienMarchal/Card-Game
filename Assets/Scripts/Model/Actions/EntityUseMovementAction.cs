@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityUseMovementAction : EntityAction
+public class EntityUseMovementAction : EntityCostAction
 {
     public int movementUsed{
         get;
