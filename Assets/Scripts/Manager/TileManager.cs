@@ -65,7 +65,7 @@ public class TileManager : MonoBehaviour
 
     public bool displayInfoUI { 
         set{
-            infoImage.gameObject.SetActive(value);
+            infoQuad.SetActive(value);
         }}
 
     [SerializeField]
@@ -87,7 +87,7 @@ public class TileManager : MonoBehaviour
     Material curseSourceTileMat;
 
     [SerializeField]
-    Image infoImage;
+    GameObject infoQuad;
 
 
     public TileManagerEvent selectedEvent = new TileManagerEvent();
@@ -99,6 +99,7 @@ public class TileManager : MonoBehaviour
     {
         hovered = false;
         selected = false;
+        displayInfoUI = false;
     }
 
     // Update is called once per frame

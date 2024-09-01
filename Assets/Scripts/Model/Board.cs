@@ -110,13 +110,17 @@ public class Board {
         return Entity.noEntity;
     }
 
-    public Entity GetFirstEntityInDirectionWithRange(Tile startTile, Direction direction, int range){
+    public Entity GetFirstEntityInDirectionWithRange(Tile startTile, Direction direction, int range, out Tile[] tilesRanged){
         
         var tile = startTile;
 
+        var tileList = new List<Tile>();
+
         while(range > 0 && tile != Tile.noTile){
+            tileList.Add(tile);
             var entityAtTile = GetEntityAtTile(tile);
             if(entityAtTile != Entity.noEntity){
+                tilesRanged = tileList.ToArray();
                 return entityAtTile;
             }
 
@@ -124,6 +128,7 @@ public class Board {
             range --;
         }
 
+        tilesRanged = tileList.ToArray();
         return Entity.noEntity;
     }
 

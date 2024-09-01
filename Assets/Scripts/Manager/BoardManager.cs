@@ -148,7 +148,7 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
-    public void DisplayTilesUI(Tile[] tiles){
+    public void DisplayTilesUIInfo(Tile[] tiles){
         foreach(var tile in tiles){
             var tileManager = GetTileManagerFromTile(tile);
             if(tileManager != null){
@@ -157,7 +157,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void ResetAllTileLayerDisplayUI(){
+    public void ResetAllTileLayerDisplayUIInfo(){
         foreach (var tileManager in tileManagers){
             tileManager.displayInfoUI = false;
         }

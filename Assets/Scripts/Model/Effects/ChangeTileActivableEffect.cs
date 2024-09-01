@@ -23,4 +23,10 @@ public class ChangeTileActivableEffect : ActivableEffect
     {
         return $"Change tile under {associatedEntity} to {tileType.ToTileString()}";
     }
+
+    public override void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected)
+    {
+        entitiesAffected = new Entity[0];
+        tilesAffected = new Tile[]{associatedEntity.currentTile};
+    }
 }

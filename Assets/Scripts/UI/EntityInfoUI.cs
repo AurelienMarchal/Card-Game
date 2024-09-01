@@ -38,6 +38,14 @@ public class EntityInfoUI : MonoBehaviour
     [SerializeField]
     GameObject buffCanvasPrefab;
 
+    public EffectEvent effectHoverEnterEvent = new EffectEvent();
+
+    public EffectEvent effectHoverExitEvent = new EffectEvent();
+
+    public UnityEvent weaponHoverEnterEvent = new UnityEvent();
+
+    public UnityEvent weaponHoverExitEvent = new UnityEvent();
+
     private EntityManager entityManager_;
     public EntityManager entityManager{
         get{
@@ -84,6 +92,8 @@ public class EntityInfoUI : MonoBehaviour
 
         if(effectUIDisplay != null){
             effectUIDisplay.effect = effect;
+            effectUIDisplay.effectHoverEnterEvent.AddListener((effect) => effectHoverEnterEvent.Invoke(effect));
+            effectUIDisplay.effectHoverExitEvent.AddListener((effect) => effectHoverExitEvent.Invoke(effect));
         }
     }
 
@@ -128,5 +138,21 @@ public class EntityInfoUI : MonoBehaviour
                 AddBuffCanvasFromBuff(buff);
             }
         }
+    }
+
+    public void OnWeaponHoverEnter(){
+        weaponHoverEnterEvent.Invoke();
+    }
+
+    public void OnWeaponHoverExit(){
+        weaponHoverExitEvent.Invoke();
+    }
+
+    void OnDestroy(){
+        effectHoverEnterEvent.RemoveAllListeners();
+        effectHoverExitEvent.RemoveAllListeners();
+        weaponUsedUnityEvent.RemoveAllListeners();
+        weaponHoverEnterEvent.RemoveAllListeners();
+        weaponHoverExitEvent.RemoveAllListeners();
     }
 }

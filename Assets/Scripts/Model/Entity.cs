@@ -326,6 +326,17 @@ public class Entity
         return CanPayHeartCost(weapon.costToUse.heartCost) && CanUseMovement(weapon.costToUse.mouvementCost);
     }
 
+    public void GetTilesAndEntitiesAffectedByAtk(out Entity[] entitiesAffected, out Tile[] tilesAffected){
+        if(weapon == Weapon.noWeapon){
+            entitiesAffected = new Entity[0];
+            tilesAffected = new Tile[0];
+            return;
+        }
+
+        weapon.GetTilesAndEntitiesAffectedByAtk(currentTile, direction, out entitiesAffected, out tilesAffected);
+
+    }
+
 
     public bool TakeDamage(Damage damage){
         Debug.Log($"{this} taking {damage} damage");
@@ -333,6 +344,8 @@ public class Entity
         Debug.Log($"{this} current {health}");
         return isDead;
     }
+
+
 
     public bool TryToCreateEntityUseMovementAction(int movement,  out EntityUseMovementAction entityUseMovementAction, Action requiredAction = null){
         entityUseMovementAction = new EntityUseMovementAction(movement, this, requiredAction);

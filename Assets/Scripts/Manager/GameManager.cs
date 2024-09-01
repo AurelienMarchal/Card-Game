@@ -108,6 +108,10 @@ public class GameManager : MonoBehaviour
         animationManager.SpawnEntity(hero2);
 
         entityInfoUI.weaponUsedUnityEvent.AddListener(OnWeaponUsed);
+        entityInfoUI.effectHoverEnterEvent.AddListener(OnEffectHoverEnter);
+        entityInfoUI.effectHoverExitEvent.AddListener(OnEffectHoverExit);
+        entityInfoUI.weaponHoverEnterEvent.AddListener(OnWeaponHoverEnter);
+        entityInfoUI.weaponHoverExitEvent.AddListener(OnWeaponHoverExit);
 
         Game.currentGame.PileAction(new StartGameAction());
     }
@@ -326,5 +330,39 @@ public class GameManager : MonoBehaviour
         {
             SetGameLayerRecursive(child.gameObject, layer);
         }
+    }
+
+    private void OnEffectHoverEnter(Effect effect)
+    {
+        effect.GetTilesAndEntitiesAffected(out Entity[] entities, out Tile[] tiles);
+        boardManager.DisplayTilesUIInfo(tiles);
+    }
+
+    private void OnEffectHoverExit(Effect effect)
+    {
+        boardManager.ResetAllTileLayerDisplayUIInfo();
+    }
+
+    private void OnWeaponHoverEnter()
+    {
+
+        if(entityInfoUI == null){
+            return;
+        }
+        if(entityInfoUI.entityManager == null){
+            return;
+        }
+
+        if(entityInfoUI.entityManager.entity == Entity.noEntity){
+            return;
+        }
+
+        entityInfoUI.entityManager.entity.GetTilesAndEntitiesAffectedByAtk(out Entity[] entities, out Tile[] tiles);
+        boardManager.DisplayTilesUIInfo(tiles);
+    }
+
+    private void OnWeaponHoverExit()
+    {
+        boardManager.ResetAllTileLayerDisplayUIInfo();
     }
 }

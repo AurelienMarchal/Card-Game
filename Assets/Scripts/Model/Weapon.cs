@@ -86,5 +86,24 @@ public class Weapon{
         return $"Weapon {name}";
     }
 
+    public virtual void GetTilesAndEntitiesAffectedByAtk(Tile tile, Direction direction, out Entity[] entitiesAffected, out Tile[] tilesAffected){
+
+        var entityInFront = Game.currentGame.board.GetFirstEntityInDirectionWithRange(
+            Game.currentGame.board.NextTileInDirection(tile, direction), 
+            direction, 
+            range,
+            out tilesAffected
+        );
+
+        if(entityInFront == Entity.noEntity){
+            entitiesAffected = new Entity[0];
+            return;
+        }
+        
+        entitiesAffected = new Entity[1]{entityInFront};
+        
+
+    }
+
     
 }

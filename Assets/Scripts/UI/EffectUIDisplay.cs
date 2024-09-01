@@ -1,7 +1,14 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+
+
+[System.Serializable]
+public class EffectEvent : UnityEvent<Effect>
+{
+}
 
 public class EffectUIDisplay : MonoBehaviour
 {
@@ -25,6 +32,10 @@ public class EffectUIDisplay : MonoBehaviour
             UpdateFromNewEffect();
         }
     }
+
+    public EffectEvent effectHoverEnterEvent = new EffectEvent();
+
+    public EffectEvent effectHoverExitEvent = new EffectEvent();
     
     
     // Start is called before the first frame update
@@ -89,5 +100,19 @@ public class EffectUIDisplay : MonoBehaviour
         
         
 
+    }
+
+    public void OnHoverEnter(){
+        effectHoverEnterEvent.Invoke(effect);
+    }
+
+    public void OnHoverExit(){
+        effectHoverExitEvent.Invoke(effect);
+    }
+
+
+    void OnDestroy(){
+        effectHoverEnterEvent.RemoveAllListeners();
+        effectHoverExitEvent.RemoveAllListeners();
     }
 }

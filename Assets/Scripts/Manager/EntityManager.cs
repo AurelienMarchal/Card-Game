@@ -218,17 +218,16 @@ public class EntityManager : MonoBehaviour
 
     public bool TryToAttack(){
     
-        var entityInFront = Game.currentGame.board.GetFirstEntityInDirectionWithRange(
-            Game.currentGame.board.NextTileInDirection(entity.currentTile, entity.direction), 
-            entity.direction, 
-            entity.weapon.range
-        );
+        entity.GetTilesAndEntitiesAffectedByAtk(
+            out Entity[] attackedEntities,
+            out Tile[] _
+            );
 
-        if(entityInFront == Entity.noEntity){
+        if(attackedEntities.Length < 1){
             return false;
         }
 
-        return TryToAttack(entityInFront);
+        return TryToAttack(attackedEntities[0]);
     }
 
     public void UpdateHealthUIDisplay(){
