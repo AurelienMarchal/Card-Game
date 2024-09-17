@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3961b5f68718b84eaec814a8255f667, type: 3}
-  m_Name: ThrowFireballEffect
+  m_Script: {fileID: 11500000, guid: 3d2a8c4f3b0336045b72fbfbe8ccbb6f, type: 3}
+  m_Name: NoEffectActivableEffect
   m_EditorClassIdentifier: 
   cost:
     heartCost: 
-    mouvementCost: 2
-  range: 4
-  damage:
-    amount: 2
+    mouvementCost: 0

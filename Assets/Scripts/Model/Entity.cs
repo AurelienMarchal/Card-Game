@@ -345,8 +345,6 @@ public class Entity
         return isDead;
     }
 
-
-
     public bool TryToCreateEntityUseMovementAction(int movement,  out EntityUseMovementAction entityUseMovementAction, Action requiredAction = null){
         entityUseMovementAction = new EntityUseMovementAction(movement, this, requiredAction);
         var canUseMovement = CanUseMovement(movement);
@@ -409,6 +407,26 @@ public class Entity
 
     public void ResetMovement(){
         movementLeft = maxMovement;
+    }
+
+
+    public bool TryToCreateEntityPlayCardAction(Card card,  out EntityPlayCardAction entityPlayCardAction, Action costAction, Tile targetTile = null, Entity targetEntity = null){
+        
+        entityPlayCardAction = new EntityPlayCardAction(this, card, requiredAction:costAction);
+        var canAttack = CanPlayCard(card, targetTile, targetEntity);
+        if(canAttack){
+            Game.currentGame.PileAction(entityPlayCardAction);
+        }
+
+        return canAttack;
+    }
+
+    public bool CanPlayCard(Card card, Tile targetTile = null, Entity targetEntity = null){
+        return card.CanBeActivated(this, targetTile, targetEntity);
+    }
+
+    public bool TryToPlayCard(Card card, Tile targetTile = null, Entity targetEntity = null){
+        return card.TryToActivate(this, targetTile, targetEntity);
     }
 
     public void AddEffectList(List<ScriptableEffect> scriptableEffects){

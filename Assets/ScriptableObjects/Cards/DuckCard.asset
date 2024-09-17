@@ -9,15 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f8541f608ebfa247a4231c46fd8021c, type: 3}
+  m_Script: {fileID: 11500000, guid: 21c71019f40be8c4eaf3172bdfff319e, type: 3}
   m_Name: DuckCard
   m_EditorClassIdentifier: 
-  cost:
-    heartCost: 01000000
-    mouvementCost: 1
-  cardName: Canard
-  text: Il s'agit d'un canard
   sprite: {fileID: 21300000, guid: 74384b106301f074c96d01247b613c32, type: 3}
-  needsEntityTarget: 0
-  needsTileTarget: 0
-  scriptableEntity: {fileID: 11400000, guid: c1ecde8cd1a79ad4698f6109a7010c80, type: 2}
+  scriptableActivableEffect: {fileID: 11400000, guid: 4e89961c00c2c92488f69d0a56d131f0, type: 2}

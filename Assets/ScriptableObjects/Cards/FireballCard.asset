@@ -9,15 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f79f8ed60d9f4c4b99067bbdd47607c, type: 3}
+  m_Script: {fileID: 11500000, guid: 21c71019f40be8c4eaf3172bdfff319e, type: 3}
   m_Name: FireballCard
   m_EditorClassIdentifier: 
-  cost:
-    heartCost: 05000000
-    mouvementCost: 2
-  cardName: Boule de feu
-  text: Ca part comme un pet le machin
   sprite: {fileID: 21300000, guid: 12e72fe4fc640c74bb834253dd235ccd, type: 3}
-  needsEntityTarget: 0
-  needsTileTarget: 0
-  scriptableThrowProjectileEffect: {fileID: 11400000, guid: c3cfb3864c6da5240ac53105cb789e1a, type: 2}
+  scriptableActivableEffect: {fileID: 11400000, guid: c3cfb3864c6da5240ac53105cb789e1a, type: 2}

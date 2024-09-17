@@ -51,6 +51,11 @@ public class Tile {
         effects.Add(new NatureTileGivesNatureHeartEffect(this));
     }
 
+    public override string ToString()
+    {
+        return $"Tile {gridX}, {gridY}";
+    }
+
 }
 
 

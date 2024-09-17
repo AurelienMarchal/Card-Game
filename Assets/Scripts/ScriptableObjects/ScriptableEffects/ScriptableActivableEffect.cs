@@ -13,4 +13,8 @@ public class ScriptableActivableEffect : ScriptableEffect
     {
         return new ActivableEffect(Entity.noEntity, cost);
     }
+
+    public virtual ActivableEffect GetActivableEffect(){
+        return new ActivableEffect(Entity.noEntity, cost);
+    }
 }

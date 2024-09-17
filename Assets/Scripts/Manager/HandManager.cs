@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-
 
 
 public class HandManager : MonoBehaviour
@@ -14,6 +9,10 @@ public class HandManager : MonoBehaviour
     }
 
     public CardEvent cardClickedEvent = new CardEvent();
+
+    public CardEvent cardHoverEnterEvent = new CardEvent();
+
+    public CardEvent cardHoverExitEvent = new CardEvent();
 
     [SerializeField]
     GameObject cardPrefab;
@@ -34,7 +33,9 @@ public class HandManager : MonoBehaviour
             Transform child = transform.GetChild(i);
             var cardManager = child.gameObject.GetComponent<CardManager>();
             if(cardManager != null){
-                cardManager.cardClickedEvent.AddListener(OnCardClicked);
+                cardManager.cardClickedEvent.AddListener((card) => cardClickedEvent.Invoke(card));
+                cardManager.cardHoverEnterEvent.AddListener((card) => cardHoverEnterEvent.Invoke(card));
+                cardManager.cardHoverExitEvent.AddListener((card) => cardHoverExitEvent.Invoke(card));
             }
         }
     }
@@ -88,12 +89,6 @@ public class HandManager : MonoBehaviour
                 child.rotation = rotation;
             }
         }
-    }
-
-    private void OnCardClicked(Card card)
-    {
-        
-        cardClickedEvent.Invoke(card);
     }
 
 

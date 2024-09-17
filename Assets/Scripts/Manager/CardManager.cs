@@ -15,10 +15,14 @@ public class CardManager : MonoBehaviour
 {
     public CardEvent cardClickedEvent = new CardEvent();
 
-    [SerializeField]
-    ScriptableCard scriptableCard;
+    public CardEvent cardHoverEnterEvent = new CardEvent();
 
-    ScriptableCard lastScriptableCard;
+    public CardEvent cardHoverExitEvent = new CardEvent();
+
+    [SerializeField]
+    ScriptableActivableEffectCard scriptableActivableEffectCard;
+
+    ScriptableActivableEffectCard lastScriptableActivableEffectCard;
 
     [SerializeField]
     CostUIDisplay costUIDisplay;
@@ -65,7 +69,7 @@ public class CardManager : MonoBehaviour
         }
         
         UpdateAccordingToScriptableCard();
-        lastScriptableCard = scriptableCard;
+        lastScriptableActivableEffectCard = scriptableActivableEffectCard;
     }
 
     void Update(){
@@ -78,51 +82,39 @@ public class CardManager : MonoBehaviour
             }
         }
         //TEST
-        if(scriptableCard != lastScriptableCard){
+        if(scriptableActivableEffectCard != lastScriptableActivableEffectCard){
             UpdateAccordingToScriptableCard();
         }
-        lastScriptableCard = scriptableCard;
+        lastScriptableActivableEffectCard = scriptableActivableEffectCard;
     }
 
     void UpdateAccordingToCard(){
         if(card != null){
-            //cardCostTextMeshProUGUI.text = $"{card.cost.movementCost}";
-            cardTextTextMeshProUGUI.text = card.text;
-            cardNameTextMeshProUGUI.text = card.cardName;
+            cardTextTextMeshProUGUI.text = card.GetText();
+            cardNameTextMeshProUGUI.text = card.GetCardName();
             costUIDisplay.cost = card.cost;
         }
     }
 
     //TEST
     void UpdateAccordingToScriptableCard(){
-        if(scriptableCard != null){
-            cardImage.sprite = scriptableCard.sprite;
+        if(scriptableActivableEffectCard != null){
+            cardImage.sprite = scriptableActivableEffectCard.sprite;
         }
 
-        switch (scriptableCard)
-        {
-            case ScriptableMinionCard scriptableMinionCard:
-                card = new MinionCard(player, scriptableMinionCard); break;
-
-            case ScriptableThrowProjectileCard scriptableThrowProjectileCard:
-                card = new ThrowProjectileSpellCard(player, scriptableThrowProjectileCard); break;
-
-            case ScriptableSpellCard scriptableSpellCard:
-                card = new SpellCard(player, scriptableSpellCard); break;
-
-            default: 
-                card = new Card(player, Cost.noCost, "No card", "No card loaded"); break;
-        }
+        card = new Card(player, scriptableActivableEffectCard.scriptableActivableEffect.GetActivableEffect());
     }
     //TEST
 
 
     void OnMouseOver(){
         hovered = true;
+        cardHoverEnterEvent.Invoke(card);
     }
 
     void OnMouseExit(){
         hovered = false;
+        cardHoverExitEvent.Invoke(card);
     }
 
     void OnMouseDown(){

@@ -1516,6 +1516,10 @@ PrefabInstance:
     - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: scriptableCard
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
+      propertyPath: scriptableActivableEffectCard
+      value: 
       objectReference: {fileID: 11400000, guid: 994e3f7a9b7d84045b5a20c11d85145e, type: 2}
     - target: {fileID: 1563368340810509757, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2583,7 +2587,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 932746963}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9359375
+  m_Size: 0.9390625
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2955,6 +2959,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1885251747}
     m_Modifications:
+    - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
+      propertyPath: scriptableActivableEffectCard
+      value: 
+      objectReference: {fileID: 11400000, guid: 56f64938330236d47b1acc2455355768, type: 2}
     - target: {fileID: 1563368340810509757, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3201,6 +3209,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 328048201}
     m_Modifications:
+    - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
+      propertyPath: scriptableActivableEffectCard
+      value: 
+      objectReference: {fileID: 11400000, guid: 56f64938330236d47b1acc2455355768, type: 2}
     - target: {fileID: 1563368340810509757, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -4587,6 +4599,10 @@ PrefabInstance:
     - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: scriptableCard
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
+      propertyPath: scriptableActivableEffectCard
+      value: 
       objectReference: {fileID: 11400000, guid: 7ca9f4ab695e2a84eb5a8775986be203, type: 2}
     - target: {fileID: 1563368340810509757, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5797,7 +5813,11 @@ PrefabInstance:
     - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: scriptableCard
       value: 
-      objectReference: {fileID: 11400000, guid: 994e3f7a9b7d84045b5a20c11d85145e, type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
+      propertyPath: scriptableActivableEffectCard
+      value: 
+      objectReference: {fileID: 11400000, guid: 7ca9f4ab695e2a84eb5a8775986be203, type: 2}
     - target: {fileID: 1563368340810509757, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -6288,7 +6308,11 @@ PrefabInstance:
     - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: scriptableCard
       value: 
-      objectReference: {fileID: 11400000, guid: 7ca9f4ab695e2a84eb5a8775986be203, type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
+      propertyPath: scriptableActivableEffectCard
+      value: 
+      objectReference: {fileID: 11400000, guid: 994e3f7a9b7d84045b5a20c11d85145e, type: 2}
     - target: {fileID: 1563368340810509757, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

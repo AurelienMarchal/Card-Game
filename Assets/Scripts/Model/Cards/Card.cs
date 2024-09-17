@@ -1,10 +1,9 @@
-
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class Card{
+
+public class Card {
 
     public bool needsEntityTarget{
         get;
@@ -26,80 +25,77 @@ public class Card{
         protected set;
     }
 
-    public string cardName{
+    protected EntityPlayCardAction entityPlayCardAction;
+
+    public ActivableEffect activableEffect{
         get;
-        protected set;
+        private set;
     }
 
-    public string text{
-        get;
-        protected set;
-    }
-
-    protected CardPlayedAction cardPlayedAction;
-
-    public Card(Player player, Cost cost, string cardName, string text, bool needsTileTarget = false, bool needsEntityTarget = false){
+    public Card(Player player, ActivableEffect activableEffect)
+    {
         this.player = player;
-        this.cost = cost;
-        this.cardName = cardName;
-        this.text = text;
-        this.needsTileTarget = needsTileTarget;
-        this.needsEntityTarget = needsEntityTarget;
+        this.activableEffect = activableEffect;
+        cost = activableEffect.cost;
     }
 
-    public Card(Player player, ScriptableCard scriptableCard){
+    public Card(Player player, ScriptableActivableEffect scriptableActivableEffect){
         this.player = player;
-        cost = scriptableCard.cost;
-        cardName = scriptableCard.cardName;
-        text = scriptableCard.text;
-        needsTileTarget = scriptableCard.needsTileTarget;
-        needsEntityTarget = scriptableCard.needsEntityTarget;
+        activableEffect = scriptableActivableEffect.GetActivableEffect();
+        cost = scriptableActivableEffect.GetActivableEffect().cost;
     }
 
-    public bool TryToCreateCardPlayedAction(Action costAction, out CardPlayedAction cardPlayedAction, Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
-
-        cardPlayedAction = new CardPlayedAction(this, costAction, targetTile, targetEntity);
-        
-        var canBeActivated = CanBeActivated();
-        if(canBeActivated){
-            this.cardPlayedAction = cardPlayedAction;
-            Game.currentGame.PileAction(cardPlayedAction);
-        }
-
+    public virtual bool CanBeActivated(Entity caster, Tile targetTile = null, Entity targetEntity = null){
+        activableEffect.associatedEntity = caster;
+        var canBeActivated = activableEffect.CanBeActivated();
+        activableEffect.associatedEntity = Entity.noEntity;
         return canBeActivated;
     }
 
-    public bool TryToActivate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
-        var canBeActivated = CanBeActivated();
+    protected virtual bool Activate(Entity caster, Tile targetTile = null, Entity targetEntity = null)
+    {
+        activableEffect.associatedEntity = caster;
+        return activableEffect.TryToCreateEffectActivatedAction(entityPlayCardAction, out EffectActivatedAction _);
+    }
+
+    public virtual string GetText()
+    {
+        return activableEffect.GetEffectText();
+    }
+
+    public virtual string GetCardName()
+    {
+        return activableEffect.GetEffectText();
+    }
+
+    public bool TryToActivate(Entity caster, Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
+        var canBeActivated = CanBeActivated(caster, targetTile, targetEntity);
         
         if(canBeActivated){
             
-            return Activate(targetTile, targetEntity);
+            return Activate(caster, targetTile, targetEntity);
         }
         return canBeActivated;
     }
 
-    protected virtual bool Activate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
-        return true;
-    }
-
-    public virtual bool CanBeActivated(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
-        return false;
-    }
-
-    public virtual List<Tile> PossibleTileTargets(){
-        var tileTargetList = new List<Tile>();
-
-        return tileTargetList;
-    }
-
-    public virtual List<Entity> PossibleEntityTargets(){
+    public virtual List<Entity> PossibleEntityCasters(){
         var entityTargetList = new List<Entity>();
 
         return entityTargetList;
     }
 
-    public virtual string GetText(){
-        return string.Empty;
+    public virtual List<Tile> PossibleTileTargets(Entity caster){
+        var tileTargetList = new List<Tile>();
+
+        return tileTargetList;
     }
+
+    public virtual List<Entity> PossibleEntityTargets(Entity caster){
+        var entityTargetList = new List<Entity>();
+
+        return entityTargetList;
+    }
+
+    
+
 }

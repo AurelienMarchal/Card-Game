@@ -1,5 +1,7 @@
-using System.Collections;
+
 using System.Collections.Generic;
+
+using UnityEngine;
 
 public class Board {
 
@@ -111,7 +113,7 @@ public class Board {
     }
 
     public Entity GetFirstEntityInDirectionWithRange(Tile startTile, Direction direction, int range, out Tile[] tilesRanged){
-        
+
         var tile = startTile;
 
         var tileList = new List<Tile>();
@@ -124,7 +126,7 @@ public class Board {
                 return entityAtTile;
             }
 
-            tile = NextTileInDirection(startTile, direction);
+            tile = NextTileInDirection(tile, direction);
             range --;
         }
 

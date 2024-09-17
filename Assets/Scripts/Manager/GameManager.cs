@@ -75,6 +75,8 @@ public class GameManager : MonoBehaviour
 
         for(var i = 0;  i < playerManagers.Length; i++){
             playerManagers[i].player = Game.currentGame.players[i];
+            playerManagers[i].cardHoverEnterEvent.AddListener(OnCardHoverEnter);
+            playerManagers[i].cardHoverExitEvent.AddListener(OnCardHoverExit);
         }
 
         blockInputs = false;
@@ -340,6 +342,15 @@ public class GameManager : MonoBehaviour
 
     private void OnEffectHoverExit(Effect effect)
     {
+        boardManager.ResetAllTileLayerDisplayUIInfo();
+    }
+
+    private void OnCardHoverEnter(Card card){
+        card.activableEffect.GetTilesAndEntitiesAffected(out Entity[] entities, out Tile[] tiles);
+        boardManager.DisplayTilesUIInfo(tiles);
+    }
+
+    private void OnCardHoverExit(Card card){
         boardManager.ResetAllTileLayerDisplayUIInfo();
     }
 
