@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 21c71019f40be8c4eaf3172bdfff319e, type: 3}
-  m_Name: NoEffectActivableEffectCard
+  m_Name: HealingCard
   m_EditorClassIdentifier: 
-  sprite: {fileID: 0}
-  scriptableActivableEffect: {fileID: 11400000, guid: 76172712784c461429dd6a94f64eac69, type: 2}
+  sprite: {fileID: 21300000, guid: d5a3f514df7109641a1fb69b53e9d13c, type: 3}
+  scriptableActivableEffect: {fileID: 11400000, guid: fdbdb3eb98a351b4c8ee59a260cb1591, type: 2}

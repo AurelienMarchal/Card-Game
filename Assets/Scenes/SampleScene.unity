@@ -849,6 +849,12 @@ MonoBehaviour:
   cardClickedEvent:
     m_PersistentCalls:
       m_Calls: []
+  cardHoverEnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardHoverExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   cardPrefab: {fileID: 2256344958365107060, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
   radius: 26
   degreeRange: 30
@@ -2587,7 +2593,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 932746963}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9390625
+  m_Size: 0.7609375
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2860,6 +2866,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handManager: {fileID: 328048202}
+  cardHoverEnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardHoverExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1094126360
 Transform:
   m_ObjectHideFlags: 0
@@ -2962,7 +2974,7 @@ PrefabInstance:
     - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: scriptableActivableEffectCard
       value: 
-      objectReference: {fileID: 11400000, guid: 56f64938330236d47b1acc2455355768, type: 2}
+      objectReference: {fileID: 11400000, guid: bb6a1159823246847a6ebb8336697edc, type: 2}
     - target: {fileID: 1563368340810509757, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3212,7 +3224,7 @@ PrefabInstance:
     - target: {fileID: -8429513816721689143, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: scriptableActivableEffectCard
       value: 
-      objectReference: {fileID: 11400000, guid: 56f64938330236d47b1acc2455355768, type: 2}
+      objectReference: {fileID: 11400000, guid: bb6a1159823246847a6ebb8336697edc, type: 2}
     - target: {fileID: 1563368340810509757, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5496,6 +5508,12 @@ MonoBehaviour:
   cardClickedEvent:
     m_PersistentCalls:
       m_Calls: []
+  cardHoverEnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardHoverExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   cardPrefab: {fileID: 2256344958365107060, guid: 6bc529e58390a5c4ba9e2c65f7e93991, type: 3}
   radius: 26
   degreeRange: 30
@@ -6585,6 +6603,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handManager: {fileID: 1885251746}
+  cardHoverEnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardHoverExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &2112426988
 Transform:
   m_ObjectHideFlags: 0

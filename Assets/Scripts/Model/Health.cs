@@ -190,6 +190,17 @@ public class Health : ICloneable{
 
     }
 
+    public bool TryToHeal(){
+        for(var i = 0; i < hearts.Length; i++){
+            if(hearts[i] == HeartType.RedEmpty){
+                hearts[i] = HeartType.Red;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public object Clone(){
         var heartsClone = hearts.Clone() as HeartType[];
         var healthClone = new Health(heartsClone);

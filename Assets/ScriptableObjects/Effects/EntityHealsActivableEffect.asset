@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21c71019f40be8c4eaf3172bdfff319e, type: 3}
-  m_Name: NoEffectActivableEffectCard
+  m_Script: {fileID: 11500000, guid: fb715267018393a4697e9c44977a479d, type: 3}
+  m_Name: EntityHealsActivableEffect
   m_EditorClassIdentifier: 
-  sprite: {fileID: 0}
-  scriptableActivableEffect: {fileID: 11400000, guid: 76172712784c461429dd6a94f64eac69, type: 2}
+  cost:
+    heartCost: 
+    mouvementCost: 2
+  numberOfHeartsHealed: 2
