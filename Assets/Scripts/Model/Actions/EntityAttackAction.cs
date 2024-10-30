@@ -23,11 +23,7 @@ public class EntityAttackAction : EntityAction
     protected override bool Perform()
     {
 
-        if(entity.weapon == null){
-            return false;
-        }
-
-        Game.currentGame.PileAction(new EntityTakeDamageAction(attackedEntity, entity.weapon.atkDamage, this));
+        Game.currentGame.PileAction(new EntityTakeDamageAction(attackedEntity, entity.atkDamage, this));
 
         if(!isCounterAttack){
             if(attackedEntity.CanAttack(entity)){

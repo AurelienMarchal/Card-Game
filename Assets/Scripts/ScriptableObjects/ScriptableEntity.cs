@@ -10,8 +10,6 @@ public class ScriptableEntity : ScriptableObject
 
     public EntityModel entityModel;
 
-    public ScriptableWeapon scriptableWeapon;
-
     public int maxMovement;
 
     public List<ScriptableEffect> scriptableEffects;

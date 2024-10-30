@@ -204,8 +204,8 @@ public class EntityManager : MonoBehaviour
             return false;
         }
 
-        this.entity.TryToCreateEntityUseMovementAction(this.entity.weapon.costToUse.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
-        this.entity.TryToCreateEntityPayHeartCostAction(this.entity.weapon.costToUse.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
+        this.entity.TryToCreateEntityUseMovementAction(this.entity.costToAtk.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
+        this.entity.TryToCreateEntityPayHeartCostAction(this.entity.costToAtk.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
 
         if(!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed){
             return false;

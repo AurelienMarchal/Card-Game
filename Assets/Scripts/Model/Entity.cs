@@ -36,15 +36,48 @@ public class Entity
         protected set;
     }
 
-    public Weapon weapon{
-        get;
-        protected set;
-    }
-
     public int movementLeft{
         get;
         protected set;
     }
+
+    public Cost costToAtk{
+        get{
+            return CalculateCostToAtk();
+        }
+    }
+
+    
+
+    public Cost baseCostToAtk{
+        get;
+        protected set;
+    }
+
+    public int range{
+        get{
+            return CalculateRange();
+        }
+    }
+
+    
+
+    public int baseRange{
+        get;
+        protected set;
+    }
+
+    public Damage atkDamage{
+        get{
+            return CalculateAtkDamage();
+        }
+    }
+
+    public Damage baseAtkDamage{
+        get;
+        protected set;
+    }
+    
 
     public int maxMovement{
         get;
@@ -53,8 +86,7 @@ public class Entity
 
     public Cost costToMove{
         get{
-            var weightedDownBuffCount = NumberOfBuffs<WeightedDownBuff>();
-            return new Cost(1 + weightedDownBuffCount);
+            return CalculateCostToMove();
         }
     }
 
@@ -71,13 +103,12 @@ public class Entity
         private set;
     }
 
-    public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Weapon weapon = Weapon.noWeapon){
+    public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North){
         this.player = player;
         this.model = model;
         this.name = name;
         currentTile = startingTile;
         health = startingHealth.Clone() as Health;
-        this.weapon = weapon;
         maxMovement = startingMaxMovement;
         movementLeft = 0;
         direction = startingDirection;
@@ -94,12 +125,6 @@ public class Entity
         currentTile = startingTile;
         health = scriptableEntity.health.Clone() as Health;
         //Debug.Log($"Cloning health successfull : {health != scriptableEntity.health}");
-        if(scriptableEntity.scriptableWeapon == null){
-            weapon = Weapon.noWeapon;
-        }
-        else{
-            weapon = new Weapon(scriptableEntity.scriptableWeapon);
-        }
         maxMovement = scriptableEntity.maxMovement;
         movementLeft = 0;
         direction = startingDirection;
@@ -107,6 +132,11 @@ public class Entity
         buffs = new List<EntityBuff>(); 
         AddEffectList(scriptableEntity.scriptableEffects);
         AddDefaultPermanentEffects();
+    }
+
+    protected virtual Cost CalculateCostToMove(){
+        var weightedDownBuffCount = NumberOfBuffs<WeightedDownBuff>();
+        return new Cost(1 + weightedDownBuffCount);
     }
 
     public virtual bool TryToCreateEntityMoveAction(Tile tile, Action requiredAction, out EntityMoveAction entityMoveAction){
@@ -262,13 +292,21 @@ public class Entity
         return canAttack;
     }
 
-    public bool CanAttack(Entity entity){
+    protected virtual Cost CalculateCostToAtk(){
+        return baseCostToAtk;
+    }
+
+    protected virtual int CalculateRange(){
+        return baseRange;
+    }
+
+    protected virtual Damage CalculateAtkDamage(){
+        return baseAtkDamage;
+    }
+
+    public virtual bool CanAttack(Entity entity){
 
         if(entity == this){
-            return false;
-        }
-
-        if(weapon == Weapon.noWeapon){
             return false;
         }
 
@@ -276,7 +314,7 @@ public class Entity
             return false;
         }
 
-        if(entity.currentTile.Distance(currentTile) > weapon.range){
+        if(entity.currentTile.Distance(currentTile) > range){
             return false;
         }
 
@@ -290,13 +328,9 @@ public class Entity
         return true;
     }
 
-    public bool CanAttackByChangingDirection(Entity entity){
+    public virtual bool CanAttackByChangingDirection(Entity entity){
 
         if(entity == this){
-            return false;
-        }
-
-        if(weapon == Weapon.noWeapon){
             return false;
         }
 
@@ -304,7 +338,7 @@ public class Entity
             return false;
         }
 
-        if(entity.currentTile.Distance(currentTile) > weapon.range){
+        if(entity.currentTile.Distance(currentTile) > range){
             return false;
         }
 
@@ -318,22 +352,25 @@ public class Entity
         return true;
     }
 
-    public bool CanPayWeaponCost(){
-        if(weapon == null){
-            return false;
-        }
-
-        return CanPayHeartCost(weapon.costToUse.heartCost) && CanUseMovement(weapon.costToUse.mouvementCost);
+    public virtual bool CanPayAtkCost(){
+        return CanPayHeartCost(costToAtk.heartCost) && CanUseMovement(costToAtk.mouvementCost);
     }
 
-    public void GetTilesAndEntitiesAffectedByAtk(out Entity[] entitiesAffected, out Tile[] tilesAffected){
-        if(weapon == Weapon.noWeapon){
+    public virtual void GetTilesAndEntitiesAffectedByAtk(out Entity[] entitiesAffected, out Tile[] tilesAffected){
+        
+        var entityInFront = Game.currentGame.board.GetFirstEntityInDirectionWithRange(
+            Game.currentGame.board.NextTileInDirection(currentTile, direction), 
+            direction, 
+            range,
+            out tilesAffected
+        );
+
+        if(entityInFront == Entity.noEntity){
             entitiesAffected = new Entity[0];
-            tilesAffected = new Tile[0];
             return;
         }
-
-        weapon.GetTilesAndEntitiesAffectedByAtk(currentTile, direction, out entitiesAffected, out tilesAffected);
+        
+        entitiesAffected = new Entity[1]{entityInFront};
 
     }
 
