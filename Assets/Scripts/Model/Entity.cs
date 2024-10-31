@@ -60,8 +60,6 @@ public class Entity
         }
     }
 
-    
-
     public int baseRange{
         get;
         protected set;
@@ -112,8 +110,11 @@ public class Entity
         maxMovement = startingMaxMovement;
         movementLeft = 0;
         direction = startingDirection;
+        baseCostToAtk = new Cost(1);
+        baseRange = 1;
+        baseAtkDamage = new Damage(1);
         effects = new List<EntityEffect>();
-        buffs = new List<EntityBuff>(); 
+        buffs = new List<EntityBuff>();
         AddEffectList(permanentEffects);
         AddDefaultPermanentEffects();
     }
@@ -128,6 +129,9 @@ public class Entity
         maxMovement = scriptableEntity.maxMovement;
         movementLeft = 0;
         direction = startingDirection;
+        baseCostToAtk = new Cost(1);
+        baseRange = 1;
+        baseAtkDamage = new Damage(1);
         effects = new List<EntityEffect>();
         buffs = new List<EntityBuff>(); 
         AddEffectList(scriptableEntity.scriptableEffects);
@@ -297,11 +301,29 @@ public class Entity
     }
 
     protected virtual int CalculateRange(){
-        return baseRange;
+        var total = baseRange;
+
+        foreach(var buff in buffs){
+            if(buff is RangeBuff rangeBuff){
+                total += rangeBuff.amount;
+            }
+        }
+
+        return total;
     }
 
     protected virtual Damage CalculateAtkDamage(){
-        return baseAtkDamage;
+
+        var total = baseAtkDamage.amount;
+
+        foreach(var buff in buffs){
+            if(buff is AtkBuff atkBuff){
+                total += atkBuff.amount;
+            }
+        }
+
+
+        return new Damage(total);
     }
 
     public virtual bool CanAttack(Entity entity){
@@ -524,9 +546,8 @@ public class Entity
     private int NumberOfBuffs<B>() where B : EntityBuff{
         var count = 0;
         foreach(var buff in buffs){
-            switch(buff){
-                case B _:
-                    count += 1; break;
+            if(buff is B b){
+                count++;
             }
         }
 

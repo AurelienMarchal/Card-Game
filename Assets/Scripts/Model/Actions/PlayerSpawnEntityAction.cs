@@ -30,11 +30,6 @@ public class PlayerSpawnEntityAction : PlayerAction
         protected set;
     }
 
-    public Weapon weapon{
-        get;
-        protected set;
-    }
-
     public int maxMovement{
         get;
         protected set;
@@ -60,7 +55,6 @@ public class PlayerSpawnEntityAction : PlayerAction
         this.model = model;
         this.name = name;
         health = startingHealth;
-        this.weapon = weapon;
         maxMovement = startingMaxMovement;
         direction = startingDirection;
         this.permanentEffects = permanentEffects;
@@ -73,12 +67,6 @@ public class PlayerSpawnEntityAction : PlayerAction
         model = scriptableEntity.entityModel;
         name = scriptableEntity.entityName;
         health = scriptableEntity.health;
-        if(scriptableEntity.scriptableWeapon == null){
-            weapon = Weapon.noWeapon;
-        }
-        else{
-            weapon = new Weapon(scriptableEntity.scriptableWeapon);
-        }
         direction = startingDirection;
         permanentEffects = new List<EntityEffect>();
         entitySpawned = Entity.noEntity;
@@ -87,7 +75,7 @@ public class PlayerSpawnEntityAction : PlayerAction
 
     protected override bool Perform(){
         if(scriptableEntity == null){
-            entitySpawned = new Entity(player, model, name, tile, health, maxMovement, permanentEffects, direction, weapon);
+            entitySpawned = new Entity(player, model, name, tile, health, maxMovement, permanentEffects, direction);
         }
         else{
             entitySpawned = new Entity(player, scriptableEntity, tile, direction);

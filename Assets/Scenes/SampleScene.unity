@@ -2593,7 +2593,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 932746963}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.7609375
+  m_Size: 0.84375
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4193,7 +4193,7 @@ MonoBehaviour:
   healthUIDisplay: {fileID: 8537986988398696558}
   movementUIDisplay: {fileID: 2036360314}
   entityNameTextMeshProUGUI: {fileID: 1085583575}
-  weaponUIDisplay: {fileID: 9056693671628862199}
+  atkUiDisplay: {fileID: 9056693671628862199}
   weaponUsedUnityEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -8786,7 +8786,7 @@ GameObject:
   - component: {fileID: 7708231928604774239}
   - component: {fileID: 9056693671628862199}
   m_Layer: 5
-  m_Name: WeaponCanvas
+  m_Name: AtkCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10072,7 +10072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 047c7ec17de71b44eb495242ae9d5bd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponButton: {fileID: 6753969078409842451}
+  atkButton: {fileID: 6753969078409842451}
   weaponNameTextMeshProUGUI: {fileID: 1683526996}
   weaponEffectTextMeshProUGUI: {fileID: 8421256116926141964}
   weaponImage: {fileID: 165258612189591896}

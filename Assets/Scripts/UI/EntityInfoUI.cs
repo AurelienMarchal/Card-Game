@@ -22,7 +22,7 @@ public class EntityInfoUI : MonoBehaviour
     TextMeshProUGUI entityNameTextMeshProUGUI;
 
     [SerializeField]
-    WeaponUIDisplay weaponUIDisplay;
+    AtkUIDisplay atkUiDisplay;
 
     public UnityEvent weaponUsedUnityEvent = new UnityEvent();
 
@@ -66,8 +66,7 @@ public class EntityInfoUI : MonoBehaviour
         if(entityManager != null){
             healthUIDisplay.health = entityManager.entity.health;
             movementUIDisplay.entity = entityManager.entity;
-            weaponUIDisplay.weapon = entityManager.entity.weapon;
-            weaponUIDisplay.weaponButton.enabled = entityManager.entity.CanPayWeaponCost() && Game.currentGame.currentPlayer == entityManager.entity.player;
+            //atkUiDisplay.entity = entityManager.entity;
         }
     }
 
@@ -124,10 +123,9 @@ public class EntityInfoUI : MonoBehaviour
             healthUIDisplay.health = entityManager.entity.health;
             movementUIDisplay.entity = entityManager.entity;
             
-            weaponUIDisplay.weapon = entityManager.entity.weapon;
-            weaponUIDisplay.weaponButton.enabled = entityManager.entity.CanPayWeaponCost() && Game.currentGame.currentPlayer == entityManager.entity.player;
-            weaponUIDisplay.weaponButton.onClick.RemoveAllListeners();
-            weaponUIDisplay.weaponButton.onClick.AddListener(OnWeaponButtonClick);
+            atkUiDisplay.entity = entityManager.entity;
+            atkUiDisplay.atkButton.onClick.RemoveAllListeners();
+            atkUiDisplay.atkButton.onClick.AddListener(OnWeaponButtonClick);
             
             entityNameTextMeshProUGUI.text = entityManager.entity.name;
             foreach (var effect in entityManager.entity.effects){

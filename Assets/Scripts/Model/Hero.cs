@@ -3,12 +3,19 @@ using UnityEngine;
 
 public class Hero : Entity{
 
-    public Hero(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, Damage starttingAtkDamage, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Weapon weapon = Weapon.noWeapon) : base(player, model, name, startingTile, startingHealth, startingMaxMovement, permanentEffects, startingDirection){
+    public Hero(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Weapon weapon = Weapon.noWeapon) : base(player, model, name, startingTile, startingHealth, startingMaxMovement, permanentEffects, startingDirection){
         movementLeft = maxMovement;
+        this.weapon = weapon;
     }
 
-    public Hero(Player player, ScriptableHero scriptableHero, Tile startingTile, Direction startingDirection = Direction.North, Weapon weapon = Weapon.noWeapon) : base(player, scriptableHero, startingTile, startingDirection){
+    public Hero(Player player, ScriptableHero scriptableHero, Tile startingTile, Direction startingDirection = Direction.North) : base(player, scriptableHero, startingTile, startingDirection){
         movementLeft = maxMovement;
+        if(scriptableHero.scriptableWeapon == null){
+            weapon = Weapon.noWeapon;
+        }
+        else{
+            weapon = new Weapon(scriptableHero.scriptableWeapon);
+        }
     }
 
     public Weapon weapon{
@@ -44,15 +51,15 @@ public class Hero : Entity{
     }
 
     protected override Cost CalculateCostToAtk(){
-        return weapon.costToUse;
+        return weapon != null ? weapon.costToUse : Cost.noCost;
     }
 
     protected override int CalculateRange(){
-        return weapon.range;
+        return weapon != null ? weapon.range : 0;
     }
 
     protected override Damage CalculateAtkDamage(){
-        return weapon.atkDamage;
+        return weapon != null ? weapon.atkDamage : new Damage(0);
     }
 
     public override bool CanAttack(Entity entity){
