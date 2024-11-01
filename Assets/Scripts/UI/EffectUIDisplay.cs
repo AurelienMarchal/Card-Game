@@ -93,8 +93,7 @@ public class EffectUIDisplay : MonoBehaviour
         }
         
         effectTextMeshProUGUI.text = effect.GetEffectText();
-        if(effect is ActivableEffect activableEffect)
-        {
+        if(effect is ActivableEffect activableEffect){
             button.interactable = activableEffect.CanBeActivated() && Game.currentGame.currentPlayer == activableEffect.associatedEntity.player;
         }
         

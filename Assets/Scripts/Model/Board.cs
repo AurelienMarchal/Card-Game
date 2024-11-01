@@ -102,6 +102,10 @@ public class Board {
     }
 
     public Entity GetEntityAtTile(Tile tile){
+
+        if(tile == Tile.noTile){
+            return Entity.noEntity;
+        }
         
         foreach (var entity in entities){
             if(entity.currentTile == tile){

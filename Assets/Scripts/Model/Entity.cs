@@ -96,7 +96,30 @@ public class Entity
         protected set;
     }
 
-    public List<EntityBuff> buffs{
+    public EntityBuff[] buffs{
+        get{
+            var dynamicList = new List<EntityBuff>();
+            if(tempBuffs != null){
+                dynamicList.AddRange(tempBuffs);
+            }
+            if(permanentBuffs != null){
+                dynamicList.AddRange(permanentBuffs);
+            }
+            return dynamicList.ToArray();
+        }
+    }
+
+    protected List<EntityBuff> tempBuffs{
+        get;
+        set;
+    }
+
+    protected List<EntityBuff> permanentBuffs{
+        get;
+        set;
+    }
+
+    public List<Effect> affectedByEffects{
         get;
         private set;
     }
@@ -111,10 +134,12 @@ public class Entity
         movementLeft = 0;
         direction = startingDirection;
         baseCostToAtk = new Cost(1);
-        baseRange = 1;
-        baseAtkDamage = new Damage(1);
+        baseRange = 0;
+        baseAtkDamage = new Damage(0);
         effects = new List<EntityEffect>();
-        buffs = new List<EntityBuff>();
+        tempBuffs = new List<EntityBuff>();
+        permanentBuffs = new List<EntityBuff>();
+        affectedByEffects = new List<Effect>();
         AddEffectList(permanentEffects);
         AddDefaultPermanentEffects();
     }
@@ -130,10 +155,12 @@ public class Entity
         movementLeft = 0;
         direction = startingDirection;
         baseCostToAtk = new Cost(1);
-        baseRange = 1;
-        baseAtkDamage = new Damage(1);
+        baseRange = 0;
+        baseAtkDamage = new Damage(0);
         effects = new List<EntityEffect>();
-        buffs = new List<EntityBuff>(); 
+        tempBuffs = new List<EntityBuff>();
+        permanentBuffs = new List<EntityBuff>();
+        affectedByEffects = new List<Effect>();
         AddEffectList(scriptableEntity.scriptableEffects);
         AddDefaultPermanentEffects();
     }
@@ -504,13 +531,13 @@ public class Entity
     public void AddEffect(EntityEffect entityEffect){
         entityEffect.associatedEntity = this;
         effects.Add(entityEffect);
-        UpdateBuffsAccordingToEffects();
+        UpdateTempBuffsAccordingToEffects();
     }
 
     public void RemoveEffect(EntityEffect entityEffect){
         if(effects.Contains(entityEffect)){
             effects.Remove(entityEffect);
-            UpdateBuffsAccordingToEffects();
+            UpdateTempBuffsAccordingToEffects();
         }
     }
 
@@ -530,17 +557,17 @@ public class Entity
         return $"Entity {name}";
     }
 
-    public void UpdateBuffsAccordingToEffects(){
+    public void UpdateTempBuffsAccordingToEffects(){
 
-        buffs.Clear();
+        tempBuffs.Clear();
 
-        foreach(var effect in effects){
+        foreach(var effect in affectedByEffects){
             foreach (var buff in effect.entityBuffs){
-                buffs.Add(buff);
+                tempBuffs.Add(buff);
             }
         }
 
-        Debug.Log($"{this} buffs : [{String.Join(", ", buffs)}]");
+        Debug.Log($"{this} tempbuffs : [{String.Join(", ", tempBuffs)}]");
     }
 
     private int NumberOfBuffs<B>() where B : EntityBuff{

@@ -45,11 +45,19 @@ public class EntityIsWeightedDownByStoneHeartEffect : EntityEffect
         }
 
         entityBuffs.Clear();
-        for (int i = 0; i < stoneHeartCount; i++)
-        {
+        for (int i = 0; i < stoneHeartCount; i++){
             entityBuffs.Add(new WeightedDownBuff());
         }
+
+        if(!associatedEntity.affectedByEffects.Contains(this)){
+            associatedEntity.affectedByEffects.Add(this);
+        }
         
-        associatedEntity.UpdateBuffsAccordingToEffects();
+        associatedEntity.UpdateTempBuffsAccordingToEffects();
+    }
+
+    public override void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected){
+        tilesAffected = new Tile[0];
+        entitiesAffected = new Entity[1]{associatedEntity};
     }
 }

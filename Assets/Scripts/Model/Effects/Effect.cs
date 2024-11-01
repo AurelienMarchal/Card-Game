@@ -9,8 +9,14 @@ public class Effect{
         private set;
     }
 
+    public List<EntityBuff> entityBuffs{
+        get;
+        private set;
+    }
+
     public Effect(bool displayOnUI = true){
         this.displayOnUI = displayOnUI;
+        entityBuffs = new List<EntityBuff>();
     }
 
     protected EffectActivatedAction effectActivatedAction;

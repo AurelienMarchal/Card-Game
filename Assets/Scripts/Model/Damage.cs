@@ -14,4 +14,14 @@ public struct Damage{
         return $"Damage with amount {amount}";
     }
 
+    public static Damage operator+ (Damage d1, Damage d2) {
+         
+        return new Damage(d1.amount + d2.amount);
+    }
+
+    public static Damage operator- (Damage d1, Damage d2) {
+         
+        return new Damage(d1.amount - d2.amount);
+    }
+
 }

@@ -55,11 +55,11 @@ public class Hero : Entity{
     }
 
     protected override int CalculateRange(){
-        return weapon != null ? weapon.range : 0;
+        return (weapon != null ? weapon.range : 0) + base.CalculateRange();
     }
 
     protected override Damage CalculateAtkDamage(){
-        return weapon != null ? weapon.atkDamage : new Damage(0);
+        return (weapon != null ? weapon.atkDamage : new Damage(0)) + base.CalculateAtkDamage();
     }
 
     public override bool CanAttack(Entity entity){
