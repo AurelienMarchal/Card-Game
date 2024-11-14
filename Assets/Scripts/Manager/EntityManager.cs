@@ -11,6 +11,9 @@ public class EntityManagerEvent : UnityEvent<EntityManager>
 public class EntityManager : MonoBehaviour
 {
     [SerializeField]
+    float yOffset;
+
+    [SerializeField]
     Animator animator;
 
     [SerializeField]
@@ -81,12 +84,15 @@ public class EntityManager : MonoBehaviour
 
     float infoUITimer = 0f;
 
+    [HideInInspector]
     public TileManager goalTileManager;
 
     BoardManager boardManager;
 
+    [HideInInspector]
     public EntityManagerEvent selectedEvent = new EntityManagerEvent();
 
+    [HideInInspector]
     public EntityManagerEvent clickedEvent = new EntityManagerEvent();
     
     void Awake(){
@@ -166,7 +172,7 @@ public class EntityManager : MonoBehaviour
     public void UpdatePositionAccordingToEntity(){
         transform.position = new Vector3(
             entity.currentTile.gridX * boardManager.tileSizeX, 
-            boardManager.entityY,  
+            boardManager.entityY + yOffset,  
             entity.currentTile.gridY * boardManager.tileSizeZ);
 
     }

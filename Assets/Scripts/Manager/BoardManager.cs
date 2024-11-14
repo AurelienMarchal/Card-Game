@@ -103,6 +103,7 @@ public class BoardManager : MonoBehaviour
         var entityInstance = Instantiate(entityPrefab, Vector3.zero, Quaternion.identity, transform);
         var entityManager = entityInstance.GetComponent<EntityManager>();
         if(entityManager == null){
+            Debug.LogError("Entity prefab has no EntityManager attached.");
             Destroy(entityInstance);
             return;
         }
@@ -116,10 +117,7 @@ public class BoardManager : MonoBehaviour
 
     public void AddEntity(EntityManager entityManager){
         entityManagers.Add(entityManager);
-        entityManager.entity.player.entities.Add(entityManager.entity);
-        if(entityManager.entity is Hero hero){
-            entityManager.entity.player.hero = hero;
-        }
+        //entityManager.entity.player.entities.Add(entityManager.entity);
     }
 
     public void RemoveEntity(EntityManager entityManager){

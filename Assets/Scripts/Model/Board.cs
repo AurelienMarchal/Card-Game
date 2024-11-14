@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -25,12 +26,15 @@ public class Board {
         protected set;
     }
 
+    private List<Entity> entities_;
+
     public List<Entity> entities{
         get{
-            List<Entity> entities_ = new List<Entity>();
+            entities_.Clear();
             if(Game.currentGame != null){
                 foreach(Player player in Game.currentGame.players){
                     foreach(Entity entity in player.entities){
+                        //Debug.Log($"{player} has {entity}");
                         entities_.Add(entity);
                     }
                 }
@@ -46,6 +50,8 @@ public class Board {
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
 
+        entities_ = new List<Entity>();
+
         tiles = new Tile[gridHeight * gridWidth];
         effects = new List<Effect>();
         SetupPermanentEffects();
@@ -55,10 +61,12 @@ public class Board {
                 tiles[i*gridHeight + j] = new Tile(i, j, i*gridHeight + j);
             }
         }
+
+        //Debug.Log($"Tiles : [{String.Join(", ", (object[])tiles)}]");
     }
 
     public Tile GetTileAt(int gridX, int gridY){
-        if(gridX*gridHeight + gridY >= tiles.Length || gridX < 0 || gridY < 0){
+        if(gridX < 0 || gridY < 0 || gridX >= gridHeight || gridY >= gridWidth){
             return Tile.noTile;
         }
 
@@ -66,6 +74,10 @@ public class Board {
     }
 
     public Tile NextTileInDirection(Tile startingTile, Direction direction){
+
+        if(startingTile == Tile.noTile){
+            return Tile.noTile;
+        }
         
         var incrementX = 0;
         var incrementY = 0;
@@ -96,6 +108,8 @@ public class Board {
             default:
                 break;
         }
+
+        //Debug.Log($"Starting tile : {startingTile}. Next tile in direction {direction} : {GetTileAt(startingTile.gridX + incrementX, startingTile.gridY + incrementY)};");
 
         return GetTileAt(startingTile.gridX + incrementX, startingTile.gridY + incrementY);
 
@@ -136,6 +150,32 @@ public class Board {
 
         tilesRanged = tileList.ToArray();
         return Entity.noEntity;
+    }
+
+    public Entity[] GetAllEntitiesInDirectionWithRange(Tile startTile, Direction direction, int range, out Tile[] tilesRanged){
+
+        var tile = startTile;
+
+        var tileList = new List<Tile>();
+
+        var entityList = new List<Entity>();
+
+        //Debug.Log($"startTile {tile}, {direction}");
+
+        while(range > 0 && tile != Tile.noTile){
+            //Debug.Log($"startTile {tile}, {direction}");
+            tileList.Add(tile);
+            var entityAtTile = GetEntityAtTile(tile);
+            if(entityAtTile != Entity.noEntity){
+                entityList.Add(entityAtTile);
+            }
+
+            tile = NextTileInDirection(tile, direction);
+            range --;
+        }
+
+        tilesRanged = tileList.ToArray();
+        return entityList.ToArray();
     }
 
     private void SetupPermanentEffects(){

@@ -1,5 +1,5 @@
 
 
 public enum EntityModel{
-    MageHero, BarbarianHero, Duck
+    MageHero, BarbarianHero, Duck, Bomb
 }

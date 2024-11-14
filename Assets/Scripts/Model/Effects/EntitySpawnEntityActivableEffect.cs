@@ -30,8 +30,7 @@ public class EntitySpawnEntityActivableEffect : ActivableEffect
         return base.CanBeActivated() && startingTile != Tile.noTile && Game.currentGame.board.GetEntityAtTile(startingTile) == Entity.noEntity;
     }
 
-    public override void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected)
-    {
+    public override void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected){
         entitiesAffected = new Entity[0];
         tilesAffected = new Tile[1]{Game.currentGame.board.NextTileInDirection(associatedEntity.currentTile, associatedEntity.direction)};
     }

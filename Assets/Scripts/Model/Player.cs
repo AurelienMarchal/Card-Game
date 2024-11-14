@@ -105,6 +105,12 @@ public class Player{
 
     private void SpawnEntity(Entity entity){
         entities.Add(entity);
+
+        if(entity is Hero hero){
+            this.hero = hero;
+        }
+
+        //Debug.Log($"Adding {entity} to {this}");
     }
 
     public bool CanSpawnEntity(Entity entity){

@@ -198,6 +198,8 @@ public sealed class Game{
 
     void CheckTriggers(Action action){
 
+        
+
         foreach(Effect effect in currentGame.effects){
             if(effect.Trigger(action)){
                 effect.TryToCreateEffectActivatedAction(action, out _);
@@ -226,9 +228,13 @@ public sealed class Game{
             }
         }
 
+        //Debug.Log($"Cheking triggers for board entities : [{String.Join(", ", currentGame.board.entities)}]");
+
         foreach(Entity entity in currentGame.board.entities){
             foreach(Effect effect in entity.effects){
+                //Debug.Log($"Checking Trigger for {entity} for effect {effect} with action {action}");
                 if(effect.Trigger(action)){
+                    
                     effect.TryToCreateEffectActivatedAction(action, out _);
                 }
             }

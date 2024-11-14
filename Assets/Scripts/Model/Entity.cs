@@ -1,7 +1,6 @@
 
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Entity
@@ -142,6 +141,8 @@ public class Entity
         affectedByEffects = new List<Effect>();
         AddEffectList(permanentEffects);
         AddDefaultPermanentEffects();
+
+        Debug.Log($"{this} effects : [{String.Join(", ", effects)}]");
     }
 
     public Entity(Player player, ScriptableEntity scriptableEntity, Tile startingTile, Direction startingDirection = Direction.North){
@@ -163,6 +164,8 @@ public class Entity
         affectedByEffects = new List<Effect>();
         AddEffectList(scriptableEntity.scriptableEffects);
         AddDefaultPermanentEffects();
+
+        Debug.Log($"{this} effects : [{String.Join(", ", effects)}]");
     }
 
     protected virtual Cost CalculateCostToMove(){
@@ -567,7 +570,7 @@ public class Entity
             }
         }
 
-        Debug.Log($"{this} tempbuffs : [{String.Join(", ", tempBuffs)}]");
+        //Debug.Log($"{this} tempbuffs : [{String.Join(", ", tempBuffs)}]");
     }
 
     private int NumberOfBuffs<B>() where B : EntityBuff{

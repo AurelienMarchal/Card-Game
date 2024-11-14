@@ -100,12 +100,16 @@ public class GameManager : MonoBehaviour
         var hero1 = new Hero(Game.currentGame.players[0], scriptableHero1, startingTile1, direction1);
         hero1.effects.Add(new MoveToChangeTileTypeEffect(hero1, TileType.Nature));
 
+        playerManagers[0].player.TryToSpawnEntity(hero1);
+
         animationManager.SpawnEntity(hero1);
 
         var startingTile2 = boardManager.board.GetTileAt(2, 3);
         var direction2 = Direction.South;
         var hero2 = new Hero(Game.currentGame.players[1], scriptableHero2, startingTile2, direction2);
         //hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
+
+        playerManagers[1].player.TryToSpawnEntity(hero2);
 
         animationManager.SpawnEntity(hero2);
 

@@ -74,6 +74,9 @@ public class AtkUIDisplay : MonoBehaviour
             }
         }
         else{
+            rangeImage.gameObject.SetActive(true);
+            atkImage.gameObject.SetActive(true);
+            weaponNameTextMeshProUGUI.text = "";
             weaponImage.gameObject.SetActive(false);
             weaponEffectTextMeshProUGUI.text = "Attack";
         }
