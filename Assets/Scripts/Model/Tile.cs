@@ -1,63 +1,67 @@
 using System;
 using System.Collections.Generic;
 
-public class Tile {
+namespace GameLogic{
 
-    public int gridX{
-        get;
-        private set;
-    }
-    public int gridY{
-        get;
-        private set;
-    }
+    using GameAction;
+    using GameEffect;
+    public class Tile {
 
-    public int num{
-        get;
-        private set;
-    }
-    
-    public TileType tileType{
-        get;
-        set;
-    }
+        public int gridX{
+            get;
+            private set;
+        }
+        public int gridY{
+            get;
+            private set;
+        }
 
-    public const Tile noTile = null;
+        public int num{
+            get;
+            private set;
+        }
+        
+        public TileType tileType{
+            get;
+            set;
+        }
 
-    public List<Effect> effects{
-        get;
-        protected set;
-    }
+        public const Tile noTile = null;
 
-    public Tile(int gridX, int gridY, int num, TileType tileType = TileType.Standard){
-        this.gridX = gridX;
-        this.gridY = gridY;
-        this.num = num;
-        this.tileType = tileType;
-        effects = new List<Effect>();
-        AddDefaultPermanentEffects();
-    }
+        public List<Effect> effects{
+            get;
+            protected set;
+        }
 
-    public int Distance(Tile tile){
-        return Math.Abs(gridX - tile.gridX) + Math.Abs(gridY - tile.gridY);
-    }
+        public Tile(int gridX, int gridY, int num, TileType tileType = TileType.Standard){
+            this.gridX = gridX;
+            this.gridY = gridY;
+            this.num = num;
+            this.tileType = tileType;
+            effects = new List<Effect>();
+            AddDefaultPermanentEffects();
+        }
 
-    
-    protected void AddDefaultPermanentEffects(){
-        effects.Add(new PickNextCursedTileOnStartPlayerTurnTileEffect(this));
-        effects.Add(new ChangeWillGetCurseTypeIntoCursedTileEffect(this));
-        effects.Add(new CurseTileGivesCurseHeartEffect(this));
-        effects.Add(new CurseSourceTileGivesCurseHeartEffect(this));
-        effects.Add(new NatureTileGivesNatureHeartEffect(this));
-    }
+        public int Distance(Tile tile){
+            return Math.Abs(gridX - tile.gridX) + Math.Abs(gridY - tile.gridY);
+        }
 
-    public override string ToString()
-    {
-        return $"Tile {gridX}, {gridY}";
+        
+        protected void AddDefaultPermanentEffects(){
+            effects.Add(new PickNextCursedTileOnStartPlayerTurnTileEffect(this));
+            effects.Add(new ChangeWillGetCurseTypeIntoCursedTileEffect(this));
+            effects.Add(new CurseTileGivesCurseHeartEffect(this));
+            effects.Add(new CurseSourceTileGivesCurseHeartEffect(this));
+            effects.Add(new NatureTileGivesNatureHeartEffect(this));
+        }
+
+        public override string ToString()
+        {
+            return $"Tile {gridX}, {gridY}";
+        }
+
     }
 
 }
-
-
 
 

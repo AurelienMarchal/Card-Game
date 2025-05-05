@@ -1,5 +1,8 @@
 using UnityEngine;
 
+using GameLogic;
+using GameLogic.GameEffect;
+
 [CreateAssetMenu(fileName = "EntityExplodeAfterXTurnEffect", menuName = "Effect/PassiveEffect/EntityExplodeAfterXTurnEffect", order = 0)]
 public class ScriptableEntityExplodeAfterXTurnEffect : ScriptableEffect{
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+using GameLogic;
 [Serializable]
 public struct HeartSprite {
     public HeartType heartType;

@@ -1,5 +1,8 @@
 
+namespace GameLogic{
 
-public enum EntityModel{
-    MageHero, BarbarianHero, Duck, Bomb
+    //Ca n'a rien a faire la ?
+    public enum EntityModel{
+        MageHero, BarbarianHero, Duck, Bomb
+    }
 }

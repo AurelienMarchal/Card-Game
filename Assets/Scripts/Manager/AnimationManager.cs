@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+using GameLogic;
+using GameLogic.GameAction;
+
 
 [Serializable]
 public struct PrefabCorrespondingToEntityModel {
@@ -52,7 +55,7 @@ public class AnimationManager : MonoBehaviour
     }
 
 
-    public void PlayAnimationForAction(Action action){
+    public void PlayAnimationForAction(GameLogic.GameAction.Action action){
 
         switch(action){
             case EntityMoveAction entityMoveAction: 

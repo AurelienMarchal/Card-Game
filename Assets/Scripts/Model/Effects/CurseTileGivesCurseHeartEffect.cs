@@ -1,8 +1,12 @@
 
-public class CurseTileGivesCurseHeartEffect : TileGivesHeartTypeEffect
-{
+namespace GameLogic{
+
+    namespace GameEffect{
+        public class CurseTileGivesCurseHeartEffect : TileGivesHeartTypeEffect{
 
 
-    public CurseTileGivesCurseHeartEffect(Tile tile) : base(tile, TileType.Cursed, HeartType.Cursed){
+            public CurseTileGivesCurseHeartEffect(Tile tile) : base(tile, TileType.Cursed, HeartType.Cursed){
+            }
+        }
     }
 }

@@ -5,6 +5,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+using GameLogic;
+
 public class CostUIDisplay : MonoBehaviour
 {
 

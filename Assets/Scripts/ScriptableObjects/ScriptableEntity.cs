@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using GameLogic;
+
 
 [CreateAssetMenu(fileName = "NoEffectMinion", menuName = "Entity/Minion/NoEffect Minion", order = 0)]
 public class ScriptableEntity : ScriptableObject

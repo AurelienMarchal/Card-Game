@@ -2,20 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityChangeDirectionAction : EntityAction
-{
-    
-    public Direction newDirection{
-        get;
-        protected set;
-    }
+namespace GameLogic{
 
-    public EntityChangeDirectionAction(Entity entity, Direction newDirection, Action requiredAction = null) : base(entity, requiredAction)
-    {
-        this.newDirection = newDirection;
-    }
+    namespace GameAction{
+        public class EntityChangeDirectionAction : EntityAction{
+            
+            public Direction newDirection{
+                get;
+                protected set;
+            }
 
-    protected override bool Perform(){
-        return entity.TryToChangeDirection(newDirection);
+            public EntityChangeDirectionAction(Entity entity, Direction newDirection, Action requiredAction = null) : base(entity, requiredAction)
+            {
+                this.newDirection = newDirection;
+            }
+
+            protected override bool Perform(){
+                return entity.TryToChangeDirection(newDirection);
+            }
+        }
     }
 }

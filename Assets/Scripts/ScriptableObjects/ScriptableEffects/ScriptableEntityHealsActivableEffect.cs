@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using GameLogic;
+using GameLogic.GameEffect;
 
 [CreateAssetMenu(fileName = "EntityHealsActivableEffect", menuName = "Effect/ActivableEffect/EntityHealsActivableEffect", order = 0)]
 public class ScriptableEntityHealsActivableEffect : ScriptableActivableEffect{

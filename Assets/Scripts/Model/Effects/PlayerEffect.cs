@@ -2,15 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerEffect : Effect
-{
-    
-    public Player associatedPlayer{
-        get;
-        protected set;
-    }
+namespace GameLogic{
 
-    public PlayerEffect(Player player){
-        associatedPlayer = player;
+    namespace GameEffect{
+
+        public class PlayerEffect : Effect{
+            
+            public Player associatedPlayer{
+                get;
+                protected set;
+            }
+
+            public PlayerEffect(Player player){
+                associatedPlayer = player;
+            }
+        }
     }
 }

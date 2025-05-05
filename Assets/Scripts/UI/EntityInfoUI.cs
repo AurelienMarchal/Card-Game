@@ -1,10 +1,10 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System;
 using UnityEngine.Events;
 
+using GameLogic.GameEffect;
+using GameLogic.GameBuff;
 
 public class EntityInfoUI : MonoBehaviour
 {   

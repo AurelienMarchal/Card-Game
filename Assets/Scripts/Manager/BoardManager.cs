@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using GameLogic;
+
 public class BoardManager : MonoBehaviour
 {
     private Board board_;

@@ -5,6 +5,8 @@ using UnityEngine.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
+using GameLogic;
+
 [System.Serializable]
 public class TileManagerEvent : UnityEvent<TileManager>
 {

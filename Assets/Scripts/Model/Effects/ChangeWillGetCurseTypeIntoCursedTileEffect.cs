@@ -2,30 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChangeWillGetCurseTypeIntoCursedTileEffect : TileEffect
-{
+namespace GameLogic{
 
-    public ChangeWillGetCurseTypeIntoCursedTileEffect(Tile tile) : base(tile){
-    }
+    using GameAction;
 
-    protected override void Activate()
-    {
-        Game.currentGame.PileAction(new TileChangeTypeAction(associatedTile, TileType.Cursed, effectActivatedAction));
-    }
+    namespace GameEffect{
+        public class ChangeWillGetCurseTypeIntoCursedTileEffect : TileEffect
+        {
 
-    public override bool CanBeActivated()
-    {
-        return base.CanBeActivated() && associatedTile.tileType == TileType.WillGetCursed;
-    }
+            public ChangeWillGetCurseTypeIntoCursedTileEffect(Tile tile) : base(tile){
+            }
+
+            protected override void Activate()
+            {
+                Game.currentGame.PileAction(new TileChangeTypeAction(associatedTile, TileType.Cursed, effectActivatedAction));
+            }
+
+            public override bool CanBeActivated()
+            {
+                return base.CanBeActivated() && associatedTile.tileType == TileType.WillGetCursed;
+            }
 
 
-    public override bool Trigger(Action action)
-    {
-        switch(action){
-            case EndPlayerTurnAction endPlayerTurnAction:
-                return endPlayerTurnAction.wasPerformed;
+            public override bool Trigger(Action action)
+            {
+                switch(action){
+                    case EndPlayerTurnAction endPlayerTurnAction:
+                        return endPlayerTurnAction.wasPerformed;
 
-            default : return false;
+                    default : return false;
+                }
+            }
         }
     }
 }

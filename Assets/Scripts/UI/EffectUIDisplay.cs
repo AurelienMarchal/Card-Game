@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-
+using GameLogic;
+using GameLogic.GameAction;
+using GameLogic.GameEffect;
 [System.Serializable]
 public class EffectEvent : UnityEvent<Effect>
 {

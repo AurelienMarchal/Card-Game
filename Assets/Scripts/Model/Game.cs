@@ -1,261 +1,264 @@
-using System;
+
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class Game{
 
-    public const int maxPileCount = 100;
+namespace GameLogic{
 
-    public Board board{
-        get;
-        private set;
-    }
 
-    public Player[] players{
-        get;
-        private set;
-    }
+    using GameEffect;
 
-    public Player currentPlayer{
-        get;
-        private set;
-    }
+    public sealed class Game{
 
-    public int turn{
-        get;
-        private set;
-    }
+        public const int maxPileCount = 100;
 
-    public System.Random random{
-        get;
-        private set;
-    }
+        public Board board{
+            get;
+            private set;
+        }
 
-    public List<Effect> effects{
-        get;
-        private set;
-    }
+        public Player[] players{
+            get;
+            private set;
+        }
 
-    private List<Action> actionPile;
+        public Player currentPlayer{
+            get;
+            private set;
+        }
 
-    public List<Action> depiledActionQueue{
-        get;
-        private set;
-    }
+        public int turn{
+            get;
+            private set;
+        }
 
-    private bool depileStarted;
+        public System.Random random{
+            get;
+            private set;
+        }
 
-    private Game(){
-        
-    }
+        public List<Effect> effects{
+            get;
+            private set;
+        }
 
-    static Game currentGame_;
+        private List<GameAction.Action> actionPile;
 
-    public static Game currentGame{
-        get{
-            if(currentGame_ == null){
-                currentGame_ = new Game();
+        public List<GameAction.Action> depiledActionQueue{
+            get;
+            private set;
+        }
+
+        private bool depileStarted;
+
+        private Game(){
+            
+        }
+
+        static Game currentGame_;
+
+        public static Game currentGame{
+            get{
+                if(currentGame_ == null){
+                    currentGame_ = new Game();
+                }
+                return currentGame_;
             }
-            return currentGame_;
         }
-    }
 
-    public void SetUpGame(int numberOfPlayer, int boardHeight, int boardWidth){
-        board = new Board(boardHeight, boardWidth);
-        players = new Player[2];
-        actionPile = new List<Action>();
-        depiledActionQueue = new List<Action>();
-        random = new System.Random(0);
-        effects = new List<Effect>();
-        SetupPermanentEffects();
-        depileStarted = false;
-        for(var i = 0; i < numberOfPlayer; i++){
-            players[i] = new Player(i + 1, i);
+        public void SetUpGame(int numberOfPlayer, int boardHeight, int boardWidth){
+            board = new Board(boardHeight, boardWidth);
+            players = new Player[2];
+            actionPile = new List<GameAction.Action>();
+            depiledActionQueue = new List<GameAction.Action>();
+            random = new System.Random(0);
+            effects = new List<Effect>();
+            SetupPermanentEffects();
+            depileStarted = false;
+            for(var i = 0; i < numberOfPlayer; i++){
+                players[i] = new Player(i + 1, i);
+            }
         }
-    }
 
-    public void StartGame(){
-        Debug.Log("Starting Game");
-        currentPlayer = players[0];
-        turn = 0;
-    }
-
-    public void StartTurn(){
-        Debug.Log($"Starting turn {turn}");
-    }
-
-    public void StartPlayerTurn(){
-        Debug.Log($"Starting player turn {currentPlayer}");
-    }
-
-    public bool EndPlayerTurn(){
-        Debug.Log($"Ending player turn {currentPlayer}");
-
-        var changeTurn = GoToNextPlayer();
-        if(changeTurn){
-            turn ++;
-        }
-        return changeTurn;
-    }
-
-    private bool GoToNextPlayer(){
-        var nextPlayerIndex = currentPlayer.playerNum;
-        if(nextPlayerIndex >= players.Length){
+        public void StartGame(){
+            Debug.Log("Starting Game");
             currentPlayer = players[0];
-            return true;
+            turn = 0;
         }
-        currentPlayer = players[nextPlayerIndex];
-        return false;
-    }
 
-    public void PileActions(Action[] actions){
-        foreach(var action in actions){
-            if(actionPile.Count < maxPileCount){
-            actionPile.Add(action);
-            Debug.Log($"Piling {action}");
+        public void StartTurn(){
+            Debug.Log($"Starting turn {turn}");
         }
+
+        public void StartPlayerTurn(){
+            Debug.Log($"Starting player turn {currentPlayer}");
+        }
+
+        public bool EndPlayerTurn(){
+            Debug.Log($"Ending player turn {currentPlayer}");
+
+            var changeTurn = GoToNextPlayer();
+            if(changeTurn){
+                turn ++;
+            }
+            return changeTurn;
+        }
+
+        private bool GoToNextPlayer(){
+            var nextPlayerIndex = currentPlayer.playerNum;
+            if(nextPlayerIndex >= players.Length){
+                currentPlayer = players[0];
+                return true;
+            }
+            currentPlayer = players[nextPlayerIndex];
+            return false;
+        }
+
+        public void PileActions(GameAction.Action[] actions){
+            foreach(var action in actions){
+                if(actionPile.Count < maxPileCount){
+                actionPile.Add(action);
+                Debug.Log($"Piling {action}");
+            }
+                else{
+                    Debug.Log($"Reached pile action maximum");
+                }
+            }
+
+            TryToDepileActionPile();
+        }
+
+        
+        public void PileAction(GameAction.Action action){
+            if(actionPile.Count < maxPileCount){
+                actionPile.Add(action);
+                Debug.Log($"Piling {action}");
+            }
             else{
                 Debug.Log($"Reached pile action maximum");
             }
+
+            TryToDepileActionPile();
         }
 
-        TryToDepileActionPile();
-    }
+        public bool TryToDepileActionPile(){
+            var canDepile = !depileStarted;
+            if(canDepile){
+                DepileActionPile();
+            }
 
-    
-    public void PileAction(Action action){
-        if(actionPile.Count < maxPileCount){
-            actionPile.Add(action);
-            Debug.Log($"Piling {action}");
-        }
-        else{
-            Debug.Log($"Reached pile action maximum");
+            return canDepile;
         }
 
-        TryToDepileActionPile();
-    }
+        private void DepileActionPile(){
+            var c = 0;
+            depileStarted = true;
+            while(actionPile.Count > 0 && c < 1000){
+                var action = actionPile[^1];
 
-    public bool TryToDepileActionPile(){
-        var canDepile = !depileStarted;
-        if(canDepile){
-            DepileActionPile();
-        }
+                Debug.Log("Depile start");
+                Debug.Log($"action : {action}");
 
-        return canDepile;
-    }
+                //Debug.Log("Checking Trigger");
 
-    private void DepileActionPile(){
-        var c = 0;
-        depileStarted = true;
-        while(actionPile.Count > 0 && c < 1000){
-            var action = actionPile[^1];
+                CheckTriggers(action);
 
-            Debug.Log("Depile start");
-            Debug.Log($"action : {action}");
+                //Debug.Log($"GameAction.Action pile : {string.Join( ",", actionPile)}");
 
-            //Debug.Log("Checking Trigger");
+                var newAction = actionPile[^1];
 
-            CheckTriggers(action);
+                //Debug.Log($"newAction : {newAction}");
 
-            //Debug.Log($"Action pile : {string.Join( ",", actionPile)}");
+                if(action == newAction){
 
-            var newAction = actionPile[^1];
+                    Debug.Log("Trying to perform action");
+                    var wasPerformed = action.TryToPerform();
 
-            //Debug.Log($"newAction : {newAction}");
+                    if(wasPerformed){
+                        Debug.Log($"{action} was performed");
+                    }
+                    else{
+                        Debug.Log($"{action} was not performed");
+                    }
 
-            if(action == newAction){
+                    depiledActionQueue.Add(action);
+                    actionPile.Remove(action);
 
-                Debug.Log("Trying to perform action");
-                var wasPerformed = action.TryToPerform();
-
-                if(wasPerformed){
-                    Debug.Log($"{action} was performed");
+                    if(wasPerformed){
+                        Debug.Log("Checking Trigger");
+                        CheckTriggers(action);
+                    }
                 }
+
                 else{
-                    Debug.Log($"{action} was not performed");
+                    c++;
                 }
 
-                depiledActionQueue.Add(action);
-                actionPile.Remove(action);
-
-                if(wasPerformed){
-                    Debug.Log("Checking Trigger");
-                    CheckTriggers(action);
-                }
+                //Debug.Log($"GameAction.Action pile : {string.Join( ",", actionPile)}");
             }
 
-            else{
-                c++;
-            }
+            //Debug.Log($"GameAction.Action performed pile : {string.Join( ",", depiledActionQueue)}");
 
-            //Debug.Log($"Action pile : {string.Join( ",", actionPile)}");
+            depileStarted = false;
         }
 
-        //Debug.Log($"Action performed pile : {string.Join( ",", depiledActionQueue)}");
+        void CheckTriggers(GameAction.Action action){
 
-        depileStarted = false;
-    }
+            
 
-    void CheckTriggers(Action action){
-
-        
-
-        foreach(Effect effect in currentGame.effects){
-            if(effect.Trigger(action)){
-                effect.TryToCreateEffectActivatedAction(action, out _);
-            }
-        }
-
-        foreach(Effect effect in currentGame.board.effects){
-            if(effect.Trigger(action)){
-                effect.TryToCreateEffectActivatedAction(action, out _);
-            }
-        }
-
-        foreach(Player player in players){
-            foreach(Effect effect in player.effects){
+            foreach(Effect effect in currentGame.effects){
                 if(effect.Trigger(action)){
                     effect.TryToCreateEffectActivatedAction(action, out _);
                 }
             }
-        }
 
-        foreach(Tile tile in currentGame.board.tiles){
-            foreach(Effect effect in tile.effects){
+            foreach(Effect effect in currentGame.board.effects){
                 if(effect.Trigger(action)){
                     effect.TryToCreateEffectActivatedAction(action, out _);
                 }
             }
-        }
 
-        //Debug.Log($"Cheking triggers for board entities : [{String.Join(", ", currentGame.board.entities)}]");
+            foreach(Player player in players){
+                foreach(Effect effect in player.effects){
+                    if(effect.Trigger(action)){
+                        effect.TryToCreateEffectActivatedAction(action, out _);
+                    }
+                }
+            }
 
-        foreach(Entity entity in currentGame.board.entities){
-            foreach(Effect effect in entity.effects){
-                //Debug.Log($"Checking Trigger for {entity} for effect {effect} with action {action}");
-                if(effect.Trigger(action)){
-                    
-                    effect.TryToCreateEffectActivatedAction(action, out _);
+            foreach(Tile tile in currentGame.board.tiles){
+                foreach(Effect effect in tile.effects){
+                    if(effect.Trigger(action)){
+                        effect.TryToCreateEffectActivatedAction(action, out _);
+                    }
+                }
+            }
+
+            //Debug.Log($"Cheking triggers for board entities : [{String.Join(", ", currentGame.board.entities)}]");
+
+            foreach(Entity entity in currentGame.board.entities){
+                foreach(Effect effect in entity.effects){
+                    //Debug.Log($"Checking Trigger for {entity} for effect {effect} with action {action}");
+                    if(effect.Trigger(action)){
+                        
+                        effect.TryToCreateEffectActivatedAction(action, out _);
+                    }
                 }
             }
         }
-    }
 
-    public Action DequeueDepiledActionQueue(){
-        if(depiledActionQueue.Count == 0){
-            return null;
+        public GameAction.Action DequeueDepiledActionQueue(){
+            if(depiledActionQueue.Count == 0){
+                return null;
+            }
+            var action = depiledActionQueue[0];
+            depiledActionQueue.RemoveAt(0);
+
+            return action;
         }
-        var action = depiledActionQueue[0];
-        depiledActionQueue.RemoveAt(0);
 
-        return action;
+        private void SetupPermanentEffects(){
+
+        }
     }
-
-    private void SetupPermanentEffects(){
-
-    }
-
-
-
-    
 }

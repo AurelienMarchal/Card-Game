@@ -2,19 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeightedDownBuff : EntityBuff
-{
-    public WeightedDownBuff() : base("Weighted Down")
-    {
-    }
+namespace GameLogic{
 
-    public override string GetText()
-    {
-        return "Cost one more Mouvement to move";
-    }
+    namespace GameBuff{
+        public class WeightedDownBuff : EntityBuff
+        {
+            public WeightedDownBuff() : base("Weighted Down"){
+            }
 
-    public override int IsPositive()
-    {
-        return -1;
+            public override string GetText()
+            {
+                return "Cost one more Mouvement to move";
+            }
+
+            public override int IsPositive()
+            {
+                return -1;
+            }
+        }
     }
 }

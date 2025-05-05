@@ -1,49 +1,58 @@
-public class TileGivesHeartTypeEffect : TileEffect
-{
+namespace GameLogic{
 
-    public Entity affectedEntity{
-        get;
-        protected set;
-    }
+    namespace GameEffect{
 
-    public TileType tileType{
-        get;
-        protected set;
-    }
+        using GameAction;
+        
 
-    public HeartType heartType{
-        get;
-        protected set;
-    }
+        public class TileGivesHeartTypeEffect : TileEffect{
 
-    public TileGivesHeartTypeEffect(Tile tile, TileType tileType, HeartType heartType) : base(tile){
-        this.tileType = tileType;
-        this.heartType = heartType;
-        affectedEntity = Entity.noEntity;
-    }
+            public Entity affectedEntity{
+                get;
+                protected set;
+            }
 
-    public override bool CanBeActivated(){
-        return base.CanBeActivated() && associatedTile.tileType == tileType && affectedEntity != Entity.noEntity;
-    }
+            public TileType tileType{
+                get;
+                protected set;
+            }
 
-    protected override void Activate()
-    {   
+            public HeartType heartType{
+                get;
+                protected set;
+            }
 
-        Game.currentGame.PileAction(new EntityGainHeartAction(affectedEntity, heartType, effectActivatedAction));
-        affectedEntity = Entity.noEntity;
-    }
+            public TileGivesHeartTypeEffect(Tile tile, TileType tileType, HeartType heartType) : base(tile){
+                this.tileType = tileType;
+                this.heartType = heartType;
+                affectedEntity = Entity.noEntity;
+            }
 
-    public override bool Trigger(Action action)
-    {
-        switch(action){
-            case EntityMoveAction entityMoveAction:
-                    var condition = entityMoveAction.wasPerformed && entityMoveAction.endTile == associatedTile;
-                    if(condition){
-                        affectedEntity = entityMoveAction.entity;
-                    }
-                    return condition;
+            public override bool CanBeActivated(){
+                return base.CanBeActivated() && associatedTile.tileType == tileType && affectedEntity != Entity.noEntity;
+            }
 
-            default : return false;
+            protected override void Activate()
+            {   
+
+                Game.currentGame.PileAction(new EntityGainHeartAction(affectedEntity, heartType, effectActivatedAction));
+                affectedEntity = Entity.noEntity;
+            }
+
+            public override bool Trigger(Action action)
+            {
+                switch(action){
+                    case EntityMoveAction entityMoveAction:
+                            var condition = entityMoveAction.wasPerformed && entityMoveAction.endTile == associatedTile;
+                            if(condition){
+                                affectedEntity = entityMoveAction.entity;
+                            }
+                            return condition;
+
+                    default : return false;
+                }
+            }
         }
+
     }
 }

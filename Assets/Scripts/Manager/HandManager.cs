@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using GameLogic;
 
 public class HandManager : MonoBehaviour
 {

@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
+using GameLogic;
+
 public class ManaUIDisplay : MonoBehaviour
 {
     Player player_;

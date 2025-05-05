@@ -1,23 +1,29 @@
-public class Buff{
-    
-    public string name{
-        get;
-        private set;
-    }
 
-    public Buff(string name) {
-        this.name = name;
-    }
+namespace GameLogic{
 
-    public virtual string GetText(){
-        return string.Empty;
-    }
+    namespace GameBuff{
+        public class Buff{
+            
+            public string name{
+                get;
+                private set;
+            }
 
-    public override string ToString() {
-        return name + "buff";
-    }
+            public Buff(string name) {
+                this.name = name;
+            }
 
-    public virtual int IsPositive(){
-        return 0;
+            public virtual string GetText(){
+                return string.Empty;
+            }
+
+            public override string ToString() {
+                return name + "buff";
+            }
+
+            public virtual int IsPositive(){
+                return 0;
+            }
+        }
     }
 }

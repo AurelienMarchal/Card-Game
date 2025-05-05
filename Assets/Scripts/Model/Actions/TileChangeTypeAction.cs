@@ -2,20 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileChangeTypeAction : TileAction
-{
-    public TileType newType{
-        get;
-        protected set;
-    }
+namespace GameLogic{
 
-    public TileChangeTypeAction(Tile tile, TileType tileType, Action requiredAction = null) : base(tile, requiredAction){
-        newType = tileType;
-    }
+    namespace GameAction{
+        public class TileChangeTypeAction : TileAction
+        {
+            public TileType newType{
+                get;
+                protected set;
+            }
 
-    protected override bool Perform(){
-        //Check si c'est possible avant blablabla
-        tile.tileType = newType;
-        return true;
+            public TileChangeTypeAction(Tile tile, TileType tileType, Action requiredAction = null) : base(tile, requiredAction){
+                newType = tileType;
+            }
+
+            protected override bool Perform(){
+                //Check si c'est possible avant blablabla
+                tile.tileType = newType;
+                return true;
+            }
+        }
     }
 }

@@ -1,43 +1,51 @@
 using UnityEngine;
 
-public class MoveToChangeTileTypeEffect : EntityEffect
-{
 
-    public TileType tileType{
-        get;
-        protected set;
-    }
+namespace GameLogic{
 
-    public MoveToChangeTileTypeEffect(Entity entity, TileType tileType) : base(entity){
-        associatedEntity = entity;
-        this.tileType = tileType;
-    }
+    namespace GameEffect{
 
-    protected override void Activate(){
-        Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType, effectActivatedAction));
-    }
+        using GameAction;
+        public class MoveToChangeTileTypeEffect : EntityEffect
+        {
 
-    public override bool CanBeActivated()
-    {
-        return base.CanBeActivated();
-    }
+            public TileType tileType{
+                get;
+                protected set;
+            }
 
-    public override bool Trigger(Action action)
-    {
-        switch(action){
-            case EntityMoveAction entityMoveAction: 
-                if(entityMoveAction.wasPerformed && entityMoveAction.entity == associatedEntity){
-                    return true;
+            public MoveToChangeTileTypeEffect(Entity entity, TileType tileType) : base(entity){
+                associatedEntity = entity;
+                this.tileType = tileType;
+            }
+
+            protected override void Activate(){
+                Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType, effectActivatedAction));
+            }
+
+            public override bool CanBeActivated()
+            {
+                return base.CanBeActivated();
+            }
+
+            public override bool Trigger(Action action)
+            {
+                switch(action){
+                    case EntityMoveAction entityMoveAction: 
+                        if(entityMoveAction.wasPerformed && entityMoveAction.entity == associatedEntity){
+                            return true;
+                        }
+                        return false;
+
+                    default : return false;
                 }
-                return false;
+            }
 
-            default : return false;
+            public override string GetEffectText(){
+                return $"Every time {associatedEntity} moves, the tile under it is transformed into a {tileType.ToTileString()}";
+            }
+
+            
         }
     }
-
-    public override string GetEffectText(){
-        return $"Every time {associatedEntity} moves, the tile under it is transformed into a {tileType.ToTileString()}";
-    }
-
-    
 }

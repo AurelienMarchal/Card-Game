@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using GameLogic;
 
 [CreateAssetMenu(fileName = "NoEffectWeapon", menuName = "Weapon/NoEffect Weapon", order = 0)]
 public class ScriptableWeapon : ScriptableObject

@@ -1,28 +1,35 @@
-public class ActivableEffect : EntityEffect
-{
+namespace GameLogic{
 
-    public Cost cost{
-        get;
-        protected set;
-    }
+    using GameAction;
 
-    public ActivableEffect(Entity entity, Cost cost) : base(entity){
-        this.cost = cost;
-    }
+    namespace GameEffect{
+        public class ActivableEffect : EntityEffect
+        {
 
-    public bool EntityCanPayCost(){
-        return associatedEntity!= Entity.noEntity && associatedEntity.CanPayHeartCost(cost.heartCost) && associatedEntity.CanUseMovement(cost.mouvementCost);
-    }
+            public Cost cost{
+                get;
+                protected set;
+            }
 
-    public override bool TryToCreateEffectActivatedAction(Action costAction, out EffectActivatedAction effectActivatedAction){
-        effectActivatedAction = new EffectActivatedAction(this, costAction);
+            public ActivableEffect(Entity entity, Cost cost) : base(entity){
+                this.cost = cost;
+            }
 
-        var canBeActivated = CanBeActivated();
-        if(canBeActivated){
-            this.effectActivatedAction = effectActivatedAction;
-            Game.currentGame.PileAction(effectActivatedAction);
+            public bool EntityCanPayCost(){
+                return associatedEntity!= Entity.noEntity && associatedEntity.CanPayHeartCost(cost.heartCost) && associatedEntity.CanUseMovement(cost.mouvementCost);
+            }
+
+            public override bool TryToCreateEffectActivatedAction(GameAction.Action costAction, out EffectActivatedAction effectActivatedAction){
+                effectActivatedAction = new EffectActivatedAction(this, costAction);
+
+                var canBeActivated = CanBeActivated();
+                if(canBeActivated){
+                    this.effectActivatedAction = effectActivatedAction;
+                    Game.currentGame.PileAction(effectActivatedAction);
+                }
+                
+                return canBeActivated;
+            }
         }
-        
-        return canBeActivated;
     }
 }

@@ -6,6 +6,10 @@ using UnityEngine.EventSystems;
 using TMPro;
 using System;
 
+using GameLogic;
+using GameLogic.GameAction;
+using GameLogic.GameEffect;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -204,7 +208,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Action action = Game.currentGame.DequeueDepiledActionQueue();
+        GameLogic.GameAction.Action action = Game.currentGame.DequeueDepiledActionQueue();
 
         while(!action.wasCancelled && !action.wasPerformed && Game.currentGame.depiledActionQueue.Count > 0){
             action = Game.currentGame.DequeueDepiledActionQueue();

@@ -1,145 +1,150 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hero : Entity{
+namespace GameLogic{
 
-    public Hero(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Weapon weapon = Weapon.noWeapon) : base(player, model, name, startingTile, startingHealth, startingMaxMovement, permanentEffects, startingDirection){
-        movementLeft = maxMovement;
-        this.weapon = weapon;
-    }
+    using GameAction;
+    using GameEffect;
+    public class Hero : Entity{
 
-    public Hero(Player player, ScriptableHero scriptableHero, Tile startingTile, Direction startingDirection = Direction.North) : base(player, scriptableHero, startingTile, startingDirection){
-        movementLeft = maxMovement;
-        if(scriptableHero.scriptableWeapon == null){
-            weapon = Weapon.noWeapon;
-        }
-        else{
-            weapon = new Weapon(scriptableHero.scriptableWeapon);
-        }
-    }
-
-    public Weapon weapon{
-        get;
-        protected set;
-    }
-
-    public override bool TryToMove(Tile tile){
-
-        var result = base.TryToMove(tile);
-
-        return result;
-        
-    }
-
-    public override bool TryToCreateEntityPayHeartCostAction(HeartType[] heartCost, out EntityPayHeartCostAction entityPayHeartCostAction, Action requiredAction = null){
-        entityPayHeartCostAction = new EntityPayHeartCostAction(this, heartCost, requiredAction);
-        var canPayHeartCost = CanPayHeartCost(heartCost);
-        if(canPayHeartCost){
-            Game.currentGame.PileAction(entityPayHeartCostAction);
+        public Hero(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Weapon weapon = Weapon.noWeapon) : base(player, model, name, startingTile, startingHealth, startingMaxMovement, permanentEffects, startingDirection){
+            movementLeft = maxMovement;
+            this.weapon = weapon;
         }
 
-        return canPayHeartCost;
-    }
-
-    public override bool TryToPayHeartCost(HeartType[] heartCost){
-        return health.TryToPayHeartCost(heartCost, false);
-    }
-
-    public override bool CanPayHeartCost(HeartType[] heartCost){
-        var result = health.CanPayHeartCost(heartCost, out bool willDie);
-        return result && !willDie;
-    }
-
-    protected override Cost CalculateCostToAtk(){
-        return weapon != null ? weapon.costToUse : Cost.noCost;
-    }
-
-    protected override int CalculateRange(){
-        return (weapon != null ? weapon.range : 0) + base.CalculateRange();
-    }
-
-    protected override Damage CalculateAtkDamage(){
-        return (weapon != null ? weapon.atkDamage : new Damage(0)) + base.CalculateAtkDamage();
-    }
-
-    public override bool CanAttack(Entity entity){
-
-        if(entity == this){
-            return false;
+        public Hero(Player player, ScriptableHero scriptableHero, Tile startingTile, Direction startingDirection = Direction.North) : base(player, scriptableHero, startingTile, startingDirection){
+            movementLeft = maxMovement;
+            if(scriptableHero.scriptableWeapon == null){
+                weapon = Weapon.noWeapon;
+            }
+            else{
+                weapon = new Weapon(scriptableHero.scriptableWeapon);
+            }
         }
 
-        if(weapon == Weapon.noWeapon){
-            return false;
+        public Weapon weapon{
+            get;
+            protected set;
         }
 
-        if(entity.currentTile.gridX != currentTile.gridX && entity.currentTile.gridY != currentTile.gridY){
-            return false;
+        public override bool TryToMove(Tile tile){
+
+            var result = base.TryToMove(tile);
+
+            return result;
+            
         }
 
-        if(entity.currentTile.Distance(currentTile) > range){
-            return false;
+        public override bool TryToCreateEntityPayHeartCostAction(HeartType[] heartCost, out EntityPayHeartCostAction entityPayHeartCostAction, Action requiredAction = null){
+            entityPayHeartCostAction = new EntityPayHeartCostAction(this, heartCost, requiredAction);
+            var canPayHeartCost = CanPayHeartCost(heartCost);
+            if(canPayHeartCost){
+                Game.currentGame.PileAction(entityPayHeartCostAction);
+            }
+
+            return canPayHeartCost;
         }
 
-        if(DirectionsExtensions.FromCoordinateDifference(
-            entity.currentTile.gridX - currentTile.gridX,
-            entity.currentTile.gridY - currentTile.gridY
-            ) != direction){
+        public override bool TryToPayHeartCost(HeartType[] heartCost){
+            return health.TryToPayHeartCost(heartCost, false);
+        }
+
+        public override bool CanPayHeartCost(HeartType[] heartCost){
+            var result = health.CanPayHeartCost(heartCost, out bool willDie);
+            return result && !willDie;
+        }
+
+        protected override Cost CalculateCostToAtk(){
+            return weapon != null ? weapon.costToUse : Cost.noCost;
+        }
+
+        protected override int CalculateRange(){
+            return (weapon != null ? weapon.range : 0) + base.CalculateRange();
+        }
+
+        protected override Damage CalculateAtkDamage(){
+            return (weapon != null ? weapon.atkDamage : new Damage(0)) + base.CalculateAtkDamage();
+        }
+
+        public override bool CanAttack(Entity entity){
+
+            if(entity == this){
                 return false;
-        }
+            }
 
-        return true;
-    }
-
-    public override bool CanAttackByChangingDirection(Entity entity){
-
-        if(entity == this){
-            return false;
-        }
-
-        if(weapon == Weapon.noWeapon){
-            return false;
-        }
-
-        if(entity.currentTile.gridX != currentTile.gridX && entity.currentTile.gridY != currentTile.gridY){
-            return false;
-        }
-
-        if(entity.currentTile.Distance(currentTile) > weapon.range){
-            return false;
-        }
-
-        if(!CanChangeDirection(DirectionsExtensions.FromCoordinateDifference(
-            entity.currentTile.gridX - currentTile.gridX,
-            entity.currentTile.gridY - currentTile.gridY
-            ))){
+            if(weapon == Weapon.noWeapon){
                 return false;
+            }
+
+            if(entity.currentTile.gridX != currentTile.gridX && entity.currentTile.gridY != currentTile.gridY){
+                return false;
+            }
+
+            if(entity.currentTile.Distance(currentTile) > range){
+                return false;
+            }
+
+            if(DirectionsExtensions.FromCoordinateDifference(
+                entity.currentTile.gridX - currentTile.gridX,
+                entity.currentTile.gridY - currentTile.gridY
+                ) != direction){
+                    return false;
+            }
+
+            return true;
         }
 
-        return true;
-    }
+        public override bool CanAttackByChangingDirection(Entity entity){
 
-    public override bool CanPayAtkCost(){
-        if(weapon == null){
-            return false;
+            if(entity == this){
+                return false;
+            }
+
+            if(weapon == Weapon.noWeapon){
+                return false;
+            }
+
+            if(entity.currentTile.gridX != currentTile.gridX && entity.currentTile.gridY != currentTile.gridY){
+                return false;
+            }
+
+            if(entity.currentTile.Distance(currentTile) > weapon.range){
+                return false;
+            }
+
+            if(!CanChangeDirection(DirectionsExtensions.FromCoordinateDifference(
+                entity.currentTile.gridX - currentTile.gridX,
+                entity.currentTile.gridY - currentTile.gridY
+                ))){
+                    return false;
+            }
+
+            return true;
         }
 
-        return CanPayHeartCost(weapon.costToUse.heartCost) && CanUseMovement(weapon.costToUse.mouvementCost);
-    }
+        public override bool CanPayAtkCost(){
+            if(weapon == null){
+                return false;
+            }
 
-    public override void GetTilesAndEntitiesAffectedByAtk(out Entity[] entitiesAffected, out Tile[] tilesAffected){
-        if(weapon == Weapon.noWeapon){
-            entitiesAffected = new Entity[0];
-            tilesAffected = new Tile[0];
-            return;
+            return CanPayHeartCost(weapon.costToUse.heartCost) && CanUseMovement(weapon.costToUse.mouvementCost);
         }
 
-        weapon.GetTilesAndEntitiesAffectedByAtk(currentTile, direction, out entitiesAffected, out tilesAffected);
+        public override void GetTilesAndEntitiesAffectedByAtk(out Entity[] entitiesAffected, out Tile[] tilesAffected){
+            if(weapon == Weapon.noWeapon){
+                entitiesAffected = new Entity[0];
+                tilesAffected = new Tile[0];
+                return;
+            }
+
+            weapon.GetTilesAndEntitiesAffectedByAtk(currentTile, direction, out entitiesAffected, out tilesAffected);
+
+        }
+
+
+
+
 
     }
-
-
-
-
 
 }
-

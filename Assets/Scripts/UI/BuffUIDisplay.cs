@@ -2,6 +2,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+using GameLogic.GameBuff;
+
 public class BuffUIDisplay : MonoBehaviour
 {
     [SerializeField]

@@ -1,10 +1,9 @@
+namespace GameLogic{
+    public enum Direction{
+        North, South, East, West
+    }
 
-public enum Direction{
-    North, South, East, West
-}
-
-public static class DirectionsExtensions
-    {
+    public static class DirectionsExtensions{
         public static float ToAngle(this Direction direction)
         {
             switch(direction){
@@ -34,3 +33,4 @@ public static class DirectionsExtensions
             }
         }
     }
+}

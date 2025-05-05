@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 using UnityEngine.Events;
 
+using GameLogic;
+
 
 [System.Serializable]
 public class CardEvent : UnityEvent<Card>

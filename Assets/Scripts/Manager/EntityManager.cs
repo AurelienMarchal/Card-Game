@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
 
+using GameLogic;
+using GameLogic.GameAction;
+
 [System.Serializable]
 public class EntityManagerEvent : UnityEvent<EntityManager>
 {

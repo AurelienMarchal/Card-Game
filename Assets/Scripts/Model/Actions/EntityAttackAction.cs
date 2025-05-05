@@ -2,36 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityAttackAction : EntityAction
-{
 
-    public Entity attackedEntity{
-        get;
-        protected set;
-    }
+namespace GameLogic{
 
-    public bool isCounterAttack{
-        get;
-        protected set;
-    }
+    namespace GameAction{
+        public class EntityAttackAction : EntityAction{
 
-    public EntityAttackAction(Entity attackingEntity, Entity attackedEntity, bool isCounterAttack = false, Action requiredAction = null) : base(attackingEntity, requiredAction){
-        this.attackedEntity = attackedEntity;
-        this.isCounterAttack = isCounterAttack;
-    }
+            public Entity attackedEntity{
+                get;
+                protected set;
+            }
 
-    protected override bool Perform()
-    {
+            public bool isCounterAttack{
+                get;
+                protected set;
+            }
 
-        Game.currentGame.PileAction(new EntityTakeDamageAction(attackedEntity, entity.atkDamage, this));
+            public EntityAttackAction(Entity attackingEntity, Entity attackedEntity, bool isCounterAttack = false, Action requiredAction = null) : base(attackingEntity, requiredAction){
+                this.attackedEntity = attackedEntity;
+                this.isCounterAttack = isCounterAttack;
+            }
 
-        if(!isCounterAttack){
-            if(attackedEntity.CanAttack(entity)){
-                Game.currentGame.PileAction(new EntityAttackAction(attackedEntity, entity, true, this));
+            protected override bool Perform()
+            {
+
+                Game.currentGame.PileAction(new EntityTakeDamageAction(attackedEntity, entity.atkDamage, this));
+
+                if(!isCounterAttack){
+                    if(attackedEntity.CanAttack(entity)){
+                        Game.currentGame.PileAction(new EntityAttackAction(attackedEntity, entity, true, this));
+                    }
+                }
+                
+
+                return true;
             }
         }
-        
-
-        return true;
     }
 }

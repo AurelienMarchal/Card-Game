@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using GameLogic;
+using GameLogic.GameEffect;
+
 
 [CreateAssetMenu(fileName = "ThrowProjectileActivableEffect", menuName = "Effect/ActivableEffect/ThrowProjectileActivableEffect", order = 0)]
 public class ScriptableThrowProjectileActivaleEffect : ScriptableActivableEffect

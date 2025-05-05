@@ -2,20 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityTakeDamageAction : EntityAction{   
 
-    public Damage damage{
-        get;
-        protected set;
-    }
+namespace GameLogic{
 
-    //Damage type
-    public EntityTakeDamageAction(Entity entity, Damage damage,  Action requiredAction = null) : base(entity, requiredAction){
-        this.damage = damage;
-    }
+    namespace GameAction{
+        public class EntityTakeDamageAction : EntityAction{   
 
-    protected override bool Perform(){
-        entity.TakeDamage(damage);
-        return true;
+            public Damage damage{
+                get;
+                protected set;
+            }
+
+            //Damage type
+            public EntityTakeDamageAction(Entity entity, Damage damage,  Action requiredAction = null) : base(entity, requiredAction){
+                this.damage = damage;
+            }
+
+            protected override bool Perform(){
+                entity.TakeDamage(damage);
+                return true;
+            }
+        }
     }
 }

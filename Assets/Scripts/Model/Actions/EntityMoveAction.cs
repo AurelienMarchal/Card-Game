@@ -2,26 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityMoveAction : EntityAction
-{
-    
-    public Tile startTile{
-        get;
-        protected set;
-    }
+namespace GameLogic{
 
-    public Tile endTile{
-        get;
-        protected set;
-    }
+    namespace GameAction{
+        public class EntityMoveAction : EntityAction{
+            
+            public Tile startTile{
+                get;
+                protected set;
+            }
 
-    public EntityMoveAction(Entity entity, Tile startTile, Tile endTile,  Action requiredAction = null) : base(entity, requiredAction)
-    {
-        this.startTile = startTile;
-        this.endTile = endTile;
-    }
+            public Tile endTile{
+                get;
+                protected set;
+            }
 
-    protected override bool Perform(){
-        return entity.TryToMove(endTile);
+            public EntityMoveAction(Entity entity, Tile startTile, Tile endTile,  Action requiredAction = null) : base(entity, requiredAction)
+            {
+                this.startTile = startTile;
+                this.endTile = endTile;
+            }
+
+            protected override bool Perform(){
+                return entity.TryToMove(endTile);
+            }
+        }
     }
 }

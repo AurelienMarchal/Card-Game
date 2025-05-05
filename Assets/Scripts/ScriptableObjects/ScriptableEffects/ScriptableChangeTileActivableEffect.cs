@@ -1,6 +1,9 @@
 
 using UnityEngine;
 
+using GameLogic;
+using GameLogic.GameEffect;
+
 [CreateAssetMenu(fileName = "ChangeTileActivableEffect", menuName = "Effect/ActivableEffect/Change Tile", order = 0)]
 public class ScriptableChangeTileActivableEffect : ScriptableActivableEffect
 {

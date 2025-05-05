@@ -2,19 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityPayHeartCostAction : EntityCostAction
-{
+namespace GameLogic{
 
-    public HeartType[] heartCost{
-        get;
-        private set;
-    }
+    namespace GameAction{
+        public class EntityPayHeartCostAction : EntityCostAction
+        {
 
-    public EntityPayHeartCostAction(Entity entity, HeartType[] heartCost, Action requiredAction = null) : base(entity, requiredAction){
-        this.heartCost = heartCost;
-    }
+            public HeartType[] heartCost{
+                get;
+                private set;
+            }
 
-    protected override bool Perform(){
-        return entity.TryToPayHeartCost(heartCost);
+            public EntityPayHeartCostAction(Entity entity, HeartType[] heartCost, Action requiredAction = null) : base(entity, requiredAction){
+                this.heartCost = heartCost;
+            }
+
+            protected override bool Perform(){
+                return entity.TryToPayHeartCost(heartCost);
+            }
+        }
     }
 }

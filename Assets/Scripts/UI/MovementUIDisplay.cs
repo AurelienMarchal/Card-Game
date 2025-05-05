@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using GameLogic;
+
 public class MovementUIDisplay : MonoBehaviour
 {
     Entity entity_;

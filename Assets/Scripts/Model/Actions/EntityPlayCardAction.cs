@@ -2,24 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityPlayCardAction : EntityAction
-{
+namespace GameLogic{
 
-    public Card card{
-        get;
-        private set;
-    }
+    namespace GameAction{
+        public class EntityPlayCardAction : EntityAction
+        {
 
-
-    public EntityPlayCardAction(Entity entity, Card card, Action requiredAction = null) : base(entity, requiredAction){
-        this.card = card;
-    }
+            public Card card{
+                get;
+                private set;
+            }
 
 
+            public EntityPlayCardAction(Entity entity, Card card, Action requiredAction = null) : base(entity, requiredAction){
+                this.card = card;
+            }
 
-    protected override bool Perform()
-    {
-        return entity.TryToPlayCard(card);
+
+
+            protected override bool Perform()
+            {
+                return entity.TryToPlayCard(card);
+            }
+        }
     }
 }
 

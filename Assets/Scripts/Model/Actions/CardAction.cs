@@ -2,14 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardAction : Action{
-    
-    public Card card{
-        get;
-        protected set;
-    }
+namespace GameLogic{
 
-    public CardAction(Card card, Action requiredAction): base(requiredAction){
-        this.card = card;
+            namespace GameAction{
+        public class CardAction : Action{
+            
+            public Card card{
+                get;
+                protected set;
+            }
+
+            public CardAction(Card card, Action requiredAction): base(requiredAction){
+                this.card = card;
+            }
+        }
     }
 }

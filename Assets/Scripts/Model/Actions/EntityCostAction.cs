@@ -1,10 +1,13 @@
 
+namespace GameLogic{
 
-public class EntityCostAction : EntityAction
-{
-    public EntityCostAction(Entity entity, Action requiredAction = null) : base(entity, requiredAction)
-    {
-    
-    
+    namespace GameAction{
+        public class EntityCostAction : EntityAction{
+            public EntityCostAction(Entity entity, Action requiredAction = null) : base(entity, requiredAction)
+            {
+            
+            
+            }
+        }
     }
 }

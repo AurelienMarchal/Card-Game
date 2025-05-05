@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using GameLogic;
+using GameLogic.GameEffect;
 
 [CreateAssetMenu(fileName = "ActivableEffect", menuName = "Effect/ActivableEffect/NoEffect", order = 0)]
 public class ScriptableActivableEffect : ScriptableEffect
