@@ -7,6 +7,7 @@ namespace GameLogic{
 
 
     using GameEffect;
+    using UserAction;
 
     public sealed class Game{
 
@@ -111,6 +112,18 @@ namespace GameLogic{
                 return true;
             }
             currentPlayer = players[nextPlayerIndex];
+            return false;
+        }
+
+        public bool ReceiveUserAction(UserAction.UserAction userAction){
+
+            switch (userAction){
+                case EndTurnUserAction endTurnUserAction:
+                    break;
+                default:
+                    break;
+            }
+
             return false;
         }
 
