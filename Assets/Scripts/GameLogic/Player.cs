@@ -12,26 +12,24 @@ namespace GameLogic{
             private set;
         }
 
-        public int playerNum{
+        public uint playerNum{
             get;
             private set;
         }
 
-        public int playerColor{
-            get;
-            private set;
-        }
-
+        [Obsolete]
         public int manaLeft{
             get;
             private set;
         }
 
+        [Obsolete]
         public int maxMana{
             get;
             private set;
         }
 
+        [Obsolete]
         public const int maxManaCap = 10;
 
         public Hero hero{
@@ -49,19 +47,20 @@ namespace GameLogic{
             protected set;
         }
 
-        public Player(int num, int color){
+        public Player(uint num){
             playerNum = num;
-            playerColor = color;
             hand = new Hand(this);
             entities = new List<Entity>();
             effects = new List<Effect>();
             SetupPermanentEffects();
         }
 
+        [Obsolete]
         public void ResetMana(){
             manaLeft = maxMana;
         }
-
+        
+        [Obsolete]
         public bool TryToIncreaseMaxMana(){
             var canIncreaseMaxMana = CanIncreaseMaxMana();
             if(canIncreaseMaxMana){
@@ -71,10 +70,12 @@ namespace GameLogic{
             return canIncreaseMaxMana;
         }
 
+        [Obsolete]
         public bool CanIncreaseMaxMana(){
             return maxMana < maxManaCap;
         }
 
+        [Obsolete]
         private void IncreaseMaxMana(){
             maxMana = Math.Clamp(maxMana+1, 0, maxManaCap);
         }

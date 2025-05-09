@@ -7,6 +7,8 @@ namespace GameLogic{
             
             Effect effect;
 
+            //Targets
+
             public EffectActivatedAction(Effect effect, Action requiredAction = null) : base(requiredAction){
                 this.effect = effect;
             }

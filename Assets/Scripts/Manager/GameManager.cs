@@ -9,6 +9,7 @@ using System;
 using GameLogic;
 using GameLogic.GameAction;
 using GameLogic.GameEffect;
+using GameLogic.UserAction;
 
 
 public class GameManager : MonoBehaviour
@@ -286,7 +287,7 @@ public class GameManager : MonoBehaviour
 
 
     public void OnEndTurnPressed(){
-        Game.currentGame.PileAction(new EndPlayerTurnAction(Game.currentGame.currentPlayer));
+        Game.currentGame.ReceiveUserAction(new EndTurnUserAction(Game.currentGame.currentPlayer.playerNum));
         
         if(Game.currentGame.currentPlayer.playerNum == 1){
             mainCameraTransform.position = player1CameraTransform.position;

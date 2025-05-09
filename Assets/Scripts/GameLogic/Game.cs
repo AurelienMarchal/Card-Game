@@ -7,6 +7,7 @@ namespace GameLogic{
 
 
     using GameEffect;
+    using GameLogic.GameAction;
     using UserAction;
 
     public sealed class Game{
@@ -76,8 +77,8 @@ namespace GameLogic{
             effects = new List<Effect>();
             SetupPermanentEffects();
             depileStarted = false;
-            for(var i = 0; i < numberOfPlayer; i++){
-                players[i] = new Player(i + 1, i);
+            for(uint i = 0; i < numberOfPlayer; i++){
+                players[i] = new Player(i + 1);
             }
         }
 
@@ -117,8 +118,13 @@ namespace GameLogic{
 
         public bool ReceiveUserAction(UserAction.UserAction userAction){
 
+            if(userAction.playerNum != currentPlayer.playerNum){
+                return false;
+            }
+
             switch (userAction){
                 case EndTurnUserAction endTurnUserAction:
+                    PileAction(new EndPlayerTurnAction(currentPlayer, null));
                     break;
                 default:
                     break;

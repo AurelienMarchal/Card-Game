@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameLogic{
 
-    using GameAction;
+
     using GameEffect;
     public class Tile {
 

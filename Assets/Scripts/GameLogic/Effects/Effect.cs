@@ -10,6 +10,7 @@ namespace GameLogic{
     using GameBuff;
 
     namespace GameEffect{
+        //TODO: Effects with targets
         public class Effect{
             
             public bool displayOnUI{
@@ -44,7 +45,7 @@ namespace GameLogic{
                 return result;
             }
 
-            public virtual bool TryToCreateEffectActivatedAction(GameAction.Action requiredAction, out EffectActivatedAction effectActivatedAction){
+            public virtual bool TryToCreateEffectActivatedAction(Action requiredAction, out EffectActivatedAction effectActivatedAction){
                 effectActivatedAction = new EffectActivatedAction(this, requiredAction);
                 var canBeActivated = CanBeActivated();
                 if(canBeActivated){
@@ -55,7 +56,7 @@ namespace GameLogic{
                 return canBeActivated;
             }
 
-            public virtual bool Trigger(GameAction.Action action){
+            public virtual bool Trigger(Action action){
                 return false;
             }
 
