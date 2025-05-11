@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace GameLogic{
+
+    using GameState;
     [Serializable]
     public class Health : ICloneable{
         public HeartType[] hearts;
@@ -205,6 +207,13 @@ namespace GameLogic{
             var heartsClone = hearts.Clone() as HeartType[];
             var healthClone = new Health(heartsClone);
             return healthClone;
+        }
+
+        public HealthState ToHealthState(){
+            HealthState healthState = new HealthState();
+            healthState.hearts = new List<HeartType>();
+            healthState.hearts.AddRange(hearts);
+            return healthState;
         }
     }
 

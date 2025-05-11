@@ -5,6 +5,8 @@ namespace GameLogic{
 
 
     using GameEffect;
+    using GameState;
+
     public class Tile {
 
         public int gridX{
@@ -16,7 +18,7 @@ namespace GameLogic{
             private set;
         }
 
-        public int num{
+        public uint num{
             get;
             private set;
         }
@@ -33,7 +35,7 @@ namespace GameLogic{
             protected set;
         }
 
-        public Tile(int gridX, int gridY, int num, TileType tileType = TileType.Standard){
+        public Tile(int gridX, int gridY, uint num, TileType tileType = TileType.Standard){
             this.gridX = gridX;
             this.gridY = gridY;
             this.num = num;
@@ -58,6 +60,23 @@ namespace GameLogic{
         public override string ToString()
         {
             return $"Tile {gridX}, {gridY}";
+        }
+
+        public TileState ToTileState(){
+            TileState tileState = new TileState();
+
+            tileState.gridX = gridX;
+            tileState.gridY = gridY;
+            tileState.tileType = tileType;
+            tileState.num = num;
+            tileState.effectStates = new List<EffectState>();
+
+            foreach (Effect effect in effects){
+                tileState.effectStates.Add(effect.ToEffectState());
+            }
+            
+
+            return tileState;
         }
 
     }

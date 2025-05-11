@@ -13,7 +13,7 @@ namespace GameLogic{
                 set;
             }
 
-            public int num{
+            public uint num{
                 get;
                 set;
             }

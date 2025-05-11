@@ -12,7 +12,7 @@ namespace GameLogic{
                 set;
             }
 
-            public PlayerState[] playerStates{
+            public List<PlayerState> playerStates{
                 get;
                 set;
             }
@@ -29,12 +29,6 @@ namespace GameLogic{
 
             public List<EffectState> effectStates{
                 get;
-                set;
-            }
-
-
-            public List<EntityState> entityStates {
-                get; 
                 set;
             }
         }

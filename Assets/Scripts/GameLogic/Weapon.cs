@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GameLogic{
 
-    using GameAction;
+    using GameState;
     using GameEffect;
     [Serializable]
     public class Weapon{
@@ -108,6 +108,19 @@ namespace GameLogic{
 
         }
 
-        
+
+        public WeaponState ToWeaponState(){
+            WeaponState weaponState = new WeaponState();
+            weaponState.name = name;
+            weaponState.range = range;
+            weaponState.costToUseState = costToUse.ToCostState();
+            weaponState.atkDamageState = atkDamage.ToDamageState();
+            weaponState.effectStates = new List<EffectState>();
+            foreach (Effect effect in effects){
+                weaponState.effectStates.Add(effect.ToEffectState());
+            }
+
+            return weaponState;
+        }
     }
 }

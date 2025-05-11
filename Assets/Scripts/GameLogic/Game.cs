@@ -7,8 +7,9 @@ namespace GameLogic{
 
 
     using GameEffect;
-    using GameLogic.GameAction;
+    using GameAction;
     using UserAction;
+    using GameState;
 
     public sealed class Game{
 
@@ -44,9 +45,9 @@ namespace GameLogic{
             private set;
         }
 
-        private List<GameAction.Action> actionPile;
+        private List<Action> actionPile;
 
-        public List<GameAction.Action> depiledActionQueue{
+        public List<Action> depiledActionQueue{
             get;
             private set;
         }
@@ -266,7 +267,7 @@ namespace GameLogic{
             }
         }
 
-        public GameAction.Action DequeueDepiledActionQueue(){
+        public Action DequeueDepiledActionQueue(){
             if(depiledActionQueue.Count == 0){
                 return null;
             }
@@ -278,6 +279,27 @@ namespace GameLogic{
 
         private void SetupPermanentEffects(){
 
+        }
+
+        public GameState.GameState ToGameState(){
+            GameState.GameState gameState = new GameState.GameState();
+
+            gameState.boardState = board.ToBoardState();
+            gameState.turn = turn;
+            gameState.currentPlayerNum = currentPlayer.playerNum;
+
+            gameState.playerStates = new List<PlayerState>();
+            foreach (Player player in players){
+                gameState.playerStates.Add(player.ToPlayerState());
+            }
+
+            gameState.effectStates = new List<EffectState>();
+            foreach (Effect effect in effects){
+                gameState.effectStates.Add(effect.ToEffectState());
+            }
+
+
+            return gameState;
         }
     }
 }

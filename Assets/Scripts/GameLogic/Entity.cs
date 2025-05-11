@@ -9,6 +9,7 @@ namespace GameLogic{
     using GameAction;
     using GameEffect;
     using GameBuff;
+    using GameState;
     public class Entity
     {
         public EntityModel model{
@@ -599,6 +600,39 @@ namespace GameLogic{
             }
 
             return count;
+        }
+
+        public EntityState ToEntityState(){
+            EntityState entityState = new EntityState();
+            entityState.num = num;
+            entityState.model = model;
+            entityState.name = name;
+            entityState.currentTileNum = currentTile.num;
+            entityState.healthState = health.ToHealthState();
+            entityState.direction = direction;
+            entityState.movementLeft = movementLeft;
+            entityState.costToAtkState = costToAtk.ToCostState();
+            entityState.baseCostToAtkState = baseCostToAtk.ToCostState();
+            entityState.range = range;
+            entityState.baseRange = baseRange;
+            entityState.atkDamageState = atkDamage.ToDamageState();
+            entityState.baseAtkDamageState = baseAtkDamage.ToDamageState();
+            entityState.maxMovement = maxMovement;
+            entityState.costToMoveState = costToMove.ToCostState();
+
+            entityState.effectStates = new List<EffectState>();
+            entityState.buffStates = new List<BuffState>();
+
+            foreach (Effect effect in effects){
+                entityState.effectStates.Add(effect.ToEffectState());
+            }
+
+            foreach (Buff buff in buffs){
+                entityState.buffStates.Add(buff.ToBuffState());
+            }
+
+
+            return entityState;
         }
     }
 }

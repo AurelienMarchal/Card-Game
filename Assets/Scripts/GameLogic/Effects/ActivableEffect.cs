@@ -1,6 +1,7 @@
 namespace GameLogic{
 
     using GameAction;
+    using GameState;
 
     namespace GameEffect{
         public class ActivableEffect : EntityEffect
@@ -29,6 +30,12 @@ namespace GameLogic{
                 }
                 
                 return canBeActivated;
+            }
+
+            public override EffectState ToEffectState(){
+                EffectState effectState = base.ToEffectState();
+                effectState.costState = cost.ToCostState();
+                return effectState;
             }
         }
     }

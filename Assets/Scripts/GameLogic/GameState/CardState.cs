@@ -5,17 +5,17 @@ namespace GameLogic{
             //TODO: Targets
             public bool needsEntityTarget{
                 get;
-                protected set;
+                set;
             }
 
             public bool needsTileTarget{
                 get;
-                protected set;
+                set;
             }
 
             public CostState costState{
                 get;
-                protected set;
+                set;
             }
 
             public EffectState activableEffectState{

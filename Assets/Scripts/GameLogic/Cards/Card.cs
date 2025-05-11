@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using UnityEngine;
-
 namespace GameLogic{
 
     using GameAction;
     using GameEffect;
+    using GameState;
 
     public class Card {
 
@@ -101,7 +100,16 @@ namespace GameLogic{
             return entityTargetList;
         }
 
-        
+        public CardState ToCardState(){
+            CardState cardState= new CardState();
+            cardState.cardName = GetCardName();
+            cardState.costState = cost.ToCostState();
+            cardState.text = GetText();
+            cardState.needsEntityTarget = needsEntityTarget;
+            cardState.needsTileTarget = needsTileTarget;
+            cardState.activableEffectState = activableEffect.ToEffectState();
+            return cardState;
+        }
 
     }
 }

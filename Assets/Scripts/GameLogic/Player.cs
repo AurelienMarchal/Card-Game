@@ -6,6 +6,7 @@ namespace GameLogic{
 
     using GameAction;
     using GameEffect;
+    using GameState;
     public class Player{
         public List<Entity> entities{
             get;
@@ -168,6 +169,28 @@ namespace GameLogic{
 
         public override string ToString(){
             return $"Player {playerNum}";
+        }
+
+        public PlayerState ToPlayerState(){
+            PlayerState playerState = new PlayerState();
+
+            playerState.playerNum = playerNum;
+
+            playerState.handState = hand.ToHandState();
+            playerState.heroState = hero.ToHeroState();
+
+            playerState.entityStates = new List<EntityState>();
+            foreach (Entity entity in entities){
+                playerState.entityStates.Add(entity.ToEntityState());
+            }
+
+            playerState.effectStates = new List<EffectState>();
+            foreach (Effect effect in effects){
+                playerState.effectStates.Add(effect.ToEffectState());
+            }
+
+
+            return playerState;
         }
     }
 }

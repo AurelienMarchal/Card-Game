@@ -76,7 +76,7 @@ namespace GameLogic{
                 set;
             }
 
-            public Cost costToMoveState{
+            public CostState costToMoveState{
                 get;
                 set;
             }

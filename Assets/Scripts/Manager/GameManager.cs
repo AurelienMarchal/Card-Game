@@ -5,11 +5,14 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using TMPro;
 using System;
+using Newtonsoft.Json;
 
 using GameLogic;
 using GameLogic.GameAction;
 using GameLogic.GameEffect;
 using GameLogic.UserAction;
+using System.IO;
+
 
 
 public class GameManager : MonoBehaviour
@@ -70,6 +73,8 @@ public class GameManager : MonoBehaviour
     bool tileWasClickedThisFrame;
 
     int UILayer;
+
+    bool gameStateHasChanged;
     
     // Start is called before the first frame update
     void Start()
@@ -125,6 +130,8 @@ public class GameManager : MonoBehaviour
         entityInfoUI.weaponHoverExitEvent.AddListener(OnWeaponHoverExit);
 
         Game.currentGame.PileAction(new StartGameAction());
+
+        gameStateHasChanged = true;
     }
 
     // Update is called once per frame
@@ -135,6 +142,7 @@ public class GameManager : MonoBehaviour
         if(Game.currentGame.depiledActionQueue.Count > 0){
             blockInputs = true;
             DequeueDepiledActionQueue();
+            gameStateHasChanged = true;
         }
 
 
@@ -151,6 +159,20 @@ public class GameManager : MonoBehaviour
             */
         }
         else{
+            
+            //Testing
+            if(gameStateHasChanged){
+                
+                string jsonGameState = JsonConvert.SerializeObject(Game.currentGame.ToGameState(), Formatting.Indented);
+
+                // File path (write to persistent data path)
+                string filePath = Path.Combine(Application.persistentDataPath, "LastGameState.json");
+                
+                Debug.Log($"Writing GameState to {filePath}");
+                // Write to file
+                File.WriteAllText(filePath, jsonGameState);
+                gameStateHasChanged = false;
+            }
 
             if(Mouse.current.leftButton.wasPressedThisFrame){
                 if(!IsPointerOverUIElement()){

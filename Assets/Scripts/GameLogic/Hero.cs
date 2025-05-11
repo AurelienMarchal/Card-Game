@@ -5,6 +5,8 @@ namespace GameLogic{
 
     using GameAction;
     using GameEffect;
+    using GameBuff;
+    using GameState;
     public class Hero : Entity{
 
         public Hero(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Weapon weapon = Weapon.noWeapon) : base(player, model, name, startingTile, startingHealth, startingMaxMovement, permanentEffects, startingDirection){
@@ -142,7 +144,40 @@ namespace GameLogic{
         }
 
 
+        public HeroState ToHeroState(){
+            HeroState heroState = new HeroState();
+            heroState.num = num;
+            heroState.model = model;
+            heroState.name = name;
+            heroState.currentTileNum = currentTile.num;
+            heroState.healthState = health.ToHealthState();
+            heroState.direction = direction;
+            heroState.movementLeft = movementLeft;
+            heroState.costToAtkState = costToAtk.ToCostState();
+            heroState.baseCostToAtkState = baseCostToAtk.ToCostState();
+            heroState.range = range;
+            heroState.baseRange = baseRange;
+            heroState.atkDamageState = atkDamage.ToDamageState();
+            heroState.baseAtkDamageState = baseAtkDamage.ToDamageState();
+            heroState.maxMovement = maxMovement;
+            heroState.costToMoveState = costToMove.ToCostState();
 
+            heroState.weaponState = weapon.ToWeaponState();
+
+            heroState.effectStates = new List<EffectState>();
+            heroState.buffStates = new List<BuffState>();
+
+            foreach (Effect effect in effects){
+                heroState.effectStates.Add(effect.ToEffectState());
+            }
+
+            foreach (Buff buff in buffs){
+                heroState.buffStates.Add(buff.ToBuffState());
+            }
+
+
+            return heroState;
+        }
 
 
     }

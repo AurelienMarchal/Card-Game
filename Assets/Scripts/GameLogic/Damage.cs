@@ -1,6 +1,8 @@
 using System;
 
 namespace GameLogic{
+
+    using GameState;
     [Serializable]
     public struct Damage{
 
@@ -25,6 +27,11 @@ namespace GameLogic{
             return new Damage(d1.amount - d2.amount);
         }
 
-    }
+        public DamageState ToDamageState(){
+            DamageState damageState = new DamageState();
+            damageState.amount = amount;
+            return damageState;
+        }
 
+    }
 }

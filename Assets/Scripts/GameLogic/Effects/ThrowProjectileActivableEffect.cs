@@ -59,6 +59,12 @@ namespace GameLogic{
 
             public override void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected)
             {
+                if(associatedEntity == Entity.noEntity){
+                    tilesAffected = new Tile[0];
+                    entitiesAffected = new Entity[0];
+                    return;
+                }
+
                 var nextTile = Game.currentGame.board.NextTileInDirection(associatedEntity.currentTile, associatedEntity.direction);
                 var entityRanged = Game.currentGame.board.GetFirstEntityInDirectionWithRange(nextTile, associatedEntity.direction, range, out tilesAffected);
 

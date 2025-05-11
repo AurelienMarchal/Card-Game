@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameLogic{
 
-    using GameAction;
+    using GameState;
     using GameEffect;
     public class Board {
 
@@ -61,7 +61,7 @@ namespace GameLogic{
 
             for(var i = 0; i < gridWidth; i++){
                 for(var j = 0; j < gridHeight; j++){
-                    tiles[i*gridHeight + j] = new Tile(i, j, i*gridHeight + j);
+                    tiles[i*gridHeight + j] = new Tile(i, j, (uint)(i *gridHeight + j));
                 }
             }
 
@@ -185,7 +185,21 @@ namespace GameLogic{
 
         }
 
-        
+
+        public BoardState ToBoardState(){
+            BoardState boardState = new BoardState();
+            boardState.gridWidth = gridWidth;
+            boardState.gridHeight = gridHeight;
+            boardState.tileStates = new List<TileState>();
+
+            foreach (Tile tile in tiles){
+                boardState.tileStates.Add(tile.ToTileState());
+            }
+
+            boardState.effectStates = new List<EffectState>();
+
+            return boardState;
+        }
     }
 
 }

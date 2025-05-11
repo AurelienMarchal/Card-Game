@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameLogic.GameState;
 using UnityEngine;
 
 namespace GameLogic{
@@ -39,5 +40,13 @@ namespace GameLogic{
         }
 
         //Make + overload 
+
+        public CostState ToCostState(){
+            CostState costState = new CostState();
+            costState.mouvementCost = mouvementCost;
+            costState.heartCost = new List<HeartType>();
+            costState.heartCost.AddRange(heartCost);
+            return costState;
+        }
     }
 }

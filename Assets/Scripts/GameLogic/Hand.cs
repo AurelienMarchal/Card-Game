@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace GameLogic{
-    public class Hand 
-    {
+
+    using GameState;
+    public class Hand {
         
         public List<Card> cards{
             get;
@@ -24,6 +24,17 @@ namespace GameLogic{
         public Hand(Player player, List<Card> cards){
             this.player = player;
             this.cards = cards;
+        }
+
+        public HandState ToHandState(){
+            HandState handState = new HandState();
+            handState.cardStates = new List<CardState>();
+
+            foreach(Card card in cards){
+                handState.cardStates.Add(card.ToCardState());
+            }
+
+            return handState;
         }
     }
 

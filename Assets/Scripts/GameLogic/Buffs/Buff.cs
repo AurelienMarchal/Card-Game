@@ -1,6 +1,8 @@
 
 namespace GameLogic{
 
+    using GameState;
+
     namespace GameBuff{
         public class Buff{
             
@@ -23,6 +25,15 @@ namespace GameLogic{
 
             public virtual int IsPositive(){
                 return 0;
+            }
+
+            public BuffState ToBuffState(){
+                BuffState buffState = new BuffState();
+                buffState.name = name;
+                buffState.text = GetText();
+                buffState.isPositive = buffState.isPositive;
+
+                return buffState;
             }
         }
     }
