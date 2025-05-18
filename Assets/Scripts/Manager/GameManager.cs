@@ -4,19 +4,39 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using TMPro;
-using System;
+
+using System.IO;
 using Newtonsoft.Json;
 
 using GameLogic;
 using GameLogic.GameAction;
 using GameLogic.GameEffect;
 using GameLogic.UserAction;
-using System.IO;
+using GameLogic.GameState;
+
+
 
 
 
 public class GameManager : MonoBehaviour
 {
+
+    private GameState gameState_;
+
+
+    public GameState gameState
+    {
+        get
+        {
+            return gameState_;
+        }
+
+        set
+        {
+            gameState_ = value;
+        }
+
+    }
 
     [SerializeField]
     ScriptableHero scriptableHero1;
@@ -46,7 +66,7 @@ public class GameManager : MonoBehaviour
     EntityManager lastEntitySelected;
 
     TileManager currentTileSelected;
-    
+
     [SerializeField]
     ManaUIDisplay manaUIDisplay;
 
@@ -75,15 +95,16 @@ public class GameManager : MonoBehaviour
     int UILayer;
 
     bool gameStateHasChanged;
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
         Game.currentGame.SetUpGame(playerManagers.Length, boardHeight, boardWidth);
         boardManager.board = Game.currentGame.board;
 
-        for(var i = 0;  i < playerManagers.Length; i++){
+        for (var i = 0; i < playerManagers.Length; i++)
+        {
             playerManagers[i].player = Game.currentGame.players[i];
             playerManagers[i].cardHoverEnterEvent.AddListener(OnCardHoverEnter);
             playerManagers[i].cardHoverExitEvent.AddListener(OnCardHoverExit);
@@ -138,19 +159,22 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
-        
-        if(Game.currentGame.depiledActionQueue.Count > 0){
+
+        if (Game.currentGame.depiledActionQueue.Count > 0)
+        {
             blockInputs = true;
             DequeueDepiledActionQueue();
             gameStateHasChanged = true;
         }
 
 
-        else{
+        else
+        {
             blockInputs = animationManager.animationPlaying;
         }
 
-        if(blockInputs){
+        if (blockInputs)
+        {
             /*
             EntityManager.UnselectEveryEntity();
             TileManager.UnselectEveryTile();
@@ -158,25 +182,30 @@ public class GameManager : MonoBehaviour
             currentTileSelected = null;
             */
         }
-        else{
-            
+        else
+        {
+
             //Testing
-            if(gameStateHasChanged){
-                
+            if (gameStateHasChanged)
+            {
+
                 string jsonGameState = JsonConvert.SerializeObject(Game.currentGame.ToGameState(), Formatting.Indented);
 
                 // File path (write to persistent data path)
                 string filePath = Path.Combine(Application.persistentDataPath, "LastGameState.json");
-                
+
                 Debug.Log($"Writing GameState to {filePath}");
                 // Write to file
                 File.WriteAllText(filePath, jsonGameState);
                 gameStateHasChanged = false;
             }
 
-            if(Mouse.current.leftButton.wasPressedThisFrame){
-                if(!IsPointerOverUIElement()){
-                    if(!entityWasClickedThisFrame && !tileWasClickedThisFrame){
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                if (!IsPointerOverUIElement())
+                {
+                    if (!entityWasClickedThisFrame && !tileWasClickedThisFrame)
+                    {
                         EntityManager.UnselectEveryEntity();
                         TileManager.UnselectEveryTile();
                         currentEntitySelected = null;
@@ -185,8 +214,10 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            if (Mouse.current.rightButton.wasPressedThisFrame){
-                if(!IsPointerOverUIElement()){
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+            {
+                if (!IsPointerOverUIElement())
+                {
                     EntityManager.UnselectEveryEntity();
                     TileManager.UnselectEveryTile();
                     currentEntitySelected = null;
@@ -195,19 +226,23 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(Game.currentGame.currentPlayer != null){
+        if (Game.currentGame.currentPlayer != null)
+        {
             manaUIDisplay.player = Game.currentGame.currentPlayer;
             playerTextMesh.text = Game.currentGame.currentPlayer.ToString();
         }
 
-        else{
+        else
+        {
             playerTextMesh.text = "";
-            if(manaUIDisplay.player!= null){
+            if (manaUIDisplay.player != null)
+            {
                 manaUIDisplay.player = null;
             }
         }
-        
-        if(currentEntitySelected != null){
+
+        if (currentEntitySelected != null)
+        {
             boardManager.ResetAllTileLayer();
             var tileManager = boardManager.GetTileManagerFromTile(currentEntitySelected.entity.currentTile);
             SetGameLayerRecursive(tileManager.gameObject, LayerMask.NameToLayer("UICamera"));
@@ -215,7 +250,8 @@ public class GameManager : MonoBehaviour
 
         entityInfoUI.gameObject.SetActive(currentEntitySelected != null);
 
-        if(lastEntitySelected != currentEntitySelected){
+        if (lastEntitySelected != currentEntitySelected)
+        {
             entityInfoUI.entityManager = currentEntitySelected;
         }
 
@@ -225,72 +261,100 @@ public class GameManager : MonoBehaviour
         tileWasClickedThisFrame = false;
     }
 
-    private void DequeueDepiledActionQueue(){
+    void UpdateAccordingToGameState()
+    {
+        boardManager.boardState = gameState.boardState;
 
-        if(animationManager.animationPlaying){
+        foreach (PlayerState playerState in gameState.playerStates)
+        {
+            //Create players ...
+        }
+
+    }
+
+    private void DequeueDepiledActionQueue()
+    {
+
+        if (animationManager.animationPlaying)
+        {
             return;
         }
 
         GameLogic.GameAction.Action action = Game.currentGame.DequeueDepiledActionQueue();
 
-        while(!action.wasCancelled && !action.wasPerformed && Game.currentGame.depiledActionQueue.Count > 0){
+        while (!action.wasCancelled && !action.wasPerformed && Game.currentGame.depiledActionQueue.Count > 0)
+        {
             action = Game.currentGame.DequeueDepiledActionQueue();
         }
 
-        if(action.wasCancelled){
+        if (action.wasCancelled)
+        {
             Debug.Log($"Playing cancel animation for action {action}");
         }
-    
-        else if(action.wasPerformed){
+
+        else if (action.wasPerformed)
+        {
             Debug.Log($"Playing perform animation for action {action}");
             animationManager.PlayAnimationForAction(action);
         }
-        
+
     }
 
 
-    void OnEntitySelected(EntityManager entityManager){
+    void OnEntitySelected(EntityManager entityManager)
+    {
         currentEntitySelected = entityManager;
-        
+
     }
 
-    void OnTileSelected(TileManager tileManager){
+    void OnTileSelected(TileManager tileManager)
+    {
         currentTileSelected = tileManager;
-        if(currentEntitySelected == null){
+        if (currentEntitySelected == null)
+        {
             return;
         }
     }
 
-    void OnEntityClicked(EntityManager entityManager){
-        if(blockInputs){
+    void OnEntityClicked(EntityManager entityManager)
+    {
+        if (blockInputs)
+        {
             return;
         }
-        
+
         entityWasClickedThisFrame = true;
         EntityManager.UnselectEveryEntity();
         TileManager.UnselectEveryTile();
         entityManager.selected = entityManager.hovered;
-        
+
     }
 
-    private void OnWeaponUsed(){
-        if(currentEntitySelected != null){
+    private void OnWeaponUsed()
+    {
+        if (currentEntitySelected != null)
+        {
             currentEntitySelected.TryToAttack();
         }
     }
 
-    void OnTileClicked(TileManager tileManager){
-        if(blockInputs){
+    void OnTileClicked(TileManager tileManager)
+    {
+        if (blockInputs)
+        {
             return;
         }
 
         tileWasClickedThisFrame = true;
         var didMove = false;
 
-        if(currentEntitySelected != null){
-            if(currentEntitySelected.entity.player == Game.currentGame.currentPlayer){
+        if (currentEntitySelected != null)
+        {
+            if (currentEntitySelected.entity.player == Game.currentGame.currentPlayer)
+            {
                 didMove = currentEntitySelected.TryToMove(tileManager.tile);
-                if(!didMove){
+                if (!didMove)
+                {
                     var direction = DirectionsExtensions.FromCoordinateDifference(
                         tileManager.tile.gridX - currentEntitySelected.entity.currentTile.gridX,
                         tileManager.tile.gridY - currentEntitySelected.entity.currentTile.gridY);
@@ -299,7 +363,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        else{
+        else
+        {
             EntityManager.UnselectEveryEntity();
             TileManager.UnselectEveryTile();
             currentEntitySelected = null;
@@ -308,18 +373,22 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void OnEndTurnPressed(){
+    public void OnEndTurnPressed()
+    {
         Game.currentGame.ReceiveUserAction(new EndTurnUserAction(Game.currentGame.currentPlayer.playerNum));
-        
-        if(Game.currentGame.currentPlayer.playerNum == 1){
+
+        if (Game.currentGame.currentPlayer.playerNum == 1)
+        {
             mainCameraTransform.position = player1CameraTransform.position;
             mainCameraTransform.rotation = player1CameraTransform.rotation;
         }
-        else if(Game.currentGame.currentPlayer.playerNum == 2){
+        else if (Game.currentGame.currentPlayer.playerNum == 2)
+        {
             mainCameraTransform.position = player2CameraTransform.position;
             mainCameraTransform.rotation = player2CameraTransform.rotation;
         }
-        else{
+        else
+        {
 
         }
 
@@ -376,26 +445,31 @@ public class GameManager : MonoBehaviour
         boardManager.ResetAllTileLayerDisplayUIInfo();
     }
 
-    private void OnCardHoverEnter(Card card){
+    private void OnCardHoverEnter(Card card)
+    {
         card.activableEffect.GetTilesAndEntitiesAffected(out Entity[] entities, out Tile[] tiles);
         boardManager.DisplayTilesUIInfo(tiles);
     }
 
-    private void OnCardHoverExit(Card card){
+    private void OnCardHoverExit(Card card)
+    {
         boardManager.ResetAllTileLayerDisplayUIInfo();
     }
 
     private void OnWeaponHoverEnter()
     {
 
-        if(entityInfoUI == null){
+        if (entityInfoUI == null)
+        {
             return;
         }
-        if(entityInfoUI.entityManager == null){
+        if (entityInfoUI.entityManager == null)
+        {
             return;
         }
 
-        if(entityInfoUI.entityManager.entity == Entity.noEntity){
+        if (entityInfoUI.entityManager.entity == Entity.noEntity)
+        {
             return;
         }
 
@@ -407,4 +481,6 @@ public class GameManager : MonoBehaviour
     {
         boardManager.ResetAllTileLayerDisplayUIInfo();
     }
+    
+
 }

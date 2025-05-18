@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using GameLogic;
+using GameLogic.GameState;
 
 public class BoardManager : MonoBehaviour
 {
@@ -16,6 +17,19 @@ public class BoardManager : MonoBehaviour
         set{
             board_ = value;
             CreateTilesAccordingToBoard();
+        }
+    }
+
+    private BoardState boardState_;
+
+    public BoardState boardState{
+        get{
+            return boardState_;
+        }
+
+        set{
+            boardState_ = value;
+            UpdateAccordingToBoardState();
         }
     }
 
@@ -49,6 +63,11 @@ public class BoardManager : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
+        
+    }
+
+    void UpdateAccordingToBoardState()
+    {
         
     }
 

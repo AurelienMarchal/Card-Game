@@ -5,6 +5,7 @@ using UnityEngine;
 
 using GameLogic;
 using GameLogic.GameAction;
+using GameLogic.GameState;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -16,53 +17,85 @@ public class PlayerManager : MonoBehaviour
 
     public CardEvent cardHoverExitEvent = new CardEvent();
 
+    private PlayerState playerState_;
+
+    public PlayerState playerState
+    {
+        get
+        {
+            return playerState_;
+        }
+
+        set
+        {
+            playerState_ = value;
+            UpdateAccordingToPlayerState();
+        }
+    }
+
     private Player player_;
 
-    public Player player{
-        get{
+    public Player player
+    {
+        get
+        {
             return player_;
         }
 
-        set{
+        set
+        {
             player_ = value;
             UpdateAccordingToPlayer();
         }
     }
 
-    void Start(){
+    void Start()
+    {
         handManager.cardClickedEvent.AddListener(OnCardClicked);
         handManager.cardHoverEnterEvent.AddListener(
-            (card) => {
+            (card) =>
+            {
                 card.activableEffect.associatedEntity = player.hero;
                 cardHoverEnterEvent.Invoke(card);
                 card.activableEffect.associatedEntity = Entity.noEntity;
             });
         handManager.cardHoverExitEvent.AddListener(
-            (card) => {
+            (card) =>
+            {
                 cardHoverExitEvent.Invoke(card);
-                
+
             });
     }
 
-    private void OnCardClicked(Card card){
+    private void OnCardClicked(Card card)
+    {
         Debug.Log($"Clicked on {card}");
-        if(!player.hero.CanPlayCard(card)){
+        if (!player.hero.CanPlayCard(card))
+        {
             return;
         }
 
         player.hero.TryToCreateEntityUseMovementAction(card.activableEffect.cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
         player.hero.TryToCreateEntityPayHeartCostAction(card.activableEffect.cost.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
 
-        if(!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed){
+        if (!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed)
+        {
             return;
         }
 
         player.hero.TryToCreateEntityPlayCardAction(card, out EntityPlayCardAction entityPlayCardAction, entityPayHeartCostAction);
     }
 
-    void UpdateAccordingToPlayer(){
-        if(player != null){
+    void UpdateAccordingToPlayer()
+    {
+        if (player != null)
+        {
             handManager.hand = player.hand;
         }
+    }
+
+    void UpdateAccordingToPlayerState()
+    {
+        
     }
 }
