@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
         set
         {
             gameState_ = value;
+            UpdateAccordingToGameState();
         }
 
     }
@@ -103,6 +104,7 @@ public class GameManager : MonoBehaviour
         Game.currentGame.SetUpGame(playerManagers.Length, boardHeight, boardWidth);
         boardManager.board = Game.currentGame.board;
 
+        // A enlever
         for (var i = 0; i < playerManagers.Length; i++)
         {
             playerManagers[i].player = Game.currentGame.players[i];
@@ -263,11 +265,31 @@ public class GameManager : MonoBehaviour
 
     void UpdateAccordingToGameState()
     {
+
+        if (gameState == null)
+        {
+            return;
+        }
+
         boardManager.boardState = gameState.boardState;
+
+        if (gameState.playerStates == null)
+        {
+            return;
+        }
+
+
+        // Pour l'instant les playerManagers sont créés avant 
 
         foreach (PlayerState playerState in gameState.playerStates)
         {
-            //Create players ...
+            
+            if (playerState.playerNum > 0 &&
+                playerState.playerNum < playerManagers.Length &&
+                playerManagers[playerState.playerNum] != null)
+            {
+                playerManagers[playerState.playerNum].playerState = playerState;
+            }
         }
 
     }
@@ -377,6 +399,7 @@ public class GameManager : MonoBehaviour
     {
         Game.currentGame.ReceiveUserAction(new EndTurnUserAction(Game.currentGame.currentPlayer.playerNum));
 
+        //temp et plutot playerNum == 0 ou playerNum == 1
         if (Game.currentGame.currentPlayer.playerNum == 1)
         {
             mainCameraTransform.position = player1CameraTransform.position;

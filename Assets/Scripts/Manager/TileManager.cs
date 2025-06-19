@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using GameLogic;
+using GameLogic.GameState;
+using System;
 
 [System.Serializable]
 public class TileManagerEvent : UnityEvent<TileManager>
@@ -25,6 +27,19 @@ public class TileManager : MonoBehaviour
         set{
             tile_ = value;
             UpdateAccordingToTile();
+        }
+    }
+
+    private TileState tileState_;
+
+    public TileState tileState{
+        get{
+            return tileState_;
+        }
+
+        set{
+            tileState_ = value;
+            UpdateAccordingToTileState();
         }
     }
 
@@ -106,6 +121,29 @@ public class TileManager : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
+    }
+
+    private void UpdateAccordingToTileState()
+    {
+        if (tileState == null)
+        {
+            return;
+        }
+
+        //la pos est gere par le board 
+
+        Material[] matArray = tileRenderer.sharedMaterials;
+        
+        switch (tileState.tileType){
+            case TileType.Standard: matArray[1] = standardTileMat ; break;
+            case TileType.Nature: matArray[1] = natureTileMat; break;
+            case TileType.Cursed: matArray[1] = cursedTileMat; break;
+            case TileType.CurseSource: matArray[1] = curseSourceTileMat; break;
+            case TileType.WillGetCursed: matArray[1] = willGetCursedTileMat; break;
+            default: matArray[1] = standardTileMat; break;
+        }
+
+        tileRenderer.sharedMaterials = matArray;
     }
 
     void OnMouseDown(){

@@ -1,11 +1,29 @@
 using UnityEngine;
 using GameLogic;
+using GameLogic.GameState;
+using System;
 
 public class HandManager : MonoBehaviour
 {
     public Hand hand{
         get;
         set;
+    }
+
+    private HandState handState_;
+
+    public HandState handState
+    {
+        get
+        {
+            return handState_;
+        }
+
+        set
+        {
+            handState_ = value;
+            UpdateAccordingToPlayerState();
+        }
     }
 
     public CardEvent cardClickedEvent = new CardEvent();
@@ -89,6 +107,10 @@ public class HandManager : MonoBehaviour
                 child.rotation = rotation;
             }
         }
+    }
+
+    private void UpdateAccordingToPlayerState(){
+        //TODO
     }
 
 

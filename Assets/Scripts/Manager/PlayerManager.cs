@@ -33,8 +33,10 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    [Obsolete]
     private Player player_;
 
+    [Obsolete]
     public Player player
     {
         get
@@ -49,6 +51,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    [Obsolete]
     void Start()
     {
         handManager.cardClickedEvent.AddListener(OnCardClicked);
@@ -67,6 +70,7 @@ public class PlayerManager : MonoBehaviour
             });
     }
 
+    [Obsolete]
     private void OnCardClicked(Card card)
     {
         Debug.Log($"Clicked on {card}");
@@ -86,6 +90,7 @@ public class PlayerManager : MonoBehaviour
         player.hero.TryToCreateEntityPlayCardAction(card, out EntityPlayCardAction entityPlayCardAction, entityPayHeartCostAction);
     }
 
+    [Obsolete]
     void UpdateAccordingToPlayer()
     {
         if (player != null)
@@ -96,6 +101,13 @@ public class PlayerManager : MonoBehaviour
 
     void UpdateAccordingToPlayerState()
     {
+        if (playerState == null)
+        {
+            return;
+        }
+
+        handManager.handState = playerState.handState;
+
         
     }
 }

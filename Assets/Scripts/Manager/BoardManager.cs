@@ -68,7 +68,34 @@ public class BoardManager : MonoBehaviour
 
     void UpdateAccordingToBoardState()
     {
-        
+        if (boardState == null)
+        {
+            return;
+        }
+
+        if (boardState.tileStates == null)
+        {
+            return;
+        }
+
+        if (tileManagers == null || tileManagers.Length != boardState.tileStates.Count){
+            tileManagers = new TileManager[boardState.tileStates.Count];
+        }
+
+        foreach(TileState tileState in boardState.tileStates){
+            //Il faut etre sur que ca ne soit pas le cas avant ca ou avoir un attribut maxTileNum dans boardState 
+            if (tileState.num > 0 && tileState.num < tileManagers.Length)
+            {
+                if (tileManagers[tileState.num] == null)
+                {
+                    tileManagers[tileState.num] = CreateTileManagerAt(new Vector3(
+                        tileSizeX * tileState.gridX,
+                        0f,
+                        tileSizeZ * tileState.gridY));
+                }
+                tileManagers[tileState.num].tileState = tileState;
+            }
+        }
     }
 
     void OnTileSelected(TileManager tileManager){
@@ -87,7 +114,7 @@ public class BoardManager : MonoBehaviour
         entityClickedEvent.Invoke(entityManager);
     }
 
-
+    //A enlever  
     void CreateTilesAccordingToBoard(){
 
         if(tileManagers != null){
@@ -141,7 +168,9 @@ public class BoardManager : MonoBehaviour
         //entityManager.entity.player.entities.Add(entityManager.entity);
     }
 
-    public void RemoveEntity(EntityManager entityManager){
+    //A enlever 
+    public void RemoveEntity(EntityManager entityManager)
+    {
         entityManagers.Remove(entityManager);
         board.entities.Remove(entityManager.entity);
     }
@@ -156,11 +185,25 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
-    public TileManager GetTileManagerFromTile(Tile tile){
-        if(tile == Tile.noTile){
+    public EntityManager GetEntityManagerFromEntityNum(int num){
+        if (num > 0 && num < entityManagers.Count)
+        {
+            return entityManagers[num];
+        }
+
+        return null;
+    }
+    
+
+
+    public TileManager GetTileManagerFromTile(Tile tile)
+    {
+        if (tile == Tile.noTile)
+        {
             return null;
         }
-        if(tile.num >= 0 && tile.num < tileManagers.Length){
+        if (tile.num >= 0 && tile.num < tileManagers.Length)
+        {
             return tileManagers[tile.num];
         }
 

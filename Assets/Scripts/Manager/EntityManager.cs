@@ -4,6 +4,8 @@ using TMPro;
 
 using GameLogic;
 using GameLogic.GameAction;
+using GameLogic.GameState;
+using System;
 
 [System.Serializable]
 public class EntityManagerEvent : UnityEvent<EntityManager>
@@ -24,19 +26,37 @@ public class EntityManager : MonoBehaviour
 
     GameObject entityInfoCanvasInstance;
 
+    [Obsolete]
     private Entity entity_;
 
-    public Entity entity{
-        get{
+    [Obsolete]
+    public Entity entity
+    {
+        get
+        {
             return entity_;
         }
 
-        set{
+        set
+        {
             entity_ = value;
             UpdateAccordingToEntity();
         }
     }
-    
+
+    private EntityState entityState_;
+
+    public EntityState entityState{
+        get{
+            return entityState_;
+        }
+
+        set{
+            entityState_ = value;
+            UpdateAccordingToEntityState();
+        }
+    }
+
     private bool selected_;
 
     public bool selected{
@@ -162,6 +182,17 @@ public class EntityManager : MonoBehaviour
         }
     }
 
+    private void UpdateAccordingToEntityState()
+    {
+        //A voir a cause des animations
+        //UpdatePositionAccordingToEntityState();
+        //UpdateRotationAccordingToEntityState();
+        UpdateHealthUIDisplay();
+        UpdateMovementUIDisplay();
+        UpdateNameUIDisplay();
+    }
+
+    [Obsolete]
     void UpdateAccordingToEntity(){
         
         UpdatePositionAccordingToEntity();
@@ -172,28 +203,35 @@ public class EntityManager : MonoBehaviour
         UpdateNameUIDisplay();
     }
 
-    public void UpdatePositionAccordingToEntity(){
+    [Obsolete]
+    public void UpdatePositionAccordingToEntity()
+    {
         transform.position = new Vector3(
-            entity.currentTile.gridX * boardManager.tileSizeX, 
-            boardManager.entityY + yOffset,  
+            entity.currentTile.gridX * boardManager.tileSizeX,
+            boardManager.entityY + yOffset,
             entity.currentTile.gridY * boardManager.tileSizeZ);
 
     }
 
-    public void UpdateRotationAccordingToEntity(){
+    [Obsolete]
+    public void UpdateRotationAccordingToEntity()
+    {
         transform.rotation = Quaternion.Euler(0f, entity.direction.ToAngle(), 0f);
     }
 
-    public bool TryToMove(Tile tile){
+    [Obsolete]
+    public bool TryToMove(Tile tile)
+    {
 
-        if(!entity.CanMoveByChangingDirection(tile)){
+        if (!entity.CanMoveByChangingDirection(tile))
+        {
             return false;
         }
-        
+
         entity.TryToCreateEntityUseMovementAction(
-            tile.Distance(entity.currentTile) * entity.costToMove.mouvementCost, 
+            tile.Distance(entity.currentTile) * entity.costToMove.mouvementCost,
             out EntityUseMovementAction useMovementAction);
-        
+
         entity.TryToCreateEntityMoveAction(tile, useMovementAction, out EntityMoveAction entityMoveAction);
 
         return entityMoveAction.wasPerformed;
@@ -207,16 +245,20 @@ public class EntityManager : MonoBehaviour
 
     }
 
-    public bool TryToAttack(Entity entity){
+    [Obsolete]
+    public bool TryToAttack(Entity entity)
+    {
 
-        if(!this.entity.CanAttackByChangingDirection(entity)){
+        if (!this.entity.CanAttackByChangingDirection(entity))
+        {
             return false;
         }
 
         this.entity.TryToCreateEntityUseMovementAction(this.entity.costToAtk.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
         this.entity.TryToCreateEntityPayHeartCostAction(this.entity.costToAtk.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
 
-        if(!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed){
+        if (!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed)
+        {
             return false;
         }
 
@@ -225,14 +267,17 @@ public class EntityManager : MonoBehaviour
         return entityAttackAction.wasPerformed;
     }
 
-    public bool TryToAttack(){
-    
+    [Obsolete]
+    public bool TryToAttack()
+    {
+
         entity.GetTilesAndEntitiesAffectedByAtk(
             out Entity[] attackedEntities,
             out Tile[] _
             );
 
-        if(attackedEntities.Length < 1){
+        if (attackedEntities.Length < 1)
+        {
             return false;
         }
 
@@ -242,7 +287,7 @@ public class EntityManager : MonoBehaviour
     public void UpdateHealthUIDisplay(){
         var healthUIDisplay = entityInfoCanvasInstance.GetComponentInChildren<HealthUIDisplay>();
         if(healthUIDisplay!=null){
-            healthUIDisplay.health = entity.health;
+            healthUIDisplay.healthState = entityState.healthState;
             ResetInfoUITimer();
         }
     }
@@ -250,7 +295,7 @@ public class EntityManager : MonoBehaviour
     public void UpdateMovementUIDisplay(){
         var movementUIDisplay = entityInfoCanvasInstance.GetComponentInChildren<MovementUIDisplay>();
         if(movementUIDisplay!=null){
-            movementUIDisplay.entity = entity;
+            movementUIDisplay.entityState = entityState;
             ResetInfoUITimer();
         }
     }
@@ -258,7 +303,7 @@ public class EntityManager : MonoBehaviour
     public void UpdateNameUIDisplay(){
         var nameUIDisplay = entityInfoCanvasInstance.GetComponentInChildren<TextMeshProUGUI>();
         if(nameUIDisplay!=null){
-            nameUIDisplay.text = entity.name;
+            nameUIDisplay.text = entityState.name;
             ResetInfoUITimer();
         }
     }

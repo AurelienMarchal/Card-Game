@@ -24,6 +24,8 @@ Every entity has a certain combinaison of hearts. When they have no more hearts 
 
 # Ideas
 
+Board needs to be 9x9 or 7x7 to have a middle tile for late game !! the middle tile might be immune to any modifications 
+
 ## Hearts
 
 - Red :heart:: Can be healed

@@ -4,19 +4,39 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using GameLogic;
+using GameLogic.GameState;
+using System;
 
 public class MovementUIDisplay : MonoBehaviour
 {
-    Entity entity_;
+    [Obsolete]
+    private Entity entity_;
 
-    public Entity entity{
-        get{
+    [Obsolete]
+    public Entity entity
+    {
+        get
+        {
             return entity_;
         }
 
-        set{
+        set
+        {
             entity_ = value;
-            UpdateFromEntity();
+            UpdateAccordingToEntity();
+        }
+    }
+
+    private EntityState entityState_;
+
+    public EntityState entityState{
+        get{
+            return entityState_;
+        }
+
+        set{
+            entityState_ = value;
+            UpdateAccordingToEntityState();
         }
     }
 
@@ -30,20 +50,42 @@ public class MovementUIDisplay : MonoBehaviour
     Sprite spriteMovementFull;
     
     // Start is called before the first frame update
-    void Start(){
-        UpdateFromEntity();
+    void Awake(){
+        UpdateAccordingToEntityState();
+        UpdateAccordingToEntity();
     }
-
-    private void UpdateFromEntity()
+    
+    private void UpdateAccordingToEntityState()
     {
-        if(entity == null){
-            for (int i = 0; i < images.Length; i++){
+        if (entityState == null)
+        {
+            for (int i = 0; i < images.Length; i++)
+            {
                 images[i].gameObject.SetActive(false);
             }
             return;
         }
 
-        for (int i = 0; i < images.Length; i++){
+        for (int i = 0; i < images.Length; i++)
+        {
+            images[i].gameObject.SetActive(i < entityState.maxMovement);
+            images[i].sprite = i < entityState.movementLeft ? spriteMovementFull : spriteMovementEmpty;
+        }
+    }
+
+    private void UpdateAccordingToEntity()
+    {
+        if (entity == null)
+        {
+            for (int i = 0; i < images.Length; i++)
+            {
+                images[i].gameObject.SetActive(false);
+            }
+            return;
+        }
+
+        for (int i = 0; i < images.Length; i++)
+        {
             images[i].gameObject.SetActive(i < entity.maxMovement);
             images[i].sprite = i < entity.movementLeft ? spriteMovementFull : spriteMovementEmpty;
         }
