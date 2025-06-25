@@ -5,6 +5,8 @@ using UnityEngine.Events;
 
 using GameLogic.GameEffect;
 using GameLogic.GameBuff;
+using System;
+using GameLogic.GameState;
 
 public class EntityInfoUI : MonoBehaviour
 {   
@@ -38,8 +40,10 @@ public class EntityInfoUI : MonoBehaviour
     [SerializeField]
     GameObject buffCanvasPrefab;
 
+    [Obsolete]
     public EffectEvent effectHoverEnterEvent = new EffectEvent();
 
+    [Obsolete]
     public EffectEvent effectHoverExitEvent = new EffectEvent();
 
     public UnityEvent weaponHoverEnterEvent = new UnityEvent();
@@ -53,7 +57,7 @@ public class EntityInfoUI : MonoBehaviour
         }
         set{
             entityManager_ = value;
-            UpdateAccordingToEntity();
+            UpdateAccordingToEntityManager();
         }
     }
 
@@ -64,8 +68,9 @@ public class EntityInfoUI : MonoBehaviour
     void Update(){
         cameraFollowingSelectedEntity.angle = angleScrollbar.value * 2 * Mathf.PI;
         if(entityManager != null){
-            healthUIDisplay.health = entityManager.entity.health;
-            movementUIDisplay.entity = entityManager.entity;
+            //Temp
+            healthUIDisplay.healthState = entityManager.entityState.healthState;
+            movementUIDisplay.entityState = entityManager.entityState;
             //atkUiDisplay.entity = entityManager.entity;
         }
     }
@@ -81,6 +86,36 @@ public class EntityInfoUI : MonoBehaviour
         }
     }
 
+    void AddEffectCanvasFromEffectState(EffectState effectState){
+        /*
+        if (!effectState.displayOnUI)
+        {
+            return;
+        }
+        */
+
+        var effectCanvas = Instantiate(effectCanvasPrefab, effectScrollViewContent.transform);
+        var effectUIDisplay = effectCanvas.GetComponent<EffectUIDisplay>();
+
+        if(effectUIDisplay != null){
+            effectUIDisplay.effectState = effectState;
+            //effectUIDisplay.effectHoverEnterEvent.AddListener((effect) => effectHoverEnterEvent.Invoke(effect));
+            //effectUIDisplay.effectHoverExitEvent.AddListener((effect) => effectHoverExitEvent.Invoke(effect));
+        }
+    }
+
+    void AddBuffCanvasFromBuffState(BuffState buffState){
+        
+
+        var buffCanvas = Instantiate(buffCanvasPrefab, effectScrollViewContent.transform);
+        var buffUIDisplay = buffCanvas.GetComponent<BuffUIDisplay>();
+
+        if(buffUIDisplay != null){
+            buffUIDisplay.buffState = buffState;
+        }
+    }
+
+    [Obsolete]
     void AddEffectCanvasFromEffect(Effect effect){
         if(!effect.displayOnUI){
             return;
@@ -96,6 +131,7 @@ public class EntityInfoUI : MonoBehaviour
         }
     }
 
+    [Obsolete]
     void AddBuffCanvasFromBuff(Buff buff){
         /*
         if(!effect.displayOnUI){
@@ -111,7 +147,7 @@ public class EntityInfoUI : MonoBehaviour
         }
     }
 
-    void UpdateAccordingToEntity(){
+    void UpdateAccordingToEntityManager(){
         ClearScrollView();
         if(entityManager == null){
             cameraFollowingSelectedEntity.entityGameobject = null;
@@ -120,20 +156,20 @@ public class EntityInfoUI : MonoBehaviour
         else{
 
             cameraFollowingSelectedEntity.entityGameobject = entityManager.gameObject;
-            healthUIDisplay.health = entityManager.entity.health;
-            movementUIDisplay.entity = entityManager.entity;
+            healthUIDisplay.healthState = entityManager.entityState.healthState;
+            movementUIDisplay.entityState = entityManager.entityState;
             
-            atkUiDisplay.entity = entityManager.entity;
+            atkUiDisplay.entityState = entityManager.entityState;
             atkUiDisplay.atkButton.onClick.RemoveAllListeners();
             atkUiDisplay.atkButton.onClick.AddListener(OnWeaponButtonClick);
             
-            entityNameTextMeshProUGUI.text = entityManager.entity.name;
-            foreach (var effect in entityManager.entity.effects){
-                AddEffectCanvasFromEffect(effect);
+            entityNameTextMeshProUGUI.text = entityManager.entityState.name;
+            foreach (var effectState in entityManager.entityState.effectStates){
+                AddEffectCanvasFromEffectState(effectState);
             }
 
-            foreach (var buff in entityManager.entity.buffs){
-                AddBuffCanvasFromBuff(buff);
+            foreach (var buffState in entityManager.entityState.buffStates){
+                AddBuffCanvasFromBuffState(buffState);
             }
         }
     }
@@ -147,8 +183,8 @@ public class EntityInfoUI : MonoBehaviour
     }
 
     void OnDestroy(){
-        effectHoverEnterEvent.RemoveAllListeners();
-        effectHoverExitEvent.RemoveAllListeners();
+        //effectHoverEnterEvent.RemoveAllListeners();
+        //effectHoverExitEvent.RemoveAllListeners();
         weaponUsedUnityEvent.RemoveAllListeners();
         weaponHoverEnterEvent.RemoveAllListeners();
         weaponHoverExitEvent.RemoveAllListeners();

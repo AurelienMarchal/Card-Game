@@ -11,8 +11,11 @@ namespace GameLogic{
                 get; 
                 set;
             }
+            
+            //add displayOnUI
 
-            public CostState costState{
+            public CostState costState
+            {
                 get;
                 set;
             }

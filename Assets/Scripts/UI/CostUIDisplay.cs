@@ -6,20 +6,44 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using GameLogic;
+using GameLogic.GameState;
 
 public class CostUIDisplay : MonoBehaviour
 {
 
+    [Obsolete]
     Cost cost_;
 
-    public Cost cost{
-        get{
+    [Obsolete]
+    public Cost cost
+    {
+        get
+        {
             return cost_;
         }
 
-        set{
+        set
+        {
             cost_ = value;
             UpdateFromCost();
+        }
+    }
+
+    
+    CostState costState_;
+
+    
+    public CostState costState
+    {
+        get
+        {
+            return costState_;
+        }
+
+        set
+        {
+            costState_ = value;
+            UpdateFromCostState();
         }
     }
 
@@ -41,30 +65,40 @@ public class CostUIDisplay : MonoBehaviour
     TextMeshProUGUI[] heartTexts;
 
 
-    void Awake(){
-        cost = Cost.noCost;
+    void Awake()
+    {
         heartSpriteDictionary = new Dictionary<HeartType, Sprite>();
-        foreach(HeartSprite heartSprite in heartSprites){
+        foreach (HeartSprite heartSprite in heartSprites)
+        {
             heartSpriteDictionary.Add(heartSprite.heartType, heartSprite.sprite);
         }
 
-        UpdateFromCost();
+        //UpdateFromCost();
+        UpdateFromCostState();
     }
 
-    private void UpdateFromCost()
+    private void UpdateFromCostState()
     {
-
-        for (int i = 0; i < heartImages.Length; i++){
+        for (int i = 0; i < heartImages.Length; i++)
+        {
             heartImages[i].gameObject.SetActive(false);
         }
-        
-        manaImage.gameObject.SetActive(cost.mouvementCost > 0);
-        manaText.text = cost.mouvementCost.ToString();
+
+        if (costState == null)
+        {
+            manaImage.gameObject.SetActive(false);
+            return;
+        }
+
+        manaImage.gameObject.SetActive(costState.mouvementCost > 0);
+        manaText.text = costState.mouvementCost.ToString();
 
         var count = 0;
 
-        foreach(KeyValuePair<HeartType, int> entry in cost.GetHeartTypeDict()){
-            if(count >=  heartImages.Length || count >=  heartTexts.Length){
+        foreach (KeyValuePair<HeartType, int> entry in costState.GetHeartTypeDict())
+        {
+            if (count >= heartImages.Length || count >= heartTexts.Length)
+            {
                 break;
             }
 
@@ -72,7 +106,36 @@ public class CostUIDisplay : MonoBehaviour
             heartImages[count].sprite = heartSpriteDictionary[entry.Key];
             heartTexts[count].text = entry.Value.ToString();
 
-            count ++;
+            count++;
+        }
+    }
+
+    [Obsolete]
+    private void UpdateFromCost()
+    {
+
+        for (int i = 0; i < heartImages.Length; i++)
+        {
+            heartImages[i].gameObject.SetActive(false);
+        }
+
+        manaImage.gameObject.SetActive(cost.mouvementCost > 0);
+        manaText.text = cost.mouvementCost.ToString();
+
+        var count = 0;
+
+        foreach (KeyValuePair<HeartType, int> entry in cost.GetHeartTypeDict())
+        {
+            if (count >= heartImages.Length || count >= heartTexts.Length)
+            {
+                break;
+            }
+
+            heartImages[count].gameObject.SetActive(true);
+            heartImages[count].sprite = heartSpriteDictionary[entry.Key];
+            heartTexts[count].text = entry.Value.ToString();
+
+            count++;
         }
 
     }

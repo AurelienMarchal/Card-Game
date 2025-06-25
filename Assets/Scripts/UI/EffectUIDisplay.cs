@@ -7,7 +7,8 @@ using UnityEngine.UI;
 using GameLogic;
 using GameLogic.GameAction;
 using GameLogic.GameEffect;
-[System.Serializable]
+using GameLogic.GameState;
+[System.Serializable][Obsolete]
 public class EffectEvent : UnityEvent<Effect>
 {
 }
@@ -24,19 +25,38 @@ public class EffectUIDisplay : MonoBehaviour
     [SerializeField]
     CostUIDisplay costUIDisplay;
 
+    [Obsolete]
     private Effect effect_;
-    public Effect effect{
-        get{
+
+    [Obsolete]
+    public Effect effect
+    {
+        get
+        {
             return effect_;
         }
-        set{
+        set
+        {
             effect_ = value;
             UpdateFromNewEffect();
         }
     }
 
+    private EffectState effectState_;
+    public EffectState effectState{
+        get{
+            return effectState_;
+        }
+        set{
+            effectState_ = value;
+            UpdateFromEffectState();
+        }
+    }
+
+    [Obsolete]
     public EffectEvent effectHoverEnterEvent = new EffectEvent();
 
+    [Obsolete]
     public EffectEvent effectHoverExitEvent = new EffectEvent();
     
     
@@ -47,9 +67,40 @@ public class EffectUIDisplay : MonoBehaviour
 
     // Update is called once per frame
     void Update(){
-        UpdateFromEffect();
+        //UpdateFromEffect();
     }
 
+    private void UpdateFromEffectState(){
+        if(effectState == null){
+            return;
+        }
+
+
+        effectTextMeshProUGUI.text = effectState.effectText;
+
+        //Peut etre a changer
+        button.interactable = effectState.canBeActivated;
+
+
+        //costUIDisplay.gameObject.SetActive(effect is ActivableEffect);
+
+        /*
+        switch (effect)
+        {
+            case ActivableEffect activableEffect:
+
+                costUIDisplay.cost = activableEffect.cost;
+                button.onClick.AddListener(OnButtonClick);
+
+                break;
+            default:
+
+                break;
+        }
+        */
+    }
+
+    [Obsolete]
     void UpdateFromNewEffect(){
         if(effect == null){
             return;
@@ -77,6 +128,7 @@ public class EffectUIDisplay : MonoBehaviour
 
     private void OnButtonClick()
     {
+        /*
         Debug.Log($"Effect : {effect}");
         if (effect is ActivableEffect activableEffect){
             activableEffect.associatedEntity.TryToCreateEntityUseMovementAction(activableEffect.cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
@@ -86,9 +138,11 @@ public class EffectUIDisplay : MonoBehaviour
             }
             activableEffect.TryToCreateEffectActivatedAction(entityPayHeartCostAction, out _);
         }
+        */
 
     }
 
+    [Obsolete]
     void UpdateFromEffect(){
         if(effect == null){
             return;
@@ -104,16 +158,16 @@ public class EffectUIDisplay : MonoBehaviour
     }
 
     public void OnHoverEnter(){
-        effectHoverEnterEvent.Invoke(effect);
+        //effectHoverEnterEvent.Invoke(effect);
     }
 
     public void OnHoverExit(){
-        effectHoverExitEvent.Invoke(effect);
+        //effectHoverExitEvent.Invoke(effect);
     }
 
 
     void OnDestroy(){
-        effectHoverEnterEvent.RemoveAllListeners();
-        effectHoverExitEvent.RemoveAllListeners();
+        //effectHoverEnterEvent.RemoveAllListeners();
+        //effectHoverExitEvent.RemoveAllListeners();
     }
 }
