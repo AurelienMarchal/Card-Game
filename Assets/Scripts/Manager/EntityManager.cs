@@ -238,8 +238,10 @@ public class EntityManager : MonoBehaviour
 
     }
 
-    public bool TryToChangeDirection(Direction direction){
-        
+    [Obsolete]
+    public bool TryToChangeDirection(Direction direction)
+    {
+
         entity.TryToCreateEntityChangeDirectionAction(direction, null, out EntityChangeDirectionAction entityChangeDirectionAction);
         return entityChangeDirectionAction.wasPerformed;
 

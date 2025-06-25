@@ -65,7 +65,7 @@ public class HealthUIDisplay : MonoBehaviour
             heartSpriteDictionary.Add(heartSprite.heartType, heartSprite.sprite);
         }
 
-        UpdateFromHealth();
+        //UpdateFromHealth();
         UpdateFromHealthState();
     }
 
@@ -83,7 +83,7 @@ public class HealthUIDisplay : MonoBehaviour
         }
         
         for (int i = 0; i < healthState.hearts.Count; i++){
-            var heart = health.hearts[i];
+            var heart = healthState.hearts[i];
 
             images[i].gameObject.SetActive(heart != HeartType.NoHeart);
 

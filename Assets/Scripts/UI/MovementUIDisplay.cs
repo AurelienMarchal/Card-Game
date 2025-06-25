@@ -52,7 +52,7 @@ public class MovementUIDisplay : MonoBehaviour
     // Start is called before the first frame update
     void Awake(){
         UpdateAccordingToEntityState();
-        UpdateAccordingToEntity();
+        //UpdateAccordingToEntity();
     }
     
     private void UpdateAccordingToEntityState()
@@ -73,6 +73,7 @@ public class MovementUIDisplay : MonoBehaviour
         }
     }
 
+    [Obsolete]
     private void UpdateAccordingToEntity()
     {
         if (entity == null)
