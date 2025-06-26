@@ -13,6 +13,7 @@ using GameLogic.GameAction;
 using GameLogic.GameEffect;
 using GameLogic.UserAction;
 using GameLogic.GameState;
+using System;
 
 
 
@@ -101,6 +102,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
 
+        /*
         Game.currentGame.SetUpGame(playerManagers.Length, boardHeight, boardWidth);
         boardManager.board = Game.currentGame.board;
 
@@ -155,13 +157,14 @@ public class GameManager : MonoBehaviour
         Game.currentGame.PileAction(new StartGameAction());
 
         gameStateHasChanged = true;
+        */
     }
 
     // Update is called once per frame
     void Update()
     {
 
-
+        /*
         if (Game.currentGame.depiledActionQueue.Count > 0)
         {
             blockInputs = true;
@@ -177,12 +180,12 @@ public class GameManager : MonoBehaviour
 
         if (blockInputs)
         {
-            /*
+            
             EntityManager.UnselectEveryEntity();
             TileManager.UnselectEveryTile();
             currentEntitySelected = null;
             currentTileSelected = null;
-            */
+            
         }
         else
         {
@@ -261,6 +264,8 @@ public class GameManager : MonoBehaviour
 
         entityWasClickedThisFrame = false;
         tileWasClickedThisFrame = false;
+        */
+        
     }
 
     void UpdateAccordingToGameState()
@@ -294,6 +299,7 @@ public class GameManager : MonoBehaviour
 
     }
 
+    [Obsolete]
     private void DequeueDepiledActionQueue()
     {
 
@@ -356,7 +362,7 @@ public class GameManager : MonoBehaviour
     {
         if (currentEntitySelected != null)
         {
-            currentEntitySelected.TryToAttack();
+            //currentEntitySelected.TryToAttack();
         }
     }
 
@@ -368,10 +374,11 @@ public class GameManager : MonoBehaviour
         }
 
         tileWasClickedThisFrame = true;
-        var didMove = false;
+        //var didMove = false;
 
         if (currentEntitySelected != null)
-        {
+        {   
+            /*
             if (currentEntitySelected.entity.player == Game.currentGame.currentPlayer)
             {
                 didMove = currentEntitySelected.TryToMove(tileManager.tile);
@@ -383,6 +390,7 @@ public class GameManager : MonoBehaviour
                     currentEntitySelected.TryToChangeDirection(direction);
                 }
             }
+            */
         }
 
         else
@@ -394,7 +402,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    [Obsolete]
     public void OnEndTurnPressed()
     {
         Game.currentGame.ReceiveUserAction(new EndTurnUserAction(Game.currentGame.currentPlayer.playerNum));
@@ -457,28 +465,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Obsolete]
     private void OnEffectHoverEnter(Effect effect)
     {
         effect.GetTilesAndEntitiesAffected(out Entity[] entities, out Tile[] tiles);
         boardManager.DisplayTilesUIInfo(tiles);
     }
 
+    [Obsolete]
     private void OnEffectHoverExit(Effect effect)
     {
         boardManager.ResetAllTileLayerDisplayUIInfo();
     }
 
+    [Obsolete]
     private void OnCardHoverEnter(Card card)
     {
         card.activableEffect.GetTilesAndEntitiesAffected(out Entity[] entities, out Tile[] tiles);
         boardManager.DisplayTilesUIInfo(tiles);
     }
 
+    [Obsolete]
     private void OnCardHoverExit(Card card)
     {
         boardManager.ResetAllTileLayerDisplayUIInfo();
     }
 
+    [Obsolete]
     private void OnWeaponHoverEnter()
     {
 
@@ -500,6 +513,7 @@ public class GameManager : MonoBehaviour
         boardManager.DisplayTilesUIInfo(tiles);
     }
 
+    [Obsolete]
     private void OnWeaponHoverExit()
     {
         boardManager.ResetAllTileLayerDisplayUIInfo();
