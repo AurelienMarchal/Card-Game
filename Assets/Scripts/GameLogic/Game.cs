@@ -127,9 +127,15 @@ namespace GameLogic{
                 case EndTurnUserAction endTurnUserAction:
                     PileAction(new EndPlayerTurnAction(currentPlayer, null));
                     break;
+
+                case MoveEntityUserAction moveEntityUserAction:
+
+                    break;
+
                 default:
                     break;
             }
+            
 
             return false;
         }
