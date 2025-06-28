@@ -106,6 +106,7 @@ public class AnimationManager : MonoBehaviour
     }
 
     public void PlayAnimationForAction(EntityMoveAction entityMoveAction){
+        /*
         var entityManager = boardManager.GetEntityManagerFromEntity(entityMoveAction.entity);
         var goalTileManager = boardManager.GetTileManagerFromTile(entityMoveAction.endTile);
         if(entityManager != null){
@@ -113,6 +114,7 @@ public class AnimationManager : MonoBehaviour
             animatorsPlaying.Add(animator);
             entityManager.goalTileManager = goalTileManager;
         }
+        */
     }
 
     public void PlayAnimationForAction(EntityTakeDamageAction entityTakeDamageAction){
@@ -165,8 +167,8 @@ public class AnimationManager : MonoBehaviour
     }
 
     public void PlayAnimationForAction(TileChangeTypeAction tileChangeTypeAction){
-        var tileManager = boardManager.GetTileManagerFromTile(tileChangeTypeAction.tile);
-        tileManager.UpdateAccordingToTile();
+        //var tileManager = boardManager.GetTileManagerFromTile(tileChangeTypeAction.tile);
+        //tileManager.UpdateAccordingToTile();
     }
 
     public void PlayAnimationForAction(EntityDieAction entityDieAction){

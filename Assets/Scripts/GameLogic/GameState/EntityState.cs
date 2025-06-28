@@ -9,8 +9,14 @@ namespace GameLogic{
                 get;
                 set;
             }
+            
+            public uint playerNum{
+                get;
+                set;
+            }
 
-            public EntityModel model{
+            public EntityModel model
+            {
                 get;
                 set;
             }

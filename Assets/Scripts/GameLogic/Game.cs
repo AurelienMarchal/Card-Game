@@ -69,18 +69,22 @@ namespace GameLogic{
             }
         }
 
-        public void SetUpGame(int numberOfPlayer, int boardHeight, int boardWidth){
+        public void SetUpGame(int numberOfPlayer, int boardHeight, int boardWidth)
+        {
             board = new Board(boardHeight, boardWidth);
             players = new Player[2];
-            actionPile = new List<GameAction.Action>();
-            depiledActionQueue = new List<GameAction.Action>();
+            actionPile = new List<Action>();
+            depiledActionQueue = new List<Action>();
             random = new System.Random(0);
             effects = new List<Effect>();
             SetupPermanentEffects();
             depileStarted = false;
-            for(uint i = 0; i < numberOfPlayer; i++){
-                players[i] = new Player(i + 1);
+            for (uint i = 0; i < numberOfPlayer; i++)
+            {
+                players[i] = new Player(i);
             }
+            
+            
         }
 
         public void StartGame(){
@@ -117,25 +121,92 @@ namespace GameLogic{
             return false;
         }
 
-        public bool ReceiveUserAction(UserAction.UserAction userAction){
+        private Player GetPlayerByPlayerNum(uint playerNum)
+        {
+            if (players == null)
+            {
+                return null;
+            }
 
-            if(userAction.playerNum != currentPlayer.playerNum){
+            if (playerNum > players.Length)
+            {
+                return null;
+            }
+
+            return players[playerNum];
+        }
+
+        private Entity GetEntityByEntityNumAndPlayerNum(uint playerNum, uint entityNum)
+        {
+            Player player = GetPlayerByPlayerNum(playerNum);
+
+            if (player == null)
+            {
+                return Entity.noEntity;
+            }
+
+            if (player.entities == null)
+            {
+                return Entity.noEntity;
+            }
+
+            if (entityNum > player.entities.Count)
+            {
+                return Entity.noEntity;
+            }
+
+            return player.entities[(int)entityNum];
+        }
+
+        public bool ReceiveUserAction(UserAction.UserAction userAction)
+        {
+
+            if (userAction.playerNum != currentPlayer.playerNum)
+            {
                 return false;
             }
 
-            switch (userAction){
+            switch (userAction)
+            {
                 case EndTurnUserAction endTurnUserAction:
                     PileAction(new EndPlayerTurnAction(currentPlayer, null));
-                    break;
+                    return true;
 
                 case MoveEntityUserAction moveEntityUserAction:
 
-                    break;
+                    Entity entity = GetEntityByEntityNumAndPlayerNum(
+                        moveEntityUserAction.playerNum,
+                        moveEntityUserAction.entityNum
+                    );
+
+                    if (entity == Entity.noEntity) {
+                        return false;
+                    }
+
+                    Tile tile = board.NextTileInDirection(entity.currentTile, moveEntityUserAction.direction);
+
+                    if (tile == Tile.noTile)
+                    {
+                        return false;
+                    }
+
+                    if (!entity.CanMoveByChangingDirection(tile))
+                    {
+                        return false;
+                    }
+
+                    entity.TryToCreateEntityUseMovementAction(
+                        tile.Distance(entity.currentTile) * entity.costToMove.mouvementCost,
+                        out EntityUseMovementAction useMovementAction);
+
+                    entity.TryToCreateEntityMoveAction(tile, useMovementAction, out EntityMoveAction entityMoveAction);
+
+                    return entityMoveAction.wasPerformed;
 
                 default:
                     break;
             }
-            
+
 
             return false;
         }

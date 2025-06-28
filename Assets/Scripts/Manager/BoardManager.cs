@@ -4,17 +4,23 @@ using UnityEngine;
 
 using GameLogic;
 using GameLogic.GameState;
+using System;
 
 public class BoardManager : MonoBehaviour
-{
+{   
+    [Obsolete]
     private Board board_;
 
-    public Board board{
-        get{
+    [Obsolete]
+    public Board board
+    {
+        get
+        {
             return board_;
         }
 
-        set{
+        set
+        {
             board_ = value;
             CreateTilesAccordingToBoard();
         }
@@ -114,6 +120,7 @@ public class BoardManager : MonoBehaviour
         entityClickedEvent.Invoke(entityManager);
     }
 
+    [Obsolete]
     //A enlever  
     void CreateTilesAccordingToBoard(){
 
@@ -147,10 +154,13 @@ public class BoardManager : MonoBehaviour
         return tileManager;
     }
 
-    public void SpawnEntity(GameObject entityPrefab, Entity entity){
+    [Obsolete]
+    public void SpawnEntity(GameObject entityPrefab, Entity entity)
+    {
         var entityInstance = Instantiate(entityPrefab, Vector3.zero, Quaternion.identity, transform);
         var entityManager = entityInstance.GetComponent<EntityManager>();
-        if(entityManager == null){
+        if (entityManager == null)
+        {
             Debug.LogError("Entity prefab has no EntityManager attached.");
             Destroy(entityInstance);
             return;
@@ -168,16 +178,20 @@ public class BoardManager : MonoBehaviour
         //entityManager.entity.player.entities.Add(entityManager.entity);
     }
 
-    //A enlever 
+    [Obsolete]
     public void RemoveEntity(EntityManager entityManager)
     {
         entityManagers.Remove(entityManager);
         board.entities.Remove(entityManager.entity);
     }
 
-    public EntityManager GetEntityManagerFromEntity(Entity entity){
-        foreach (var entityManager in entityManagers){
-            if(entityManager.entity == entity){
+    [Obsolete]
+    public EntityManager GetEntityManagerFromEntity(Entity entity)
+    {
+        foreach (var entityManager in entityManagers)
+        {
+            if (entityManager.entity == entity)
+            {
                 return entityManager;
             }
         }
@@ -185,10 +199,10 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
-    public EntityManager GetEntityManagerFromEntityNum(int num){
-        if (num > 0 && num < entityManagers.Count)
+    public EntityManager GetEntityManagerFromEntityNum(uint num){
+        if (num < entityManagers.Count)
         {
-            return entityManagers[num];
+            return entityManagers[(int)num];
         }
 
         return null;
@@ -196,27 +210,29 @@ public class BoardManager : MonoBehaviour
     
 
 
-    public TileManager GetTileManagerFromTile(Tile tile)
+    public TileManager GetTileManagerFromTileNum(uint tileNum)
     {
-        if (tile == Tile.noTile)
+        if (tileNum < tileManagers.Length)
         {
-            return null;
-        }
-        if (tile.num >= 0 && tile.num < tileManagers.Length)
-        {
-            return tileManagers[tile.num];
+            return tileManagers[tileNum];
         }
 
         return null;
     }
 
-    public void DisplayTilesUIInfo(Tile[] tiles){
-        foreach(var tile in tiles){
+    [Obsolete]
+    public void DisplayTilesUIInfo(Tile[] tiles)
+    {   
+        /*
+        foreach (var tile in tiles)
+        {
             var tileManager = GetTileManagerFromTile(tile);
-            if(tileManager != null){
+            if (tileManager != null)
+            {
                 tileManager.displayInfoUI = true;
             }
         }
+        */
     }
 
     public void ResetAllTileLayerDisplayUIInfo(){

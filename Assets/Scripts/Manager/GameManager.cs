@@ -102,17 +102,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
 
-        /*
         Game.currentGame.SetUpGame(playerManagers.Length, boardHeight, boardWidth);
-        boardManager.board = Game.currentGame.board;
+        //Game.currentGame.board = Game.currentGame.board;
 
-        // A enlever
-        for (var i = 0; i < playerManagers.Length; i++)
-        {
-            playerManagers[i].player = Game.currentGame.players[i];
-            playerManagers[i].cardHoverEnterEvent.AddListener(OnCardHoverEnter);
-            playerManagers[i].cardHoverExitEvent.AddListener(OnCardHoverExit);
-        }
+        
 
         blockInputs = false;
 
@@ -130,46 +123,59 @@ public class GameManager : MonoBehaviour
         boardManager.entityClickedEvent.AddListener(OnEntityClicked);
         boardManager.tileClickedEvent.AddListener(OnTileClicked);
 
-        var startingTile1 = boardManager.board.GetTileAt(2, 2);
+        //Testing
+        var startingTile1 = Game.currentGame.board.GetTileAt(2, 2);
         var direction1 = Direction.East;
         var hero1 = new Hero(Game.currentGame.players[0], scriptableHero1, startingTile1, direction1);
         hero1.effects.Add(new MoveToChangeTileTypeEffect(hero1, TileType.Nature));
+        Game.currentGame.players[0].entities.Add(hero1);
+        Game.currentGame.players[0].hero = hero1;
 
-        playerManagers[0].player.TryToSpawnEntity(hero1);
+        //playerManagers[0].player.TryToSpawnEntity(hero1);
 
         animationManager.SpawnEntity(hero1);
 
-        var startingTile2 = boardManager.board.GetTileAt(2, 3);
+        var startingTile2 = Game.currentGame.board.GetTileAt(2, 3);
         var direction2 = Direction.South;
         var hero2 = new Hero(Game.currentGame.players[1], scriptableHero2, startingTile2, direction2);
-        //hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
+        hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
+        Game.currentGame.players[1].entities.Add(hero2);
+        Game.currentGame.players[1].hero = hero2;
 
-        playerManagers[1].player.TryToSpawnEntity(hero2);
+
+        //playerManagers[1].player.TryToSpawnEntity(hero2);
 
         animationManager.SpawnEntity(hero2);
 
-        entityInfoUI.weaponUsedUnityEvent.AddListener(OnWeaponUsed);
-        entityInfoUI.effectHoverEnterEvent.AddListener(OnEffectHoverEnter);
-        entityInfoUI.effectHoverExitEvent.AddListener(OnEffectHoverExit);
-        entityInfoUI.weaponHoverEnterEvent.AddListener(OnWeaponHoverEnter);
-        entityInfoUI.weaponHoverExitEvent.AddListener(OnWeaponHoverExit);
+        // A enlever
+        for (var i = 0; i < playerManagers.Length; i++)
+        {
+            playerManagers[i].playerState = Game.currentGame.players[i].ToPlayerState();
+            //playerManagers[i].cardHoverEnterEvent.AddListener(OnCardHoverEnter);
+            //playerManagers[i].cardHoverExitEvent.AddListener(OnCardHoverExit);
+        }
 
-        Game.currentGame.PileAction(new StartGameAction());
+        //entityInfoUI.weaponUsedUnityEvent.AddListener(OnWeaponUsed);
+        //entityInfoUI.effectHoverEnterEvent.AddListener(OnEffectHoverEnter);
+        //entityInfoUI.effectHoverExitEvent.AddListener(OnEffectHoverExit);
+        //entityInfoUI.weaponHoverEnterEvent.AddListener(OnWeaponHoverEnter);
+        //entityInfoUI.weaponHoverExitEvent.AddListener(OnWeaponHoverExit);
 
-        gameStateHasChanged = true;
-        */
+        Game.currentGame.StartGame();
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        /*
-        if (Game.currentGame.depiledActionQueue.Count > 0)
+        
+        if (false /*Game.currentGame.depiledActionQueue.Count > 0*/)
         {
-            blockInputs = true;
-            DequeueDepiledActionQueue();
-            gameStateHasChanged = true;
+            //blockInputs = true;
+            //DequeueDepiledActionQueue();
+            //gameStateHasChanged = true;
         }
 
 
@@ -249,7 +255,7 @@ public class GameManager : MonoBehaviour
         if (currentEntitySelected != null)
         {
             boardManager.ResetAllTileLayer();
-            var tileManager = boardManager.GetTileManagerFromTile(currentEntitySelected.entity.currentTile);
+            var tileManager = boardManager.GetTileManagerFromTileNum(currentEntitySelected.entityState.currentTileNum);
             SetGameLayerRecursive(tileManager.gameObject, LayerMask.NameToLayer("UICamera"));
         }
 
@@ -264,7 +270,7 @@ public class GameManager : MonoBehaviour
 
         entityWasClickedThisFrame = false;
         tileWasClickedThisFrame = false;
-        */
+        
         
     }
 
@@ -297,6 +303,20 @@ public class GameManager : MonoBehaviour
             }
         }
 
+    }
+
+    public void SendUserAction(UserAction userAction)
+    {
+        var result = Game.currentGame.ReceiveUserAction(userAction);
+        if (!result)
+        {
+            Debug.LogWarning($"Unable to perform {userAction}");
+        }
+        else
+        {
+            Debug.Log("Updating Game State");
+            gameState = Game.currentGame.ToGameState();
+        }
     }
 
     [Obsolete]
@@ -341,6 +361,13 @@ public class GameManager : MonoBehaviour
         if (currentEntitySelected == null)
         {
             return;
+        }
+        else
+        {
+            SendUserAction(new MoveEntityUserAction(
+                currentEntitySelected.entityState.playerNum,
+                currentEntitySelected.entityState.num,
+                Direction.North));
         }
     }
 

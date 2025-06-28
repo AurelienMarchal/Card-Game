@@ -605,6 +605,7 @@ namespace GameLogic{
         public EntityState ToEntityState(){
             EntityState entityState = new EntityState();
             entityState.num = num;
+            entityState.playerNum = player.playerNum;
             entityState.model = model;
             entityState.name = name;
             entityState.currentTileNum = currentTile.num;
