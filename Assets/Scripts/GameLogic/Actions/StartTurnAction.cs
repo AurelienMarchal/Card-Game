@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameLogic.GameState;
 using UnityEngine;
 
 namespace GameLogic{
@@ -8,15 +9,21 @@ namespace GameLogic{
         public class StartTurnAction : Action
         {
 
-            public StartTurnAction(Action requiredAction = null): base(requiredAction){
+            public StartTurnAction(Action requiredAction = null) : base(requiredAction)
+            {
 
             }
-
+            
             protected override bool Perform()
             {
                 Game.currentGame.StartTurn();
-                Game.currentGame.PileAction(new StartPlayerTurnAction(Game.currentGame.currentPlayer, this));
+                Game.currentGame.PileAction(new PlayerStartTurnAction(Game.currentGame.currentPlayer, this));
                 return true;
+            }
+            
+            public override ActionState ToActionState()
+            {
+                throw new System.NotImplementedException();
             }
         }
     }

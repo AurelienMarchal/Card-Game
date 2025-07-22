@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace GameLogic{
 
-            namespace GameAction{
-        public class CardAction : Action{
+    namespace GameAction{
+        public abstract class CardAction : Action{
             
             public Card card{
                 get;

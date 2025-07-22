@@ -1,5 +1,6 @@
 
 using System;
+using GameLogic.GameState;
 
 namespace GameLogic{
 
@@ -20,6 +21,10 @@ namespace GameLogic{
                 return player.TryToUseMana(numberOfMana);
             }
 
+            public override ActionState ToActionState()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

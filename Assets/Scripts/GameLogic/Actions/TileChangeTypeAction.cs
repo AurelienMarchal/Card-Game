@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameLogic.GameState;
 using UnityEngine;
 
 namespace GameLogic{
@@ -20,6 +21,11 @@ namespace GameLogic{
                 //Check si c'est possible avant blablabla
                 tile.tileType = newType;
                 return true;
+            }
+
+            public override ActionState ToActionState()
+            {
+                throw new System.NotImplementedException();
             }
         }
     }

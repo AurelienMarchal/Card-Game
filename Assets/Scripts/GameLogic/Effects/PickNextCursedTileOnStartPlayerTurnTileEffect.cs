@@ -29,8 +29,8 @@ namespace GameLogic{
             public override bool Trigger(Action action)
             {
                 switch(action){
-                    case StartPlayerTurnAction startPlayerTurnAction:
-                            return startPlayerTurnAction.wasPerformed;
+                    case PlayerStartTurnAction playerStartTurnAction:
+                            return playerStartTurnAction.wasPerformed;
                         
 
                     default : return false;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameLogic.GameState;
 using UnityEngine;
 
 
@@ -36,6 +37,11 @@ namespace GameLogic{
                 
 
                 return true;
+            }
+
+            public override ActionState ToActionState()
+            {
+                throw new System.NotImplementedException();
             }
         }
     }

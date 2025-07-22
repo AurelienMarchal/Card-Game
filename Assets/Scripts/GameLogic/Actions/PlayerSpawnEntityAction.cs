@@ -5,6 +5,7 @@ using UnityEngine;
 namespace GameLogic{
 
     using GameEffect;
+    using GameLogic.GameState;
 
     namespace GameAction{
 
@@ -88,6 +89,11 @@ namespace GameLogic{
                 }
                 
                 return player.TryToSpawnEntity(entitySpawned);
+            }
+
+            public override ActionState ToActionState()
+            {
+                throw new System.NotImplementedException();
             }
         }
         }

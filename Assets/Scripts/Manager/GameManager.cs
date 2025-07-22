@@ -170,12 +170,19 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
-        
-        if (false /*Game.currentGame.depiledActionQueue.Count > 0*/)
+
+        if (Game.currentGame.depiledActionQueue.Count > 0)
         {
-            //blockInputs = true;
-            //DequeueDepiledActionQueue();
-            //gameStateHasChanged = true;
+            blockInputs = true;
+            gameStateHasChanged = true;
+            //test
+            ActionState actionState = Game.currentGame.DequeueDepiledActionQueueAndGetActionState();
+
+            if (actionState != null)
+            {
+
+                Debug.Log("Serialized ActionState :" + JsonConvert.SerializeObject(actionState));
+            }
         }
 
 
@@ -319,6 +326,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /*
     [Obsolete]
     private void DequeueDepiledActionQueue()
     {
@@ -328,11 +336,11 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        GameLogic.GameAction.Action action = Game.currentGame.DequeueDepiledActionQueue();
+        //GameLogic.GameAction.Action action = Game.currentGame.DequeueDepiledActionQueue();
 
         while (!action.wasCancelled && !action.wasPerformed && Game.currentGame.depiledActionQueue.Count > 0)
         {
-            action = Game.currentGame.DequeueDepiledActionQueue();
+            //action = Game.currentGame.DequeueDepiledActionQueue();
         }
 
         if (action.wasCancelled)
@@ -347,6 +355,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
+    */
 
 
     void OnEntitySelected(EntityManager entityManager)
@@ -429,11 +438,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [Obsolete]
+    
     public void OnEndTurnPressed()
     {
         Game.currentGame.ReceiveUserAction(new EndTurnUserAction(Game.currentGame.currentPlayer.playerNum));
 
+        /*
         //temp et plutot playerNum == 0 ou playerNum == 1
         if (Game.currentGame.currentPlayer.playerNum == 1)
         {
@@ -449,9 +459,10 @@ public class GameManager : MonoBehaviour
         {
 
         }
+        */
 
         EntityManager.UnselectEveryEntity();
-        boardManager.GetEntityManagerFromEntity(Game.currentGame.currentPlayer.hero).selected = true;
+        //boardManager.GetEntityManagerFromEntity(Game.currentGame.currentPlayer.hero).selected = true;
     }
 
     //Returns 'true' if we touched or hovering on Unity UI element.

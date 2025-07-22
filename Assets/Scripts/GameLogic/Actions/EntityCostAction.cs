@@ -1,8 +1,10 @@
 
+using GameLogic.GameState;
+
 namespace GameLogic{
 
     namespace GameAction{
-        public class EntityCostAction : EntityAction{
+        public abstract class EntityCostAction : EntityAction{
             public EntityCostAction(Entity entity, Action requiredAction = null) : base(entity, requiredAction)
             {
             

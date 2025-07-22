@@ -1,13 +1,18 @@
 
+using GameLogic.GameState;
+
 namespace GameLogic{
 
     namespace GameAction{
-        public class PlayerAction : Action{
-            public Player player{
+        public abstract class PlayerAction : Action
+        {
+            public Player player
+            {
                 get;
                 protected set;
             }
-            public PlayerAction(Player player, Action requiredAction = null) : base(requiredAction){
+            public PlayerAction(Player player, Action requiredAction = null) : base(requiredAction)
+            {
                 this.player = player;
             }
         }

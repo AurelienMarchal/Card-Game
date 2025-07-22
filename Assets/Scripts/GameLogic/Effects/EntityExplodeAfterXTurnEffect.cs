@@ -37,8 +37,8 @@ namespace GameLogic{
 
             public override bool Trigger(Action action){
                 switch (action){
-                    case EndPlayerTurnAction endPlayerTurnAction:
-                        if(endPlayerTurnAction.wasPerformed && endPlayerTurnAction.player == associatedEntity.player){
+                    case PlayerEndTurnAction playerEndTurnAction:
+                        if(playerEndTurnAction.wasPerformed && playerEndTurnAction.player == associatedEntity.player){
                             
                             turnLeft --;
                             Debug.Log($"Turn Left : {turnLeft}");

@@ -2,7 +2,7 @@
 namespace GameLogic{
 
     namespace GameAction{
-        public class TileAction : Action{
+        public abstract class TileAction : Action{
             
             public Tile tile;
 

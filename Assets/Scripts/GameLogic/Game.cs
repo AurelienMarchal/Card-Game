@@ -169,7 +169,7 @@ namespace GameLogic{
             switch (userAction)
             {
                 case EndTurnUserAction endTurnUserAction:
-                    PileAction(new EndPlayerTurnAction(currentPlayer, null));
+                    PileAction(new PlayerEndTurnAction(currentPlayer, null));
                     return true;
 
                 case MoveEntityUserAction moveEntityUserAction:
@@ -344,7 +344,7 @@ namespace GameLogic{
             }
         }
 
-        public Action DequeueDepiledActionQueue(){
+        private Action DequeueDepiledActionQueue(){
             if(depiledActionQueue.Count == 0){
                 return null;
             }
@@ -354,7 +354,19 @@ namespace GameLogic{
             return action;
         }
 
-        private void SetupPermanentEffects(){
+        public ActionState DequeueDepiledActionQueueAndGetActionState()
+        {
+            var action = DequeueDepiledActionQueue();
+            if (action != null)
+            {
+                return action.ToActionState();
+            }
+            return null;
+            
+        }
+
+        private void SetupPermanentEffects()
+        {
 
         }
 

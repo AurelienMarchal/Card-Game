@@ -1,4 +1,6 @@
 
+using GameLogic.GameState;
+
 namespace GameLogic{
 
     namespace GameAction{
@@ -30,6 +32,11 @@ namespace GameLogic{
 
 
                 return oneHeartWasHealed;
+            }
+
+            public override ActionState ToActionState()
+            {
+                throw new System.NotImplementedException();
             }
         }
     }

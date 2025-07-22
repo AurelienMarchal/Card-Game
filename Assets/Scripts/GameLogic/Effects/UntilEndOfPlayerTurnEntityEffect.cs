@@ -15,8 +15,8 @@ namespace GameLogic{
             public override bool Trigger(Action action)
             {
                 switch (action){
-                    case EndPlayerTurnAction endPlayerTurnAction:
-                        return associatedEntity.player == endPlayerTurnAction.player;
+                    case PlayerEndTurnAction playerEndTurnAction:
+                        return associatedEntity.player == playerEndTurnAction.player;
 
                     default: return false;
                 }

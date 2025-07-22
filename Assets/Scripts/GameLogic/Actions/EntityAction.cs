@@ -2,7 +2,7 @@
 namespace GameLogic{
 
     namespace GameAction{
-        public class EntityAction : Action{
+        public abstract class EntityAction : Action{
             
             public Entity entity{
                 get;

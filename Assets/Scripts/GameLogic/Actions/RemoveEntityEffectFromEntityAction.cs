@@ -2,6 +2,7 @@
 namespace GameLogic{
 
     using GameEffect;
+    using GameLogic.GameState;
 
     namespace GameAction{
         public class RemoveEntityEffectFromEntityAction : EntityAction{
@@ -24,6 +25,11 @@ namespace GameLogic{
                 }
 
                 return false;
+            }
+
+            public override ActionState ToActionState()
+            {
+                throw new System.NotImplementedException();
             }
         }
     }

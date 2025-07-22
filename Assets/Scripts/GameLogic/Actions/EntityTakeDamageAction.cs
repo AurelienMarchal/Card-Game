@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameLogic.GameState;
 using UnityEngine;
 
 
@@ -21,6 +22,11 @@ namespace GameLogic{
             protected override bool Perform(){
                 entity.TakeDamage(damage);
                 return true;
+            }
+
+            public override ActionState ToActionState()
+            {
+                throw new System.NotImplementedException();
             }
         }
     }

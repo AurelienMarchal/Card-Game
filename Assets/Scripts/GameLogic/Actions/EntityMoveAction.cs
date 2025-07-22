@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameLogic.GameState;
 using UnityEngine;
 
 namespace GameLogic{
@@ -25,6 +26,11 @@ namespace GameLogic{
 
             protected override bool Perform(){
                 return entity.TryToMove(endTile);
+            }
+
+            public override ActionState ToActionState()
+            {
+                throw new System.NotImplementedException();
             }
         }
     }
