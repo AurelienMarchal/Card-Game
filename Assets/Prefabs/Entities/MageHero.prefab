@@ -1701,12 +1701,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7063583469523896447}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ddd4e370c7537243b64de3d52d5211b, type: 3}
+  m_Script: {fileID: 11500000, guid: fe4027a0b79a2af4eb6c61faa04f25be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  yOffset: 0
   animator: {fileID: 7663199207295091533}
   entityInfoCanvasPrefab: {fileID: 6479235720520980047, guid: 4688df96d40664e4695728a5e755fb21, type: 3}
-  walkingSpeed: 3
+  walkingSpeed: 2
+  timeToDislayInfoUI: 1
   goalTileManager: {fileID: 0}
   selectedEvent:
     m_PersistentCalls:

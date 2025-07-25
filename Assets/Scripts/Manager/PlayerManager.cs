@@ -13,6 +13,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     HandManager handManager;
 
+    List<EntityManager> entityManagers = new List<EntityManager>();
+
     public CardEvent cardHoverEnterEvent = new CardEvent();
 
     public CardEvent cardHoverExitEvent = new CardEvent();
@@ -106,8 +108,40 @@ public class PlayerManager : MonoBehaviour
             return;
         }
 
+        var boardManager = FindFirstObjectByType<BoardManager>();
+
+        if (boardManager == null)
+        {
+            return;
+        }
+
+        //TODO: remove entitymanagers that are not in entitystates anymore
+
+        foreach (var entityState in playerState.entityStates)
+        {
+            var found = false;
+            foreach (var entityManager in entityManagers)
+            {
+                if (entityState.num == entityManager.entityState.num)
+                {
+                    entityManager.entityState = entityState;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                var entityManager = boardManager.SpawnEntity(entityState);
+                if (entityManager != null)
+                {
+                    entityManagers.Add(entityManager);
+                }
+                
+            }
+        }
+
         handManager.handState = playerState.handState;
 
-        
+
     }
 }

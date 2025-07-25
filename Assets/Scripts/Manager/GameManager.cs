@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
 
         //playerManagers[0].player.TryToSpawnEntity(hero1);
 
-        animationManager.SpawnEntity(hero1);
+        //animationManager.SpawnEntity(hero1);
 
         var startingTile2 = Game.currentGame.board.GetTileAt(2, 3);
         var direction2 = Direction.South;
@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
 
         //playerManagers[1].player.TryToSpawnEntity(hero2);
 
-        animationManager.SpawnEntity(hero2);
+        //animationManager.SpawnEntity(hero2);
 
         // A enlever
         for (var i = 0; i < playerManagers.Length; i++)
@@ -180,8 +180,9 @@ public class GameManager : MonoBehaviour
 
             if (actionState != null)
             {
-
-                Debug.Log("Serialized ActionState :" + JsonConvert.SerializeObject(actionState));
+                string serializedActionState = JsonConvert.SerializeObject(actionState);
+                Debug.Log("Serialized ActionState :" + serializedActionState);
+                Debug.Log("Deserialized ActionState :" + JsonConvert.DeserializeObject<ActionState>(serializedActionState));
             }
         }
 

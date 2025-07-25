@@ -12,7 +12,7 @@ namespace GameLogic.GameState
         public override ActionState ReadJson(JsonReader reader, Type objectType, ActionState existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             JObject jo = JObject.Load(reader);
-            string typeName = jo["type"]?.ToString()?.ToLower();
+            string typeName = jo["type"]?.ToString();
 
             if (!ActionStateRegistry.Types.TryGetValue(typeName, out Type targetType))
                 throw new JsonSerializationException($"Unknown GameAction type: {typeName}");
@@ -22,15 +22,34 @@ namespace GameLogic.GameState
             return instance;
         }
 
-        
+
         public override void WriteJson(JsonWriter writer, ActionState value, JsonSerializer serializer)
         {
-            JObject jo = JObject.FromObject(value);
-            
+            //Crashes Unity
+            //JObject jo = JObject.FromObject(value);
+
+            var jo = new JObject();
+
             string typeName = ActionStateRegistry.Types.FirstOrDefault(x => x.Value == value.GetType()).Key;
 
-            if (typeName != null)
-                jo.AddFirst(new JProperty("type", typeName));
+            //if (typeName != null)
+            //jo.AddFirst(new JProperty("type", typeName));
+
+            if (typeName == null)
+            {
+                throw new JsonSerializationException($"Unregistered type: {value.GetType().Name}");
+            }
+            
+            jo["type"] = typeName;
+
+            switch (value)
+            {
+                case PlayerActionState playerActionState:
+                    jo["playerNum"] = playerActionState.playerNum;
+                    break;
+                default:
+                    break;
+            }
 
             jo.WriteTo(writer);
         }

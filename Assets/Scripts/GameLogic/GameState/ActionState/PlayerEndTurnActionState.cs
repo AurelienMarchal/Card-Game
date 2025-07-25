@@ -7,6 +7,11 @@ namespace GameLogic
             public PlayerEndTurnActionState(uint playerNum) : base(playerNum)
             {
             }
+
+            public PlayerEndTurnActionState()
+            {
+                
+            }
         }
     }
 }

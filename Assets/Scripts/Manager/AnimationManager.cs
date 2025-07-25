@@ -6,12 +6,6 @@ using GameLogic;
 using GameLogic.GameAction;
 
 
-[Serializable]
-public struct PrefabCorrespondingToEntityModel {
-    public EntityModel entityModel;
-    public GameObject prefab;
-}
-
 
 public class AnimationManager : MonoBehaviour
 {

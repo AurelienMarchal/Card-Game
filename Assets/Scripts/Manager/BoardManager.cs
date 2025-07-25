@@ -6,8 +6,14 @@ using GameLogic;
 using GameLogic.GameState;
 using System;
 
+[Serializable]
+public struct PrefabCorrespondingToEntityModel {
+    public EntityModel entityModel;
+    public GameObject prefab;
+}
+
 public class BoardManager : MonoBehaviour
-{   
+{
     [Obsolete]
     private Board board_;
 
@@ -28,19 +34,26 @@ public class BoardManager : MonoBehaviour
 
     private BoardState boardState_;
 
-    public BoardState boardState{
-        get{
+    public BoardState boardState
+    {
+        get
+        {
             return boardState_;
         }
 
-        set{
+        set
+        {
             boardState_ = value;
             UpdateAccordingToBoardState();
         }
     }
 
+    [SerializeField]
+    PrefabCorrespondingToEntityModel[] prefabCorrespondingToEntityModels;
+
     TileManager[] tileManagers;
 
+    [Obsolete]
     List<EntityManager> entityManagers = new List<EntityManager>();
 
     [SerializeField]
@@ -62,14 +75,16 @@ public class BoardManager : MonoBehaviour
     public EntityManagerEvent entityClickedEvent = new EntityManagerEvent();
 
     public TileManagerEvent tileClickedEvent = new TileManagerEvent();
-    
+
     // Start is called before the first frame update
-    void Start(){
+    void Start()
+    {
     }
 
     // Update is called once per frame
-    void Update(){
-        
+    void Update()
+    {
+
     }
 
     void UpdateAccordingToBoardState()
@@ -84,11 +99,13 @@ public class BoardManager : MonoBehaviour
             return;
         }
 
-        if (tileManagers == null || tileManagers.Length != boardState.tileStates.Count){
+        if (tileManagers == null || tileManagers.Length != boardState.tileStates.Count)
+        {
             tileManagers = new TileManager[boardState.tileStates.Count];
         }
 
-        foreach(TileState tileState in boardState.tileStates){
+        foreach (TileState tileState in boardState.tileStates)
+        {
             //Il faut etre sur que ca ne soit pas le cas avant ca ou avoir un attribut maxTileNum dans boardState 
             if (tileState.num > 0 && tileState.num < tileManagers.Length)
             {
@@ -104,34 +121,42 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    void OnTileSelected(TileManager tileManager){
+    void OnTileSelected(TileManager tileManager)
+    {
         tileSelectedEvent.Invoke(tileManager);
     }
 
-    void OnEntitySelected(EntityManager entityManager){
+    void OnEntitySelected(EntityManager entityManager)
+    {
         entitySelectedEvent.Invoke(entityManager);
     }
 
-    void OnTileClicked(TileManager tileManager){
+    void OnTileClicked(TileManager tileManager)
+    {
         tileClickedEvent.Invoke(tileManager);
     }
 
-    void OnEntityClicked(EntityManager entityManager){
+    void OnEntityClicked(EntityManager entityManager)
+    {
         entityClickedEvent.Invoke(entityManager);
     }
 
     [Obsolete]
     //A enlever  
-    void CreateTilesAccordingToBoard(){
+    void CreateTilesAccordingToBoard()
+    {
 
-        if(tileManagers != null){
+        if (tileManagers != null)
+        {
             return;
         }
-        
+
         tileManagers = new TileManager[board.tiles.Length];
 
-        foreach(Tile tile in board.tiles){
-            if(tileManagers[tile.num] == null){
+        foreach (Tile tile in board.tiles)
+        {
+            if (tileManagers[tile.num] == null)
+            {
                 tileManagers[tile.num] = CreateTileManagerAt(new Vector3(
                     tileSizeX * tile.gridX,
                     0f,
@@ -142,11 +167,13 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    void DestroyAllTiles(){
+    void DestroyAllTiles()
+    {
 
     }
 
-    TileManager CreateTileManagerAt(Vector3 pos){
+    TileManager CreateTileManagerAt(Vector3 pos)
+    {
         var tileInstance = Instantiate(tilePrefab, pos, Quaternion.identity, transform);
         var tileManager = tileInstance.GetComponent<TileManager>();
         tileManager.selectedEvent.AddListener(OnTileSelected);
@@ -157,6 +184,9 @@ public class BoardManager : MonoBehaviour
     [Obsolete]
     public void SpawnEntity(GameObject entityPrefab, Entity entity)
     {
+
+        
+
         var entityInstance = Instantiate(entityPrefab, Vector3.zero, Quaternion.identity, transform);
         var entityManager = entityInstance.GetComponent<EntityManager>();
         if (entityManager == null)
@@ -173,7 +203,40 @@ public class BoardManager : MonoBehaviour
         AddEntity(entityManager);
     }
 
-    public void AddEntity(EntityManager entityManager){
+    public EntityManager SpawnEntity(EntityState entityState)
+    {
+        GameObject entityPrefab = null;
+        foreach(PrefabCorrespondingToEntityModel prefabCorrespondingToEntityModel in prefabCorrespondingToEntityModels){
+            if(prefabCorrespondingToEntityModel.entityModel == entityState.model){
+                entityPrefab = prefabCorrespondingToEntityModel.prefab;
+            }
+        }
+
+        if (entityPrefab == null)
+        {
+
+            Debug.LogError($"Not prefab corresponding to EntityModel {entityState.model}.");
+            return null;
+        }
+
+        var entityInstance = Instantiate(entityPrefab, Vector3.zero, Quaternion.identity, transform);
+        var entityManager = entityInstance.GetComponent<EntityManager>();
+        if (entityManager == null)
+        {
+            Debug.LogError("Entity prefab has no EntityManager attached.");
+            Destroy(entityInstance);
+            return null;
+        }
+
+        entityManager.entityState = entityState;
+        entityManager.selectedEvent.AddListener(OnEntitySelected);
+        entityManager.clickedEvent.AddListener(OnEntityClicked);
+        return entityManager;
+    }
+
+    [Obsolete]
+    public void AddEntity(EntityManager entityManager)
+    {
         entityManagers.Add(entityManager);
         //entityManager.entity.player.entities.Add(entityManager.entity);
     }
@@ -199,15 +262,9 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
-    public EntityManager GetEntityManagerFromEntityNum(uint num){
-        if (num < entityManagers.Count)
-        {
-            return entityManagers[(int)num];
-        }
 
-        return null;
-    }
-    
+
+
 
 
     public TileManager GetTileManagerFromTileNum(uint tileNum)
@@ -222,7 +279,7 @@ public class BoardManager : MonoBehaviour
 
     [Obsolete]
     public void DisplayTilesUIInfo(Tile[] tiles)
-    {   
+    {
         /*
         foreach (var tile in tiles)
         {
@@ -235,14 +292,18 @@ public class BoardManager : MonoBehaviour
         */
     }
 
-    public void ResetAllTileLayerDisplayUIInfo(){
-        foreach (var tileManager in tileManagers){
+    public void ResetAllTileLayerDisplayUIInfo()
+    {
+        foreach (var tileManager in tileManagers)
+        {
             tileManager.displayInfoUI = false;
         }
     }
 
-    public void ResetAllTileLayer(){
-        foreach (var tileManager in tileManagers){
+    public void ResetAllTileLayer()
+    {
+        foreach (var tileManager in tileManagers)
+        {
             GameManager.SetGameLayerRecursive(tileManager.gameObject, LayerMask.NameToLayer("Tile"));
         }
     }

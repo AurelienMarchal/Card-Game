@@ -7,7 +7,8 @@ namespace GameLogic
         [JsonConverter(typeof(ActionStateConverter))]
         public abstract class ActionState
         {
-
+            public ActionState() {
+            }
         }
     }
 }
