@@ -184,9 +184,9 @@ public class EntityManager : MonoBehaviour
 
     private void UpdateAccordingToEntityState()
     {
-        //A voir a cause des animations
-        //UpdatePositionAccordingToEntityState();
-        //UpdateRotationAccordingToEntityState();
+        
+        UpdatePositionAccordingToEntityState();
+        UpdateRotationAccordingToEntityState();
         UpdateHealthUIDisplay();
         UpdateMovementUIDisplay();
         UpdateNameUIDisplay();
@@ -203,6 +203,35 @@ public class EntityManager : MonoBehaviour
         UpdateNameUIDisplay();
     }
 
+    public void UpdatePositionAccordingToEntityState()
+    {
+
+        Debug.Log($"boardManager {boardManager}");
+
+        if (boardManager == null)
+        {
+            return;
+        }
+
+        var tileManager = boardManager.GetTileManagerFromTileNum(entityState.currentTileNum);
+
+        if (tileManager == null)
+        {
+            return;
+        }
+
+        transform.position = new Vector3(
+            tileManager.transform.position.x,
+            boardManager.entityY + yOffset,
+            tileManager.transform.position.z);
+
+    }
+
+    public void UpdateRotationAccordingToEntityState()
+    {
+        transform.rotation = Quaternion.Euler(0f, entityState.direction.ToAngle(), 0f);
+    }
+
     [Obsolete]
     public void UpdatePositionAccordingToEntity()
     {
@@ -210,7 +239,6 @@ public class EntityManager : MonoBehaviour
             entity.currentTile.gridX * boardManager.tileSizeX,
             boardManager.entityY + yOffset,
             entity.currentTile.gridY * boardManager.tileSizeZ);
-
     }
 
     [Obsolete]

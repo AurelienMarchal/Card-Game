@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         Game.currentGame.SetUpGame(playerManagers.Length, boardHeight, boardWidth);
         //Game.currentGame.board = Game.currentGame.board;
 
-        
+
 
         blockInputs = false;
 
@@ -162,6 +162,7 @@ public class GameManager : MonoBehaviour
         //entityInfoUI.weaponHoverExitEvent.AddListener(OnWeaponHoverExit);
 
         Game.currentGame.StartGame();
+        gameState = Game.currentGame.ToGameState();
 
 
     }
@@ -303,7 +304,7 @@ public class GameManager : MonoBehaviour
         foreach (PlayerState playerState in gameState.playerStates)
         {
             
-            if (playerState.playerNum > 0 &&
+            if (playerState.playerNum >= 0 &&
                 playerState.playerNum < playerManagers.Length &&
                 playerManagers[playerState.playerNum] != null)
             {

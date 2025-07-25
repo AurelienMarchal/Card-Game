@@ -99,6 +99,8 @@ public class BoardManager : MonoBehaviour
             return;
         }
 
+        //TODO: Check if tiles have changed and Remove/Add accordingly
+
         if (tileManagers == null || tileManagers.Length != boardState.tileStates.Count)
         {
             tileManagers = new TileManager[boardState.tileStates.Count];
@@ -107,7 +109,7 @@ public class BoardManager : MonoBehaviour
         foreach (TileState tileState in boardState.tileStates)
         {
             //Il faut etre sur que ca ne soit pas le cas avant ca ou avoir un attribut maxTileNum dans boardState 
-            if (tileState.num > 0 && tileState.num < tileManagers.Length)
+            if (tileState.num >= 0 && tileState.num < tileManagers.Length)
             {
                 if (tileManagers[tileState.num] == null)
                 {
@@ -185,8 +187,6 @@ public class BoardManager : MonoBehaviour
     public void SpawnEntity(GameObject entityPrefab, Entity entity)
     {
 
-        
-
         var entityInstance = Instantiate(entityPrefab, Vector3.zero, Quaternion.identity, transform);
         var entityManager = entityInstance.GetComponent<EntityManager>();
         if (entityManager == null)
@@ -262,13 +262,13 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
-
-
-
-
-
     public TileManager GetTileManagerFromTileNum(uint tileNum)
     {
+        if (tileManagers == null)
+        {
+            return null;
+        }
+
         if (tileNum < tileManagers.Length)
         {
             return tileManagers[tileNum];
