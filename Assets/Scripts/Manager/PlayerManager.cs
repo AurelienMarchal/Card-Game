@@ -136,12 +136,31 @@ public class PlayerManager : MonoBehaviour
                 {
                     entityManagers.Add(entityManager);
                 }
-                
             }
         }
 
         handManager.handState = playerState.handState;
 
 
+    }
+
+    public EntityManager GetEntityManagerFromEntityNum(uint entityNum)
+    {
+        if (entityManagers == null)
+        {
+            return null;
+        }
+
+        //TODO: sort entityManagersByNum to avoid loop
+
+        foreach (var entityManager in entityManagers)
+        {
+            if (entityManager.entityState.num == entityNum)
+            {
+                return entityManager;
+            }
+        }
+
+        return null;
     }
 }

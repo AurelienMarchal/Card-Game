@@ -183,7 +183,17 @@ public class GameManager : MonoBehaviour
             {
                 string serializedActionState = JsonConvert.SerializeObject(actionState);
                 Debug.Log("Serialized ActionState :" + serializedActionState);
-                Debug.Log("Deserialized ActionState :" + JsonConvert.DeserializeObject<ActionState>(serializedActionState));
+                var deserializedActionState = JsonConvert.DeserializeObject<ActionState>(serializedActionState);
+                Debug.Log("Deserialized ActionState :" + deserializedActionState);
+
+                
+
+                if (deserializedActionState != null)
+                {
+                    Debug.Log("Playing animation for " + serializedActionState);
+                    animationManager.PlayAnimationForActionState(deserializedActionState);
+                }
+                
             }
         }
 
@@ -314,6 +324,7 @@ public class GameManager : MonoBehaviour
 
     }
 
+
     public void SendUserAction(UserAction userAction)
     {
         var result = Game.currentGame.ReceiveUserAction(userAction);
@@ -323,9 +334,38 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Updating Game State");
-            gameState = Game.currentGame.ToGameState();
+            //Debug.Log("Updating Game State");
+            //Visual changes need to be applied only if an animation won't do it. 
+            //gameState = Game.currentGame.ToGameState();
         }
+    }
+
+    public PlayerManager GetPlayerManagerFromPlayerNum(uint playerNum)
+    {
+
+        if (playerManagers == null)
+        {
+            return null;
+        }
+
+        if (playerNum < 0 || playerNum > playerManagers.Length - 1)
+        {
+            return null;
+        }
+
+        return playerManagers[playerNum];
+    }
+
+    public EntityManager GetEntityManagerFromPlayernumAndEntityNum(uint playerNum, uint entityNum)
+    {
+        var playerManager = GetPlayerManagerFromPlayerNum(playerNum);
+
+        if (playerManager == null)
+        {
+            return null;
+        }
+
+        return playerManager.GetEntityManagerFromEntityNum(entityNum);
     }
 
     /*
@@ -371,14 +411,12 @@ public class GameManager : MonoBehaviour
         currentTileSelected = tileManager;
         if (currentEntitySelected == null)
         {
+            
             return;
         }
         else
         {
-            SendUserAction(new MoveEntityUserAction(
-                currentEntitySelected.entityState.playerNum,
-                currentEntitySelected.entityState.num,
-                Direction.North));
+            
         }
     }
 
@@ -412,10 +450,28 @@ public class GameManager : MonoBehaviour
         }
 
         tileWasClickedThisFrame = true;
-        //var didMove = false;
+
 
         if (currentEntitySelected != null)
-        {   
+        {
+            //TODO: Check if it's the right player
+
+            var canMove = currentEntitySelected.CanMove(tileManager);
+            if (canMove)
+            {
+                var entityManagerCurrentTileState = boardManager.GetTileStateFromTileNum(currentEntitySelected.entityState.currentTileNum);
+                if (entityManagerCurrentTileState != null)
+                {
+                    var direction = DirectionsExtensions.FromCoordinateDifference(
+                        tileManager.tileState.gridX - entityManagerCurrentTileState.gridX,
+                        tileManager.tileState.gridY - entityManagerCurrentTileState.gridY);
+                    SendUserAction(new MoveEntityUserAction(
+                        currentEntitySelected.entityState.playerNum,
+                        currentEntitySelected.entityState.num,
+                        direction));
+                }
+            }
+            
             /*
             if (currentEntitySelected.entity.player == Game.currentGame.currentPlayer)
             {

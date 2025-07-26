@@ -99,6 +99,40 @@ namespace GameLogic{
             }
         }
 
+        public Tile[] tilesToMoveTo
+        {
+            get
+            {
+                var dynamicList = new List<Tile>();
+                var tileEast = Game.currentGame.board.NextTileInDirection(currentTile, Direction.East);
+                if (CanMoveByChangingDirection(tileEast))
+                {
+                    dynamicList.Add(tileEast);
+                }
+
+                var tileWest = Game.currentGame.board.NextTileInDirection(currentTile, Direction.West);
+                if (CanMoveByChangingDirection(tileWest))
+                {
+                    dynamicList.Add(tileWest);
+                }
+
+                var tileNorth = Game.currentGame.board.NextTileInDirection(currentTile, Direction.North);
+                if (CanMoveByChangingDirection(tileNorth))
+                {
+                    dynamicList.Add(tileNorth);
+                }
+
+                var tileSouth = Game.currentGame.board.NextTileInDirection(currentTile, Direction.South);
+                if (CanMoveByChangingDirection(tileSouth))
+                {
+                    dynamicList.Add(tileSouth);
+                }
+
+                return dynamicList.ToArray();
+                
+            }
+        }
+
         public const Entity noEntity = null;
 
         public static uint entityCount = 0;
@@ -621,10 +655,17 @@ namespace GameLogic{
             entityState.maxMovement = maxMovement;
             entityState.costToMoveState = costToMove.ToCostState();
 
+            entityState.tileNumsToMoveTo = new List<uint>();
+            foreach (var tile in tilesToMoveTo)
+            {
+                entityState.tileNumsToMoveTo.Add(tile.num);
+            }
+
             entityState.effectStates = new List<EffectState>();
             entityState.buffStates = new List<BuffState>();
 
-            foreach (Effect effect in effects){
+            foreach (Effect effect in effects)
+            {
                 entityState.effectStates.Add(effect.ToEffectState());
             }
 

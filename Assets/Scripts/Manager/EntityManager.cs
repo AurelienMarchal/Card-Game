@@ -247,6 +247,24 @@ public class EntityManager : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, entity.direction.ToAngle(), 0f);
     }
 
+    public bool CanMove(TileManager tileManager)
+    {
+        if (tileManager == null)
+        {
+            return false;
+        }
+        if (entityState == null)
+        {
+            return false;
+        }
+        if (entityState.tileNumsToMoveTo == null)
+        {
+            return false;
+        }
+
+        return entityState.tileNumsToMoveTo.Contains(tileManager.tileState.num);
+    }
+
     [Obsolete]
     public bool TryToMove(Tile tile)
     {

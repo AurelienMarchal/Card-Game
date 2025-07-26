@@ -86,8 +86,15 @@ namespace GameLogic{
                 get;
                 set;
             }
+            
+            public List<uint> tileNumsToMoveTo
+            {
+                get;
+                set;
+            }
 
-            public List<EffectState> effectStates{
+            public List<EffectState> effectStates
+            {
                 get;
                 set;
             }

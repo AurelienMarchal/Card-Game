@@ -277,6 +277,16 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
+    public TileState GetTileStateFromTileNum(uint tileNum)
+    {
+        TileManager tileManager = GetTileManagerFromTileNum(tileNum);
+        if (tileManager == null)
+        {
+            return null;
+        }
+        return tileManager.tileState;
+    }
+
     [Obsolete]
     public void DisplayTilesUIInfo(Tile[] tiles)
     {

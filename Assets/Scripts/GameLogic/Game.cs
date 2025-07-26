@@ -371,6 +371,8 @@ namespace GameLogic{
         }
 
         public GameState.GameState ToGameState(){
+            //Only send what has changed. If reco send everything
+
             GameState.GameState gameState = new GameState.GameState();
 
             gameState.boardState = board.ToBoardState();

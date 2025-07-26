@@ -5588,6 +5588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf02876ddbed90458e5696ab4f1ae78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 229934140}
   boardManager: {fileID: 1703089466}
   prefabCorrespondingToEntityModels:
   - entityModel: 0

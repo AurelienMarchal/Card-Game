@@ -16,15 +16,20 @@ public class TileManagerEvent : UnityEvent<TileManager>
 
 [RequireComponent(typeof(Highlight))]
 public class TileManager : MonoBehaviour
-{
+{   
+    [Obsolete]
     private Tile tile_;
 
-    public Tile tile{
-        get{
+    [Obsolete]
+    public Tile tile
+    {
+        get
+        {
             return tile_;
         }
 
-        set{
+        set
+        {
             tile_ = value;
             UpdateAccordingToTile();
         }
@@ -169,11 +174,14 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    public void UpdateAccordingToTile(){
+    [Obsolete]
+    public void UpdateAccordingToTile()
+    {
         Material[] matArray = tileRenderer.sharedMaterials;
-        
-        switch (tile.tileType){
-            case TileType.Standard: matArray[1] = standardTileMat ; break;
+
+        switch (tile.tileType)
+        {
+            case TileType.Standard: matArray[1] = standardTileMat; break;
             case TileType.Nature: matArray[1] = natureTileMat; break;
             case TileType.Cursed: matArray[1] = cursedTileMat; break;
             case TileType.CurseSource: matArray[1] = curseSourceTileMat; break;

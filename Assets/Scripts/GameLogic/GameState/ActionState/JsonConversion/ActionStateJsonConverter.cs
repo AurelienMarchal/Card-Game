@@ -42,13 +42,17 @@ namespace GameLogic.GameState
             
             jo["type"] = typeName;
 
-            switch (value)
-            {
-                case PlayerActionState playerActionState:
-                    jo["playerNum"] = playerActionState.playerNum;
-                    break;
-                default:
-                    break;
+            if (value is PlayerActionState playerActionState) {
+                jo["playerNum"] = playerActionState.playerNum;
+            }
+            if (value is EntityActionState entityActionState) {
+                jo["playerNum"] = entityActionState.playerNum;
+                jo["entityNum"] = entityActionState.entityNum;
+                if (entityActionState is EntityMoveActionState entityMoveActionState)
+                {
+                    jo["startTileNum"] = entityMoveActionState.startTileNum;
+                    jo["endTileNum"] = entityMoveActionState.endTileNum;
+                }
             }
 
             jo.WriteTo(writer);

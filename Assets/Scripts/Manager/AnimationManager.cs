@@ -4,11 +4,14 @@ using UnityEngine;
 
 using GameLogic;
 using GameLogic.GameAction;
+using GameLogic.GameState;
 
 
 
 public class AnimationManager : MonoBehaviour
 {
+    [SerializeField]
+    GameManager gameManager;
 
     [SerializeField]
     BoardManager boardManager;
@@ -49,6 +52,38 @@ public class AnimationManager : MonoBehaviour
     }
 
 
+    public void PlayAnimationForActionState(ActionState actionState)
+    {
+        if (actionState == null)
+        {
+            return;
+        }
+
+        switch (actionState)
+        {
+            case EntityMoveActionState entityMoveActionState:
+                var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityMoveActionState.playerNum, entityMoveActionState.entityNum);
+                if (entityManager == null)
+                {
+                    break;
+                }
+                var endTileManager = boardManager.GetTileManagerFromTileNum(entityMoveActionState.endTileNum);
+                if (endTileManager == null)
+                {
+                    break;
+                }
+
+                var animator = entityManager.gameObject.GetComponent<Animator>();
+                animatorsPlaying.Add(animator);
+                entityManager.goalTileManager = endTileManager;
+                
+                break;
+            default: break;
+        }
+
+    }
+
+    [Obsolete]
     public void PlayAnimationForAction(GameLogic.GameAction.Action action){
 
         switch(action){
@@ -99,7 +134,9 @@ public class AnimationManager : MonoBehaviour
 
     }
 
-    public void PlayAnimationForAction(EntityMoveAction entityMoveAction){
+    [Obsolete]
+    public void PlayAnimationForAction(EntityMoveAction entityMoveAction)
+    {
         /*
         var entityManager = boardManager.GetEntityManagerFromEntity(entityMoveAction.entity);
         var goalTileManager = boardManager.GetTileManagerFromTile(entityMoveAction.endTile);
@@ -111,9 +148,12 @@ public class AnimationManager : MonoBehaviour
         */
     }
 
-    public void PlayAnimationForAction(EntityTakeDamageAction entityTakeDamageAction){
+    [Obsolete]
+    public void PlayAnimationForAction(EntityTakeDamageAction entityTakeDamageAction)
+    {
         var entityManager = boardManager.GetEntityManagerFromEntity(entityTakeDamageAction.entity);
-        if(entityManager != null){
+        if (entityManager != null)
+        {
             var animator = entityManager.gameObject.GetComponent<Animator>();
             animatorsPlaying.Add(animator);
             animator.SetTrigger("hitTrigger");
@@ -121,62 +161,85 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
-    public void PlayAnimationForAction(EntityGainHeartAction entityGainHeartAction){
+    [Obsolete]
+    public void PlayAnimationForAction(EntityGainHeartAction entityGainHeartAction)
+    {
         var entityManager = boardManager.GetEntityManagerFromEntity(entityGainHeartAction.entity);
         entityManager.UpdateHealthUIDisplay();
     }
 
-    public void PlayAnimationForAction(EntityPayHeartCostAction entityPayHeartCostAction){
+    [Obsolete]
+    public void PlayAnimationForAction(EntityPayHeartCostAction entityPayHeartCostAction)
+    {
         var entityManager = boardManager.GetEntityManagerFromEntity(entityPayHeartCostAction.entity);
         //Debug.Log($"{entityPayHeartCostAction.entity} paid hearts, current health : {entityPayHeartCostAction.entity.health}");
         entityManager.UpdateHealthUIDisplay();
     }
 
+    [Obsolete]
     public void PlayAnimationForAction(EntityUseMovementAction entityUseMovementAction){
         var entityManager = boardManager.GetEntityManagerFromEntity(entityUseMovementAction.entity);
         entityManager.UpdateMovementUIDisplay();
     }
 
-    public void PlayAnimationForAction(EntityResetMovementAction entityResetMovementAction){
+    [Obsolete]
+    public void PlayAnimationForAction(EntityResetMovementAction entityResetMovementAction)
+    {
         var entityManager = boardManager.GetEntityManagerFromEntity(entityResetMovementAction.entity);
         entityManager.UpdateMovementUIDisplay();
     }
 
-    public void PlayAnimationForAction(EntityAttackAction entityAttackAction){
+    [Obsolete]
+    public void PlayAnimationForAction(EntityAttackAction entityAttackAction)
+    {
         var entityManager = boardManager.GetEntityManagerFromEntity(entityAttackAction.entity);
-        if(entityManager != null){
+        if (entityManager != null)
+        {
             var animator = entityManager.gameObject.GetComponent<Animator>();
             animatorsPlaying.Add(animator);
             animator.SetTrigger("attackTrigger");
         }
     }
 
-    public void PlayAnimationForAction(EntityChangeDirectionAction entityChangeDirectionAction){
+    [Obsolete]
+    public void PlayAnimationForAction(EntityChangeDirectionAction entityChangeDirectionAction)
+    {
         var entityManager = boardManager.GetEntityManagerFromEntity(entityChangeDirectionAction.entity);
         entityManager.UpdateRotationAccordingToEntity();
     }
 
-    public void PlayAnimationForAction(PlayerSpawnEntityAction playerSpawnEntityAction){
+    [Obsolete]
+    public void PlayAnimationForAction(PlayerSpawnEntityAction playerSpawnEntityAction)
+    {
         SpawnEntity(playerSpawnEntityAction.entitySpawned);
     }
 
-    public void PlayAnimationForAction(TileChangeTypeAction tileChangeTypeAction){
+    [Obsolete]
+    public void PlayAnimationForAction(TileChangeTypeAction tileChangeTypeAction)
+    {
         //var tileManager = boardManager.GetTileManagerFromTile(tileChangeTypeAction.tile);
         //tileManager.UpdateAccordingToTile();
     }
 
-    public void PlayAnimationForAction(EntityDieAction entityDieAction){
+    [Obsolete]
+    public void PlayAnimationForAction(EntityDieAction entityDieAction)
+    {
         var entityManager = boardManager.GetEntityManagerFromEntity(entityDieAction.entity);
-        if(entityManager != null){
+        if (entityManager != null)
+        {
             var animator = entityManager.gameObject.GetComponent<Animator>();
             animatorsPlaying.Add(animator);
             animator.SetTrigger("deathTrigger");
         }
     }
 
-    public void SpawnEntity(Entity entity){
-        foreach(PrefabCorrespondingToEntityModel prefabCorrespondingToEntityModel in prefabCorrespondingToEntityModels){
-            if(prefabCorrespondingToEntityModel.entityModel == entity.model){
+    [Obsolete]
+    public void SpawnEntity(Entity entity)
+    {
+        foreach (PrefabCorrespondingToEntityModel prefabCorrespondingToEntityModel in prefabCorrespondingToEntityModels)
+        {
+            if (prefabCorrespondingToEntityModel.entityModel == entity.model)
+            {
                 boardManager.SpawnEntity(prefabCorrespondingToEntityModel.prefab, entity);
             }
         }

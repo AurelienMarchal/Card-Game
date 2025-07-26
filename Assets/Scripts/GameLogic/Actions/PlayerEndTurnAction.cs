@@ -26,7 +26,9 @@ namespace GameLogic{
             
             public override ActionState ToActionState()
             {
-                return new PlayerEndTurnActionState(player.playerNum);
+                var actionState = new PlayerEndTurnActionState();
+                actionState.playerNum = player.playerNum;
+                return actionState;
             }
         }
     }

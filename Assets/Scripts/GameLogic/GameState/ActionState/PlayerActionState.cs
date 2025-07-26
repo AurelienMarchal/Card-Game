@@ -9,11 +9,6 @@ namespace GameLogic
         {
             public uint playerNum { get; set; }
 
-            public PlayerActionState(uint playerNum)
-            {
-                this.playerNum = playerNum;
-            }
-
             public PlayerActionState()
             {
                 

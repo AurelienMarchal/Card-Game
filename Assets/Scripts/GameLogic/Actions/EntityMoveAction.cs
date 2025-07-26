@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using GameLogic.GameState;
-using UnityEngine;
+
 
 namespace GameLogic{
 
@@ -30,7 +28,12 @@ namespace GameLogic{
 
             public override ActionState ToActionState()
             {
-                throw new System.NotImplementedException();
+                var actionState = new EntityMoveActionState();
+                actionState.entityNum = entity.num;
+                actionState.playerNum = entity.player.playerNum;
+                actionState.endTileNum = endTile.num;
+                actionState.startTileNum = startTile.num;
+                return actionState;
             }
         }
     }
