@@ -61,26 +61,56 @@ public class AnimationManager : MonoBehaviour
 
         switch (actionState)
         {
+            case PlayerEndTurnActionState playerEndTurnActionState:
+                PlayAnimationForActionState(playerEndTurnActionState);
+                break;
             case EntityMoveActionState entityMoveActionState:
-                var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityMoveActionState.playerNum, entityMoveActionState.entityNum);
-                if (entityManager == null)
-                {
-                    break;
-                }
-                var endTileManager = boardManager.GetTileManagerFromTileNum(entityMoveActionState.endTileNum);
-                if (endTileManager == null)
-                {
-                    break;
-                }
-
-                var animator = entityManager.gameObject.GetComponent<Animator>();
-                animatorsPlaying.Add(animator);
-                entityManager.goalTileManager = endTileManager;
-                
+                PlayAnimationForActionState(entityMoveActionState);
+                break;
+            case EntityAttackActionState entityAttackActionState:
+                PlayAnimationForActionState(entityAttackActionState);
                 break;
             default: break;
         }
 
+    }
+
+    public void PlayAnimationForActionState(PlayerEndTurnActionState playerEndTurnActionState)
+    {
+        gameManager.UpdatePlayerText();
+    }
+
+    public void PlayAnimationForActionState(EntityMoveActionState entityMoveActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityMoveActionState.playerNum, entityMoveActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+        var endTileManager = boardManager.GetTileManagerFromTileNum(entityMoveActionState.endTileNum);
+        if (endTileManager == null)
+        {
+            return;
+        }
+
+        var animator = entityManager.gameObject.GetComponent<Animator>();
+        animatorsPlaying.Add(animator);
+        entityManager.goalTileManager = endTileManager;
+
+        return;
+    }
+
+    public void PlayAnimationForActionState(EntityAttackActionState entityAttackActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityAttackActionState.playerNum, entityAttackActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+
+        var animator = entityManager.gameObject.GetComponent<Animator>();
+        animatorsPlaying.Add(animator);
+        animator.SetTrigger("attackTrigger");
     }
 
     [Obsolete]

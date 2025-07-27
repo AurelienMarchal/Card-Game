@@ -99,7 +99,8 @@ public class BoardManager : MonoBehaviour
             return;
         }
 
-        //TODO: Check if tiles have changed and Remove/Add accordingly
+        //TODO: Check if tiles have changed and Remove/Add accordingly 
+        // Put the tiles to remove in a seperate list and remove them only in UpdateVisuals 
 
         if (tileManagers == null || tileManagers.Length != boardState.tileStates.Count)
         {
@@ -113,6 +114,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (tileManagers[tileState.num] == null)
                 {
+                    //Instantiate avec SetActive(false) puis SetActive(true) dans UpdateVisuals
                     tileManagers[tileState.num] = CreateTileManagerAt(new Vector3(
                         tileSizeX * tileState.gridX,
                         0f,
@@ -120,6 +122,14 @@ public class BoardManager : MonoBehaviour
                 }
                 tileManagers[tileState.num].tileState = tileState;
             }
+        }
+    }
+
+    public void UpdateVisuals()
+    {
+        foreach (var tileManager in tileManagers)
+        {
+            tileManager.UpdateVisuals();
         }
     }
 

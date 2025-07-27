@@ -131,6 +131,7 @@ public class PlayerManager : MonoBehaviour
             }
             if (!found)
             {
+                //Create entity with SetActive(False) And Then SetActive(True) with UpdateVisuals
                 var entityManager = boardManager.SpawnEntity(entityState);
                 if (entityManager != null)
                 {
@@ -140,8 +141,21 @@ public class PlayerManager : MonoBehaviour
         }
 
         handManager.handState = playerState.handState;
+    }
 
+    public void UpdateVisuals()
+    {
+        foreach (var entityManager in entityManagers)
+        {
+            entityManager.UpdateVisuals();
+        }
 
+        UpdateHandVisuals();
+    }
+
+    public void UpdateHandVisuals()
+    {
+        //TODO
     }
 
     public EntityManager GetEntityManagerFromEntityNum(uint entityNum)

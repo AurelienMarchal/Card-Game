@@ -128,6 +128,7 @@ public class GameManager : MonoBehaviour
         var direction1 = Direction.East;
         var hero1 = new Hero(Game.currentGame.players[0], scriptableHero1, startingTile1, direction1);
         hero1.effects.Add(new MoveToChangeTileTypeEffect(hero1, TileType.Nature));
+        hero1.num = 0;
         Game.currentGame.players[0].entities.Add(hero1);
         Game.currentGame.players[0].hero = hero1;
 
@@ -139,6 +140,7 @@ public class GameManager : MonoBehaviour
         var direction2 = Direction.South;
         var hero2 = new Hero(Game.currentGame.players[1], scriptableHero2, startingTile2, direction2);
         hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
+        hero2.num = 0;
         Game.currentGame.players[1].entities.Add(hero2);
         Game.currentGame.players[1].hero = hero2;
 
@@ -155,7 +157,7 @@ public class GameManager : MonoBehaviour
             //playerManagers[i].cardHoverExitEvent.AddListener(OnCardHoverExit);
         }
 
-        //entityInfoUI.weaponUsedUnityEvent.AddListener(OnWeaponUsed);
+        entityInfoUI.weaponUsedUnityEvent.AddListener(OnWeaponUsed);
         //entityInfoUI.effectHoverEnterEvent.AddListener(OnEffectHoverEnter);
         //entityInfoUI.effectHoverExitEvent.AddListener(OnEffectHoverExit);
         //entityInfoUI.weaponHoverEnterEvent.AddListener(OnWeaponHoverEnter);
@@ -163,6 +165,7 @@ public class GameManager : MonoBehaviour
 
         Game.currentGame.StartGame();
         gameState = Game.currentGame.ToGameState();
+        UpdateVisuals();
 
 
     }
@@ -218,7 +221,7 @@ public class GameManager : MonoBehaviour
             //Testing
             if (gameStateHasChanged)
             {
-
+                
                 string jsonGameState = JsonConvert.SerializeObject(Game.currentGame.ToGameState(), Formatting.Indented);
 
                 // File path (write to persistent data path)
@@ -227,6 +230,7 @@ public class GameManager : MonoBehaviour
                 Debug.Log($"Writing GameState to {filePath}");
                 // Write to file
                 File.WriteAllText(filePath, jsonGameState);
+
                 gameStateHasChanged = false;
             }
 
@@ -256,20 +260,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (Game.currentGame.currentPlayer != null)
-        {
-            manaUIDisplay.player = Game.currentGame.currentPlayer;
-            playerTextMesh.text = Game.currentGame.currentPlayer.ToString();
-        }
-
-        else
-        {
-            playerTextMesh.text = "";
-            if (manaUIDisplay.player != null)
-            {
-                manaUIDisplay.player = null;
-            }
-        }
+        
 
         if (currentEntitySelected != null)
         {
@@ -324,9 +315,33 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void UpdateVisuals()
+    {
+        UpdatePlayerText();
+        boardManager.UpdateVisuals();
+        foreach (var playerManager in playerManagers)
+        {
+            playerManager.UpdateVisuals();
+        }
+    }
+
+    public void UpdatePlayerText()
+    {
+        
+        if (gameState == null)
+        {
+            playerTextMesh.text = "";
+            return;
+        }
+
+        Debug.Log("Updating player text to : " + "Player " + gameState.currentPlayerNum.ToString());
+        playerTextMesh.text = "Player " + gameState.currentPlayerNum.ToString();
+    }
+
 
     public void SendUserAction(UserAction userAction)
     {
+        Debug.Log($"Sending UserAction : {userAction}");
         var result = Game.currentGame.ReceiveUserAction(userAction);
         if (!result)
         {
@@ -334,9 +349,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //Debug.Log("Updating Game State");
+            Debug.Log("Updating Game State");
             //Visual changes need to be applied only if an animation won't do it. 
-            //gameState = Game.currentGame.ToGameState();
+            gameState = Game.currentGame.ToGameState();
         }
     }
 
@@ -436,10 +451,11 @@ public class GameManager : MonoBehaviour
 
     private void OnWeaponUsed()
     {
-        if (currentEntitySelected != null)
+        if (currentEntitySelected == null)
         {
-            //currentEntitySelected.TryToAttack();
+            return;
         }
+        SendUserAction(new AtkWithEntityUserAction(currentEntitySelected.entityState.playerNum, currentEntitySelected.entityState.num));
     }
 
     void OnTileClicked(TileManager tileManager)
@@ -499,7 +515,7 @@ public class GameManager : MonoBehaviour
     
     public void OnEndTurnPressed()
     {
-        Game.currentGame.ReceiveUserAction(new EndTurnUserAction(Game.currentGame.currentPlayer.playerNum));
+        SendUserAction(new EndTurnUserAction(Game.currentGame.currentPlayer.playerNum));
 
         /*
         //temp et plutot playerNum == 0 ou playerNum == 1

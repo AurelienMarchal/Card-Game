@@ -182,14 +182,19 @@ public class EntityManager : MonoBehaviour
         }
     }
 
-    private void UpdateAccordingToEntityState()
+    public void UpdateVisuals()
     {
-        
         UpdatePositionAccordingToEntityState();
         UpdateRotationAccordingToEntityState();
         UpdateHealthUIDisplay();
         UpdateMovementUIDisplay();
         UpdateNameUIDisplay();
+    }
+
+    private void UpdateAccordingToEntityState()
+    {
+
+        
     }
 
     [Obsolete]

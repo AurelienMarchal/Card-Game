@@ -41,7 +41,17 @@ namespace GameLogic{
 
             public override ActionState ToActionState()
             {
-                throw new System.NotImplementedException();
+                var actionState = new EntityAttackActionState();
+                actionState.playerNum = entity.player.playerNum;
+                actionState.entityNum = entity.num;
+
+                actionState.attackedEntityPlayerNum = attackedEntity.player.playerNum;
+                actionState.attackedEntityNum = attackedEntity.num;
+
+                actionState.isCounterAttack = isCounterAttack;
+
+
+                return actionState;
             }
         }
     }

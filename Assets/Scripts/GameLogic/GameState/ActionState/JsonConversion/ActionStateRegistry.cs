@@ -9,7 +9,7 @@ namespace GameLogic.GameState
         {
             { "PlayerEndTurn",      typeof(PlayerEndTurnActionState) },
             { "EntityMove",         typeof(EntityMoveActionState) },
-            
+            { "EntityAttack",         typeof(EntityAttackActionState) },
             
         };
     }

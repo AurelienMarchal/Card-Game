@@ -72,7 +72,7 @@ namespace GameLogic{
         public void SetUpGame(int numberOfPlayer, int boardHeight, int boardWidth)
         {
             board = new Board(boardHeight, boardWidth);
-            players = new Player[2];
+            players = new Player[numberOfPlayer];
             actionPile = new List<Action>();
             depiledActionQueue = new List<Action>();
             random = new System.Random(0);
@@ -112,12 +112,16 @@ namespace GameLogic{
         }
 
         private bool GoToNextPlayer(){
-            var nextPlayerIndex = currentPlayer.playerNum;
-            if(nextPlayerIndex >= players.Length){
+            var nextPlayerIndex = currentPlayer.playerNum + 1;
+            
+            if (nextPlayerIndex >= players.Length)
+            {
                 currentPlayer = players[0];
+                Debug.Log($"Current Player : {currentPlayer}");
                 return true;
             }
             currentPlayer = players[nextPlayerIndex];
+            Debug.Log($"Current Player : {currentPlayer}");
             return false;
         }
 
@@ -138,6 +142,8 @@ namespace GameLogic{
 
         private Entity GetEntityByEntityNumAndPlayerNum(uint playerNum, uint entityNum)
         {
+            Debug.Log($"Getting Entity {entityNum} of Player {playerNum}");
+
             Player player = GetPlayerByPlayerNum(playerNum);
 
             if (player == null)
@@ -150,7 +156,7 @@ namespace GameLogic{
                 return Entity.noEntity;
             }
 
-            if (entityNum > player.entities.Count)
+            if (entityNum >= player.entities.Count)
             {
                 return Entity.noEntity;
             }
@@ -169,39 +175,13 @@ namespace GameLogic{
             switch (userAction)
             {
                 case EndTurnUserAction endTurnUserAction:
-                    PileAction(new PlayerEndTurnAction(currentPlayer, null));
-                    return true;
+                    return HandleUserAction(endTurnUserAction);
 
                 case MoveEntityUserAction moveEntityUserAction:
+                    return HandleUserAction(moveEntityUserAction);
 
-                    Entity entity = GetEntityByEntityNumAndPlayerNum(
-                        moveEntityUserAction.playerNum,
-                        moveEntityUserAction.entityNum
-                    );
-
-                    if (entity == Entity.noEntity) {
-                        return false;
-                    }
-
-                    Tile tile = board.NextTileInDirection(entity.currentTile, moveEntityUserAction.direction);
-
-                    if (tile == Tile.noTile)
-                    {
-                        return false;
-                    }
-
-                    if (!entity.CanMoveByChangingDirection(tile))
-                    {
-                        return false;
-                    }
-
-                    entity.TryToCreateEntityUseMovementAction(
-                        tile.Distance(entity.currentTile) * entity.costToMove.mouvementCost,
-                        out EntityUseMovementAction useMovementAction);
-
-                    entity.TryToCreateEntityMoveAction(tile, useMovementAction, out EntityMoveAction entityMoveAction);
-
-                    return entityMoveAction.wasPerformed;
+                case AtkWithEntityUserAction atkWithEntityUserAction:
+                    return HandleUserAction(atkWithEntityUserAction);
 
                 default:
                     break;
@@ -211,13 +191,103 @@ namespace GameLogic{
             return false;
         }
 
-        public void PileActions(GameAction.Action[] actions){
-            foreach(var action in actions){
-                if(actionPile.Count < maxPileCount){
-                actionPile.Add(action);
-                Debug.Log($"Piling {action}");
+
+        public bool HandleUserAction(EndTurnUserAction endTurnUserAction)
+        {
+            var endPlayerTurnAction = new PlayerEndTurnAction(currentPlayer, null);
+            PileAction(endPlayerTurnAction);
+            return endPlayerTurnAction.wasPerformed;
+        }
+
+
+        public bool HandleUserAction(MoveEntityUserAction moveEntityUserAction)
+        {
+            Entity entity = GetEntityByEntityNumAndPlayerNum(
+                moveEntityUserAction.playerNum,
+                moveEntityUserAction.entityNum
+            );
+
+            if (entity == Entity.noEntity)
+            {
+                return false;
             }
-                else{
+
+            Tile tile = board.NextTileInDirection(entity.currentTile, moveEntityUserAction.direction);
+
+            if (tile == Tile.noTile)
+            {
+                return false;
+            }
+
+            if (!entity.CanMoveByChangingDirection(tile))
+            {
+                return false;
+            }
+
+            entity.TryToCreateEntityUseMovementAction(
+                tile.Distance(entity.currentTile) * entity.costToMove.mouvementCost,
+                out EntityUseMovementAction useMovementAction);
+
+            entity.TryToCreateEntityMoveAction(tile, useMovementAction, out EntityMoveAction entityMoveAction);
+
+            return entityMoveAction.wasPerformed;
+        }
+
+
+        public bool HandleUserAction(AtkWithEntityUserAction atkWithEntityUserAction)
+        {
+            Entity entity = GetEntityByEntityNumAndPlayerNum(
+                atkWithEntityUserAction.playerNum,
+                atkWithEntityUserAction.entityNum
+            );
+
+            if (entity == Entity.noEntity)
+            {
+                return false;
+            }
+
+            entity.GetTilesAndEntitiesAffectedByAtk(
+                out Entity[] attackedEntities,
+                out Tile[] _
+            );
+
+            if (attackedEntities.Length < 1)
+            {
+                return false;
+            }
+
+            //Temp attackedEntities[0] maybe some attacks can hit multiple entities
+            // remove CanAttackByChangingDirection just need CanAttack
+            if (!entity.CanAttackByChangingDirection(attackedEntities[0]))
+            {
+                return false;
+            }
+
+            entity.TryToCreateEntityUseMovementAction(entity.costToAtk.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
+            entity.TryToCreateEntityPayHeartCostAction(entity.costToAtk.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
+
+            if (!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed)
+            {
+                return false;
+            }
+
+            //Temp attackedEntities[0] maybe some attacks can hit multiple entities
+            entity.TryToCreateEntityAttackAction(attackedEntities[0], out EntityAttackAction entityAttackAction, entityPayHeartCostAction);
+
+            return entityAttackAction.wasPerformed;
+        }
+
+        public void PileActions(GameAction.Action[] actions)
+        {
+            foreach (var action in actions)
+            {
+                if (actionPile.Count < maxPileCount)
+                {
+                    actionPile.Add(action);
+                    Debug.Log($"Piling {action}");
+                }
+                else
+                {
                     Debug.Log($"Reached pile action maximum");
                 }
             }

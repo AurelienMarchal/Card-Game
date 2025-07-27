@@ -45,13 +45,20 @@ namespace GameLogic.GameState
             if (value is PlayerActionState playerActionState) {
                 jo["playerNum"] = playerActionState.playerNum;
             }
-            if (value is EntityActionState entityActionState) {
+            if (value is EntityActionState entityActionState)
+            {
                 jo["playerNum"] = entityActionState.playerNum;
                 jo["entityNum"] = entityActionState.entityNum;
                 if (entityActionState is EntityMoveActionState entityMoveActionState)
                 {
                     jo["startTileNum"] = entityMoveActionState.startTileNum;
                     jo["endTileNum"] = entityMoveActionState.endTileNum;
+                }
+                if (entityActionState is EntityAttackActionState entityAttackActionState)
+                {
+                    jo["attackedEntityNum"] = entityAttackActionState.attackedEntityNum;
+                    jo["attackedEntityPlayerNum"] = entityAttackActionState.attackedEntityPlayerNum;
+                    jo["isCounterAttack"] = entityAttackActionState.isCounterAttack;
                 }
             }
 

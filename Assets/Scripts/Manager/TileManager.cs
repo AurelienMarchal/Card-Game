@@ -137,6 +137,11 @@ public class TileManager : MonoBehaviour
 
         //la pos est gere par le board 
 
+        
+    }
+
+    public void UpdateVisuals()
+    {
         Material[] matArray = tileRenderer.sharedMaterials;
         
         switch (tileState.tileType){

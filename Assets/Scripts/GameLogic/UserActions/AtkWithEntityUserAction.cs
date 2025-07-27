@@ -3,7 +3,7 @@ namespace GameLogic{
     namespace UserAction{
         public class AtkWithEntityUserAction : EntityUserAction
         {
-            public AtkWithEntityUserAction(uint playerNum) : base(playerNum)
+            public AtkWithEntityUserAction(uint playerNum, uint entityNum) : base(playerNum, entityNum)
             {
             }
         }

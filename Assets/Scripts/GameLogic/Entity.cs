@@ -19,7 +19,8 @@ namespace GameLogic{
 
         public uint num{
             get;
-            protected set;
+            //Temp, num has to be set in constructor
+            set;
         }
 
         public string name{
@@ -134,8 +135,6 @@ namespace GameLogic{
         }
 
         public const Entity noEntity = null;
-
-        public static uint entityCount = 0;
         public const int maxMovementCap = 10;
 
         public List<EntityEffect> effects{
@@ -174,8 +173,6 @@ namespace GameLogic{
         public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North){
             this.player = player;
             this.model = model;
-            num = entityCount;
-            entityCount++;
             this.name = name;
             currentTile = startingTile;
             health = startingHealth.Clone() as Health;
@@ -198,8 +195,6 @@ namespace GameLogic{
         public Entity(Player player, ScriptableEntity scriptableEntity, Tile startingTile, Direction startingDirection = Direction.North){
             this.player = player;
             model = scriptableEntity.entityModel;
-            num = entityCount;
-            entityCount++;
             name = scriptableEntity.entityName;
             currentTile = startingTile;
             health = scriptableEntity.health.Clone() as Health;

@@ -22,7 +22,7 @@ public class HandManager : MonoBehaviour
         set
         {
             handState_ = value;
-            UpdateAccordingToPlayerState();
+            UpdateAccordingToHandState();
         }
     }
 
@@ -109,7 +109,12 @@ public class HandManager : MonoBehaviour
         }
     }
 
-    private void UpdateAccordingToPlayerState(){
+    private void UpdateAccordingToHandState(){
+        //TODO
+    }
+
+    public void UpdateVisuals()
+    {
         //TODO
     }
 

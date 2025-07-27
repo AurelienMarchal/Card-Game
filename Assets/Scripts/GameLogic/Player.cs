@@ -110,6 +110,8 @@ namespace GameLogic{
         }
 
         private void SpawnEntity(Entity entity){
+            //Temp
+            entity.num = (uint)entities.Count;
             entities.Add(entity);
 
             if(entity is Hero hero){
