@@ -60,6 +60,23 @@ namespace GameLogic.GameState
                     jo["attackedEntityPlayerNum"] = entityAttackActionState.attackedEntityPlayerNum;
                     jo["isCounterAttack"] = entityAttackActionState.isCounterAttack;
                 }
+                if (entityActionState is EntityChangeDirectionActionState entityChangeDirectionActionState)
+                {
+                    jo["newDirection"] = (int)entityChangeDirectionActionState.newDirection;
+                }
+                if (entityActionState is EntityUseMovementActionState entityUseMovementActionState)
+                {
+                    jo["movementUsed"] = entityUseMovementActionState.movementUsed;
+                }
+            }
+            if (value is TileActionState tileActionState)
+            {
+                jo["tileNum"] = tileActionState.tileNum;
+
+                if (tileActionState is TileChangeTypeActionState tileChangeTypeActionState)
+                {
+                    jo["newType"] = (int)tileChangeTypeActionState.newType;
+                }
             }
 
             jo.WriteTo(writer);

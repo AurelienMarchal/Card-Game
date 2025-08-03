@@ -7,9 +7,12 @@ namespace GameLogic.GameState
     {
         public static readonly Dictionary<string, Type> Types = new()
         {
-            { "PlayerEndTurn",      typeof(PlayerEndTurnActionState) },
-            { "EntityMove",         typeof(EntityMoveActionState) },
-            { "EntityAttack",         typeof(EntityAttackActionState) },
+            { "PlayerEndTurn",          typeof(PlayerEndTurnActionState) },
+            { "EntityMove",             typeof(EntityMoveActionState) },
+            { "EntityChangeDirection",  typeof(EntityChangeDirectionActionState) },
+            { "EntityAttack",           typeof(EntityAttackActionState) },
+            { "EntityUseMovement",      typeof(EntityUseMovementActionState) },
+            { "TileChangeType",         typeof(TileChangeTypeActionState) },
             
         };
     }

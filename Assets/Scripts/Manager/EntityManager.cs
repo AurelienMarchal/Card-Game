@@ -347,7 +347,7 @@ public class EntityManager : MonoBehaviour
 
     public void UpdateMovementUIDisplay(){
         var movementUIDisplay = entityInfoCanvasInstance.GetComponentInChildren<MovementUIDisplay>();
-        if(movementUIDisplay!=null){
+        if(movementUIDisplay != null){
             movementUIDisplay.entityState = entityState;
             ResetInfoUITimer();
         }

@@ -64,11 +64,22 @@ public class AnimationManager : MonoBehaviour
             case PlayerEndTurnActionState playerEndTurnActionState:
                 PlayAnimationForActionState(playerEndTurnActionState);
                 break;
+
             case EntityMoveActionState entityMoveActionState:
                 PlayAnimationForActionState(entityMoveActionState);
                 break;
+            case EntityChangeDirectionActionState entityChangeDirectionActionState:
+                PlayAnimationForActionState(entityChangeDirectionActionState);
+                break;
             case EntityAttackActionState entityAttackActionState:
                 PlayAnimationForActionState(entityAttackActionState);
+                break;
+            case EntityUseMovementActionState entityUseMovementActionState:
+                PlayAnimationForActionState(entityUseMovementActionState);
+                break;
+
+            case TileChangeTypeActionState tileChangeTypeActionState:
+                PlayAnimationForActionState(tileChangeTypeActionState);
                 break;
             default: break;
         }
@@ -100,6 +111,18 @@ public class AnimationManager : MonoBehaviour
         return;
     }
 
+    public void PlayAnimationForActionState(EntityChangeDirectionActionState entityChangeDirectionActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityChangeDirectionActionState.playerNum, entityChangeDirectionActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+
+        //Temp
+        entityManager.UpdateRotationAccordingToEntityState();
+    }
+
     public void PlayAnimationForActionState(EntityAttackActionState entityAttackActionState)
     {
         var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityAttackActionState.playerNum, entityAttackActionState.entityNum);
@@ -111,6 +134,29 @@ public class AnimationManager : MonoBehaviour
         var animator = entityManager.gameObject.GetComponent<Animator>();
         animatorsPlaying.Add(animator);
         animator.SetTrigger("attackTrigger");
+    }
+
+    public void PlayAnimationForActionState(EntityUseMovementActionState entityUseMovementActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityUseMovementActionState.playerNum, entityUseMovementActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+        
+        //temp
+        entityManager.UpdateMovementUIDisplay();
+    }
+
+    public void PlayAnimationForActionState(TileChangeTypeActionState tileChangeTypeActionState)
+    {
+        var tileManager = boardManager.GetTileManagerFromTileNum(tileChangeTypeActionState.tileNum);
+        if (tileManager == null)
+        {
+            return;
+        }
+        //Temp
+        tileManager.UpdateVisuals();
     }
 
     [Obsolete]

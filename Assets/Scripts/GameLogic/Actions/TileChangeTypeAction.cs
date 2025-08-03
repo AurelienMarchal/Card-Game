@@ -25,7 +25,10 @@ namespace GameLogic{
 
             public override ActionState ToActionState()
             {
-                throw new System.NotImplementedException();
+                var actionState = new TileChangeTypeActionState();
+                actionState.tileNum = tile.num;
+                actionState.newType = newType;
+                return actionState;
             }
         }
     }

@@ -24,7 +24,11 @@ namespace GameLogic{
 
             public override ActionState ToActionState()
             {
-                throw new System.NotImplementedException();
+                var actionState = new EntityChangeDirectionActionState();
+                actionState.entityNum = entity.num;
+                actionState.playerNum = entity.player.playerNum;
+                actionState.newDirection = newDirection;
+                return actionState;
             }
         }
     }
