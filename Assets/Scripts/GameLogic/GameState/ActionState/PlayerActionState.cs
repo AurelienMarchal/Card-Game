@@ -8,11 +8,6 @@ namespace GameLogic
         public class PlayerActionState : ActionState
         {
             public uint playerNum { get; set; }
-
-            public PlayerActionState()
-            {
-                
-            }
         }
     }
 }

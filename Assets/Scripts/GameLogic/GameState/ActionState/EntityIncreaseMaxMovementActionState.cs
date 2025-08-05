@@ -2,9 +2,8 @@ namespace GameLogic
 {
     namespace GameState
     {
-        public class PlayerEndTurnActionState : PlayerActionState
+        public class EntityIncreaseMaxMovementActionState : EntityActionState
         {
-
         }
     }
 }

@@ -62,12 +62,33 @@ namespace GameLogic.GameState
                 }
                 if (entityActionState is EntityChangeDirectionActionState entityChangeDirectionActionState)
                 {
-                    jo["newDirection"] = (int)entityChangeDirectionActionState.newDirection;
+                    jo["newDirection"] = JToken.FromObject(entityChangeDirectionActionState.newDirection);
                 }
                 if (entityActionState is EntityUseMovementActionState entityUseMovementActionState)
                 {
                     jo["movementUsed"] = entityUseMovementActionState.movementUsed;
                 }
+                if (entityActionState is EntityTakesDamageActionState entityTakesDamageActionState)
+                {
+                    jo["damageState"] = JToken.FromObject(entityTakesDamageActionState.damageState);
+                }
+                if (entityActionState is EntityGainHeartActionState entityGainHeartActionState)
+                {
+                    jo["heartType"] = JToken.FromObject(entityGainHeartActionState.heartType);
+                }
+                if (entityActionState is EntityHealsActionState entityHealsActionState)
+                {
+                    jo["numberOfHeartsHealed"] = entityHealsActionState.numberOfHeartsHealed;
+                }
+                if (entityActionState is EntityPayHeartCostActionState entityPayHeartCostActionState)
+                {
+                    jo["heartCost"] = JToken.FromObject(entityPayHeartCostActionState.heartCost);
+                }
+                if (entityActionState is EntityIncreaseMaxMovementActionState entityIncreaseMaxMovementActionState)
+                {
+                    //jo[""] = ;
+                }
+                
             }
             if (value is TileActionState tileActionState)
             {

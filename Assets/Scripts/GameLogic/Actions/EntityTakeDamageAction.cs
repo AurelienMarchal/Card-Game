@@ -26,7 +26,11 @@ namespace GameLogic{
 
             public override ActionState ToActionState()
             {
-                throw new System.NotImplementedException();
+                var actionState = new EntityTakesDamageActionState();
+                actionState.entityNum = entity.num;
+                actionState.playerNum = entity.player.playerNum;
+                actionState.damageState = damage.ToDamageState();
+                return actionState;
             }
         }
     }

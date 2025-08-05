@@ -27,7 +27,9 @@ namespace GameLogic{
 
             public override ActionState ToActionState()
             {
-                throw new System.NotImplementedException();
+                var actionState = new PlayerStartTurnActionState();
+                actionState.playerNum = player.playerNum;
+                return actionState;
             }
         }
     }

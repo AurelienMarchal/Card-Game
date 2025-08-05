@@ -6,13 +6,26 @@ namespace GameLogic.GameState
     public static class ActionStateRegistry
     {
         public static readonly Dictionary<string, Type> Types = new()
-        {
-            { "PlayerEndTurn",          typeof(PlayerEndTurnActionState) },
-            { "EntityMove",             typeof(EntityMoveActionState) },
-            { "EntityChangeDirection",  typeof(EntityChangeDirectionActionState) },
-            { "EntityAttack",           typeof(EntityAttackActionState) },
-            { "EntityUseMovement",      typeof(EntityUseMovementActionState) },
-            { "TileChangeType",         typeof(TileChangeTypeActionState) },
+        {   
+            { "StartGame",                  typeof(StartGameActionState) },
+            { "StartTurn",                  typeof(StartTurnActionState) },
+
+            { "PlayerStartTurn",            typeof(PlayerStartTurnActionState) },
+            { "PlayerEndTurn",              typeof(PlayerEndTurnActionState) },
+            
+            { "EntityMove",                 typeof(EntityMoveActionState) },
+            { "EntityChangeDirection",      typeof(EntityChangeDirectionActionState) },
+            { "EntityAttack",               typeof(EntityAttackActionState) },
+            { "EntityTakesDamage",          typeof(EntityTakesDamageActionState) },
+            { "EntityUseMovement",          typeof(EntityUseMovementActionState) },
+            { "EntityDie",                  typeof(EntityDieActionState) },
+            { "EntityGainHeart",            typeof(EntityGainHeartActionState) },
+            { "EntityHeals",                typeof(EntityHealsActionState) },
+            { "EntityPayHeartCost",         typeof(EntityPayHeartCostActionState) },
+            { "EntityResetMovement",        typeof(EntityResetMovementActionState) },
+            { "EntityIncreaseMaxMovement",  typeof(EntityIncreaseMaxMovementActionState) },
+            
+            { "TileChangeType",             typeof(TileChangeTypeActionState) },
             
         };
     }

@@ -23,7 +23,8 @@ namespace GameLogic{
             
             public override ActionState ToActionState()
             {
-                throw new System.NotImplementedException();
+                var actionState = new StartGameActionState();
+                return actionState;
             }
         }
     }

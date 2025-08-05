@@ -18,10 +18,14 @@ namespace GameLogic{
                 Game.currentGame.board.entities.Remove(entity);
                 return true;
             }
-            
+
             public override ActionState ToActionState()
             {
-                throw new System.NotImplementedException();
+                var actionState = new EntityDieActionState();
+                actionState.entityNum = entity.num;
+                actionState.playerNum = entity.player.playerNum;
+                return actionState;
+                
             }
         }
     }

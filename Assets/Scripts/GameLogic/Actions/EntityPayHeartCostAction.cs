@@ -27,7 +27,11 @@ namespace GameLogic{
             
             public override ActionState ToActionState()
             {
-                throw new System.NotImplementedException();
+                var actionState = new EntityPayHeartCostActionState();
+                actionState.entityNum = entity.num;
+                actionState.playerNum = entity.player.playerNum;
+                actionState.heartCost = heartCost;
+                return actionState;
             }
         }
     }

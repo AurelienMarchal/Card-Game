@@ -61,6 +61,21 @@ public class AnimationManager : MonoBehaviour
 
         switch (actionState)
         {
+            case StartGameActionState startGameActionState:
+                //TODO
+                //PlayAnimationForActionState(startGameActionState);
+                break;
+
+            case StartTurnActionState startTurnActionState:
+                //TODO
+                //PlayAnimationForActionState(startTurnActionState);
+                break;
+
+
+            case PlayerStartTurnActionState playerStartTurnActionState:
+                //TODO
+                //PlayAnimationForActionState(playerStartTurnActionState);
+                break;
             case PlayerEndTurnActionState playerEndTurnActionState:
                 PlayAnimationForActionState(playerEndTurnActionState);
                 break;
@@ -77,6 +92,28 @@ public class AnimationManager : MonoBehaviour
             case EntityUseMovementActionState entityUseMovementActionState:
                 PlayAnimationForActionState(entityUseMovementActionState);
                 break;
+            case EntityTakesDamageActionState entityTakesDamageActionState:
+                PlayAnimationForActionState(entityTakesDamageActionState);
+                break;
+            case EntityDieActionState entityDieActionState:
+                PlayAnimationForActionState(entityDieActionState);
+                break;
+            case EntityGainHeartActionState entityGainHeartActionState:
+                PlayAnimationForActionState(entityGainHeartActionState);
+                break;
+            case EntityHealsActionState entityHealsActionState:
+                PlayAnimationForActionState(entityHealsActionState);
+                break;
+            case EntityIncreaseMaxMovementActionState entityIncreaseMaxMovementActionState:
+                PlayAnimationForActionState(entityIncreaseMaxMovementActionState);
+                break;
+            case EntityPayHeartCostActionState entityPayHeartCostActionState:
+                PlayAnimationForActionState(entityPayHeartCostActionState);
+                break;
+            case EntityResetMovementActionState entityResetMovementActionState:
+                PlayAnimationForActionState(entityResetMovementActionState);
+                break;
+            
 
             case TileChangeTypeActionState tileChangeTypeActionState:
                 PlayAnimationForActionState(tileChangeTypeActionState);
@@ -136,6 +173,21 @@ public class AnimationManager : MonoBehaviour
         animator.SetTrigger("attackTrigger");
     }
 
+    public void PlayAnimationForActionState(EntityDieActionState entityDieActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityDieActionState.playerNum, entityDieActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+
+        var animator = entityManager.gameObject.GetComponent<Animator>();
+        animatorsPlaying.Add(animator);
+        animator.SetTrigger("deathTrigger");
+    }
+    
+
+
     public void PlayAnimationForActionState(EntityUseMovementActionState entityUseMovementActionState)
     {
         var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityUseMovementActionState.playerNum, entityUseMovementActionState.entityNum);
@@ -143,9 +195,69 @@ public class AnimationManager : MonoBehaviour
         {
             return;
         }
+
+        //temp
+        entityManager.UpdateMovementUIDisplay();
+    }
+    
+    public void PlayAnimationForActionState(EntityIncreaseMaxMovementActionState entityIncreaseMaxMovementActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityIncreaseMaxMovementActionState.playerNum, entityIncreaseMaxMovementActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
         
         //temp
         entityManager.UpdateMovementUIDisplay();
+    }
+
+    public void PlayAnimationForActionState(EntityResetMovementActionState entityResetMovementActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityResetMovementActionState.playerNum, entityResetMovementActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+        
+        //temp
+        entityManager.UpdateMovementUIDisplay();
+    }
+
+    public void PlayAnimationForActionState(EntityTakesDamageActionState entityTakesDamageActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityTakesDamageActionState.playerNum, entityTakesDamageActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+
+        //temp
+        entityManager.UpdateHealthUIDisplay();
+    }
+
+    public void PlayAnimationForActionState(EntityGainHeartActionState entityGainHeartActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityGainHeartActionState.playerNum, entityGainHeartActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+
+        //temp
+        entityManager.UpdateHealthUIDisplay();
+    }
+
+    public void PlayAnimationForActionState(EntityPayHeartCostActionState entityPayHeartCostActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityPayHeartCostActionState.playerNum, entityPayHeartCostActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+
+        //temp
+        entityManager.UpdateHealthUIDisplay();
     }
 
     public void PlayAnimationForActionState(TileChangeTypeActionState tileChangeTypeActionState)

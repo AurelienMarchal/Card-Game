@@ -22,7 +22,10 @@ namespace GameLogic{
             
             public override ActionState ToActionState()
             {
-                throw new System.NotImplementedException();
+                var actionState = new EntityResetMovementActionState();
+                actionState.entityNum = entity.num;
+                actionState.playerNum = entity.player.playerNum;
+                return actionState;
             }
         }
     }
