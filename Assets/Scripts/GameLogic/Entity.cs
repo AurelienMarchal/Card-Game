@@ -275,7 +275,12 @@ namespace GameLogic{
         }
 
         public virtual bool CanMoveByChangingDirection(Tile tile){
-            if(tile == currentTile){
+            if (tile == Tile.noTile)
+            {
+                return false;
+            }
+            if (tile == currentTile)
+            {
                 return false;
             }
 
@@ -326,7 +331,10 @@ namespace GameLogic{
 
         }
 
-        public virtual bool CanChangeDirection(Direction newDirection){
+        public virtual bool CanChangeDirection(Direction newDirection)
+        {
+            var relativeDirection = DirectionsExtensions.RelativeDirectionBetweenDirections(direction, newDirection);
+            //Temp
             return true;
         }
 

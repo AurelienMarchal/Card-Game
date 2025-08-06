@@ -8,14 +8,19 @@ using GameLogic;
 using GameLogic.GameAction;
 using GameLogic.GameEffect;
 using GameLogic.GameState;
-[System.Serializable][Obsolete]
+[System.Serializable]
+[Obsolete]
 public class EffectEvent : UnityEvent<Effect>
+{
+}
+
+public class EffectStateEvent : UnityEvent<EffectState>
 {
 }
 
 public class EffectUIDisplay : MonoBehaviour
 {
-    
+
     [SerializeField]
     Button button;
 
@@ -43,35 +48,40 @@ public class EffectUIDisplay : MonoBehaviour
     }
 
     private EffectState effectState_;
-    public EffectState effectState{
-        get{
+    public EffectState effectState
+    {
+        get
+        {
             return effectState_;
         }
-        set{
+        set
+        {
             effectState_ = value;
             UpdateFromEffectState();
         }
     }
 
-    [Obsolete]
-    public EffectEvent effectHoverEnterEvent = new EffectEvent();
+    public EffectStateEvent effectHoverEnterEvent = new EffectStateEvent();
 
-    [Obsolete]
-    public EffectEvent effectHoverExitEvent = new EffectEvent();
-    
-    
+
+    public EffectStateEvent effectHoverExitEvent = new EffectStateEvent();
+
+
     // Start is called before the first frame update
     void Start()
     {
     }
 
     // Update is called once per frame
-    void Update(){
+    void Update()
+    {
         //UpdateFromEffect();
     }
 
-    private void UpdateFromEffectState(){
-        if(effectState == null){
+    private void UpdateFromEffectState()
+    {
+        if (effectState == null)
+        {
             return;
         }
 
@@ -82,7 +92,12 @@ public class EffectUIDisplay : MonoBehaviour
         button.interactable = effectState.canBeActivated;
 
 
-        //costUIDisplay.gameObject.SetActive(effect is ActivableEffect);
+        costUIDisplay.gameObject.SetActive(effectState.costState != null);
+
+        if (effectState.costState != null)
+        {
+            costUIDisplay.costState = effectState.costState;
+        }
 
         /*
         switch (effect)
@@ -101,11 +116,13 @@ public class EffectUIDisplay : MonoBehaviour
     }
 
     [Obsolete]
-    void UpdateFromNewEffect(){
-        if(effect == null){
+    void UpdateFromNewEffect()
+    {
+        if (effect == null)
+        {
             return;
         }
-        
+
 
         effectTextMeshProUGUI.text = effect.GetEffectText();
 
@@ -113,16 +130,17 @@ public class EffectUIDisplay : MonoBehaviour
 
         costUIDisplay.gameObject.SetActive(effect is ActivableEffect);
 
-        switch(effect){
+        switch (effect)
+        {
             case ActivableEffect activableEffect:
-                
+
                 costUIDisplay.cost = activableEffect.cost;
                 button.onClick.AddListener(OnButtonClick);
-                
+
                 break;
             default:
 
-            break;
+                break;
         }
     }
 
@@ -143,31 +161,37 @@ public class EffectUIDisplay : MonoBehaviour
     }
 
     [Obsolete]
-    void UpdateFromEffect(){
-        if(effect == null){
+    void UpdateFromEffect()
+    {
+        if (effect == null)
+        {
             return;
         }
-        
+
         effectTextMeshProUGUI.text = effect.GetEffectText();
-        if(effect is ActivableEffect activableEffect){
+        if (effect is ActivableEffect activableEffect)
+        {
             button.interactable = activableEffect.CanBeActivated() && Game.currentGame.currentPlayer == activableEffect.associatedEntity.player;
         }
-        
-        
+
+
 
     }
 
-    public void OnHoverEnter(){
-        //effectHoverEnterEvent.Invoke(effect);
+    public void OnHoverEnter()
+    {
+        effectHoverEnterEvent.Invoke(effectState);
     }
 
-    public void OnHoverExit(){
-        //effectHoverExitEvent.Invoke(effect);
+    public void OnHoverExit()
+    {
+        effectHoverExitEvent.Invoke(effectState);
     }
 
 
-    void OnDestroy(){
-        //effectHoverEnterEvent.RemoveAllListeners();
-        //effectHoverExitEvent.RemoveAllListeners();
+    void OnDestroy()
+    {
+        effectHoverEnterEvent.RemoveAllListeners();
+        effectHoverExitEvent.RemoveAllListeners();
     }
 }

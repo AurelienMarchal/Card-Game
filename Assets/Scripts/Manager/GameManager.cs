@@ -79,6 +79,9 @@ public class GameManager : MonoBehaviour
     TextMeshProUGUI playerTextMesh;
 
     [SerializeField]
+    TextMeshProUGUI turnTextMesh;
+
+    [SerializeField]
     CameraFollowingSelectedEntity cameraFollowingSelectedEntity;
 
     [SerializeField]
@@ -139,7 +142,7 @@ public class GameManager : MonoBehaviour
         var startingTile2 = Game.currentGame.board.GetTileAt(2, 3);
         var direction2 = Direction.South;
         var hero2 = new Hero(Game.currentGame.players[1], scriptableHero2, startingTile2, direction2);
-        hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
+        //hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
         hero2.num = 0;
         Game.currentGame.players[1].entities.Add(hero2);
         Game.currentGame.players[1].hero = hero2;
@@ -158,8 +161,8 @@ public class GameManager : MonoBehaviour
         }
 
         entityInfoUI.weaponUsedUnityEvent.AddListener(OnWeaponUsed);
-        //entityInfoUI.effectHoverEnterEvent.AddListener(OnEffectHoverEnter);
-        //entityInfoUI.effectHoverExitEvent.AddListener(OnEffectHoverExit);
+        entityInfoUI.effectHoverEnterEvent.AddListener(OnEffectHoverEnter);
+        entityInfoUI.effectHoverExitEvent.AddListener(OnEffectHoverExit);
         //entityInfoUI.weaponHoverEnterEvent.AddListener(OnWeaponHoverEnter);
         //entityInfoUI.weaponHoverExitEvent.AddListener(OnWeaponHoverExit);
 
@@ -208,7 +211,7 @@ public class GameManager : MonoBehaviour
 
         if (blockInputs)
         {
-            
+            boardManager.ResetAllTileLayerDisplayUIInfo();
             EntityManager.UnselectEveryEntity();
             TileManager.UnselectEveryTile();
             currentEntitySelected = null;
@@ -318,6 +321,7 @@ public class GameManager : MonoBehaviour
     public void UpdateVisuals()
     {
         UpdatePlayerText();
+        UpdateTurnText();
         boardManager.UpdateVisuals();
         foreach (var playerManager in playerManagers)
         {
@@ -334,8 +338,21 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("Updating player text to : " + "Player " + gameState.currentPlayerNum.ToString());
+        //Debug.Log("Updating player text to : " + "Player " + gameState.currentPlayerNum.ToString());
         playerTextMesh.text = "Player " + gameState.currentPlayerNum.ToString();
+    }
+
+    public void UpdateTurnText()
+    {
+        
+        if (gameState == null)
+        {
+            turnTextMesh.text = "";
+            return;
+        }
+
+        //Debug.Log("Updating player text to : " + "Player " + gameState.currentPlayerNum.ToString());
+        turnTextMesh.text = "Turn " + gameState.turn;
     }
 
 
@@ -418,7 +435,12 @@ public class GameManager : MonoBehaviour
     void OnEntitySelected(EntityManager entityManager)
     {
         currentEntitySelected = entityManager;
-
+        
+        boardManager.ResetAllTileLayerDisplayUIInfo();
+        if (entityManager.entityState.playerNum == gameState.currentPlayerNum)
+        {
+            boardManager.DisplayTilesUIInfo(entityManager.entityState.tileNumsToMoveTo.ToArray());
+        }
     }
 
     void OnTileSelected(TileManager tileManager)
@@ -577,15 +599,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [Obsolete]
-    private void OnEffectHoverEnter(Effect effect)
+
+    private void OnEffectHoverEnter(EffectState effectState)
     {
-        effect.GetTilesAndEntitiesAffected(out Entity[] entities, out Tile[] tiles);
-        boardManager.DisplayTilesUIInfo(tiles);
+        boardManager.DisplayTilesUIInfo(effectState.tilesAffectedNums.ToArray());
     }
 
-    [Obsolete]
-    private void OnEffectHoverExit(Effect effect)
+    
+    private void OnEffectHoverExit(EffectState effect)
     {
         boardManager.ResetAllTileLayerDisplayUIInfo();
     }

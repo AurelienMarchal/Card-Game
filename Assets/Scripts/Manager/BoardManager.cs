@@ -297,6 +297,25 @@ public class BoardManager : MonoBehaviour
         return tileManager.tileState;
     }
 
+    public void DisplayTilesUIInfo(uint[] tileNums)
+    {
+
+        if (tileNums == null)
+        {
+            return;
+        }
+        
+        foreach (var tileNum in tileNums)
+        {
+            var tileManager = GetTileManagerFromTileNum(tileNum);
+            if (tileManager != null)
+            {
+                tileManager.displayInfoUI = true;
+            }
+        }
+        
+    }
+
     [Obsolete]
     public void DisplayTilesUIInfo(Tile[] tiles)
     {

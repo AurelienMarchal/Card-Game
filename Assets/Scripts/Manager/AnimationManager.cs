@@ -67,10 +67,8 @@ public class AnimationManager : MonoBehaviour
                 break;
 
             case StartTurnActionState startTurnActionState:
-                //TODO
-                //PlayAnimationForActionState(startTurnActionState);
+                PlayAnimationForActionState(startTurnActionState);
                 break;
-
 
             case PlayerStartTurnActionState playerStartTurnActionState:
                 //TODO
@@ -120,6 +118,16 @@ public class AnimationManager : MonoBehaviour
                 break;
             default: break;
         }
+
+    }
+    
+    public void PlayAnimationForActionState(StartTurnActionState StartTurnActionState)
+    {
+        gameManager.UpdateTurnText();
+    }
+
+    public void PlayAnimationForActionState(PlayerStartTurnActionState playerStartTurnActionState)
+    {
 
     }
 
@@ -232,7 +240,9 @@ public class AnimationManager : MonoBehaviour
             return;
         }
 
-        //temp
+        var animator = entityManager.gameObject.GetComponent<Animator>();
+        animatorsPlaying.Add(animator);
+        animator.SetTrigger("hitTrigger");
         entityManager.UpdateHealthUIDisplay();
     }
 

@@ -224,9 +224,14 @@ namespace GameLogic{
                 return false;
             }
 
-            entity.TryToCreateEntityUseMovementAction(
+            var costWasPaid = entity.TryToCreateEntityUseMovementAction(
                 tile.Distance(entity.currentTile) * entity.costToMove.mouvementCost,
                 out EntityUseMovementAction useMovementAction);
+
+            if (!costWasPaid)
+            {
+                return false;
+            }
 
             entity.TryToCreateEntityMoveAction(tile, useMovementAction, out EntityMoveAction entityMoveAction);
 

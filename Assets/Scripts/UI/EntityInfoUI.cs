@@ -40,11 +40,10 @@ public class EntityInfoUI : MonoBehaviour
     [SerializeField]
     GameObject buffCanvasPrefab;
 
-    [Obsolete]
-    public EffectEvent effectHoverEnterEvent = new EffectEvent();
+    
+    public EffectStateEvent effectHoverEnterEvent = new EffectStateEvent();
 
-    [Obsolete]
-    public EffectEvent effectHoverExitEvent = new EffectEvent();
+    public EffectStateEvent effectHoverExitEvent = new EffectStateEvent();
 
     public UnityEvent weaponHoverEnterEvent = new UnityEvent();
 
@@ -99,8 +98,8 @@ public class EntityInfoUI : MonoBehaviour
 
         if(effectUIDisplay != null){
             effectUIDisplay.effectState = effectState;
-            //effectUIDisplay.effectHoverEnterEvent.AddListener((effect) => effectHoverEnterEvent.Invoke(effect));
-            //effectUIDisplay.effectHoverExitEvent.AddListener((effect) => effectHoverExitEvent.Invoke(effect));
+            effectUIDisplay.effectHoverEnterEvent.AddListener((effect) => effectHoverEnterEvent.Invoke(effect));
+            effectUIDisplay.effectHoverExitEvent.AddListener((effect) => effectHoverExitEvent.Invoke(effect));
         }
     }
 
@@ -183,8 +182,8 @@ public class EntityInfoUI : MonoBehaviour
     }
 
     void OnDestroy(){
-        //effectHoverEnterEvent.RemoveAllListeners();
-        //effectHoverExitEvent.RemoveAllListeners();
+        effectHoverEnterEvent.RemoveAllListeners();
+        effectHoverExitEvent.RemoveAllListeners();
         weaponUsedUnityEvent.RemoveAllListeners();
         weaponHoverEnterEvent.RemoveAllListeners();
         weaponHoverExitEvent.RemoveAllListeners();

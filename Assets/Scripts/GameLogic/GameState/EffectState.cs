@@ -25,8 +25,10 @@ namespace GameLogic{
                 set;
             }
 
-            public List<uint> entitiesAffectedNums{
-                get; 
+            //TODO : dictionnary by player num
+            public List<uint> entitiesAffectedNums
+            {
+                get;
                 set;
             }
 
