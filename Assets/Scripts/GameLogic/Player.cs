@@ -32,8 +32,15 @@ namespace GameLogic{
 
         [Obsolete]
         public const int maxManaCap = 10;
+        
+        public Deck deck
+        {
+            get;
+            private set;
+        }
 
-        public Hero hero{
+        public Hero hero
+        {
             get;
             set;
         }
@@ -48,8 +55,9 @@ namespace GameLogic{
             protected set;
         }
 
-        public Player(uint num){
+        public Player(uint num, uint[] deckList, System.Random random){
             playerNum = num;
+            deck = new Deck(deckList, random);
             hand = new Hand(this);
             entities = new List<Entity>();
             effects = new List<Effect>();

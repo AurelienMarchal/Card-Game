@@ -36,6 +36,11 @@ namespace GameLogic{
             private set;
         }
 
+        public Card()
+        {
+            this.player = null;
+        }
+
         public Card(Player player, ActivableEffect activableEffect)
         {
             this.player = player;

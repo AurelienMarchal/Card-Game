@@ -69,7 +69,7 @@ namespace GameLogic{
             }
         }
 
-        public void SetUpGame(int numberOfPlayer, int boardHeight, int boardWidth)
+        public void SetUpGame(int numberOfPlayer, int boardHeight, int boardWidth /*ADD decklists*/ )
         {
             board = new Board(boardHeight, boardWidth);
             players = new Player[numberOfPlayer];
@@ -81,7 +81,7 @@ namespace GameLogic{
             depileStarted = false;
             for (uint i = 0; i < numberOfPlayer; i++)
             {
-                players[i] = new Player(i);
+                players[i] = new Player(i, new uint[]{0, 1, 2}, random);
             }
             
             
