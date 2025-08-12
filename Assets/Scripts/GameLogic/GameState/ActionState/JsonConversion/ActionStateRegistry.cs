@@ -12,6 +12,8 @@ namespace GameLogic.GameState
 
             { "PlayerStartTurn",            typeof(PlayerStartTurnActionState) },
             { "PlayerEndTurn",              typeof(PlayerEndTurnActionState) },
+            { "PlayerAddCardToHand",        typeof(PlayerAddCardToHandActionState) },
+            { "PlayerDrawCard",             typeof(PlayerDrawCardActionState) },
             
             { "EntityMove",                 typeof(EntityMoveActionState) },
             { "EntityChangeDirection",      typeof(EntityChangeDirectionActionState) },

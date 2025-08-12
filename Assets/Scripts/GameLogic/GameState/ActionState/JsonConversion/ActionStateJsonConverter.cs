@@ -42,8 +42,19 @@ namespace GameLogic.GameState
             
             jo["type"] = typeName;
 
-            if (value is PlayerActionState playerActionState) {
+            if (value is PlayerActionState playerActionState)
+            {
                 jo["playerNum"] = playerActionState.playerNum;
+                if (value is PlayerAddCardToHandActionState playerAddCardToHandActionState)
+                {
+                    jo["card"] = JToken.FromObject(playerAddCardToHandActionState.card);
+                    jo["position"] = playerAddCardToHandActionState.position;
+                }
+                if (value is PlayerDrawCardActionState playerDrawCardActionState)
+                {
+                    jo["card"] = JToken.FromObject(playerDrawCardActionState.card);
+                    jo["cardWasAddedToHand"] = playerDrawCardActionState.cardWasAddedToHand;
+                }
             }
             if (value is EntityActionState entityActionState)
             {

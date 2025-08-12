@@ -62,7 +62,7 @@ namespace GameLogic{
             }
 
             public virtual string GetEffectText(){
-                return "";
+                return "No Effect";
             }
 
             public virtual void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected){

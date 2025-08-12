@@ -19,11 +19,6 @@ namespace GameLogic{
             protected set;
         }
 
-        public Player player{
-            get;
-            protected set;
-        }
-
         public Cost cost{
             get;
             protected set;
@@ -36,20 +31,13 @@ namespace GameLogic{
             private set;
         }
 
-        public Card()
+        public Card(ActivableEffect activableEffect)
         {
-            this.player = null;
-        }
-
-        public Card(Player player, ActivableEffect activableEffect)
-        {
-            this.player = player;
             this.activableEffect = activableEffect;
             cost = activableEffect.cost;
         }
 
-        public Card(Player player, ScriptableActivableEffect scriptableActivableEffect){
-            this.player = player;
+        public Card(ScriptableActivableEffect scriptableActivableEffect){
             activableEffect = scriptableActivableEffect.GetActivableEffect();
             cost = scriptableActivableEffect.GetActivableEffect().cost;
         }
@@ -74,7 +62,7 @@ namespace GameLogic{
 
         public virtual string GetCardName()
         {
-            return activableEffect.GetEffectText();
+            return activableEffect.GetType().ToString();
         }
 
         public bool TryToActivate(Entity caster, Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){

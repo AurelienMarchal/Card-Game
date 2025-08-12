@@ -4,8 +4,10 @@ using GameLogic.GameState;
 using System;
 
 public class HandManager : MonoBehaviour
-{
-    public Hand hand{
+{   
+    [Obsolete]
+    public Hand hand
+    {
         get;
         set;
     }
@@ -26,10 +28,13 @@ public class HandManager : MonoBehaviour
         }
     }
 
+    [Obsolete]
     public CardEvent cardClickedEvent = new CardEvent();
 
+    [Obsolete]
     public CardEvent cardHoverEnterEvent = new CardEvent();
 
+    [Obsolete]
     public CardEvent cardHoverExitEvent = new CardEvent();
 
     [SerializeField]
@@ -45,8 +50,9 @@ public class HandManager : MonoBehaviour
     Vector3 hoveredCardOffset;
 
     void Start(){
+        /*
         var childCount = transform.childCount;
-
+        //DO When addind cards
         for (var i = 0; i < childCount; i++){
             Transform child = transform.GetChild(i);
             var cardManager = child.gameObject.GetComponent<CardManager>();
@@ -56,28 +62,13 @@ public class HandManager : MonoBehaviour
                 cardManager.cardHoverExitEvent.AddListener((card) => cardHoverExitEvent.Invoke(card));
             }
         }
+        */
     }
 
     void Update(){
         
-        UpdateCardsPosition();
+        
         // Update according to hand ?
-
-        // TEST
-        hand.cards.Clear();
-        var childCount = transform.childCount;
-
-        for (var i = 0; i < childCount; i++){
-            Transform child = transform.GetChild(i);
-            var cardManager = child.gameObject.GetComponent<CardManager>();
-            if(cardManager != null){
-                if(cardManager.card != null){
-                    hand.cards.Add(cardManager.card);
-                }
-            }
-        }
-
-        //TEST
     }
 
     void UpdateCardsPosition(){
@@ -116,6 +107,7 @@ public class HandManager : MonoBehaviour
     public void UpdateVisuals()
     {
         //TODO
+        UpdateCardsPosition();
     }
 
 

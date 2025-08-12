@@ -5,25 +5,37 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 
 using GameLogic;
+using System;
+using GameLogic.GameState;
 
 
-[System.Serializable]
+[System.Serializable, Obsolete]
 public class CardEvent : UnityEvent<Card>
 {
 
 }
 
-public class CardManager : MonoBehaviour
+[System.Serializable]
+public class CardStateEvent : UnityEvent<CardState>
 {
+
+}
+
+public class CardManager : MonoBehaviour
+{   
+    [Obsolete]
     public CardEvent cardClickedEvent = new CardEvent();
 
+    [Obsolete]
     public CardEvent cardHoverEnterEvent = new CardEvent();
 
+    [Obsolete]
     public CardEvent cardHoverExitEvent = new CardEvent();
 
-    [SerializeField]
+    [SerializeField][Obsolete]
     ScriptableActivableEffectCard scriptableActivableEffectCard;
 
+    [Obsolete]
     ScriptableActivableEffectCard lastScriptableActivableEffectCard;
 
     [SerializeField]
@@ -38,7 +50,8 @@ public class CardManager : MonoBehaviour
     [SerializeField]
     Image cardImage;
 
-    public bool hovered{
+    public bool hovered
+    {
         get;
         private set;
     }
@@ -46,81 +59,112 @@ public class CardManager : MonoBehaviour
     //[SerializeField]
     //TextMeshProUGUI cardCostTextMeshProUGUI;
 
-    Player player;
-
+    [Obsolete]
     private Card card_;
 
-    public Card card{
-        get{
+    [Obsolete]
+    public Card card
+    {
+        get
+        {
             return card_;
         }
-        set{
+        set
+        {
             card_ = value;
             UpdateAccordingToCard();
         }
     }
 
-    void Start(){
+    
+    private CardState cardState_;
+
+    public CardState cardState
+    {
+        get
+        {
+            return cardState_;
+        }
+        set
+        {
+            cardState_ = value;
+            UpdateAccordingToCardState();
+        }
+    }
+
+    void Start()
+    {
         hovered = false;
-        
-        if(player == null){
-            var handManager = transform.parent.gameObject.GetComponent<HandManager>();
-            if(handManager != null){
-                player = handManager.hand.player;
-            }
-        }
-        
-        UpdateAccordingToScriptableCard();
-        lastScriptableActivableEffectCard = scriptableActivableEffectCard;
     }
 
-    void Update(){
-        
-        //TEST
-        if(player == null){
-            var handManager = transform.parent.gameObject.GetComponent<HandManager>();
-            if(handManager != null){
-                player = handManager.hand.player;
-            }
-        }
-        //TEST
-        if(scriptableActivableEffectCard != lastScriptableActivableEffectCard){
-            UpdateAccordingToScriptableCard();
-        }
-        lastScriptableActivableEffectCard = scriptableActivableEffectCard;
+    void Update()
+    {
     }
 
-    void UpdateAccordingToCard(){
-        if(card != null){
+    
+    void UpdateAccordingToCardState()
+    {
+
+        
+        
+    }
+
+    public void UpdateVisuals()
+    {
+        if (cardState == null)
+        {
+            costUIDisplay.costState = null;
+        }
+        else
+        {
+            cardTextTextMeshProUGUI.text = cardState.text;
+            cardNameTextMeshProUGUI.text = cardState.cardName;
+            costUIDisplay.costState = cardState.costState;
+        }
+    }
+
+    [Obsolete]
+    void UpdateAccordingToCard()
+    {
+        if (card != null)
+        {
             cardTextTextMeshProUGUI.text = card.GetText();
             cardNameTextMeshProUGUI.text = card.GetCardName();
             costUIDisplay.cost = card.cost;
         }
     }
 
-    //TEST
-    void UpdateAccordingToScriptableCard(){
-        if(scriptableActivableEffectCard != null){
+    [Obsolete]
+    void UpdateAccordingToScriptableCard()
+    {
+        if (scriptableActivableEffectCard != null)
+        {
             cardImage.sprite = scriptableActivableEffectCard.sprite;
         }
 
-        card = new Card(player, scriptableActivableEffectCard.scriptableActivableEffect.GetActivableEffect());
+        //card = new Card(player, scriptableActivableEffectCard.scriptableActivableEffect.GetActivableEffect());
     }
-    //TEST
 
 
-    void OnMouseOver(){
+    [Obsolete]
+    void OnMouseOver()
+    {
         hovered = true;
         cardHoverEnterEvent.Invoke(card);
     }
 
-    void OnMouseExit(){
+    [Obsolete]
+    void OnMouseExit()
+    {
         hovered = false;
         cardHoverExitEvent.Invoke(card);
     }
 
-    void OnMouseDown(){
-        if(card != null){
+    [Obsolete]
+    void OnMouseDown()
+    {
+        if (card != null)
+        {
             cardClickedEvent.Invoke(card);
         }
     }

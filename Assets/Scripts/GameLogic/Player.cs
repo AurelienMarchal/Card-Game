@@ -172,9 +172,25 @@ namespace GameLogic{
         }
 
 
+        public Card TryToDraw()
+        {
+            var canDraw = CanDraw();
+            if (canDraw)
+            {
+                return deck.TryToDraw();
+            }
 
-        private void SetupPermanentEffects(){
+            return null;
+        }
 
+        public bool CanDraw()
+        {
+            return deck.CanDraw();
+        }
+
+        private void SetupPermanentEffects()
+        {
+            effects.Add(new DrawCardAtTurnStartPlayerEffect(this));
         }
 
         public override string ToString(){

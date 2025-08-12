@@ -1,0 +1,35 @@
+using GameLogic.GameAction;
+
+namespace GameLogic{
+
+    namespace GameEffect{
+
+        public class DrawCardAtTurnStartPlayerEffect : PlayerEffect
+        {
+            public DrawCardAtTurnStartPlayerEffect(Player player) : base(player)
+            {
+            }
+            
+            protected override void Activate(){
+                Game.currentGame.PileAction(new PlayerDrawCardAction(associatedPlayer, effectActivatedAction));
+            }
+
+            public override bool CanBeActivated()
+            {
+                return associatedPlayer.CanDraw();
+            }
+
+            public override bool Trigger(Action action)
+            {
+                switch (action)
+                {
+                    case PlayerStartTurnAction playerStartTurnAction:
+                        return playerStartTurnAction.wasPerformed;
+
+
+                    default: return false;
+                }
+            }
+        }
+    }
+}

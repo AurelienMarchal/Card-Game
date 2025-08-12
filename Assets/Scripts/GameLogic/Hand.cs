@@ -2,16 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace GameLogic{
-
+    using System;
     using GameState;
     public class Hand {
         
-        public List<Card> cards{
+        private List<Card> cards{
             get;
-            /*private*/ set; // for setting cards from the editor
+            set;
         }
 
-        public Player player{
+        public int handSize{
+            get
+            {
+                return cards.Count;
+            }
+        }
+
+        public static readonly int maxHandSize = 10;
+
+        
+        //Maybe don't need player 
+        public Player player
+        {
             get;
             private set;
         }
@@ -21,10 +33,63 @@ namespace GameLogic{
             this.player = player;
         }
 
-        public Hand(Player player, List<Card> cards){
+        [Obsolete]
+        public Hand(Player player, List<Card> cards)
+        {
             this.player = player;
             this.cards = cards;
         }
+
+
+        //-1 means at the end 
+        public bool TryToAddCard(Card card, int position = -1)
+        {
+            var canAddCard = CanAddCard(card, position);
+            if (canAddCard)
+            {
+                AddCard(card, position);
+            }
+
+            return canAddCard;
+        }
+
+        public bool CanAddCard(Card card, int position = -1)
+        {
+            if (handSize >= maxHandSize)
+            {
+                return false;
+            }
+
+            if (card == null)
+            {
+                return false;
+            }
+
+            var cardIndex = position > 0 ? position : handSize + position;
+
+            if (cardIndex < 0 || cardIndex > handSize)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void AddCard(Card card, int position = -1)
+        {
+            var cardIndex = position > 0 ? position : handSize + position;
+
+            if (cardIndex >= handSize)
+            {
+                cards.Add(card);
+            }
+            else
+            {
+                cards.Insert(cardIndex, card);
+            }
+        }
+
+        
 
         public HandState ToHandState(){
             HandState handState = new HandState();
