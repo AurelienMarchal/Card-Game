@@ -81,7 +81,7 @@ namespace GameLogic{
             depileStarted = false;
             for (uint i = 0; i < numberOfPlayer; i++)
             {
-                players[i] = new Player(i, new uint[]{0, 1, 2}, random);
+                players[i] = new Player(i, new uint[]{0, 1, 2, 3, 0, 0, 0, 0, 0}, random);
             }
             
             

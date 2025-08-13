@@ -2,6 +2,7 @@ using UnityEngine;
 using GameLogic;
 using GameLogic.GameState;
 using System;
+using System.Collections.Generic;
 
 public class HandManager : MonoBehaviour
 {   
@@ -11,6 +12,8 @@ public class HandManager : MonoBehaviour
         get;
         set;
     }
+
+    private List<CardManager> cardManagers = new List<CardManager>();
 
     private HandState handState_;
 
@@ -49,7 +52,8 @@ public class HandManager : MonoBehaviour
     [SerializeField]
     Vector3 hoveredCardOffset;
 
-    void Start(){
+    void Start()
+    {
         /*
         var childCount = transform.childCount;
         //DO When addind cards
@@ -72,15 +76,16 @@ public class HandManager : MonoBehaviour
     }
 
     void UpdateCardsPosition(){
-        var childCount = transform.childCount;
 
-        for (var i = 0; i < childCount; i++)
+        for (var i = 0; i < cardManagers.Count; i++)
         {
-            Transform child = transform.GetChild(i);
-            CardManager cardManager = child.gameObject.GetComponent<CardManager>();
+            
+            CardManager cardManager = cardManagers[i];
+            Transform cardManagerTransform = cardManager.transform;
 
-            if(cardManager != null){
-                var angle = (i - childCount/2) * degreeRange * (Mathf.PI/180) / childCount;
+            if (cardManager != null)
+            {
+                var angle = (i - cardManagers.Count / 2) * degreeRange * (Mathf.PI / 180) / cardManagers.Count;
 
                 // Calculate the position on the circle
                 var x = Mathf.Sin(angle) * radius;
@@ -88,20 +93,59 @@ public class HandManager : MonoBehaviour
                 var z = Mathf.Cos(angle) * radius - radius;
 
                 // Set the position of the child
-                child.localPosition = new Vector3(x, y, z) + (cardManager.hovered ? hoveredCardOffset : Vector3.zero);
+                cardManagerTransform.localPosition = new Vector3(x, y, z) + (cardManager.hovered ? hoveredCardOffset : Vector3.zero);
 
                 var circleCenter = transform.position + transform.forward * (-radius);
-                
+
 
                 // Orient the child's rotation
-                Quaternion rotation = Quaternion.LookRotation(-Vector3.up, -(circleCenter - child.position));
-                child.rotation = rotation;
+                Quaternion rotation = Quaternion.LookRotation(-Vector3.up, -(circleCenter - cardManagerTransform.position));
+                cardManagerTransform.rotation = rotation;
             }
         }
     }
 
-    private void UpdateAccordingToHandState(){
-        //TODO
+    private void UpdateAccordingToHandState()
+    {
+        if (handState == null)
+        {
+            return;
+        }
+
+        if (handState.cardStates == null)
+        {
+            return;
+        }
+
+
+        while (handState.cardStates.Count > cardManagers.Count)
+        {
+            var instance = Instantiate(cardPrefab, transform);
+            var cardManager = instance.GetComponent<CardManager>();
+            if (cardManager == null)
+            {
+                Destroy(instance);
+                Debug.LogError("Could not find CardManager Script in cardPrefab");
+                return;
+            }
+            else
+            {
+                cardManagers.Add(cardManager);
+            }
+
+        }
+        while (handState.cardStates.Count < cardManagers.Count)
+        {
+            var cardManager = cardManagers[^1];
+            cardManagers.Remove(cardManager);
+            Destroy(cardManager.gameObject);
+        }
+
+        for (int i = 0; i < handState.cardStates.Count; i++)
+        {
+            var cardState = handState.cardStates[i];
+            cardManagers[i].cardState = cardState;
+        }
     }
 
     public void UpdateVisuals()

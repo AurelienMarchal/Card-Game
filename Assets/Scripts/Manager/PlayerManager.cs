@@ -11,7 +11,7 @@ public class PlayerManager : MonoBehaviour
 {
 
     [SerializeField]
-    HandManager handManager;
+    public HandManager handManager;
 
     List<EntityManager> entityManagers = new List<EntityManager>();
 

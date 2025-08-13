@@ -65,7 +65,7 @@ namespace GameLogic{
                 return false;
             }
 
-            var cardIndex = position > 0 ? position : handSize + position;
+            var cardIndex = position > 0 ? position : handSize + position + 1;
 
             if (cardIndex < 0 || cardIndex > handSize)
             {
@@ -77,7 +77,7 @@ namespace GameLogic{
 
         private void AddCard(Card card, int position = -1)
         {
-            var cardIndex = position > 0 ? position : handSize + position;
+            var cardIndex = position > 0 ? position : handSize + position + 1;
 
             if (cardIndex >= handSize)
             {

@@ -24,7 +24,7 @@ namespace GameLogic{
                 switch (action)
                 {
                     case PlayerStartTurnAction playerStartTurnAction:
-                        return playerStartTurnAction.wasPerformed;
+                        return playerStartTurnAction.wasPerformed && playerStartTurnAction.player == associatedPlayer;
 
 
                     default: return false;

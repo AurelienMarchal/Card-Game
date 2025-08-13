@@ -62,7 +62,7 @@ public class AnimationManager : MonoBehaviour
         switch (actionState)
         {
             case StartGameActionState startGameActionState:
-                //TODO
+                
                 //PlayAnimationForActionState(startGameActionState);
                 break;
 
@@ -71,11 +71,13 @@ public class AnimationManager : MonoBehaviour
                 break;
 
             case PlayerStartTurnActionState playerStartTurnActionState:
-                //TODO
-                //PlayAnimationForActionState(playerStartTurnActionState);
+                PlayAnimationForActionState(playerStartTurnActionState);
                 break;
             case PlayerEndTurnActionState playerEndTurnActionState:
                 PlayAnimationForActionState(playerEndTurnActionState);
+                break;
+            case PlayerAddCardToHandActionState playerAddCardToHandActionState:
+                PlayAnimationForActionState(playerAddCardToHandActionState);
                 break;
 
             case EntityMoveActionState entityMoveActionState:
@@ -134,6 +136,24 @@ public class AnimationManager : MonoBehaviour
     public void PlayAnimationForActionState(PlayerEndTurnActionState playerEndTurnActionState)
     {
         gameManager.UpdatePlayerText();
+    }
+
+    public void PlayAnimationForActionState(PlayerAddCardToHandActionState playerAddCardToHandActionState)
+    {
+        var playerManager = gameManager.GetPlayerManagerFromPlayerNum(playerAddCardToHandActionState.playerNum);
+
+        if (playerManager == null)
+        {
+            return;
+        }
+
+        if (playerManager.handManager == null)
+        {
+            return;
+        }
+        //Temp
+        playerManager.handManager.UpdateVisuals();
+
     }
 
     public void PlayAnimationForActionState(EntityMoveActionState entityMoveActionState)
