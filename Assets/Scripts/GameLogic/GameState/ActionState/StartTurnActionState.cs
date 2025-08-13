@@ -4,7 +4,11 @@ namespace GameLogic
     {
         public class StartTurnActionState : ActionState
         {
-
+            public int newTurnCount
+            {
+                get;
+                set;
+            }
         }
     }
 }

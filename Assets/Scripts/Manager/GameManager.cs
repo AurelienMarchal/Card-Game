@@ -178,12 +178,12 @@ public class GameManager : MonoBehaviour
     {
 
 
-        if (Game.currentGame.depiledActionQueue.Count > 0)
+        if (Game.currentGame.actionStatesToSendQueue.Count > 0)
         {
             blockInputs = true;
             gameStateHasChanged = true;
             //test
-            ActionState actionState = Game.currentGame.DequeueDepiledActionQueueAndGetActionState();
+            ActionState actionState = Game.currentGame.DequeueActionStateToSendQueue();
 
             if (actionState != null)
             {
@@ -220,20 +220,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-
-            //Testing
             if (gameStateHasChanged)
             {
-                
-                string jsonGameState = JsonConvert.SerializeObject(Game.currentGame.ToGameState(), Formatting.Indented);
-
-                // File path (write to persistent data path)
-                string filePath = Path.Combine(Application.persistentDataPath, "LastGameState.json");
-
-                Debug.Log($"Writing GameState to {filePath}");
-                // Write to file
-                File.WriteAllText(filePath, jsonGameState);
-
+                OnAnimationsFinished();
                 gameStateHasChanged = false;
             }
 
@@ -355,6 +344,26 @@ public class GameManager : MonoBehaviour
         turnTextMesh.text = "Turn " + gameState.turn;
     }
 
+    public void OnAnimationsFinished()
+    {
+
+        Debug.Log("--------- Animation finished ---------");
+        Debug.Log("Updating according To Game State");
+
+        gameState = Game.currentGame.ToGameState();
+        //UpdateVisuals();
+
+
+        string jsonGameState = JsonConvert.SerializeObject(gameState, Formatting.Indented);
+
+        // File path (write to persistent data path)
+        string filePath = Path.Combine(Application.persistentDataPath, "LastGameState.json");
+
+        Debug.Log($"Writing GameState to {filePath}");
+        // Write to file
+        File.WriteAllText(filePath, jsonGameState);
+    }
+
 
     public void SendUserAction(UserAction userAction)
     {
@@ -368,7 +377,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Updating Game State");
             //Visual changes need to be applied only if an animation won't do it. 
-            gameState = Game.currentGame.ToGameState();
+            //gameState = Game.currentGame.ToGameState();
         }
     }
 

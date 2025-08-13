@@ -11,6 +11,7 @@ namespace GameLogic{
     using UserAction;
     using GameState;
 
+
     public sealed class Game{
 
         public const int maxPileCount = 100;
@@ -47,7 +48,14 @@ namespace GameLogic{
 
         private List<Action> actionPile;
 
-        public List<Action> depiledActionQueue{
+        [System.Obsolete]
+        public List<Action> depiledActionQueue
+        {
+            get;
+            private set;
+        }
+
+        public List<ActionState> actionStatesToSendQueue{
             get;
             private set;
         }
@@ -74,7 +82,9 @@ namespace GameLogic{
             board = new Board(boardHeight, boardWidth);
             players = new Player[numberOfPlayer];
             actionPile = new List<Action>();
-            depiledActionQueue = new List<Action>();
+            
+            //depiledActionQueue = new List<Action>();
+            actionStatesToSendQueue = new List<ActionState>();
             random = new System.Random(0);
             effects = new List<Effect>();
             SetupPermanentEffects();
@@ -353,10 +363,26 @@ namespace GameLogic{
                         Debug.Log($"{action} was not performed");
                     }
 
-                    depiledActionQueue.Add(action);
+                    //depiledActionQueue.Add(action);
+                    
                     actionPile.Remove(action);
 
-                    if(wasPerformed){
+                    if (action.wasPerformed || action.wasCancelled)
+                    {
+                        //Converting action to actionState the moment they were activated
+                        try
+                        {
+                            actionStatesToSendQueue.Add(action.ToActionState());
+                        }
+                        catch(System.NotImplementedException exeption)
+                        {
+                            Debug.LogError(exeption);
+                        }
+                        
+                    }
+
+                    if (wasPerformed)
+                    {
                         Debug.Log("Checking Trigger");
                         CheckTriggers(action);
                     }
@@ -374,10 +400,15 @@ namespace GameLogic{
             depileStarted = false;
         }
 
-        void CheckTriggers(GameAction.Action action){
+        //TODO Put effects in a Dictionnary<ActionType, List<Effect>> 
+        // where all the effects that are triggered by the same type of action are in the same list 
+        // in order to not check every effects when checking triggers but only the ones that are 
+        // triggerd by the action
+
+        void CheckTriggers(Action action){
 
             
-
+            
             foreach(Effect effect in currentGame.effects){
                 if(effect.Trigger(action)){
                     effect.TryToCreateEffectActivatedAction(action, out _);
@@ -419,8 +450,23 @@ namespace GameLogic{
             }
         }
 
-        private Action DequeueDepiledActionQueue(){
-            if(depiledActionQueue.Count == 0){
+        public ActionState DequeueActionStateToSendQueue()
+        {
+            if (actionStatesToSendQueue.Count == 0)
+            {
+                return null;
+            }
+            var actionState = actionStatesToSendQueue[0];
+            actionStatesToSendQueue.RemoveAt(0);
+
+            return actionState;
+        }
+
+        [System.Obsolete]
+        private Action DequeueDepiledActionQueue()
+        {
+            if (depiledActionQueue.Count == 0)
+            {
                 return null;
             }
             var action = depiledActionQueue[0];
@@ -429,6 +475,7 @@ namespace GameLogic{
             return action;
         }
 
+        [System.Obsolete]
         public ActionState DequeueDepiledActionQueueAndGetActionState()
         {
             var action = DequeueDepiledActionQueue();
@@ -437,7 +484,7 @@ namespace GameLogic{
                 return action.ToActionState();
             }
             return null;
-            
+
         }
 
         private void SetupPermanentEffects()

@@ -191,7 +191,7 @@ public class EntityManager : MonoBehaviour
         UpdateNameUIDisplay();
     }
 
-    private void UpdateAccordingToEntityState()
+    public void UpdateAccordingToEntityState()
     {
 
         

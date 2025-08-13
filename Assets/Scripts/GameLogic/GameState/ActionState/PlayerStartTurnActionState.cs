@@ -4,7 +4,6 @@ namespace GameLogic
     {
         public class PlayerStartTurnActionState : PlayerActionState
         {
-
         }
     }
 }

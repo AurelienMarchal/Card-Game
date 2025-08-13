@@ -4,7 +4,11 @@ namespace GameLogic
     {
         public class EntityResetMovementActionState : EntityActionState
         {
-            
+            public int newMovementLeft
+            {
+                get;
+                set;
+            }
         }
     }
 }

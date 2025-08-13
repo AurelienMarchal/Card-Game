@@ -20,10 +20,12 @@ namespace GameLogic{
                 Game.currentGame.PileAction(new PlayerStartTurnAction(Game.currentGame.currentPlayer, this));
                 return true;
             }
-            
+
             public override ActionState ToActionState()
             {
-                return new StartTurnActionState();
+                var actionState = new StartTurnActionState();
+                actionState.newTurnCount = Game.currentGame.turn;
+                return actionState;
             }
         }
     }

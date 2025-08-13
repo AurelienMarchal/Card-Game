@@ -34,6 +34,7 @@ namespace GameLogic{
             {
                 var actionState = new PlayerAddCardToHandActionState();
                 actionState.card = card == null ? null : card.ToCardState();
+                actionState.newHandState = player.hand.ToHandState();
                 actionState.position = position;
                 actionState.playerNum = player.playerNum;
                 return actionState;

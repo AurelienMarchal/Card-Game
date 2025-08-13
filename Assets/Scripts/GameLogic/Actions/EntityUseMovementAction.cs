@@ -28,6 +28,7 @@ namespace GameLogic{
                 actionState.entityNum = entity.num;
                 actionState.playerNum = entity.player.playerNum;
                 actionState.movementUsed = movementUsed;
+                actionState.newMovementLeft = entity.movementLeft;
                 return actionState;
             }
         }

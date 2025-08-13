@@ -9,6 +9,11 @@ namespace GameLogic
                 get;
                 set;
             }
+
+            public HealthState newHealthState{
+                get;
+                set;
+            }
         }
     }
 }

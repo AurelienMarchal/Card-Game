@@ -16,6 +16,11 @@ namespace GameLogic
                 set;
             }
 
+            public HandState newHandState{
+                get;
+                set;
+            }
+
         }
     }
 }

@@ -4,7 +4,13 @@ namespace GameLogic
     {
         public class EntityHealsActionState : EntityActionState
         {
-            public int numberOfHeartsHealed{
+            public int numberOfHeartsHealed
+            {
+                get;
+                set;
+            }
+            
+            public HealthState newHealthState{
                 get;
                 set;
             }

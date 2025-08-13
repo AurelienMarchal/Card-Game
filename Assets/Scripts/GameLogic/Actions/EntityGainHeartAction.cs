@@ -28,6 +28,7 @@ namespace GameLogic{
                 actionState.entityNum = entity.num;
                 actionState.playerNum = entity.player.playerNum;
                 actionState.heartType = heartType;
+                actionState.newHealthState = entity.health.ToHealthState();
                 return actionState;
             }
         }

@@ -31,6 +31,7 @@ namespace GameLogic{
                 actionState.entityNum = entity.num;
                 actionState.playerNum = entity.player.playerNum;
                 actionState.heartCost = heartCost;
+                actionState.newHealthState = entity.health.ToHealthState();
                 return actionState;
             }
         }

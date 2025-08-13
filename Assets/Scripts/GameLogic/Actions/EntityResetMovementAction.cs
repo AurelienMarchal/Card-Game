@@ -25,6 +25,7 @@ namespace GameLogic{
                 var actionState = new EntityResetMovementActionState();
                 actionState.entityNum = entity.num;
                 actionState.playerNum = entity.player.playerNum;
+                actionState.newMovementLeft = entity.movementLeft;
                 return actionState;
             }
         }

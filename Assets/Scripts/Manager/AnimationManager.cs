@@ -123,19 +123,21 @@ public class AnimationManager : MonoBehaviour
 
     }
     
-    public void PlayAnimationForActionState(StartTurnActionState StartTurnActionState)
+    public void PlayAnimationForActionState(StartTurnActionState startTurnActionState)
     {
+        gameManager.gameState.turn = startTurnActionState.newTurnCount;
         gameManager.UpdateTurnText();
     }
 
     public void PlayAnimationForActionState(PlayerStartTurnActionState playerStartTurnActionState)
     {
-
+        gameManager.gameState.currentPlayerNum = playerStartTurnActionState.playerNum;
+        gameManager.UpdatePlayerText();
     }
 
     public void PlayAnimationForActionState(PlayerEndTurnActionState playerEndTurnActionState)
     {
-        gameManager.UpdatePlayerText();
+        
     }
 
     public void PlayAnimationForActionState(PlayerAddCardToHandActionState playerAddCardToHandActionState)
@@ -151,7 +153,7 @@ public class AnimationManager : MonoBehaviour
         {
             return;
         }
-        //Temp
+        playerManager.handManager.handState = playerAddCardToHandActionState.newHandState;
         playerManager.handManager.UpdateVisuals();
 
     }
@@ -163,6 +165,10 @@ public class AnimationManager : MonoBehaviour
         {
             return;
         }
+
+        entityManager.entityState.currentTileNum = entityMoveActionState.endTileNum;
+        
+
         var endTileManager = boardManager.GetTileManagerFromTileNum(entityMoveActionState.endTileNum);
         if (endTileManager == null)
         {
@@ -184,7 +190,8 @@ public class AnimationManager : MonoBehaviour
             return;
         }
 
-        //Temp
+        entityManager.entityState.direction = entityChangeDirectionActionState.newDirection;
+        
         entityManager.UpdateRotationAccordingToEntityState();
     }
 
@@ -224,7 +231,7 @@ public class AnimationManager : MonoBehaviour
             return;
         }
 
-        //temp
+        entityManager.entityState.movementLeft = entityUseMovementActionState.newMovementLeft;
         entityManager.UpdateMovementUIDisplay();
     }
     
@@ -236,7 +243,7 @@ public class AnimationManager : MonoBehaviour
             return;
         }
         
-        //temp
+        entityManager.entityState.maxMovement = entityIncreaseMaxMovementActionState.newMaxMovement;
         entityManager.UpdateMovementUIDisplay();
     }
 
@@ -248,7 +255,7 @@ public class AnimationManager : MonoBehaviour
             return;
         }
         
-        //temp
+        entityManager.entityState.movementLeft = entityResetMovementActionState.newMovementLeft;
         entityManager.UpdateMovementUIDisplay();
     }
 
@@ -263,6 +270,7 @@ public class AnimationManager : MonoBehaviour
         var animator = entityManager.gameObject.GetComponent<Animator>();
         animatorsPlaying.Add(animator);
         animator.SetTrigger("hitTrigger");
+        entityManager.entityState.healthState = entityTakesDamageActionState.newHealthState;
         entityManager.UpdateHealthUIDisplay();
     }
 
@@ -274,7 +282,7 @@ public class AnimationManager : MonoBehaviour
             return;
         }
 
-        //temp
+        entityManager.entityState.healthState = entityGainHeartActionState.newHealthState;
         entityManager.UpdateHealthUIDisplay();
     }
 
@@ -286,7 +294,7 @@ public class AnimationManager : MonoBehaviour
             return;
         }
 
-        //temp
+        entityManager.entityState.healthState = entityPayHeartCostActionState.newHealthState;
         entityManager.UpdateHealthUIDisplay();
     }
 
@@ -297,7 +305,7 @@ public class AnimationManager : MonoBehaviour
         {
             return;
         }
-        //Temp
+        tileManager.tileState.tileType = tileChangeTypeActionState.newType;
         tileManager.UpdateVisuals();
     }
 

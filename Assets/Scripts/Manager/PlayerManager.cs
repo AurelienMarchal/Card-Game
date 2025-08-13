@@ -150,12 +150,7 @@ public class PlayerManager : MonoBehaviour
             entityManager.UpdateVisuals();
         }
 
-        UpdateHandVisuals();
-    }
-
-    public void UpdateHandVisuals()
-    {
-        //TODO
+        handManager.UpdateVisuals();
     }
 
     public EntityManager GetEntityManagerFromEntityNum(uint entityNum)

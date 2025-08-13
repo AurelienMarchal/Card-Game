@@ -23,6 +23,7 @@ namespace GameLogic{
                 var actionState = new EntityIncreaseMaxMovementActionState();
                 actionState.entityNum = entity.num;
                 actionState.playerNum = entity.player.playerNum;
+                actionState.newMaxMovement = entity.maxMovement;
                 return actionState;
             }
         }

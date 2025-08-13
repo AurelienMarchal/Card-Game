@@ -4,7 +4,13 @@ namespace GameLogic
     {
         public class EntityGainHeartActionState : EntityActionState
         {
-            public HeartType heartType{
+            public HeartType heartType
+            {
+                get;
+                set;
+            }
+
+            public HealthState newHealthState{
                 get;
                 set;
             }

@@ -15,6 +15,8 @@ namespace GameLogic
                 get;
                 set;
             }
+
+            //New deckState
         }
     }
 }

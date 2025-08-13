@@ -4,7 +4,13 @@ namespace GameLogic
     {
         public class EntityTakesDamageActionState : EntityActionState
         {
-            public DamageState damageState{
+            public DamageState damageState
+            {
+                get;
+                set;
+            }
+            
+            public HealthState newHealthState{
                 get;
                 set;
             }

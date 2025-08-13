@@ -42,6 +42,11 @@ namespace GameLogic.GameState
             
             jo["type"] = typeName;
 
+            if (value is StartTurnActionState startTurnActionState)
+            {
+                jo["newTurnCount"] = startTurnActionState.newTurnCount;
+            }
+
             if (value is PlayerActionState playerActionState)
             {
                 jo["playerNum"] = playerActionState.playerNum;
@@ -49,6 +54,7 @@ namespace GameLogic.GameState
                 {
                     jo["card"] = JToken.FromObject(playerAddCardToHandActionState.card);
                     jo["position"] = playerAddCardToHandActionState.position;
+                    jo["newHandState"] = JToken.FromObject(playerAddCardToHandActionState.newHandState);
                 }
                 if (value is PlayerDrawCardActionState playerDrawCardActionState)
                 {
@@ -78,26 +84,35 @@ namespace GameLogic.GameState
                 if (entityActionState is EntityUseMovementActionState entityUseMovementActionState)
                 {
                     jo["movementUsed"] = entityUseMovementActionState.movementUsed;
+                    jo["newMovementLeft"] = entityUseMovementActionState.newMovementLeft;
+                }
+                if (entityActionState is EntityResetMovementActionState entityResetMovementActionState)
+                {
+                    jo["newMovementLeft"] = entityResetMovementActionState.newMovementLeft;
                 }
                 if (entityActionState is EntityTakesDamageActionState entityTakesDamageActionState)
                 {
                     jo["damageState"] = JToken.FromObject(entityTakesDamageActionState.damageState);
+                    jo["newHealthState"] = JToken.FromObject(entityTakesDamageActionState.newHealthState);
                 }
                 if (entityActionState is EntityGainHeartActionState entityGainHeartActionState)
                 {
                     jo["heartType"] = JToken.FromObject(entityGainHeartActionState.heartType);
+                    jo["newHealthState"] = JToken.FromObject(entityGainHeartActionState.newHealthState);
                 }
                 if (entityActionState is EntityHealsActionState entityHealsActionState)
                 {
                     jo["numberOfHeartsHealed"] = entityHealsActionState.numberOfHeartsHealed;
+                    jo["newHealthState"] = JToken.FromObject(entityHealsActionState.newHealthState);
                 }
                 if (entityActionState is EntityPayHeartCostActionState entityPayHeartCostActionState)
                 {
                     jo["heartCost"] = JToken.FromObject(entityPayHeartCostActionState.heartCost);
+                    jo["newHealthState"] = JToken.FromObject(entityPayHeartCostActionState.newHealthState);
                 }
                 if (entityActionState is EntityIncreaseMaxMovementActionState entityIncreaseMaxMovementActionState)
                 {
-                    //jo[""] = ;
+                    jo["newMaxMovement"] = entityIncreaseMaxMovementActionState.newMaxMovement;
                 }
                 
             }
