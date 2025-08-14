@@ -15,9 +15,11 @@ public class PlayerManager : MonoBehaviour
 
     List<EntityManager> entityManagers = new List<EntityManager>();
 
-    public CardEvent cardHoverEnterEvent = new CardEvent();
+    public IntEvent cardClickedEvent = new IntEvent();
 
-    public CardEvent cardHoverExitEvent = new CardEvent();
+    public IntEvent cardHoverEnterEvent = new IntEvent();
+
+    public IntEvent cardHoverExitEvent = new IntEvent();
 
     private PlayerState playerState_;
 
@@ -53,23 +55,12 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    [Obsolete]
+    //Maybe awake
     void Start()
     {
-        handManager.cardClickedEvent.AddListener(OnCardClicked);
-        handManager.cardHoverEnterEvent.AddListener(
-            (card) =>
-            {
-                card.activableEffect.associatedEntity = player.hero;
-                cardHoverEnterEvent.Invoke(card);
-                card.activableEffect.associatedEntity = Entity.noEntity;
-            });
-        handManager.cardHoverExitEvent.AddListener(
-            (card) =>
-            {
-                cardHoverExitEvent.Invoke(card);
-
-            });
+        handManager.cardClickedEvent.AddListener((cardPositionInHand) => cardClickedEvent.Invoke(cardPositionInHand));
+        handManager.cardHoverEnterEvent.AddListener((cardPositionInHand) => cardHoverEnterEvent.Invoke(cardPositionInHand));
+        handManager.cardHoverExitEvent.AddListener((cardPositionInHand) => cardHoverExitEvent.Invoke(cardPositionInHand));
     }
 
     [Obsolete]

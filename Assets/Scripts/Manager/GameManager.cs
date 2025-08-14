@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
         boardManager.entityClickedEvent.AddListener(OnEntityClicked);
         boardManager.tileClickedEvent.AddListener(OnTileClicked);
 
-        //Testing
+        // --------- Testing ---------
         var startingTile1 = Game.currentGame.board.GetTileAt(2, 2);
         var direction1 = Direction.East;
         var hero1 = new Hero(Game.currentGame.players[0], scriptableHero1, startingTile1, direction1);
@@ -155,10 +155,14 @@ public class GameManager : MonoBehaviour
         // A enlever
         for (var i = 0; i < playerManagers.Length; i++)
         {
-            playerManagers[i].playerState = Game.currentGame.players[i].ToPlayerState();
-            //playerManagers[i].cardHoverEnterEvent.AddListener(OnCardHoverEnter);
-            //playerManagers[i].cardHoverExitEvent.AddListener(OnCardHoverExit);
+            var playerState = Game.currentGame.players[i].ToPlayerState();
+            playerManagers[i].playerState = playerState;
+            playerManagers[i].cardClickedEvent.AddListener((cardPositionInHand) => OnCardClicked(cardPositionInHand, playerState.playerNum));
+            playerManagers[i].cardHoverEnterEvent.AddListener((cardPositionInHand) => OnCardHoverEnter(cardPositionInHand, playerState.playerNum));
+            playerManagers[i].cardHoverExitEvent.AddListener((cardPositionInHand) => OnCardHoverExit(cardPositionInHand, playerState.playerNum));
         }
+
+        // ------------------
 
         entityInfoUI.weaponUsedUnityEvent.AddListener(OnWeaponUsed);
         entityInfoUI.effectHoverEnterEvent.AddListener(OnEffectHoverEnter);
@@ -197,7 +201,7 @@ public class GameManager : MonoBehaviour
                 if (deserializedActionState != null)
                 {
                     Debug.Log("Playing animation for " + serializedActionState);
-                    animationManager.PlayAnimationForActionState(deserializedActionState);
+                    animationManager.HandleActionState(deserializedActionState);
                 }
                 
             }
@@ -367,7 +371,7 @@ public class GameManager : MonoBehaviour
 
     public void SendUserAction(UserAction userAction)
     {
-        Debug.Log($"Sending UserAction : {userAction}");
+        Debug.Log($"Sending UserAction : {JsonConvert.SerializeObject(userAction)}");
         var result = Game.currentGame.ReceiveUserAction(userAction);
         if (!result)
         {
@@ -618,6 +622,23 @@ public class GameManager : MonoBehaviour
     private void OnEffectHoverExit(EffectState effect)
     {
         boardManager.ResetAllTileLayerDisplayUIInfo();
+    }
+
+    
+    private void OnCardHoverEnter(int cardPositionInHand, uint playerNum)
+    {
+        //card.activableEffect.GetTilesAndEntitiesAffected(out Entity[] entities, out Tile[] tiles);
+        //boardManager.DisplayTilesUIInfo(tiles);
+    }
+
+    private void OnCardHoverExit(int cardPositionInHand, uint playerNum)
+    {
+        //boardManager.ResetAllTileLayerDisplayUIInfo();
+    }
+
+    private void OnCardClicked(int cardPositionInHand, uint playerNum)
+    {
+        SendUserAction(new PlayCardFromHandUserAction(playerNum, cardPositionInHand, 0, 0, 0));
     }
 
     [Obsolete]

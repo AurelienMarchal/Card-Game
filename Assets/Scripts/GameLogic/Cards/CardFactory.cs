@@ -6,7 +6,14 @@ namespace GameLogic
     {
         public static Card CreateCardWithNum(uint cardNum)
         {
-            return new Card(new ActivableEffect(null, new Cost(1)));
+            //TEMP
+            switch (cardNum)
+            {
+                case 0: return new Card(cardNum, new ThrowProjectileActivableEffect(null, new Cost(1), new Damage(2), 4));
+                case 1: return new Card(cardNum, new EntityHealsActivableEffect(2, null, new Cost(1)));
+                default: return new Card(cardNum, new ActivableEffect(null, new Cost(1)));
+            }
+            
         }
     }
 }

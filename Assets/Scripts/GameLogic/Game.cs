@@ -91,7 +91,7 @@ namespace GameLogic{
             depileStarted = false;
             for (uint i = 0; i < numberOfPlayer; i++)
             {
-                players[i] = new Player(i, new uint[]{0, 1, 2, 3, 0, 0, 0, 0, 0}, random);
+                players[i] = new Player(i, new uint[]{0, 0, 0, 3, 2, 1, 0}, random);
             }
             
             
@@ -193,6 +193,9 @@ namespace GameLogic{
                 case AtkWithEntityUserAction atkWithEntityUserAction:
                     return HandleUserAction(atkWithEntityUserAction);
 
+                case PlayCardFromHandUserAction playCardFromHandUserAction:
+                    return HandleUserAction(playCardFromHandUserAction);
+
                 default:
                     break;
             }
@@ -291,6 +294,43 @@ namespace GameLogic{
 
             return entityAttackAction.wasPerformed;
         }
+
+        public bool HandleUserAction(PlayCardFromHandUserAction playCardFromHandUserAction)
+        {
+            var player = GetPlayerByPlayerNum(playCardFromHandUserAction.playerNum);
+
+            if (player == null)
+            {
+                return false;
+            }
+
+            var card = player.hand.GetCardInPosition(playCardFromHandUserAction.cardPositionInHand);
+
+            if (card == null)
+            {
+                return false;
+            }
+
+            Debug.Log($"Card : {card}");
+
+
+            if (!player.hero.CanPlayCard(card))
+            {
+                return false;
+            }
+
+            player.hero.TryToCreateEntityUseMovementAction(card.activableEffect.cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
+            player.hero.TryToCreateEntityPayHeartCostAction(card.activableEffect.cost.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
+
+            if (!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed)
+            {
+                return false;
+            }
+
+            player.hero.TryToCreateEntityPlayCardAction(card, out EntityPlayCardAction entityPlayCardAction, entityPayHeartCostAction);
+            return entityPlayCardAction.wasPerformed;
+        }
+
 
         public void PileActions(GameAction.Action[] actions)
         {
@@ -492,8 +532,15 @@ namespace GameLogic{
 
         }
 
-        public GameState.GameState ToGameState(){
-            //Only send what has changed. If reco send everything
+
+        //Big TODO
+        public void FromGameState()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public GameState.GameState ToGameState()
+        {
 
             GameState.GameState gameState = new GameState.GameState();
 
@@ -502,12 +549,14 @@ namespace GameLogic{
             gameState.currentPlayerNum = currentPlayer.playerNum;
 
             gameState.playerStates = new List<PlayerState>();
-            foreach (Player player in players){
+            foreach (Player player in players)
+            {
                 gameState.playerStates.Add(player.ToPlayerState());
             }
 
             gameState.effectStates = new List<EffectState>();
-            foreach (Effect effect in effects){
+            foreach (Effect effect in effects)
+            {
                 gameState.effectStates.Add(effect.ToEffectState());
             }
 

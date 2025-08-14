@@ -2,14 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace GameLogic{
-
+    using System;
     using GameAction;
     using GameEffect;
     using GameState;
 
     public class Card {
+        
+        public uint num
+        {
+            get;
+            private set;
+        }
 
-        public bool needsEntityTarget{
+        public bool needsEntityTarget {
             get;
             protected set;
         }
@@ -31,13 +37,16 @@ namespace GameLogic{
             private set;
         }
 
-        public Card(ActivableEffect activableEffect)
+        public Card(uint num, ActivableEffect activableEffect)
         {
+            this.num = num;
             this.activableEffect = activableEffect;
             cost = activableEffect.cost;
         }
 
-        public Card(ScriptableActivableEffect scriptableActivableEffect){
+        [Obsolete]
+        public Card(ScriptableActivableEffect scriptableActivableEffect)
+        {
             activableEffect = scriptableActivableEffect.GetActivableEffect();
             cost = scriptableActivableEffect.GetActivableEffect().cost;
         }
@@ -101,6 +110,7 @@ namespace GameLogic{
             cardState.needsEntityTarget = needsEntityTarget;
             cardState.needsTileTarget = needsTileTarget;
             cardState.activableEffectState = activableEffect.ToEffectState();
+            cardState.num = num;
             return cardState;
         }
 

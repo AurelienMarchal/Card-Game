@@ -65,7 +65,7 @@ namespace GameLogic{
                 return false;
             }
 
-            var cardIndex = position > 0 ? position : handSize + position + 1;
+            var cardIndex = position >= 0 ? position : handSize + position + 1;
 
             if (cardIndex < 0 || cardIndex > handSize)
             {
@@ -77,25 +77,46 @@ namespace GameLogic{
 
         private void AddCard(Card card, int position = -1)
         {
-            var cardIndex = position > 0 ? position : handSize + position + 1;
+            var cardIndex = position >= 0 ? position : handSize + position + 1;
 
-            if (cardIndex >= handSize)
+            if (cardIndex < 0)
+            {
+                return;
+            }
+
+            else if (cardIndex >= handSize)
             {
                 cards.Add(card);
             }
+
             else
             {
                 cards.Insert(cardIndex, card);
             }
         }
 
+        public Card GetCardInPosition(int position)
+        {
+            var cardIndex = position >= 0 ? position : handSize + position + 1;
+            if (cardIndex >= handSize || cardIndex < 0)
+            {
+                return null;
+            }
+            else
+            {
+                return cards[cardIndex];
+            }
+        }
+
         
 
-        public HandState ToHandState(){
+        public HandState ToHandState()
+        {
             HandState handState = new HandState();
             handState.cardStates = new List<CardState>();
 
-            foreach(Card card in cards){
+            foreach (Card card in cards)
+            {
                 handState.cardStates.Add(card.ToCardState());
             }
 

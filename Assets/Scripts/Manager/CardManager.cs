@@ -7,6 +7,8 @@ using UnityEngine.Events;
 using GameLogic;
 using System;
 using GameLogic.GameState;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 
 [System.Serializable, Obsolete]
@@ -16,27 +18,32 @@ public class CardEvent : UnityEvent<Card>
 }
 
 [System.Serializable]
-public class CardStateEvent : UnityEvent<CardState>
+public class IntEvent : UnityEvent<int>
 {
 
 }
 
 public class CardManager : MonoBehaviour
-{   
-    [Obsolete]
-    public CardEvent cardClickedEvent = new CardEvent();
+{
 
-    [Obsolete]
-    public CardEvent cardHoverEnterEvent = new CardEvent();
+    //Temp
+    [SerializeField]
+    List<Sprite> cardArtWorks;
 
-    [Obsolete]
-    public CardEvent cardHoverExitEvent = new CardEvent();
+    public int positionInHand;
 
-    [SerializeField][Obsolete]
+    [SerializeField]
+    [Obsolete]
     ScriptableActivableEffectCard scriptableActivableEffectCard;
 
     [Obsolete]
     ScriptableActivableEffectCard lastScriptableActivableEffectCard;
+
+    public IntEvent cardClickedEvent = new IntEvent();
+
+    public IntEvent cardHoverEnterEvent = new IntEvent();
+
+    public IntEvent cardHoverExitEvent = new IntEvent();
 
     [SerializeField]
     CostUIDisplay costUIDisplay;
@@ -76,7 +83,7 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    
+
     private CardState cardState_;
 
     public CardState cardState
@@ -101,12 +108,12 @@ public class CardManager : MonoBehaviour
     {
     }
 
-    
+
     void UpdateAccordingToCardState()
     {
 
-        
-        
+
+
     }
 
     public void UpdateVisuals()
@@ -117,9 +124,14 @@ public class CardManager : MonoBehaviour
         }
         else
         {
+
             cardTextTextMeshProUGUI.text = cardState.text;
             cardNameTextMeshProUGUI.text = cardState.cardName;
             costUIDisplay.costState = cardState.costState;
+            if (cardState.num < cardArtWorks.Count)
+            {
+                cardImage.sprite = cardArtWorks[(int)cardState.num];
+            }
         }
     }
 
@@ -145,27 +157,27 @@ public class CardManager : MonoBehaviour
         //card = new Card(player, scriptableActivableEffectCard.scriptableActivableEffect.GetActivableEffect());
     }
 
-
-    [Obsolete]
     void OnMouseOver()
     {
         hovered = true;
-        cardHoverEnterEvent.Invoke(card);
+        cardHoverEnterEvent.Invoke(positionInHand);
     }
 
-    [Obsolete]
     void OnMouseExit()
     {
         hovered = false;
-        cardHoverExitEvent.Invoke(card);
+        cardHoverExitEvent.Invoke(positionInHand);
     }
 
-    [Obsolete]
     void OnMouseDown()
     {
-        if (card != null)
-        {
-            cardClickedEvent.Invoke(card);
-        }
+        cardClickedEvent.Invoke(positionInHand);
+    }
+
+    void OnDestroy()
+    {
+        cardClickedEvent.RemoveAllListeners();
+        cardHoverEnterEvent.RemoveAllListeners();
+        cardHoverExitEvent.RemoveAllListeners();
     }
 }

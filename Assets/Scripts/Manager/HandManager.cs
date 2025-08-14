@@ -31,14 +31,11 @@ public class HandManager : MonoBehaviour
         }
     }
 
-    [Obsolete]
-    public CardEvent cardClickedEvent = new CardEvent();
+    public IntEvent cardClickedEvent = new IntEvent();
 
-    [Obsolete]
-    public CardEvent cardHoverEnterEvent = new CardEvent();
+    public IntEvent cardHoverEnterEvent = new IntEvent();
 
-    [Obsolete]
-    public CardEvent cardHoverExitEvent = new CardEvent();
+    public IntEvent cardHoverExitEvent = new IntEvent();
 
     [SerializeField]
     GameObject cardPrefab;
@@ -131,6 +128,11 @@ public class HandManager : MonoBehaviour
             else
             {
                 cardManagers.Add(cardManager);
+                if(cardManager != null){
+                    cardManager.cardClickedEvent.AddListener(OnCardClicked);
+                    cardManager.cardHoverEnterEvent.AddListener(OnCardHoverEnter);
+                    cardManager.cardHoverExitEvent.AddListener(OnCardHoverExit);
+                }
             }
 
         }
@@ -145,22 +147,34 @@ public class HandManager : MonoBehaviour
         {
             var cardState = handState.cardStates[i];
             cardManagers[i].cardState = cardState;
+            cardManagers[i].positionInHand = i;
         }
     }
 
     public void UpdateVisuals()
     {
-        //TODO
+
+        UpdateCardsPosition();
+        foreach (var cardManager in cardManagers)
+        {
+            cardManager.UpdateVisuals();
+        }
+    }
+
+    public void OnCardClicked(int cardPositionInHand)
+    {
+        cardClickedEvent.Invoke(cardPositionInHand);
+    }
+
+    public void OnCardHoverEnter(int cardPositionInHand)
+    {
+        cardHoverEnterEvent.Invoke(cardPositionInHand);
         UpdateCardsPosition();
     }
 
-
-    void OnDestroy(){
-        var childCount = transform.childCount;
-
-        for (var i = 0; i < childCount; i++){
-            Transform child = transform.GetChild(i);
-            Destroy(child.gameObject);
-        }
+    public void OnCardHoverExit(int cardPositionInHand)
+    {
+        cardHoverExitEvent.Invoke(cardPositionInHand);
+        UpdateCardsPosition();
     }
 }

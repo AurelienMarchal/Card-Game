@@ -557,12 +557,12 @@ namespace GameLogic{
         public bool TryToCreateEntityPlayCardAction(Card card,  out EntityPlayCardAction entityPlayCardAction, Action costAction, Tile targetTile = null, Entity targetEntity = null){
             
             entityPlayCardAction = new EntityPlayCardAction(this, card, requiredAction:costAction);
-            var canAttack = CanPlayCard(card, targetTile, targetEntity);
-            if(canAttack){
+            var canPlayCard = CanPlayCard(card, targetTile, targetEntity);
+            if(canPlayCard){
                 Game.currentGame.PileAction(entityPlayCardAction);
             }
 
-            return canAttack;
+            return canPlayCard;
         }
 
         public bool CanPlayCard(Card card, Tile targetTile = null, Entity targetEntity = null){

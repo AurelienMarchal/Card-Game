@@ -52,7 +52,7 @@ public class AnimationManager : MonoBehaviour
     }
 
 
-    public void PlayAnimationForActionState(ActionState actionState)
+    public void HandleActionState(ActionState actionState)
     {
         if (actionState == null)
         {
@@ -283,6 +283,18 @@ public class AnimationManager : MonoBehaviour
         }
 
         entityManager.entityState.healthState = entityGainHeartActionState.newHealthState;
+        entityManager.UpdateHealthUIDisplay();
+    }
+
+    public void PlayAnimationForActionState(EntityHealsActionState entityHealsActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityHealsActionState.playerNum, entityHealsActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+
+        entityManager.entityState.healthState = entityHealsActionState.newHealthState;
         entityManager.UpdateHealthUIDisplay();
     }
 

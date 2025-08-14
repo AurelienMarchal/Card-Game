@@ -2,8 +2,16 @@ namespace GameLogic{
 
     namespace GameState{
         public class CardState{
-            //TODO: Targets
-            public bool needsEntityTarget{
+            
+            public uint num
+            {
+                get;
+                set;
+            }
+
+            //TODO: Possible Targets
+            public bool needsEntityTarget
+            {
                 get;
                 set;
             }
