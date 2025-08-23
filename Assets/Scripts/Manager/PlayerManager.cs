@@ -15,11 +15,15 @@ public class PlayerManager : MonoBehaviour
 
     List<EntityManager> entityManagers = new List<EntityManager>();
 
-    public IntEvent cardClickedEvent = new IntEvent();
+    public CardManagerEvent cardSelectedEvent = new CardManagerEvent();
 
-    public IntEvent cardHoverEnterEvent = new IntEvent();
+    public CardManagerEvent cardMouseDownEvent = new CardManagerEvent();
 
-    public IntEvent cardHoverExitEvent = new IntEvent();
+    public CardManagerEvent cardMouseUpEvent = new CardManagerEvent();
+
+    public CardManagerEvent cardHoverEnterEvent = new CardManagerEvent();
+
+    public CardManagerEvent cardHoverExitEvent = new CardManagerEvent();
 
     private PlayerState playerState_;
 
@@ -58,9 +62,11 @@ public class PlayerManager : MonoBehaviour
     //Maybe awake
     void Start()
     {
-        handManager.cardClickedEvent.AddListener((cardPositionInHand) => cardClickedEvent.Invoke(cardPositionInHand));
-        handManager.cardHoverEnterEvent.AddListener((cardPositionInHand) => cardHoverEnterEvent.Invoke(cardPositionInHand));
-        handManager.cardHoverExitEvent.AddListener((cardPositionInHand) => cardHoverExitEvent.Invoke(cardPositionInHand));
+        handManager.cardSelectedEvent.AddListener((cardManager) => cardSelectedEvent.Invoke(cardManager));
+        handManager.cardMouseDownEvent.AddListener((cardManager) => cardMouseDownEvent.Invoke(cardManager));
+        handManager.cardMouseUpEvent.AddListener((cardManager) => cardMouseUpEvent.Invoke(cardManager));
+        handManager.cardHoverEnterEvent.AddListener((cardManager) => cardHoverEnterEvent.Invoke(cardManager));
+        handManager.cardHoverExitEvent.AddListener((cardManager) => cardHoverExitEvent.Invoke(cardManager));
     }
 
     [Obsolete]
@@ -72,8 +78,8 @@ public class PlayerManager : MonoBehaviour
             return;
         }
 
-        player.hero.TryToCreateEntityUseMovementAction(card.activableEffect.cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
-        player.hero.TryToCreateEntityPayHeartCostAction(card.activableEffect.cost.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
+        player.hero.TryToCreateEntityUseMovementAction(card.cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
+        player.hero.TryToCreateEntityPayHeartCostAction(card.cost.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
 
         if (!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed)
         {
@@ -162,5 +168,18 @@ public class PlayerManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void ResetAllEntityLayer()
+    {
+        if (entityManagers == null)
+        {
+            return;
+        }
+
+        foreach (var entityManager in entityManagers)
+        {
+            GameManager.SetGameLayerRecursive(entityManager.gameObject, LayerMask.NameToLayer("Entity"));
+        }
     }
 }

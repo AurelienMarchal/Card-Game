@@ -70,11 +70,23 @@ public class BoardManager : MonoBehaviour
 
     public EntityManagerEvent entitySelectedEvent = new EntityManagerEvent();
 
+    public EntityManagerEvent entityMouseDownEvent = new EntityManagerEvent();
+
+    public EntityManagerEvent entityMouseUpEvent = new EntityManagerEvent();
+
+    public EntityManagerEvent entityHoverEnterEvent = new EntityManagerEvent();
+
+    public EntityManagerEvent entityHoverExitEvent = new EntityManagerEvent();
+
     public TileManagerEvent tileSelectedEvent = new TileManagerEvent();
 
-    public EntityManagerEvent entityClickedEvent = new EntityManagerEvent();
+    public TileManagerEvent tileMouseDownEvent = new TileManagerEvent();
 
-    public TileManagerEvent tileClickedEvent = new TileManagerEvent();
+    public TileManagerEvent tileMouseUpEvent = new TileManagerEvent();
+
+    public TileManagerEvent tileHoverEnterEvent = new TileManagerEvent();
+
+    public TileManagerEvent tileHoverExitEvent = new TileManagerEvent();
 
     // Start is called before the first frame update
     void Start()
@@ -133,25 +145,6 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    void OnTileSelected(TileManager tileManager)
-    {
-        tileSelectedEvent.Invoke(tileManager);
-    }
-
-    void OnEntitySelected(EntityManager entityManager)
-    {
-        entitySelectedEvent.Invoke(entityManager);
-    }
-
-    void OnTileClicked(TileManager tileManager)
-    {
-        tileClickedEvent.Invoke(tileManager);
-    }
-
-    void OnEntityClicked(EntityManager entityManager)
-    {
-        entityClickedEvent.Invoke(entityManager);
-    }
 
     [Obsolete]
     //A enlever  
@@ -188,29 +181,12 @@ public class BoardManager : MonoBehaviour
     {
         var tileInstance = Instantiate(tilePrefab, pos, Quaternion.identity, transform);
         var tileManager = tileInstance.GetComponent<TileManager>();
-        tileManager.selectedEvent.AddListener(OnTileSelected);
-        tileManager.clickedEvent.AddListener(OnTileClicked);
+        tileManager.tileSelectedEvent.AddListener((tileManager) => tileSelectedEvent.Invoke(tileManager));
+        tileManager.tileMouseDownEvent.AddListener((tileManager) => tileMouseDownEvent.Invoke(tileManager));
+        tileManager.tileMouseUpEvent.AddListener((tileManager) => tileMouseUpEvent.Invoke(tileManager));
+        tileManager.tileHoverEnterEvent.AddListener((tileManager) => tileHoverEnterEvent.Invoke(tileManager));
+        tileManager.tileHoverExitEvent.AddListener((tileManager) => tileHoverExitEvent.Invoke(tileManager));
         return tileManager;
-    }
-
-    [Obsolete]
-    public void SpawnEntity(GameObject entityPrefab, Entity entity)
-    {
-
-        var entityInstance = Instantiate(entityPrefab, Vector3.zero, Quaternion.identity, transform);
-        var entityManager = entityInstance.GetComponent<EntityManager>();
-        if (entityManager == null)
-        {
-            Debug.LogError("Entity prefab has no EntityManager attached.");
-            Destroy(entityInstance);
-            return;
-        }
-
-        entityManager.entity = entity;
-        entityManager.selectedEvent.AddListener(OnEntitySelected);
-        entityManager.clickedEvent.AddListener(OnEntityClicked);
-
-        AddEntity(entityManager);
     }
 
     public EntityManager SpawnEntity(EntityState entityState)
@@ -239,8 +215,11 @@ public class BoardManager : MonoBehaviour
         }
 
         entityManager.entityState = entityState;
-        entityManager.selectedEvent.AddListener(OnEntitySelected);
-        entityManager.clickedEvent.AddListener(OnEntityClicked);
+        entityManager.entitySelectedEvent.AddListener((entityManager) => entitySelectedEvent.Invoke(entityManager));
+        entityManager.entityMouseDownEvent.AddListener((entityManager) => entityMouseDownEvent.Invoke(entityManager));
+        entityManager.entityMouseUpEvent.AddListener((entityManager) => entityMouseUpEvent.Invoke(entityManager));
+        entityManager.entityHoverEnterEvent.AddListener((entityManager) => entityHoverEnterEvent.Invoke(entityManager));
+        entityManager.entityHoverExitEvent.AddListener((entityManager) => entityHoverExitEvent.Invoke(entityManager));
         return entityManager;
     }
 
@@ -333,6 +312,11 @@ public class BoardManager : MonoBehaviour
 
     public void ResetAllTileLayerDisplayUIInfo()
     {
+        if (tileManagers == null)
+        {
+            return;
+        }
+
         foreach (var tileManager in tileManagers)
         {
             tileManager.displayInfoUI = false;
@@ -341,6 +325,12 @@ public class BoardManager : MonoBehaviour
 
     public void ResetAllTileLayer()
     {
+
+        if (tileManagers == null)
+        {
+            return;
+        }
+        
         foreach (var tileManager in tileManagers)
         {
             GameManager.SetGameLayerRecursive(tileManager.gameObject, LayerMask.NameToLayer("Tile"));

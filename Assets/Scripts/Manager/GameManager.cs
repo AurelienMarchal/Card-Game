@@ -22,6 +22,75 @@ using System;
 public class GameManager : MonoBehaviour
 {
 
+    private enum UIState
+    {
+        Default, AnimationPlaying, EntitySelected, TileSelected, CardSelected
+    }
+
+    UIState uiState_;
+
+    UIState uiState
+    {
+        get { return uiState_; }
+        set
+        {
+            uiState_ = value;
+            Debug.Log($"New UIState : {uiState}");
+            switch (value)
+            {
+                case UIState.Default:
+                case UIState.AnimationPlaying:
+                    entityInfoUI.gameObject.SetActive(false);
+                    boardManager.ResetAllTileLayerDisplayUIInfo();
+                    boardManager.ResetAllTileLayer();
+                    ResetAllEntityLayer();
+                    EntityManager.UnselectEveryEntity();
+                    TileManager.UnselectEveryTile();
+                    currentEntitySelected = null;
+                    currentTileSelected = null;
+                    break;
+
+                case UIState.EntitySelected:
+                    TileManager.UnselectEveryTile();
+                    currentTileSelected = null;
+                    entityInfoUI.gameObject.SetActive(true);
+                    boardManager.ResetAllTileLayer();
+                    var tileManager = boardManager.GetTileManagerFromTileNum(currentEntitySelected.entityState.currentTileNum);
+                    SetGameLayerRecursive(tileManager.gameObject, LayerMask.NameToLayer("UICamera"));
+                    boardManager.ResetAllTileLayerDisplayUIInfo();
+                    if (currentEntitySelected.entityState.playerNum == gameState.currentPlayerNum)
+                    {
+                        boardManager.DisplayTilesUIInfo(currentEntitySelected.entityState.tileNumsToMoveTo.ToArray());
+                    }
+
+                    entityInfoUI.entityManager = currentEntitySelected;
+                    break;
+
+                case UIState.TileSelected:
+                    EntityManager.UnselectEveryEntity();
+                    ResetAllEntityLayer();
+                    currentEntitySelected = null;
+                    boardManager.ResetAllTileLayerDisplayUIInfo();
+                    entityInfoUI.gameObject.SetActive(false);
+                    break;
+
+                case UIState.CardSelected:
+                    EntityManager.UnselectEveryEntity();
+                    TileManager.UnselectEveryTile();
+                    currentEntitySelected = null;
+                    currentTileSelected = null;
+                    boardManager.ResetAllTileLayerDisplayUIInfo();
+                    boardManager.ResetAllTileLayer();
+                    ResetAllEntityLayer();
+                    entityInfoUI.gameObject.SetActive(false);
+                    break;
+
+                default: break;
+            }
+            
+        }
+    }
+
     private GameState gameState_;
 
 
@@ -55,8 +124,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     PlayerManager[] playerManagers;
 
-    bool blockInputs;
-
     [SerializeField]
     int boardHeight;
 
@@ -65,9 +132,9 @@ public class GameManager : MonoBehaviour
 
     EntityManager currentEntitySelected;
 
-    EntityManager lastEntitySelected;
-
     TileManager currentTileSelected;
+
+    CardManager currentCardSelected;
 
     [SerializeField]
     ManaUIDisplay manaUIDisplay;
@@ -99,7 +166,6 @@ public class GameManager : MonoBehaviour
 
     int UILayer;
 
-    bool gameStateHasChanged;
 
     // Start is called before the first frame update
     void Start()
@@ -108,23 +174,26 @@ public class GameManager : MonoBehaviour
         Game.currentGame.SetUpGame(playerManagers.Length, boardHeight, boardWidth);
         //Game.currentGame.board = Game.currentGame.board;
 
-
-
-        blockInputs = false;
-
         currentTileSelected = null;
         currentEntitySelected = null;
-        lastEntitySelected = null;
+        currentCardSelected = null;
 
         entityWasClickedThisFrame = false;
         tileWasClickedThisFrame = false;
 
+        uiState = UIState.Default;
+
         UILayer = LayerMask.NameToLayer("UI");
 
         boardManager.entitySelectedEvent.AddListener(OnEntitySelected);
+        boardManager.entityMouseDownEvent.AddListener(OnEntityMouseDown);
+        boardManager.entityMouseUpEvent.AddListener(OnEntityMouseUp);
+
         boardManager.tileSelectedEvent.AddListener(OnTileSelected);
-        boardManager.entityClickedEvent.AddListener(OnEntityClicked);
-        boardManager.tileClickedEvent.AddListener(OnTileClicked);
+        boardManager.tileMouseDownEvent.AddListener(OnTileMouseDown);
+        boardManager.tileMouseUpEvent.AddListener(OnTileMouseUpEvent);
+
+
 
         // --------- Testing ---------
         var startingTile1 = Game.currentGame.board.GetTileAt(2, 2);
@@ -157,9 +226,11 @@ public class GameManager : MonoBehaviour
         {
             var playerState = Game.currentGame.players[i].ToPlayerState();
             playerManagers[i].playerState = playerState;
-            playerManagers[i].cardClickedEvent.AddListener((cardPositionInHand) => OnCardClicked(cardPositionInHand, playerState.playerNum));
-            playerManagers[i].cardHoverEnterEvent.AddListener((cardPositionInHand) => OnCardHoverEnter(cardPositionInHand, playerState.playerNum));
-            playerManagers[i].cardHoverExitEvent.AddListener((cardPositionInHand) => OnCardHoverExit(cardPositionInHand, playerState.playerNum));
+            playerManagers[i].cardSelectedEvent.AddListener((cardManager) => OnCardSelected(cardManager, playerState.playerNum));
+            playerManagers[i].cardMouseDownEvent.AddListener((cardManager) => OnCardMouseDown(cardManager, playerState.playerNum));
+            playerManagers[i].cardMouseUpEvent.AddListener((cardManager) => OnCardMouseUp(cardManager, playerState.playerNum));
+            playerManagers[i].cardHoverEnterEvent.AddListener((cardManager) => OnCardHoverEnter(cardManager, playerState.playerNum));
+            playerManagers[i].cardHoverExitEvent.AddListener((cardManager) => OnCardHoverExit(cardManager, playerState.playerNum));
         }
 
         // ------------------
@@ -177,107 +248,94 @@ public class GameManager : MonoBehaviour
 
     }
 
+    
+
     // Update is called once per frame
     void Update()
     {
-
-
-        if (Game.currentGame.actionStatesToSendQueue.Count > 0)
+        //UI state machine
+        switch (uiState)
         {
-            blockInputs = true;
-            gameStateHasChanged = true;
-            //test
-            ActionState actionState = Game.currentGame.DequeueActionStateToSendQueue();
+            case UIState.Default:
 
-            if (actionState != null)
-            {
-                string serializedActionState = JsonConvert.SerializeObject(actionState);
-                Debug.Log("Serialized ActionState :" + serializedActionState);
-                var deserializedActionState = JsonConvert.DeserializeObject<ActionState>(serializedActionState);
-                Debug.Log("Deserialized ActionState :" + deserializedActionState);
+                break;
 
-                
-
-                if (deserializedActionState != null)
+            case UIState.AnimationPlaying:
+                if (!animationManager.animationPlaying)
                 {
-                    Debug.Log("Playing animation for " + serializedActionState);
-                    animationManager.HandleActionState(deserializedActionState);
+                    uiState = UIState.Default;
+                    OnAnimationsFinished();
                 }
-                
-            }
-        }
+                break;
 
-
-        else
-        {
-            blockInputs = animationManager.animationPlaying;
-        }
-
-        if (blockInputs)
-        {
-            boardManager.ResetAllTileLayerDisplayUIInfo();
-            EntityManager.UnselectEveryEntity();
-            TileManager.UnselectEveryTile();
-            currentEntitySelected = null;
-            currentTileSelected = null;
-            
-        }
-        else
-        {
-            if (gameStateHasChanged)
-            {
-                OnAnimationsFinished();
-                gameStateHasChanged = false;
-            }
-
-            if (Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                if (!IsPointerOverUIElement())
+            case UIState.EntitySelected:
+            case UIState.TileSelected:
+                if (Mouse.current.leftButton.wasPressedThisFrame)
                 {
-                    if (!entityWasClickedThisFrame && !tileWasClickedThisFrame)
+                    if (!IsPointerOverUIElement())
                     {
-                        EntityManager.UnselectEveryEntity();
-                        TileManager.UnselectEveryTile();
-                        currentEntitySelected = null;
-                        currentTileSelected = null;
+                        if (!entityWasClickedThisFrame && !tileWasClickedThisFrame)
+                        {
+                            uiState = UIState.Default;
+                        }
                     }
                 }
-            }
 
-            if (Mouse.current.rightButton.wasPressedThisFrame)
-            {
-                if (!IsPointerOverUIElement())
+                if (Mouse.current.rightButton.wasPressedThisFrame)
                 {
-                    EntityManager.UnselectEveryEntity();
-                    TileManager.UnselectEveryTile();
-                    currentEntitySelected = null;
-                    currentTileSelected = null;
+                    if (!IsPointerOverUIElement())
+                    {
+                        uiState = UIState.Default;
+                    }
                 }
-            }
+                break;
+
+            case UIState.CardSelected:
+                if (!Mouse.current.leftButton.isPressed)
+                {
+                    currentCardSelected.selected = false;
+                    currentCardSelected = null;
+                    uiState = UIState.Default;
+                }
+                foreach (var playerManager in playerManagers)
+                {
+                    playerManager.handManager.UpdateCardsPosition();
+                }
+                break;
+
+            default:
+                break;
         }
 
-        
 
-        if (currentEntitySelected != null)
+        if (Game.currentGame.actionStatesToSendQueue.Count > 0 && uiState != UIState.AnimationPlaying /*temp*/)
         {
-            boardManager.ResetAllTileLayer();
-            var tileManager = boardManager.GetTileManagerFromTileNum(currentEntitySelected.entityState.currentTileNum);
-            SetGameLayerRecursive(tileManager.gameObject, LayerMask.NameToLayer("UICamera"));
+            //test
+            ActionState actionState = Game.currentGame.DequeueActionStateToSendQueue();
+            string serializedActionState = JsonConvert.SerializeObject(actionState);
+            Debug.Log("Serialized ActionState :" + serializedActionState);
+            var deserializedActionState = JsonConvert.DeserializeObject<ActionState>(serializedActionState);
+            Debug.Log("Deserialized ActionState :" + deserializedActionState);
+            HandleActionState(deserializedActionState);
+            uiState = UIState.AnimationPlaying;
+
+
         }
-
-        entityInfoUI.gameObject.SetActive(currentEntitySelected != null);
-
-        if (lastEntitySelected != currentEntitySelected)
-        {
-            entityInfoUI.entityManager = currentEntitySelected;
-        }
-
-        lastEntitySelected = currentEntitySelected;
 
         entityWasClickedThisFrame = false;
         tileWasClickedThisFrame = false;
-        
-        
+
+    }
+
+    void HandleActionState(ActionState actionState)
+    {
+        if (actionState == null)
+        {
+            return;
+        }
+
+        Debug.Log("Playing animation for " + JsonConvert.SerializeObject(actionState));
+        animationManager.HandleActionState(actionState);
     }
 
     void UpdateAccordingToGameState()
@@ -300,7 +358,7 @@ public class GameManager : MonoBehaviour
 
         foreach (PlayerState playerState in gameState.playerStates)
         {
-            
+
             if (playerState.playerNum >= 0 &&
                 playerState.playerNum < playerManagers.Length &&
                 playerManagers[playerState.playerNum] != null)
@@ -324,7 +382,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdatePlayerText()
     {
-        
+
         if (gameState == null)
         {
             playerTextMesh.text = "";
@@ -337,7 +395,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateTurnText()
     {
-        
+
         if (gameState == null)
         {
             turnTextMesh.text = "";
@@ -447,55 +505,56 @@ public class GameManager : MonoBehaviour
 
     void OnEntitySelected(EntityManager entityManager)
     {
-        currentEntitySelected = entityManager;
-        
-        boardManager.ResetAllTileLayerDisplayUIInfo();
-        if (entityManager.entityState.playerNum == gameState.currentPlayerNum)
-        {
-            boardManager.DisplayTilesUIInfo(entityManager.entityState.tileNumsToMoveTo.ToArray());
-        }
-    }
 
-    void OnTileSelected(TileManager tileManager)
-    {
-        currentTileSelected = tileManager;
-        if (currentEntitySelected == null)
+        if (uiState == UIState.AnimationPlaying)
         {
-            
             return;
         }
-        else
-        {
-            
-        }
+
+        ResetAllEntityLayer();
+
+        currentEntitySelected = entityManager;
+        uiState = UIState.EntitySelected;
+
     }
 
-    void OnEntityClicked(EntityManager entityManager)
+    void OnEntityMouseDown(EntityManager entityManager)
     {
-        if (blockInputs)
+        if (uiState == UIState.AnimationPlaying)
         {
             return;
         }
 
         entityWasClickedThisFrame = true;
         EntityManager.UnselectEveryEntity();
-        TileManager.UnselectEveryTile();
         entityManager.selected = entityManager.hovered;
 
     }
 
-    private void OnWeaponUsed()
+    private void OnEntityMouseUp(EntityManager entityManager)
     {
-        if (currentEntitySelected == null)
+        if (uiState != UIState.CardSelected)
         {
             return;
         }
-        SendUserAction(new AtkWithEntityUserAction(currentEntitySelected.entityState.playerNum, currentEntitySelected.entityState.num));
     }
 
-    void OnTileClicked(TileManager tileManager)
+    void OnTileSelected(TileManager tileManager)
     {
-        if (blockInputs)
+        if (uiState == UIState.AnimationPlaying)
+        {
+            return;
+        }
+
+        boardManager.ResetAllTileLayer();
+
+        currentTileSelected = tileManager;
+        uiState = UIState.TileSelected;
+    }
+
+    void OnTileMouseDown(TileManager tileManager)
+    {
+        if (uiState == UIState.AnimationPlaying)
         {
             return;
         }
@@ -503,7 +562,7 @@ public class GameManager : MonoBehaviour
         tileWasClickedThisFrame = true;
 
 
-        if (currentEntitySelected != null)
+        if (uiState == UIState.EntitySelected)
         {
             //TODO: Check if it's the right player
 
@@ -522,7 +581,7 @@ public class GameManager : MonoBehaviour
                         direction));
                 }
             }
-            
+
             /*
             if (currentEntitySelected.entity.player == Game.currentGame.currentPlayer)
             {
@@ -540,14 +599,21 @@ public class GameManager : MonoBehaviour
 
         else
         {
-            EntityManager.UnselectEveryEntity();
             TileManager.UnselectEveryTile();
-            currentEntitySelected = null;
             tileManager.selected = tileManager.hovered;
         }
     }
 
-    
+
+    private void OnTileMouseUpEvent(TileManager tileManager)
+    {
+        if (uiState != UIState.CardSelected)
+        {
+            return;
+        }
+    }
+
+
     public void OnEndTurnPressed()
     {
         SendUserAction(new EndTurnUserAction(Game.currentGame.currentPlayer.playerNum));
@@ -618,40 +684,92 @@ public class GameManager : MonoBehaviour
         boardManager.DisplayTilesUIInfo(effectState.tilesAffectedNums.ToArray());
     }
 
-    
+
     private void OnEffectHoverExit(EffectState effect)
     {
         boardManager.ResetAllTileLayerDisplayUIInfo();
     }
 
-    
-    private void OnCardHoverEnter(int cardPositionInHand, uint playerNum)
+    private void OnCardSelected(CardManager cardManager, uint playerNum)
+    {
+        if (uiState == UIState.AnimationPlaying)
+        {
+            return;
+        }
+
+        currentCardSelected = cardManager;
+        uiState = UIState.CardSelected;
+    }
+
+
+    private void OnCardMouseDown(CardManager cardManager, uint playerNum)
+    {
+        if (uiState == UIState.AnimationPlaying)
+        {
+            return;
+        }
+
+
+        CardManager.UnselectEveryEntity();
+        cardManager.selected = true;
+    }
+
+    private void OnCardMouseUp(CardManager cardManager, uint playerNum)
+    {
+        if (!cardManager.selected)
+        {
+            return;
+        }
+
+        if (!cardManager.cardState.needsEntityTarget && !cardManager.cardState.needsTileTarget)
+        {
+            //And current mouse pos is in the right area
+            SendUserAction(new PlayCardFromHandUserAction(playerNum, cardManager.positionInHand, 0, 0, 0));
+        }
+        else if (cardManager.cardState.needsEntityTarget)
+        {
+
+        }
+        else if (cardManager.cardState.needsTileTarget)
+        {
+
+        }
+
+        
+
+    }
+
+    private void OnCardHoverEnter(CardManager cardManager, uint playerNum)
     {
         //card.activableEffect.GetTilesAndEntitiesAffected(out Entity[] entities, out Tile[] tiles);
         //boardManager.DisplayTilesUIInfo(tiles);
     }
 
-    private void OnCardHoverExit(int cardPositionInHand, uint playerNum)
+    private void OnCardHoverExit(CardManager cardManager, uint playerNum)
     {
         //boardManager.ResetAllTileLayerDisplayUIInfo();
-    }
-
-    private void OnCardClicked(int cardPositionInHand, uint playerNum)
-    {
-        SendUserAction(new PlayCardFromHandUserAction(playerNum, cardPositionInHand, 0, 0, 0));
     }
 
     [Obsolete]
     private void OnCardHoverEnter(Card card)
     {
-        card.activableEffect.GetTilesAndEntitiesAffected(out Entity[] entities, out Tile[] tiles);
-        boardManager.DisplayTilesUIInfo(tiles);
+        //card.activableEffect.GetTilesAndEntitiesAffected(out Entity[] entities, out Tile[] tiles);
+        //boardManager.DisplayTilesUIInfo(tiles);
     }
 
     [Obsolete]
     private void OnCardHoverExit(Card card)
     {
         boardManager.ResetAllTileLayerDisplayUIInfo();
+    }
+
+    private void OnWeaponUsed()
+    {
+        if (uiState != UIState.EntitySelected)
+        {
+            return;
+        }
+        SendUserAction(new AtkWithEntityUserAction(currentEntitySelected.entityState.playerNum, currentEntitySelected.entityState.num));
     }
 
     [Obsolete]
@@ -680,6 +798,19 @@ public class GameManager : MonoBehaviour
     private void OnWeaponHoverExit()
     {
         boardManager.ResetAllTileLayerDisplayUIInfo();
+    }
+
+    public void ResetAllEntityLayer()
+    {
+        if (playerManagers == null)
+        {
+            return;
+        }
+
+        foreach (var playerManager in playerManagers)
+        {
+            playerManager.ResetAllEntityLayer();
+        }
     }
     
 

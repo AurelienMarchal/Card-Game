@@ -844,7 +844,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b4df58fd3b173428918a4311f04ffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardClickedEvent:
+  cardSelectedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardMouseDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardMouseUpEvent:
     m_PersistentCalls:
       m_Calls: []
   cardHoverEnterEvent:
@@ -2029,7 +2035,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &866624996
 Transform:
   m_ObjectHideFlags: 0
@@ -2381,8 +2387,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 932746964}
   m_HandleRect: {fileID: 932746963}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.64375
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2655,6 +2661,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handManager: {fileID: 328048202}
+  cardSelectedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardMouseDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardMouseUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
   cardHoverEnterEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -4057,13 +4072,31 @@ MonoBehaviour:
   entitySelectedEvent:
     m_PersistentCalls:
       m_Calls: []
+  entityMouseDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  entityMouseUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  entityHoverEnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  entityHoverExitEvent:
+    m_PersistentCalls:
+      m_Calls: []
   tileSelectedEvent:
     m_PersistentCalls:
       m_Calls: []
-  entityClickedEvent:
+  tileMouseDownEvent:
     m_PersistentCalls:
       m_Calls: []
-  tileClickedEvent:
+  tileMouseUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  tileHoverEnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  tileHoverExitEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &1703089467
@@ -4672,7 +4705,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b4df58fd3b173428918a4311f04ffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardClickedEvent:
+  cardSelectedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardMouseDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardMouseUpEvent:
     m_PersistentCalls:
       m_Calls: []
   cardHoverEnterEvent:
@@ -5251,6 +5290,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handManager: {fileID: 1885251746}
+  cardSelectedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardMouseDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardMouseUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
   cardHoverEnterEvent:
     m_PersistentCalls:
       m_Calls: []

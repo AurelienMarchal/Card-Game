@@ -67,7 +67,7 @@ public class EntityManager : MonoBehaviour
             selected_ = value;
 
             if(selected){
-                selectedEvent.Invoke(this);
+                entitySelectedEvent.Invoke(this);
                 GameManager.SetGameLayerRecursive(gameObject, LayerMask.NameToLayer("UICamera"));
             }
             else{
@@ -107,16 +107,19 @@ public class EntityManager : MonoBehaviour
 
     float infoUITimer = 0f;
 
-    [HideInInspector]
     public TileManager goalTileManager;
 
     BoardManager boardManager;
 
-    [HideInInspector]
-    public EntityManagerEvent selectedEvent = new EntityManagerEvent();
+    public EntityManagerEvent entitySelectedEvent = new EntityManagerEvent();
 
-    [HideInInspector]
-    public EntityManagerEvent clickedEvent = new EntityManagerEvent();
+    public EntityManagerEvent entityMouseDownEvent = new EntityManagerEvent();
+
+    public EntityManagerEvent entityMouseUpEvent = new EntityManagerEvent();
+
+    public EntityManagerEvent entityHoverEnterEvent = new EntityManagerEvent();
+
+    public EntityManagerEvent entityHoverExitEvent = new EntityManagerEvent();
     
     void Awake(){
         boardManager = GetComponentInParent<BoardManager>();
@@ -162,7 +165,12 @@ public class EntityManager : MonoBehaviour
     }
 
     void OnMouseDown(){
-        clickedEvent.Invoke(this);
+        entityMouseDownEvent.Invoke(this);
+    }
+
+    void OnMouseUp()
+    {
+        entityMouseUpEvent.Invoke(this);
     }
 
     void OnMouseOver(){

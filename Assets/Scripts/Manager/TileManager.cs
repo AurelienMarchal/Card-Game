@@ -58,7 +58,7 @@ public class TileManager : MonoBehaviour
             selected_ = value;
 
             if(selected){
-                selectedEvent.Invoke(this);
+                tileSelectedEvent.Invoke(this);
             }
             /*
             var highlight = GetComponent<Highlight>();
@@ -112,9 +112,15 @@ public class TileManager : MonoBehaviour
     GameObject infoQuad;
 
 
-    public TileManagerEvent selectedEvent = new TileManagerEvent();
+    public TileManagerEvent tileSelectedEvent = new TileManagerEvent();
 
-    public TileManagerEvent clickedEvent = new TileManagerEvent();
+    public TileManagerEvent tileMouseDownEvent = new TileManagerEvent();
+
+    public TileManagerEvent tileMouseUpEvent = new TileManagerEvent();
+
+    public TileManagerEvent tileHoverEnterEvent = new TileManagerEvent();
+
+    public TileManagerEvent tileHoverExitEvent = new TileManagerEvent();
     
     // Start is called before the first frame update
     void Start()
@@ -157,15 +163,21 @@ public class TileManager : MonoBehaviour
     }
 
     void OnMouseDown(){
-        clickedEvent.Invoke(this);
+        tileMouseDownEvent.Invoke(this);
+    }
+
+    void OnMouseUp(){
+        tileMouseUpEvent.Invoke(this);
     }
 
     
     void OnMouseOver(){
+        tileHoverEnterEvent.Invoke(this);
         hovered = true;
     }
 
     void OnMouseExit(){
+        tileHoverExitEvent.Invoke(this);
         hovered = false;
     }
 

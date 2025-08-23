@@ -32,84 +32,63 @@ namespace GameLogic{
 
         protected EntityPlayCardAction entityPlayCardAction;
 
-        public ActivableEffect activableEffect{
-            get;
-            private set;
-        }
 
-        public Card(uint num, ActivableEffect activableEffect)
+        public Card(uint num, Cost cost, bool needsEntityTarget = false, bool needsTileTarget = false)
         {
             this.num = num;
-            this.activableEffect = activableEffect;
-            cost = activableEffect.cost;
+            this.cost = cost;
+            this.needsEntityTarget = needsEntityTarget;
+            this.needsTileTarget = needsTileTarget;
         }
 
-        [Obsolete]
-        public Card(ScriptableActivableEffect scriptableActivableEffect)
+        public virtual bool CanBeActivated(Tile targetTile = null, Entity targetEntity = null){
+            return false;
+        }
+
+        protected virtual bool Activate(Tile targetTile = null, Entity targetEntity = null)
         {
-            activableEffect = scriptableActivableEffect.GetActivableEffect();
-            cost = scriptableActivableEffect.GetActivableEffect().cost;
-        }
-
-        public virtual bool CanBeActivated(Entity caster, Tile targetTile = null, Entity targetEntity = null){
-            activableEffect.associatedEntity = caster;
-            var canBeActivated = activableEffect.CanBeActivated();
-            activableEffect.associatedEntity = Entity.noEntity;
-            return canBeActivated;
-        }
-
-        protected virtual bool Activate(Entity caster, Tile targetTile = null, Entity targetEntity = null)
-        {
-            activableEffect.associatedEntity = caster;
-            return activableEffect.TryToCreateEffectActivatedAction(entityPlayCardAction, out EffectActivatedAction _);
+            return false;
         }
 
         public virtual string GetText()
         {
-            return activableEffect.GetEffectText();
+            return "No text  Card";
         }
 
         public virtual string GetCardName()
         {
-            return activableEffect.GetType().ToString();
+            return "No name card";
         }
 
-        public bool TryToActivate(Entity caster, Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
-            var canBeActivated = CanBeActivated(caster, targetTile, targetEntity);
+        public bool TryToActivate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
+            var canBeActivated = CanBeActivated(targetTile, targetEntity);
             
             if(canBeActivated){
                 
-                return Activate(caster, targetTile, targetEntity);
+                return Activate(targetTile, targetEntity);
             }
             return canBeActivated;
         }
 
-        public virtual List<Entity> PossibleEntityCasters(){
-            var entityTargetList = new List<Entity>();
-
-            return entityTargetList;
-        }
-
-        public virtual List<Tile> PossibleTileTargets(Entity caster){
+        public virtual List<Tile> PossibleTileTargets(){
             var tileTargetList = new List<Tile>();
 
             return tileTargetList;
         }
 
-        public virtual List<Entity> PossibleEntityTargets(Entity caster){
+        public virtual List<Entity> PossibleEntityTargets(){
             var entityTargetList = new List<Entity>();
 
             return entityTargetList;
         }
 
-        public CardState ToCardState(){
+        public virtual CardState ToCardState(){
             CardState cardState= new CardState();
             cardState.cardName = GetCardName();
             cardState.costState = cost.ToCostState();
             cardState.text = GetText();
             cardState.needsEntityTarget = needsEntityTarget;
             cardState.needsTileTarget = needsTileTarget;
-            cardState.activableEffectState = activableEffect.ToEffectState();
             cardState.num = num;
             return cardState;
         }

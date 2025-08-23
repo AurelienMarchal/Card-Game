@@ -18,7 +18,7 @@ public class CardEvent : UnityEvent<Card>
 }
 
 [System.Serializable]
-public class IntEvent : UnityEvent<int>
+public class CardManagerEvent : UnityEvent<CardManager>
 {
 
 }
@@ -39,11 +39,15 @@ public class CardManager : MonoBehaviour
     [Obsolete]
     ScriptableActivableEffectCard lastScriptableActivableEffectCard;
 
-    public IntEvent cardClickedEvent = new IntEvent();
+    public CardManagerEvent cardSelectedEvent = new CardManagerEvent();
 
-    public IntEvent cardHoverEnterEvent = new IntEvent();
+    public CardManagerEvent cardMouseDownEvent = new CardManagerEvent();
 
-    public IntEvent cardHoverExitEvent = new IntEvent();
+    public CardManagerEvent cardMouseUpEvent = new CardManagerEvent();
+
+    public CardManagerEvent cardHoverEnterEvent = new CardManagerEvent();
+
+    public CardManagerEvent cardHoverExitEvent = new CardManagerEvent();
 
     [SerializeField]
     CostUIDisplay costUIDisplay;
@@ -63,10 +67,33 @@ public class CardManager : MonoBehaviour
         private set;
     }
 
-    //[SerializeField]
-    //TextMeshProUGUI cardCostTextMeshProUGUI;
+    private bool selected_;
 
-    [Obsolete]
+    public bool selected
+    {
+        get
+        {
+            return selected_;
+        }
+        set
+        {
+            selected_ = value;
+
+            if (selected)
+            {
+                cardSelectedEvent.Invoke(this);
+            }
+            else
+            {
+                
+            }
+        }
+    }
+
+    //[SerializeField]
+        //TextMeshProUGUI cardCostTextMeshProUGUI;
+
+        [Obsolete]
     private Card card_;
 
     [Obsolete]
@@ -102,10 +129,12 @@ public class CardManager : MonoBehaviour
     void Start()
     {
         hovered = false;
+        selected = false;
     }
 
     void Update()
     {
+        
     }
 
 
@@ -157,26 +186,40 @@ public class CardManager : MonoBehaviour
         //card = new Card(player, scriptableActivableEffectCard.scriptableActivableEffect.GetActivableEffect());
     }
 
+    public static void UnselectEveryEntity(){
+        foreach(GameObject cardGO in GameObject.FindGameObjectsWithTag("Card")){
+            var cardManager = cardGO.GetComponent<CardManager>();
+            if(cardManager != null){
+                cardManager.selected = false;
+            }
+        }
+    }
+
     void OnMouseOver()
     {
         hovered = true;
-        cardHoverEnterEvent.Invoke(positionInHand);
+        cardHoverEnterEvent.Invoke(this);
     }
 
     void OnMouseExit()
     {
         hovered = false;
-        cardHoverExitEvent.Invoke(positionInHand);
+        cardHoverExitEvent.Invoke(this);
     }
 
     void OnMouseDown()
     {
-        cardClickedEvent.Invoke(positionInHand);
+        cardMouseDownEvent.Invoke(this);
+    }
+
+    void OnMouseUp()
+    {
+        cardMouseUpEvent.Invoke(this);
     }
 
     void OnDestroy()
     {
-        cardClickedEvent.RemoveAllListeners();
+        cardMouseDownEvent.RemoveAllListeners();
         cardHoverEnterEvent.RemoveAllListeners();
         cardHoverExitEvent.RemoveAllListeners();
     }

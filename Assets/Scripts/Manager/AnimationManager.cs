@@ -478,7 +478,7 @@ public class AnimationManager : MonoBehaviour
         {
             if (prefabCorrespondingToEntityModel.entityModel == entity.model)
             {
-                boardManager.SpawnEntity(prefabCorrespondingToEntityModel.prefab, entity);
+                //boardManager.SpawnEntity(prefabCorrespondingToEntityModel.prefab, entity);
             }
         }
     }

@@ -26,11 +26,6 @@ namespace GameLogic{
                 set;
             }
 
-            public EffectState activableEffectState{
-                get;
-                set;
-            }
-
             public string text{
                 get;
                 set;

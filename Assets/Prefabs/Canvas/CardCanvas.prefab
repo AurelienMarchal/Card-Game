@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1639026227801307129}
   m_Layer: 5
   m_Name: CardCanvas
-  m_TagString: Untagged
+  m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,7 +119,15 @@ MonoBehaviour:
   cardArtWorks:
   - {fileID: 21300000, guid: 12e72fe4fc640c74bb834253dd235ccd, type: 3}
   - {fileID: 21300000, guid: d5a3f514df7109641a1fb69b53e9d13c, type: 3}
-  cardClickedEvent:
+  positionInHand: 0
+  scriptableActivableEffectCard: {fileID: 0}
+  cardSelectedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardMouseDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  cardMouseUpEvent:
     m_PersistentCalls:
       m_Calls: []
   cardHoverEnterEvent:
@@ -128,7 +136,6 @@ MonoBehaviour:
   cardHoverExitEvent:
     m_PersistentCalls:
       m_Calls: []
-  scriptableActivableEffectCard: {fileID: 0}
   costUIDisplay: {fileID: 5415012614430946984}
   cardNameTextMeshProUGUI: {fileID: 8730935442102279942}
   cardTextTextMeshProUGUI: {fileID: 6993365604042801738}

@@ -194,7 +194,7 @@ namespace GameLogic{
                     return HandleUserAction(atkWithEntityUserAction);
 
                 case PlayCardFromHandUserAction playCardFromHandUserAction:
-                    return HandleUserAction(playCardFromHandUserAction);
+                    //return HandleUserAction(playCardFromHandUserAction);
 
                 default:
                     break;
@@ -295,6 +295,7 @@ namespace GameLogic{
             return entityAttackAction.wasPerformed;
         }
 
+
         public bool HandleUserAction(PlayCardFromHandUserAction playCardFromHandUserAction)
         {
             var player = GetPlayerByPlayerNum(playCardFromHandUserAction.playerNum);
@@ -314,21 +315,22 @@ namespace GameLogic{
             Debug.Log($"Card : {card}");
 
 
-            if (!player.hero.CanPlayCard(card))
+            if (player.hero == null)
             {
                 return false;
             }
 
-            player.hero.TryToCreateEntityUseMovementAction(card.activableEffect.cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
-            player.hero.TryToCreateEntityPayHeartCostAction(card.activableEffect.cost.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
+            player.hero.TryToCreateEntityUseMovementAction(card.cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
+            player.hero.TryToCreateEntityPayHeartCostAction(card.cost.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
 
             if (!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed)
             {
                 return false;
             }
 
-            player.hero.TryToCreateEntityPlayCardAction(card, out EntityPlayCardAction entityPlayCardAction, entityPayHeartCostAction);
-            return entityPlayCardAction.wasPerformed;
+            //player.hero.TryToCreateEntityPlayCardAction(card, out EntityPlayCardAction entityPlayCardAction, entityPayHeartCostAction);
+            //return entityPlayCardAction.wasPerformed;
+            return false;
         }
 
 

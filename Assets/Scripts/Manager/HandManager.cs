@@ -31,11 +31,15 @@ public class HandManager : MonoBehaviour
         }
     }
 
-    public IntEvent cardClickedEvent = new IntEvent();
+    public CardManagerEvent cardSelectedEvent = new CardManagerEvent();
 
-    public IntEvent cardHoverEnterEvent = new IntEvent();
+    public CardManagerEvent cardMouseDownEvent = new CardManagerEvent();
 
-    public IntEvent cardHoverExitEvent = new IntEvent();
+    public CardManagerEvent cardMouseUpEvent = new CardManagerEvent();
+
+    public CardManagerEvent cardHoverEnterEvent = new CardManagerEvent();
+
+    public CardManagerEvent cardHoverExitEvent = new CardManagerEvent();
 
     [SerializeField]
     GameObject cardPrefab;
@@ -51,28 +55,14 @@ public class HandManager : MonoBehaviour
 
     void Start()
     {
-        /*
-        var childCount = transform.childCount;
-        //DO When addind cards
-        for (var i = 0; i < childCount; i++){
-            Transform child = transform.GetChild(i);
-            var cardManager = child.gameObject.GetComponent<CardManager>();
-            if(cardManager != null){
-                cardManager.cardClickedEvent.AddListener((card) => cardClickedEvent.Invoke(card));
-                cardManager.cardHoverEnterEvent.AddListener((card) => cardHoverEnterEvent.Invoke(card));
-                cardManager.cardHoverExitEvent.AddListener((card) => cardHoverExitEvent.Invoke(card));
-            }
-        }
-        */
+
     }
 
     void Update(){
         
-        
-        // Update according to hand ?
     }
 
-    void UpdateCardsPosition(){
+    public void UpdateCardsPosition(){
 
         for (var i = 0; i < cardManagers.Count; i++)
         {
@@ -80,7 +70,20 @@ public class HandManager : MonoBehaviour
             CardManager cardManager = cardManagers[i];
             Transform cardManagerTransform = cardManager.transform;
 
-            if (cardManager != null)
+            if (cardManager == null)
+            {
+                continue;
+            }
+
+            if (cardManager.selected)
+            {
+                var mousePos = Input.mousePosition;
+                //A calculer
+                mousePos.z = 12;
+                cardManager.transform.position = Camera.main.ScreenToWorldPoint(mousePos);
+            }
+
+            else
             {
                 var angle = (i - cardManagers.Count / 2) * degreeRange * (Mathf.PI / 180) / cardManagers.Count;
 
@@ -129,7 +132,9 @@ public class HandManager : MonoBehaviour
             {
                 cardManagers.Add(cardManager);
                 if(cardManager != null){
-                    cardManager.cardClickedEvent.AddListener(OnCardClicked);
+                    cardManager.cardSelectedEvent.AddListener(OnCardSelected);
+                    cardManager.cardMouseDownEvent.AddListener(OnCardMouseDown);
+                    cardManager.cardMouseUpEvent.AddListener(OnCardMouseUp);
                     cardManager.cardHoverEnterEvent.AddListener(OnCardHoverEnter);
                     cardManager.cardHoverExitEvent.AddListener(OnCardHoverExit);
                 }
@@ -151,6 +156,8 @@ public class HandManager : MonoBehaviour
         }
     }
 
+    
+
     public void UpdateVisuals()
     {
 
@@ -161,20 +168,32 @@ public class HandManager : MonoBehaviour
         }
     }
 
-    public void OnCardClicked(int cardPositionInHand)
+    private void OnCardSelected(CardManager cardManager)
     {
-        cardClickedEvent.Invoke(cardPositionInHand);
+        cardSelectedEvent.Invoke(cardManager);
     }
 
-    public void OnCardHoverEnter(int cardPositionInHand)
+    private void OnCardMouseDown(CardManager cardManager)
     {
-        cardHoverEnterEvent.Invoke(cardPositionInHand);
+        cardMouseDownEvent.Invoke(cardManager);
+    }
+
+    private void OnCardMouseUp(CardManager cardManager)
+    {
+        cardMouseUpEvent.Invoke(cardManager);
+    }
+
+    
+
+    public void OnCardHoverEnter(CardManager cardManager)
+    {
+        cardHoverEnterEvent.Invoke(cardManager);
         UpdateCardsPosition();
     }
 
-    public void OnCardHoverExit(int cardPositionInHand)
+    public void OnCardHoverExit(CardManager cardManager)
     {
-        cardHoverExitEvent.Invoke(cardPositionInHand);
+        cardHoverExitEvent.Invoke(cardManager);
         UpdateCardsPosition();
     }
 }

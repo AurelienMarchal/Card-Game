@@ -192,7 +192,9 @@ namespace GameLogic{
             Debug.Log($"{this} effects : [{String.Join(", ", effects)}]");
         }
 
-        public Entity(Player player, ScriptableEntity scriptableEntity, Tile startingTile, Direction startingDirection = Direction.North){
+        [Obsolete]
+        public Entity(Player player, ScriptableEntity scriptableEntity, Tile startingTile, Direction startingDirection = Direction.North)
+        {
             this.player = player;
             model = scriptableEntity.entityModel;
             name = scriptableEntity.entityName;
@@ -554,23 +556,30 @@ namespace GameLogic{
         }
 
 
-        public bool TryToCreateEntityPlayCardAction(Card card,  out EntityPlayCardAction entityPlayCardAction, Action costAction, Tile targetTile = null, Entity targetEntity = null){
-            
-            entityPlayCardAction = new EntityPlayCardAction(this, card, requiredAction:costAction);
+        [Obsolete]
+        public bool TryToCreateEntityPlayCardAction(Card card, out EntityPlayCardAction entityPlayCardAction, Action costAction, Tile targetTile = null, Entity targetEntity = null)
+        {
+
+            entityPlayCardAction = new EntityPlayCardAction(this, card, requiredAction: costAction);
             var canPlayCard = CanPlayCard(card, targetTile, targetEntity);
-            if(canPlayCard){
+            if (canPlayCard)
+            {
                 Game.currentGame.PileAction(entityPlayCardAction);
             }
 
             return canPlayCard;
         }
 
-        public bool CanPlayCard(Card card, Tile targetTile = null, Entity targetEntity = null){
-            return card.CanBeActivated(this, targetTile, targetEntity);
+        [Obsolete]
+        public bool CanPlayCard(Card card, Tile targetTile = null, Entity targetEntity = null)
+        {
+            return card.CanBeActivated(targetTile, targetEntity);
         }
 
-        public bool TryToPlayCard(Card card, Tile targetTile = null, Entity targetEntity = null){
-            return card.TryToActivate(this, targetTile, targetEntity);
+        [Obsolete]
+        public bool TryToPlayCard(Card card, Tile targetTile = null, Entity targetEntity = null)
+        {
+            return card.TryToActivate(targetTile, targetEntity);
         }
 
         public void AddEffectList(List<ScriptableEffect> scriptableEffects){
