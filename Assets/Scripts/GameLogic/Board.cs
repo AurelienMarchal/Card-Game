@@ -181,7 +181,40 @@ namespace GameLogic{
             return entityList.ToArray();
         }
 
-        private void SetupPermanentEffects(){
+        public List<Tile> GetTileSquareAroundTile(Tile tile, int squareSize)
+        {
+            var toReturn = new List<Tile>();
+
+            if (tile == Tile.noTile)
+            {
+                return toReturn;
+            }
+
+            if (squareSize == 0)
+            {
+                toReturn.Add(tile);
+                return toReturn;
+            }
+
+            var halfSquareSize = Math.Abs(squareSize) % 2 == 0 ? Math.Abs(squareSize) / 2 : Math.Abs(squareSize) + 1 / 2; 
+
+            for (int i = tile.gridX - halfSquareSize; i < tile.gridX + halfSquareSize; i++)
+            {
+                for (int j = tile.gridX - halfSquareSize; j < tile.gridX + halfSquareSize; j++)
+                {
+                    var tileij = GetTileAt(i, j);
+                    if (tileij != Tile.noTile)
+                    {
+                        toReturn.Add(tileij);
+                    }
+                }
+            }
+
+            return toReturn;
+        }
+
+        private void SetupPermanentEffects()
+        {
 
         }
 

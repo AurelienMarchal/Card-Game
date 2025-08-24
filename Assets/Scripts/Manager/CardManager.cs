@@ -39,14 +39,19 @@ public class CardManager : MonoBehaviour
     [Obsolete]
     ScriptableActivableEffectCard lastScriptableActivableEffectCard;
 
+    [HideInInspector]
     public CardManagerEvent cardSelectedEvent = new CardManagerEvent();
 
+    [HideInInspector]
     public CardManagerEvent cardMouseDownEvent = new CardManagerEvent();
 
+    [HideInInspector]
     public CardManagerEvent cardMouseUpEvent = new CardManagerEvent();
 
+    [HideInInspector]
     public CardManagerEvent cardHoverEnterEvent = new CardManagerEvent();
 
+    [HideInInspector]
     public CardManagerEvent cardHoverExitEvent = new CardManagerEvent();
 
     [SerializeField]
@@ -60,6 +65,12 @@ public class CardManager : MonoBehaviour
 
     [SerializeField]
     Image cardImage;
+
+    [SerializeField]
+    CanvasGroup canvasGroup;
+
+    [SerializeField, Range(0, 1f)]
+    float alphaWhenHoveringOver;
 
     public bool hovered
     {
@@ -85,15 +96,30 @@ public class CardManager : MonoBehaviour
             }
             else
             {
-                
+                hoveringOver = false;
             }
         }
     }
 
-    //[SerializeField]
-        //TextMeshProUGUI cardCostTextMeshProUGUI;
+    private bool hoveringOver_;
 
-        [Obsolete]
+    public bool hoveringOver
+    {
+        get
+        {
+            return hoveringOver_;
+        }
+        set
+        {
+            hoveringOver_ = value;
+            canvasGroup.alpha = value ? alphaWhenHoveringOver : 1f;
+        }
+    }
+
+    //[SerializeField]
+    //TextMeshProUGUI cardCostTextMeshProUGUI;
+
+    [Obsolete]
     private Card card_;
 
     [Obsolete]
@@ -126,10 +152,11 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    void Start()
+    void Awake()
     {
         hovered = false;
         selected = false;
+        hoveringOver = false;
     }
 
     void Update()
@@ -186,7 +213,7 @@ public class CardManager : MonoBehaviour
         //card = new Card(player, scriptableActivableEffectCard.scriptableActivableEffect.GetActivableEffect());
     }
 
-    public static void UnselectEveryEntity(){
+    public static void UnselectEveryCard(){
         foreach(GameObject cardGO in GameObject.FindGameObjectsWithTag("Card")){
             var cardManager = cardGO.GetComponent<CardManager>();
             if(cardManager != null){

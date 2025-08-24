@@ -31,14 +31,19 @@ public class HandManager : MonoBehaviour
         }
     }
 
+    [HideInInspector]
     public CardManagerEvent cardSelectedEvent = new CardManagerEvent();
 
+    [HideInInspector]
     public CardManagerEvent cardMouseDownEvent = new CardManagerEvent();
 
+    [HideInInspector]
     public CardManagerEvent cardMouseUpEvent = new CardManagerEvent();
 
+    [HideInInspector]
     public CardManagerEvent cardHoverEnterEvent = new CardManagerEvent();
 
+    [HideInInspector]
     public CardManagerEvent cardHoverExitEvent = new CardManagerEvent();
 
     [SerializeField]

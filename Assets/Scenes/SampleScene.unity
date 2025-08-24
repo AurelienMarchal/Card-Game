@@ -560,6 +560,12 @@ MonoBehaviour:
   mainCameraTransform: {fileID: 963194228}
   player1CameraTransform: {fileID: 1810848517}
   player2CameraTransform: {fileID: 1558099817}
+  layerMaskEntity:
+    serializedVersion: 2
+    m_Bits: 8
+  layerMaskTile:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!4 &229934141
 Transform:
   m_ObjectHideFlags: 0

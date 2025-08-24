@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace GameLogic{
 
     namespace GameState{
@@ -9,7 +11,16 @@ namespace GameLogic{
                 set;
             }
 
-            //TODO: Possible Targets
+            public Dictionary<uint, List<uint>> possibleEntityTargets
+            {
+                get;
+                set;
+            }
+            public List<uint> possibleTileTargets
+            {
+                get;
+                set;
+            }
             public bool needsEntityTarget
             {
                 get;

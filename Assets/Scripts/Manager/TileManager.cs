@@ -111,15 +111,19 @@ public class TileManager : MonoBehaviour
     [SerializeField]
     GameObject infoQuad;
 
-
+    [HideInInspector]
     public TileManagerEvent tileSelectedEvent = new TileManagerEvent();
 
+    [HideInInspector]
     public TileManagerEvent tileMouseDownEvent = new TileManagerEvent();
 
+    [HideInInspector]
     public TileManagerEvent tileMouseUpEvent = new TileManagerEvent();
 
+    [HideInInspector]
     public TileManagerEvent tileHoverEnterEvent = new TileManagerEvent();
 
+    [HideInInspector]
     public TileManagerEvent tileHoverExitEvent = new TileManagerEvent();
     
     // Start is called before the first frame update
@@ -171,12 +175,12 @@ public class TileManager : MonoBehaviour
     }
 
     
-    void OnMouseOver(){
+    public void OnMouseOver(){
         tileHoverEnterEvent.Invoke(this);
         hovered = true;
     }
 
-    void OnMouseExit(){
+    public void OnMouseExit(){
         tileHoverExitEvent.Invoke(this);
         hovered = false;
     }
@@ -187,6 +191,15 @@ public class TileManager : MonoBehaviour
             var tileManager = tile.GetComponent<TileManager>();
             if(tileManager != null){
                 tileManager.selected = false;
+            }
+        }
+    }
+
+    public static void UnhoverEveryTile(){
+        foreach(GameObject tile in GameObject.FindGameObjectsWithTag("Tile")){
+            var tileManager = tile.GetComponent<TileManager>();
+            if(tileManager != null){
+                tileManager.hovered = false;
             }
         }
     }

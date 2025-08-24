@@ -87,6 +87,27 @@ namespace GameLogic{
             cardState.cardName = GetCardName();
             cardState.costState = cost.ToCostState();
             cardState.text = GetText();
+
+            cardState.possibleEntityTargets = new Dictionary<uint, List<uint>>();
+            var possibleEntityTargets = PossibleEntityTargets();
+            foreach (var entity in possibleEntityTargets)
+            {
+                if (!cardState.possibleEntityTargets.ContainsKey(entity.player.playerNum))
+                {
+                    cardState.possibleEntityTargets.Add(entity.player.playerNum, new List<uint>());
+                }
+                cardState.possibleEntityTargets[entity.player.playerNum].Add(entity.num);
+
+            }
+
+            var possibleTileTargets = PossibleTileTargets();
+            cardState.possibleTileTargets = new List<uint>();
+
+            foreach (var tile in possibleTileTargets)
+            {
+                cardState.possibleTileTargets.Add(tile.num);
+            }
+
             cardState.needsEntityTarget = needsEntityTarget;
             cardState.needsTileTarget = needsTileTarget;
             cardState.num = num;

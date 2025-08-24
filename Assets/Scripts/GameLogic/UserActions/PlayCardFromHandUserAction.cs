@@ -15,12 +15,14 @@ namespace GameLogic{
                 private set;
             }
 
+            //Temp, certain card might need multiple targets
             public uint entityTargetNum
             {
                 get;
                 private set;
             }
 
+            //Temp, certain card might need multiple targets
             public uint tileTargetNum
             {
                 get;

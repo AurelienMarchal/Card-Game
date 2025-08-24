@@ -32,6 +32,12 @@ namespace GameLogic
             return base.Activate(targetTile, targetEntity);
         }
 
+        public override List<Tile> PossibleTileTargets()
+        {
+            var toReturn = Game.currentGame.board.GetTileSquareAroundTile(entity.player.hero.currentTile, 5);
+            return toReturn;
+        }
+
         public override string GetText()
         {
             return "Spawn " + entity.name;

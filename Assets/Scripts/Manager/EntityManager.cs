@@ -111,14 +111,19 @@ public class EntityManager : MonoBehaviour
 
     BoardManager boardManager;
 
+    [HideInInspector]
     public EntityManagerEvent entitySelectedEvent = new EntityManagerEvent();
 
+    [HideInInspector]
     public EntityManagerEvent entityMouseDownEvent = new EntityManagerEvent();
 
+    [HideInInspector]
     public EntityManagerEvent entityMouseUpEvent = new EntityManagerEvent();
 
+    [HideInInspector]
     public EntityManagerEvent entityHoverEnterEvent = new EntityManagerEvent();
 
+    [HideInInspector]
     public EntityManagerEvent entityHoverExitEvent = new EntityManagerEvent();
     
     void Awake(){
@@ -173,11 +178,11 @@ public class EntityManager : MonoBehaviour
         entityMouseUpEvent.Invoke(this);
     }
 
-    void OnMouseOver(){
+    public void OnMouseOver(){
         hovered = true;
     }
 
-    void OnMouseExit(){
+    public void OnMouseExit(){
         hovered = false;
     }
 
@@ -186,6 +191,15 @@ public class EntityManager : MonoBehaviour
             var entityManager = entity.GetComponent<EntityManager>();
             if(entityManager != null){
                 entityManager.selected = false;
+            }
+        }
+    }
+
+    public static void UnhoverEveryEntity(){
+        foreach(GameObject entity in GameObject.FindGameObjectsWithTag("Entity")){
+            var entityManager = entity.GetComponent<EntityManager>();
+            if(entityManager != null){
+                entityManager.hovered = false;
             }
         }
     }

@@ -134,6 +134,10 @@ public class GameManager : MonoBehaviour
 
     TileManager currentTileSelected;
 
+    EntityManager currentEntityHoveredWhileHoldingCard;
+
+    TileManager currentTileHoveredWhileHoldingCard;
+
     CardManager currentCardSelected;
 
     [SerializeField]
@@ -160,6 +164,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     Transform player2CameraTransform;
 
+    [SerializeField]
+    LayerMask layerMaskEntity;
+
+    [SerializeField]
+    LayerMask layerMaskTile;
+
     bool entityWasClickedThisFrame;
 
     bool tileWasClickedThisFrame;
@@ -177,6 +187,8 @@ public class GameManager : MonoBehaviour
         currentTileSelected = null;
         currentEntitySelected = null;
         currentCardSelected = null;
+        currentEntityHoveredWhileHoldingCard = null;
+        currentTileHoveredWhileHoldingCard = null;
 
         entityWasClickedThisFrame = false;
         tileWasClickedThisFrame = false;
@@ -293,10 +305,19 @@ public class GameManager : MonoBehaviour
             case UIState.CardSelected:
                 if (!Mouse.current.leftButton.isPressed)
                 {
+                    TryToPlayedWithTargets(
+                        0,
+                        currentCardSelected.positionInHand,
+                        currentCardSelected.cardState,
+                        currentEntityHoveredWhileHoldingCard == null ? null : currentEntityHoveredWhileHoldingCard.entityState,
+                        currentTileHoveredWhileHoldingCard == null ? null : currentTileHoveredWhileHoldingCard.tileState);
                     currentCardSelected.selected = false;
+                    currentCardSelected.hoveringOver = false;
                     currentCardSelected = null;
+                    
                     uiState = UIState.Default;
                 }
+                //Temp
                 foreach (var playerManager in playerManagers)
                 {
                     playerManager.handManager.UpdateCardsPosition();
@@ -325,6 +346,63 @@ public class GameManager : MonoBehaviour
         entityWasClickedThisFrame = false;
         tileWasClickedThisFrame = false;
 
+    }
+
+    
+
+    void FixedUpdate()
+    {
+        switch (uiState)
+        {
+            case UIState.CardSelected:
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hitEntity;
+                RaycastHit hitTile;
+                Debug.DrawRay(ray.origin, ray.direction * 20, Color.white);
+                EntityManager.UnhoverEveryEntity();
+                TileManager.UnhoverEveryTile();
+                var carHoveringOver = false;
+                currentEntityHoveredWhileHoldingCard = null;
+                currentTileHoveredWhileHoldingCard = null;
+                if (Physics.Raycast(ray, out hitEntity, 1000f, layerMaskEntity))
+                {
+                    if (hitEntity.collider != null)
+                    {
+                        var entityManager = hitEntity.collider.gameObject.GetComponent<EntityManager>();
+                        if (entityManager != null)
+                        {
+                            carHoveringOver = true;
+                            entityManager.OnMouseOver();
+                            currentEntityHoveredWhileHoldingCard = entityManager;
+                        }
+                    }
+                }
+                else
+                {
+
+                    if (Physics.Raycast(ray, out hitTile, 1000f, layerMaskTile))
+                    {
+                        if (hitTile.collider != null)
+                        {
+                            var tileManager = hitTile.collider.gameObject.GetComponent<TileManager>();
+                            if (tileManager != null)
+                            {
+                                carHoveringOver = true;
+                                tileManager.OnMouseOver();
+                                currentTileHoveredWhileHoldingCard = tileManager;
+                            }
+                        }
+                    }
+                }
+
+                if (currentCardSelected != null)
+                {
+                    currentCardSelected.hoveringOver = carHoveringOver;
+                }
+                
+                break;
+            default: break;
+        }
     }
 
     void HandleActionState(ActionState actionState)
@@ -441,6 +519,25 @@ public class GameManager : MonoBehaviour
             //Visual changes need to be applied only if an animation won't do it. 
             //gameState = Game.currentGame.ToGameState();
         }
+    }
+
+
+    private bool TryToPlayedWithTargets(uint playerNum, int cardPositionInHand, CardState cardState, EntityState targetEntityState, TileState targetTileState)
+    {
+        if (!cardState.needsEntityTarget && !cardState.needsTileTarget)
+        {
+            SendUserAction(new PlayCardFromHandUserAction(playerNum, cardPositionInHand, 0, 0, 0));
+        }
+        else if (cardState.needsEntityTarget)
+        {
+
+        }
+        else if (cardState.needsTileTarget)
+        {
+
+        }
+
+        return false;
     }
 
     public PlayerManager GetPlayerManagerFromPlayerNum(uint playerNum)
@@ -710,7 +807,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-        CardManager.UnselectEveryEntity();
+        CardManager.UnselectEveryCard();
         cardManager.selected = true;
     }
 
