@@ -30,7 +30,9 @@ namespace GameLogic{
             protected set;
         }
 
-        protected EntityPlayCardAction entityPlayCardAction;
+
+        //to remove ?
+        protected PlayerPlayCardAction playerPlayCardAction;
 
 
         public Card(uint num, Cost cost, bool needsEntityTarget = false, bool needsTileTarget = false)

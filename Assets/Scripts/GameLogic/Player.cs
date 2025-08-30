@@ -18,20 +18,20 @@ namespace GameLogic{
             private set;
         }
 
-        [Obsolete]
         public int manaLeft{
             get;
             private set;
         }
 
-        [Obsolete]
         public int maxMana{
             get;
             private set;
         }
 
-        [Obsolete]
-        public const int maxManaCap = 10;
+        public int maxManaCap {
+            get;
+            private set;
+        }
         
         public Deck deck
         {
@@ -56,6 +56,10 @@ namespace GameLogic{
         }
 
         public Player(uint num, uint[] deckList, System.Random random){
+            //temp
+            maxMana = 0;
+            //temp
+            maxManaCap = 10;
             playerNum = num;
             deck = new Deck(deckList, random);
             hand = new Hand(this);
@@ -64,12 +68,12 @@ namespace GameLogic{
             SetupPermanentEffects();
         }
 
-        [Obsolete]
+
         public void ResetMana(){
             manaLeft = maxMana;
         }
         
-        [Obsolete]
+
         public bool TryToIncreaseMaxMana(){
             var canIncreaseMaxMana = CanIncreaseMaxMana();
             if(canIncreaseMaxMana){
@@ -79,20 +83,76 @@ namespace GameLogic{
             return canIncreaseMaxMana;
         }
 
-        [Obsolete]
         public bool CanIncreaseMaxMana(){
             return maxMana < maxManaCap;
         }
 
-        [Obsolete]
         private void IncreaseMaxMana(){
             maxMana = Math.Clamp(maxMana+1, 0, maxManaCap);
         }
+        
+        public bool TryToCreatePlayerUseManaAction(int mana, out PlayerUseManaAction useManaAction){
+            useManaAction = new PlayerUseManaAction(this, mana);
+            var canUseMana =  CanUseMana(mana);
+            if(canUseMana){
+                Game.currentGame.PileAction(useManaAction);
+            }
 
-        public bool TryToCreateSpawnEntityAction(EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, Direction startingDirection, List<EntityEffect> permanentEffects, Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction, Weapon weapon=Weapon.noWeapon){
-            playerSpawnEntityAction = new PlayerSpawnEntityAction(this, model, name, startingTile, startingHealth, startingMaxMovement, permanentEffects, startingDirection,  weapon, requiredAction);
+            return canUseMana;
+        }
+
+        
+        public bool TryToUseMana(int mana){
+            
+            var canUseMana = CanUseMana(mana);
+
+            if(canUseMana){
+                UseMana(mana);
+            }
+
+            return canUseMana;
+        }
+
+        
+        public bool CanUseMana(int mana){
+            return mana <= manaLeft && mana >= 0;
+        }
+
+        
+        private void UseMana(int mana){
+            manaLeft = Math.Clamp(manaLeft - mana, 0, maxMana);
+            Debug.Log($"{this} using {mana} mana. {manaLeft} mana left");
+        }
+
+        public bool TryToCreatePlayerPlayCardAction(Card card, out PlayerPlayCardAction playerPlayCardAction, Action costAction, Tile targetTile = null, Entity targetEntity = null)
+        {
+
+            playerPlayCardAction = new PlayerPlayCardAction(this, card, requiredAction: costAction);
+            var canPlayCard = CanPlayCard(card, targetTile, targetEntity);
+            if (canPlayCard)
+            {
+                Game.currentGame.PileAction(playerPlayCardAction);
+            }
+
+            return canPlayCard;
+        }
+
+        public bool CanPlayCard(Card card, Tile targetTile = null, Entity targetEntity = null)
+        {
+            return card.CanBeActivated(targetTile, targetEntity);
+        }
+
+        public bool TryToPlayCard(Card card, Tile targetTile = null, Entity targetEntity = null)
+        {
+            return card.TryToActivate(targetTile, targetEntity);
+        }
+
+        public bool TryToCreateSpawnEntityAction(EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, Direction startingDirection, List<EntityEffect> permanentEffects, Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction, Weapon weapon = Weapon.noWeapon)
+        {
+            playerSpawnEntityAction = new PlayerSpawnEntityAction(this, model, name, startingTile, startingHealth, startingMaxMovement, permanentEffects, startingDirection, weapon, requiredAction);
             var canSpawnEntityAt = CanSpawnEntityAt(startingTile);
-            if(canSpawnEntityAt){
+            if (canSpawnEntityAt)
+            {
                 Game.currentGame.PileAction(playerSpawnEntityAction);
             }
 
@@ -137,41 +197,6 @@ namespace GameLogic{
             return Game.currentGame.board.GetEntityAtTile(tile) == Entity.noEntity;
         }
 
-        [Obsolete]
-        public bool TryToCreatePlayerUseManaAction(int mana, out PlayerUseManaAction useManaAction){
-            useManaAction = new PlayerUseManaAction(this, mana);
-            var canUseMana =  CanUseMana(mana);
-            if(canUseMana){
-                Game.currentGame.PileAction(useManaAction);
-            }
-
-            return canUseMana;
-        }
-
-        [Obsolete]
-        public bool TryToUseMana(int mana){
-            
-            var canUseMana = CanUseMana(mana);
-
-            if(canUseMana){
-                UseMana(mana);
-            }
-
-            return canUseMana;
-        }
-
-        [Obsolete]
-        private bool CanUseMana(int mana){
-            return mana <= manaLeft && mana >= 0;
-        }
-
-        [Obsolete]
-        private void UseMana(int mana){
-            manaLeft = Math.Clamp(manaLeft - mana, 0, maxMana);
-            Debug.Log($"{this} using {mana} mana. {manaLeft} mana left");
-        }
-
-
         public Card TryToDraw()
         {
             var canDraw = CanDraw();
@@ -189,7 +214,10 @@ namespace GameLogic{
         }
 
         private void SetupPermanentEffects()
-        {
+        {   
+            effects.Add(new PlayerResetManaAtTurnStartPlayerEffect(this));
+            effects.Add(new PlayerIncreaseMaxManaAtTurnStartPlayerEffect(this));
+            
             effects.Add(new DrawCardAtTurnStartPlayerEffect(this));
         }
 
@@ -209,6 +237,10 @@ namespace GameLogic{
             foreach (Entity entity in entities){
                 playerState.entityStates.Add(entity.ToEntityState());
             }
+
+            playerState.manaLeft = manaLeft;
+            playerState.maxMana = maxMana;
+            playerState.maxManaCap = maxManaCap;
 
             playerState.effectStates = new List<EffectState>();
             foreach (Effect effect in effects){

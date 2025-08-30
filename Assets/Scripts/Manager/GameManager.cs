@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
     CardManager currentCardSelected;
 
     [SerializeField]
-    ManaUIDisplay manaUIDisplay;
+    public ManaUIDisplay manaUIDisplay;
 
     [SerializeField]
     EntityInfoUI entityInfoUI;
@@ -253,7 +253,7 @@ public class GameManager : MonoBehaviour
         //entityInfoUI.weaponHoverEnterEvent.AddListener(OnWeaponHoverEnter);
         //entityInfoUI.weaponHoverExitEvent.AddListener(OnWeaponHoverExit);
 
-        Game.currentGame.StartGame();
+        Game.currentGame.PileAction(new StartGameAction());
         gameState = Game.currentGame.ToGameState();
         UpdateVisuals();
 
@@ -445,6 +445,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        manaUIDisplay.playerState = gameState.playerStates[(int)gameState.currentPlayerNum];
+
     }
 
     public void UpdateVisuals()
@@ -452,6 +454,7 @@ public class GameManager : MonoBehaviour
         UpdatePlayerText();
         UpdateTurnText();
         boardManager.UpdateVisuals();
+        manaUIDisplay.UpdateVisuals();
         foreach (var playerManager in playerManagers)
         {
             playerManager.UpdateVisuals();

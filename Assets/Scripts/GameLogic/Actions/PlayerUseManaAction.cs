@@ -5,7 +5,7 @@ using GameLogic.GameState;
 namespace GameLogic{
 
     namespace GameAction{
-        [Obsolete]
+
         public class PlayerUseManaAction : PlayerAction{
 
             public int numberOfMana{
@@ -23,7 +23,10 @@ namespace GameLogic{
 
             public override ActionState ToActionState()
             {
-                throw new NotImplementedException();
+                var actionState = new PlayerUseManaActionState();
+                actionState.playerNum = player.playerNum;
+                actionState.newManaLeft = player.manaLeft;
+                return actionState;
             }
         }
     }

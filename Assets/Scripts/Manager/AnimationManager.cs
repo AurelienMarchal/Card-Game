@@ -76,6 +76,18 @@ public class AnimationManager : MonoBehaviour
             case PlayerEndTurnActionState playerEndTurnActionState:
                 PlayAnimationForActionState(playerEndTurnActionState);
                 break;
+            case PlayerIncreaseMaxManaActionState playerIncreaseMaxManaActionState:
+                PlayAnimationForActionState(playerIncreaseMaxManaActionState);
+                break;
+            case PlayerUseManaActionState playerUseManaActionState:
+                PlayAnimationForActionState(playerUseManaActionState);
+                break;
+            case PlayerResetManaActionState playerResetManaActionState:
+                PlayAnimationForActionState(playerResetManaActionState);
+                break;
+            case PlayerPlayCardActionState playerPlayCardActionState:
+                //PlayAnimationForActionState(playerPlayCardActionState);
+                break;
             case PlayerAddCardToHandActionState playerAddCardToHandActionState:
                 PlayAnimationForActionState(playerAddCardToHandActionState);
                 break;
@@ -132,12 +144,31 @@ public class AnimationManager : MonoBehaviour
     public void PlayAnimationForActionState(PlayerStartTurnActionState playerStartTurnActionState)
     {
         gameManager.gameState.currentPlayerNum = playerStartTurnActionState.playerNum;
+        //gameManager.manaUIDisplay.playerState = gameManager.gameState.playerStates[(int)playerStartTurnActionState.playerNum];
         gameManager.UpdatePlayerText();
     }
 
     public void PlayAnimationForActionState(PlayerEndTurnActionState playerEndTurnActionState)
     {
         
+    }
+
+    public void PlayAnimationForActionState(PlayerIncreaseMaxManaActionState playerIncreaseMaxManaActionState)
+    {
+        gameManager.manaUIDisplay.playerState.maxMana = playerIncreaseMaxManaActionState.newMaxMana;
+        gameManager.manaUIDisplay.UpdateVisuals();
+    }
+
+    public void PlayAnimationForActionState(PlayerUseManaActionState playerUseManaActionState)
+    {
+        gameManager.manaUIDisplay.playerState.manaLeft = playerUseManaActionState.newManaLeft;
+        gameManager.manaUIDisplay.UpdateVisuals();
+    }
+
+    public void PlayAnimationForActionState(PlayerResetManaActionState playerResetManaActionState)
+    {
+        gameManager.manaUIDisplay.playerState.manaLeft = playerResetManaActionState.newManaLeft;
+        gameManager.manaUIDisplay.UpdateVisuals();
     }
 
     public void PlayAnimationForActionState(PlayerAddCardToHandActionState playerAddCardToHandActionState)

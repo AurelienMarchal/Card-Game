@@ -23,8 +23,24 @@ namespace GameLogic{
                 get;
                 set;
             }
+            
+            public int manaLeft{
+                get;
+                set;
+            }
 
-            public List<EffectState> effectStates{
+            public int maxMana{
+                get;
+                set;
+            }
+
+            public int maxManaCap {
+                get;
+                set;
+            }
+
+            public List<EffectState> effectStates
+            {
                 get;
                 set;
             }

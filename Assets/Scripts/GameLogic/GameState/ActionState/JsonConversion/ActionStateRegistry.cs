@@ -12,6 +12,10 @@ namespace GameLogic.GameState
 
             { "PlayerStartTurn",            typeof(PlayerStartTurnActionState) },
             { "PlayerEndTurn",              typeof(PlayerEndTurnActionState) },
+            { "PlayerIncreaseMaxMana",      typeof(PlayerIncreaseMaxManaActionState)},
+            { "PlayerUseMana",              typeof(PlayerUseManaActionState)},
+            { "PlayerResetMana",            typeof(PlayerResetManaActionState)},
+            { "PlayerPlayCard",             typeof(PlayerPlayCardActionState)},
             { "PlayerAddCardToHand",        typeof(PlayerAddCardToHandActionState) },
             { "PlayerDrawCard",             typeof(PlayerDrawCardActionState) },
             

@@ -50,6 +50,25 @@ namespace GameLogic.GameState
             if (value is PlayerActionState playerActionState)
             {
                 jo["playerNum"] = playerActionState.playerNum;
+                if (value is PlayerIncreaseMaxManaActionState playerIncreaseMaxManaActionState)
+                {
+                    jo["newMaxMana"] = playerIncreaseMaxManaActionState.newMaxMana;
+                }
+                if (value is PlayerUseManaActionState playerUseManaActionState)
+                {
+                    jo["newManaLeft"] = playerUseManaActionState.newManaLeft;
+                }
+                if (value is PlayerResetManaActionState playerResetManaActionState)
+                {
+                    jo["newManaLeft"] = playerResetManaActionState.newManaLeft;
+                }
+                if (value is PlayerPlayCardActionState playerPlayCardActionState)
+                {
+                    jo["card"] = JToken.FromObject(playerPlayCardActionState.card);
+                    jo["targetTileNum"] = playerPlayCardActionState.targetTileNum;
+                    jo["targetEntityNum"] = playerPlayCardActionState.targetEntityNum;
+                    jo["targetEntityPlayerNum"] = playerPlayCardActionState.targetEntityPlayerNum;
+                }
                 if (value is PlayerAddCardToHandActionState playerAddCardToHandActionState)
                 {
                     jo["card"] = JToken.FromObject(playerAddCardToHandActionState.card);

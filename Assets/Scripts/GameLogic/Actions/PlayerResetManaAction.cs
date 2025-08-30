@@ -7,22 +7,25 @@ using UnityEngine;
 namespace GameLogic{
 
     namespace GameAction{
-        [Obsolete]
+
         public class PlayerResetManaAction : PlayerAction
         {
             public PlayerResetManaAction(Player player, Action requiredAction = null) : base(player, requiredAction)
             {
             }
 
-            public override ActionState ToActionState()
-            {
-                throw new NotImplementedException();
-            }
-
             protected override bool Perform()
             {
                 player.ResetMana();
                 return true;
+            }
+
+            public override ActionState ToActionState()
+            {
+                var actionState = new PlayerResetManaActionState();
+                actionState.playerNum = player.playerNum;
+                actionState.newManaLeft = player.manaLeft;
+                return actionState;
             }
         }
     }

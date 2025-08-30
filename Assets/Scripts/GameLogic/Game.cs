@@ -194,7 +194,7 @@ namespace GameLogic{
                     return HandleUserAction(atkWithEntityUserAction);
 
                 case PlayCardFromHandUserAction playCardFromHandUserAction:
-                    //return HandleUserAction(playCardFromHandUserAction);
+                    return HandleUserAction(playCardFromHandUserAction);
 
                 default:
                     break;
@@ -312,25 +312,25 @@ namespace GameLogic{
                 return false;
             }
 
+            //TODO: Targets
+
             Debug.Log($"Card : {card}");
 
+            player.TryToCreatePlayerUseManaAction(card.cost.manaCost, out PlayerUseManaAction playerUseManaAction);
 
-            if (player.hero == null)
+            if (!playerUseManaAction.wasPerformed)
             {
                 return false;
             }
-
-            player.hero.TryToCreateEntityUseMovementAction(card.cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
-            player.hero.TryToCreateEntityPayHeartCostAction(card.cost.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
-
-            if (!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed)
-            {
-                return false;
-            }
-
-            //player.hero.TryToCreateEntityPlayCardAction(card, out EntityPlayCardAction entityPlayCardAction, entityPayHeartCostAction);
-            //return entityPlayCardAction.wasPerformed;
-            return false;
+            player.TryToCreatePlayerPlayCardAction(
+                card,
+                out PlayerPlayCardAction playerPlayCardAction,
+                costAction: playerUseManaAction,
+                targetTile: Tile.noTile,
+                targetEntity: Entity.noEntity
+            );
+            
+            return playerPlayCardAction.wasPerformed; 
         }
 
 

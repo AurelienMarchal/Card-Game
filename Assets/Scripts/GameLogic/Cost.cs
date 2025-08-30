@@ -11,17 +11,23 @@ namespace GameLogic{
 
         public int mouvementCost;
 
-        public Cost(HeartType[] hearts, int mouvement){
+        public int manaCost;
+
+        public Cost(HeartType[] hearts, int mouvement, int mana)
+        {
             heartCost = hearts;
             mouvementCost = mouvement;
+            manaCost = mana;
         }
 
-        public Cost(int mouvement){
+        public Cost(int mana = 0, int mouvement = 0)
+        {
             heartCost = new HeartType[0];
             mouvementCost = mouvement;
+            manaCost = mana;
         }
 
-        public static Cost noCost = new Cost(new HeartType[0], 0);
+        public static Cost noCost = new Cost(new HeartType[0], 0, 0);
 
 
         public Dictionary<HeartType, int> GetHeartTypeDict(){
@@ -44,6 +50,7 @@ namespace GameLogic{
         public CostState ToCostState(){
             CostState costState = new CostState();
             costState.mouvementCost = mouvementCost;
+            costState.manaCost = manaCost;
             costState.heartCost = new List<HeartType>();
             costState.heartCost.AddRange(heartCost);
             return costState;

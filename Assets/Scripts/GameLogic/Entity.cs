@@ -179,7 +179,7 @@ namespace GameLogic{
             maxMovement = startingMaxMovement;
             movementLeft = 0;
             direction = startingDirection;
-            baseCostToAtk = new Cost(1);
+            baseCostToAtk = new Cost(mouvement: 1);
             baseRange = 0;
             baseAtkDamage = new Damage(0);
             effects = new List<EntityEffect>();
@@ -204,7 +204,7 @@ namespace GameLogic{
             maxMovement = scriptableEntity.maxMovement;
             movementLeft = 0;
             direction = startingDirection;
-            baseCostToAtk = new Cost(1);
+            baseCostToAtk = new Cost(mouvement: 1);
             baseRange = 0;
             baseAtkDamage = new Damage(0);
             effects = new List<EntityEffect>();
@@ -219,7 +219,7 @@ namespace GameLogic{
 
         protected virtual Cost CalculateCostToMove(){
             var weightedDownBuffCount = NumberOfBuffs<WeightedDownBuff>();
-            return new Cost(1 + weightedDownBuffCount);
+            return new Cost(mouvement: 1 + weightedDownBuffCount);
         }
 
         public virtual bool TryToCreateEntityMoveAction(Tile tile, Action requiredAction, out EntityMoveAction entityMoveAction){
@@ -555,33 +555,6 @@ namespace GameLogic{
             movementLeft = maxMovement;
         }
 
-
-        [Obsolete]
-        public bool TryToCreateEntityPlayCardAction(Card card, out EntityPlayCardAction entityPlayCardAction, Action costAction, Tile targetTile = null, Entity targetEntity = null)
-        {
-
-            entityPlayCardAction = new EntityPlayCardAction(this, card, requiredAction: costAction);
-            var canPlayCard = CanPlayCard(card, targetTile, targetEntity);
-            if (canPlayCard)
-            {
-                Game.currentGame.PileAction(entityPlayCardAction);
-            }
-
-            return canPlayCard;
-        }
-
-        [Obsolete]
-        public bool CanPlayCard(Card card, Tile targetTile = null, Entity targetEntity = null)
-        {
-            return card.CanBeActivated(targetTile, targetEntity);
-        }
-
-        [Obsolete]
-        public bool TryToPlayCard(Card card, Tile targetTile = null, Entity targetEntity = null)
-        {
-            return card.TryToActivate(targetTile, targetEntity);
-        }
-
         public void AddEffectList(List<ScriptableEffect> scriptableEffects){
             foreach (var scriptableEffect in scriptableEffects){
                 AddEffect(scriptableEffect);
@@ -615,6 +588,7 @@ namespace GameLogic{
         }
 
         protected void AddDefaultPermanentEffects(){
+            //EntityRestoreMovementAtTurnStart
             effects.Add(new EntityDiesWhenHealthIsEmpty(this));
             effects.Add(new EntityIsWeightedDownByStoneHeartEffect(this));
         }

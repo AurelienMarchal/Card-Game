@@ -74,6 +74,7 @@ public class PlayerManager : MonoBehaviour
         handManager.cardHoverExitEvent.AddListener((cardManager) => cardHoverExitEvent.Invoke(cardManager));
     }
 
+    /*
     [Obsolete]
     private void OnCardClicked(Card card)
     {
@@ -93,6 +94,7 @@ public class PlayerManager : MonoBehaviour
 
         player.hero.TryToCreateEntityPlayCardAction(card, out EntityPlayCardAction entityPlayCardAction, entityPayHeartCostAction);
     }
+    */
 
     [Obsolete]
     void UpdateAccordingToPlayer()

@@ -17,15 +17,25 @@ namespace GameLogic{
                 get;
                 set;
             }
+            
+            public int manaCost
+            {
+                get;
+                set;
+            }
 
-            public Dictionary<HeartType, int> GetHeartTypeDict(){
+            public Dictionary<HeartType, int> GetHeartTypeDict()
+            {
                 var dict = new Dictionary<HeartType, int>();
 
-                foreach(var heart in heartCost){
-                    if(!dict.ContainsKey(heart)){
+                foreach (var heart in heartCost)
+                {
+                    if (!dict.ContainsKey(heart))
+                    {
                         dict.Add(heart, 1);
                     }
-                    else{
+                    else
+                    {
                         dict[heart] += 1;
                     }
                 }

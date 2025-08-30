@@ -8,22 +8,25 @@ namespace GameLogic{
                 get;
                 private set;
             }
-
-            public uint entityTargetPlayerNum
+            
+            //None = -1
+            public int entityTargetPlayerNum
             {
                 get;
                 private set;
             }
 
             //Temp, certain card might need multiple targets
-            public uint entityTargetNum
+            //None = -1
+            public int entityTargetNum
             {
                 get;
                 private set;
             }
 
             //Temp, certain card might need multiple targets
-            public uint tileTargetNum
+            //None = -1
+            public int tileTargetNum
             {
                 get;
                 private set;
@@ -33,9 +36,9 @@ namespace GameLogic{
             public PlayCardFromHandUserAction(
                 uint playerNum,
                 int cardPositionInHand,
-                uint entityTargetPlayerNum,
-                uint entityTargetNum,
-                uint tileTargetNum) : base(playerNum)
+                int entityTargetPlayerNum = -1,
+                int entityTargetNum = -1,
+                int tileTargetNum = -1) : base(playerNum)
             {
                 this.cardPositionInHand = cardPositionInHand;
                 this.entityTargetPlayerNum = entityTargetPlayerNum;
