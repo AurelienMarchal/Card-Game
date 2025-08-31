@@ -24,7 +24,22 @@ namespace GameLogic
 
         public override bool CanBeActivated(Tile targetTile = null, Entity targetEntity = null)
         {
-            return base.CanBeActivated(targetTile, targetEntity);
+            if (targetTile == null)
+            {
+                return false;
+            }
+
+            if (Game.currentGame.board.GetEntityAtTile(targetTile) != Entity.noEntity)
+            {
+                return false;
+            }
+
+            if (!PossibleTileTargets().Contains(targetTile))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         protected override bool Activate(Tile targetTile = null, Entity targetEntity = null)
@@ -34,6 +49,7 @@ namespace GameLogic
 
         public override List<Tile> PossibleTileTargets()
         {
+            //TODO : check if entity already on tile
             var toReturn = Game.currentGame.board.GetTileSquareAroundTile(entity.player.hero.currentTile, 5);
             return toReturn;
         }

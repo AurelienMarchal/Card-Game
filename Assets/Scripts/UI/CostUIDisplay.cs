@@ -43,9 +43,14 @@ public class CostUIDisplay : MonoBehaviour
         set
         {
             costState_ = value;
-            UpdateFromCostState();
         }
     }
+
+    [SerializeField]
+    Image mouvementImage;
+
+    [SerializeField]
+    TextMeshProUGUI mouvementText;
 
     [SerializeField]
     Image manaImage;
@@ -74,11 +79,12 @@ public class CostUIDisplay : MonoBehaviour
         }
 
         //UpdateFromCost();
-        UpdateFromCostState();
+        UpdateVisuals();
     }
 
-    private void UpdateFromCostState()
+    public void UpdateVisuals()
     {
+        
         for (int i = 0; i < heartImages.Length; i++)
         {
             heartImages[i].gameObject.SetActive(false);
@@ -87,11 +93,15 @@ public class CostUIDisplay : MonoBehaviour
         if (costState == null)
         {
             manaImage.gameObject.SetActive(false);
+            mouvementImage.gameObject.SetActive(false);
             return;
         }
 
-        manaImage.gameObject.SetActive(costState.mouvementCost > 0);
-        manaText.text = costState.mouvementCost.ToString();
+        manaImage.gameObject.SetActive(costState.manaCost > 0);
+        manaText.text = costState.manaCost.ToString();
+
+        mouvementImage.gameObject.SetActive(costState.mouvementCost > 0);
+        mouvementText.text = costState.mouvementCost.ToString();
 
         var count = 0;
 

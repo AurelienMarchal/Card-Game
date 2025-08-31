@@ -26,6 +26,7 @@ namespace GameLogic{
                 var actionState = new PlayerUseManaActionState();
                 actionState.playerNum = player.playerNum;
                 actionState.newManaLeft = player.manaLeft;
+                actionState.manaUsed = numberOfMana;
                 return actionState;
             }
         }

@@ -77,6 +77,7 @@ public class AtkUIDisplay : MonoBehaviour
         atkTextMeshProUGUI.text = $"{entityState.atkDamageState.amount}";
         rangeTextMeshProUGUI.text = $"{entityState.range}";
         costUIDisplay.costState = entityState.costToAtkState;
+        costUIDisplay.UpdateVisuals();
         //TODO : rajouter entityState.canPayAtkCost boolean
         //atkButton.enabled = entityState.CanPayAtkCost() && Game.currentGame.currentPlayer == entity.player;
 

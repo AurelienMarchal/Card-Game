@@ -97,6 +97,7 @@ public class EffectUIDisplay : MonoBehaviour
         if (effectState.costState != null)
         {
             costUIDisplay.costState = effectState.costState;
+            costUIDisplay.UpdateVisuals();
         }
 
         /*

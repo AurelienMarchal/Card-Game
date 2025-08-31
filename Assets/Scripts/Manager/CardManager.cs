@@ -167,8 +167,12 @@ public class CardManager : MonoBehaviour
 
     void UpdateAccordingToCardState()
     {
-
-
+        if (cardState == null)
+        {
+            costUIDisplay.costState = null;
+            return;
+        }
+        costUIDisplay.costState = cardState.costState;
 
     }
 
@@ -176,14 +180,14 @@ public class CardManager : MonoBehaviour
     {
         if (cardState == null)
         {
-            costUIDisplay.costState = null;
+            return;
         }
         else
         {
-
             cardTextTextMeshProUGUI.text = cardState.text;
             cardNameTextMeshProUGUI.text = cardState.cardName;
-            costUIDisplay.costState = cardState.costState;
+            
+            costUIDisplay.UpdateVisuals();
             if (cardState.num < cardArtWorks.Count)
             {
                 cardImage.sprite = cardArtWorks[(int)cardState.num];

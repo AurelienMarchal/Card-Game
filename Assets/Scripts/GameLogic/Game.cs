@@ -316,6 +316,18 @@ namespace GameLogic{
 
             Debug.Log($"Card : {card}");
 
+            if (!player.CanUseMana(card.cost.manaCost))
+            {
+                return false;
+            }
+
+            if (!player.CanPlayCard(card,
+                targetTile: Tile.noTile,
+                targetEntity: Entity.noEntity))
+            {
+                return false;
+            }
+
             player.TryToCreatePlayerUseManaAction(card.cost.manaCost, out PlayerUseManaAction playerUseManaAction);
 
             if (!playerUseManaAction.wasPerformed)
