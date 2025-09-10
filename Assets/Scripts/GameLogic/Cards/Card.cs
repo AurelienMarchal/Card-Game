@@ -14,8 +14,15 @@ namespace GameLogic{
             get;
             private set;
         }
+        
+        public Player player
+        {
+            get;
+            private set;
+        }
 
-        public bool needsEntityTarget {
+        public bool needsEntityTarget
+        {
             get;
             protected set;
         }
@@ -35,9 +42,10 @@ namespace GameLogic{
         protected PlayerPlayCardAction playerPlayCardAction;
 
 
-        public Card(uint num, Cost cost, bool needsEntityTarget = false, bool needsTileTarget = false)
+        public Card(uint num,  Player player, Cost cost, bool needsEntityTarget = false, bool needsTileTarget = false)
         {
             this.num = num;
+            this.player = player;
             this.cost = cost;
             this.needsEntityTarget = needsEntityTarget;
             this.needsTileTarget = needsTileTarget;

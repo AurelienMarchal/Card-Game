@@ -61,7 +61,7 @@ namespace GameLogic{
             //temp
             maxManaCap = 10;
             playerNum = num;
-            deck = new Deck(deckList, random);
+            deck = new Deck(deckList, this, random);
             hand = new Hand(this);
             entities = new List<Entity>();
             effects = new List<Effect>();
@@ -127,7 +127,7 @@ namespace GameLogic{
         public bool TryToCreatePlayerPlayCardAction(Card card, out PlayerPlayCardAction playerPlayCardAction, Action costAction, Tile targetTile = null, Entity targetEntity = null)
         {
 
-            playerPlayCardAction = new PlayerPlayCardAction(this, card, requiredAction: costAction);
+            playerPlayCardAction = new PlayerPlayCardAction(this, card, targetTile, targetEntity, requiredAction: costAction);
             var canPlayCard = CanPlayCard(card, targetTile, targetEntity);
             if (canPlayCard)
             {
@@ -158,20 +158,26 @@ namespace GameLogic{
 
             return canSpawnEntityAt;
         }
-
-        public bool TryToCreateSpawnEntityAction(ScriptableEntity scriptableEntity, Tile startingTile, Direction startingDirection, Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction){
-            playerSpawnEntityAction = new PlayerSpawnEntityAction(this, scriptableEntity,  startingTile, startingDirection,  requiredAction);
+        
+        public bool TryToCreateSpawnEntityAction(Entity entity, Tile startingTile, Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction)
+        {
+            playerSpawnEntityAction = new PlayerSpawnEntityAction(this, entity, startingTile, requiredAction);
             var canSpawnEntityAt = CanSpawnEntityAt(startingTile);
-            if(canSpawnEntityAt){
+            if (canSpawnEntityAt)
+            {
                 Game.currentGame.PileAction(playerSpawnEntityAction);
             }
 
             return canSpawnEntityAt;
         }
 
-        public bool TryToSpawnEntity(Entity entity){
+        
+
+        public bool TryToSpawnEntity(Entity entity)
+        {
             var canSpawnEntity = CanSpawnEntity(entity);
-            if(canSpawnEntity){
+            if (canSpawnEntity)
+            {
                 SpawnEntity(entity);
             }
             return canSpawnEntity;

@@ -222,12 +222,22 @@ namespace GameLogic{
             return new Cost(mouvement: 1 + weightedDownBuffCount);
         }
 
-        public virtual bool TryToCreateEntityMoveAction(Tile tile, Action requiredAction, out EntityMoveAction entityMoveAction){
+        internal void TryToSetStartingTile(Tile tile)
+        {
+            if (currentTile == Tile.noTile)
+            {
+                currentTile = tile;
+            }
+        }
+
+        public virtual bool TryToCreateEntityMoveAction(Tile tile, Action requiredAction, out EntityMoveAction entityMoveAction)
+        {
             var newdirection = DirectionsExtensions.FromCoordinateDifference(tile.gridX - currentTile.gridX, tile.gridY - currentTile.gridY);
             TryToCreateEntityChangeDirectionAction(newdirection, requiredAction, out EntityChangeDirectionAction entityChangeDirectionAction);
             entityMoveAction = new EntityMoveAction(this, currentTile, tile, entityChangeDirectionAction);
             var result = CanMove(tile);
-            if(result){
+            if (result)
+            {
                 Game.currentGame.PileAction(entityMoveAction);
             }
 

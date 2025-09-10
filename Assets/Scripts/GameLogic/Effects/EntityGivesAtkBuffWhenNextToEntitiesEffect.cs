@@ -34,7 +34,7 @@ namespace GameLogic{
                         return startGameAction.wasPerformed;
 
                     case PlayerSpawnEntityAction playerSpawnEntityAction:
-                        return playerSpawnEntityAction.entitySpawned == associatedEntity && playerSpawnEntityAction.wasPerformed;
+                        return playerSpawnEntityAction.entity == associatedEntity && playerSpawnEntityAction.wasPerformed;
 
                     case EntityMoveAction entityMoveAction:
                         return entityMoveAction.wasPerformed;

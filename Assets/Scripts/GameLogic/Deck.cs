@@ -5,7 +5,14 @@ namespace GameLogic
 {
     public class Deck
     {
-        public int deckSize{
+        public Player player
+        {
+            get;
+            private set;
+        }
+
+        public int deckSize
+        {
             get
             {
                 return cards.Count;
@@ -19,14 +26,15 @@ namespace GameLogic
 
         private Random random;
 
-        public Deck(uint[] deckList, System.Random random)
+        public Deck(uint[] deckList, Player player, System.Random random)
         {
+            this.player = player;
             cards = new List<Card>();
             this.random = random;
 
             foreach (var cardNum in deckList)
             {
-                cards.Add(CardFactory.CreateCardWithNum(cardNum));
+                cards.Add(CardFactory.CreateCardWithNum(cardNum, player));
             }
         }
 

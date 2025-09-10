@@ -68,12 +68,22 @@ namespace GameLogic{
             //Debug.Log($"Tiles : [{String.Join(", ", (object[])tiles)}]");
         }
 
-        public Tile GetTileAt(int gridX, int gridY){
-            if(gridX < 0 || gridY < 0 || gridX >= gridHeight || gridY >= gridWidth){
+        public Tile GetTileWithNum(uint tileNum){
+            if(tileNum >= tiles.Length){
                 return Tile.noTile;
             }
 
-            return tiles[gridX*gridHeight + gridY];
+            return tiles[(int)tileNum];
+        }
+
+        public Tile GetTileAt(int gridX, int gridY)
+        {
+            if (gridX < 0 || gridY < 0 || gridX >= gridHeight || gridY >= gridWidth)
+            {
+                return Tile.noTile;
+            }
+
+            return tiles[gridX * gridHeight + gridY];
         }
 
         public Tile NextTileInDirection(Tile startingTile, Direction direction){

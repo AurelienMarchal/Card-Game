@@ -16,7 +16,7 @@ namespace GameLogic
             private set;
         }
 
-        public EffectCard(uint num, Cost cost, Effect effect) : base(num, cost) 
+        public EffectCard(uint num, Player player, Cost cost, Effect effect) : base(num, player, cost) 
         {
             this.effect = effect;
         }

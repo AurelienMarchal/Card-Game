@@ -305,7 +305,7 @@ public class GameManager : MonoBehaviour
             case UIState.CardSelected:
                 if (!Mouse.current.leftButton.isPressed)
                 {
-                    TryToPlayedWithTargets(
+                    TryToPlayeCarddWithTargets(
                         0,
                         currentCardSelected.positionInHand,
                         currentCardSelected.cardState,
@@ -525,7 +525,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private bool TryToPlayedWithTargets(uint playerNum, int cardPositionInHand, CardState cardState, EntityState targetEntityState, TileState targetTileState)
+    private bool TryToPlayeCarddWithTargets(uint playerNum, int cardPositionInHand, CardState cardState, EntityState targetEntityState, TileState targetTileState)
     {
         if (!cardState.needsEntityTarget && !cardState.needsTileTarget)
         {
@@ -535,9 +535,9 @@ public class GameManager : MonoBehaviour
         {
 
         }
-        else if (cardState.needsTileTarget)
+        else if (cardState.needsTileTarget && targetTileState != null)
         {
-
+            SendUserAction(new PlayCardFromHandUserAction(playerNum, cardPositionInHand, 0, 0, tileTargetNum: (int)targetTileState.num));
         }
 
         return false;

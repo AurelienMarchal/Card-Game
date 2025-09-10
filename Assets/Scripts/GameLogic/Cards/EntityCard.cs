@@ -17,7 +17,7 @@ namespace GameLogic
             private set;
         }
 
-        public EntityCard(uint num, Cost cost, Entity entity) : base(num, cost, needsEntityTarget: false, needsTileTarget: true)
+        public EntityCard(uint num, Player player, Cost cost, Entity entity) : base(num, player, cost, needsEntityTarget: false, needsTileTarget: true)
         {
             this.entity = entity;
         }
@@ -44,7 +44,7 @@ namespace GameLogic
 
         protected override bool Activate(Tile targetTile = null, Entity targetEntity = null)
         {
-            return base.Activate(targetTile, targetEntity);
+            return player.TryToCreateSpawnEntityAction(entity, targetTile, playerPlayCardAction, out _);
         }
 
         public override List<Tile> PossibleTileTargets()

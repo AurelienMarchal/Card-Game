@@ -11,84 +11,34 @@ namespace GameLogic{
 
         public class PlayerSpawnEntityAction : PlayerAction
         {
+            
+            public Entity entity{
+                get;
+                protected set;
+            }
 
             public Tile tile{
                 get;
                 protected set;
             }
 
-            public EntityModel model{
-                get;
-                protected set;
-            }
+            public PlayerSpawnEntityAction(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Weapon weapon = null, Action requiredAction = null) : base(player, requiredAction)
+            {
 
-            public string name{
-                get;
-                protected set;
-            }
-
-            public Health health{
-                get;
-                protected set;
-            }
-
-            public Direction direction{
-                get;
-                protected set;
-            }
-
-            public int maxMovement{
-                get;
-                protected set;
-            }
-
-            public ScriptableEntity scriptableEntity{
-                get;
-                protected set;
-            }
-
-            public Entity entitySpawned{
-                get;
-                protected set;
-            }
-
-            public List<EntityEffect> permanentEffects{
-                get;
-                protected set;
-            }
-
-            public PlayerSpawnEntityAction(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North,  Weapon weapon = null, Action requiredAction = null) : base(player, requiredAction){
+                entity = new Entity(player, model, name, startingTile, startingHealth, startingMaxMovement, permanentEffects, startingDirection);
                 tile = startingTile;
-                this.model = model;
-                this.name = name;
-                health = startingHealth;
-                maxMovement = startingMaxMovement;
-                direction = startingDirection;
-                this.permanentEffects = permanentEffects;
-                entitySpawned = Entity.noEntity;
-                scriptableEntity = null;
             }
 
-            public PlayerSpawnEntityAction(Player player, ScriptableEntity scriptableEntity, Tile startingTile, Direction startingDirection = Direction.North, Action requiredAction = null) : base(player, requiredAction){
+            public PlayerSpawnEntityAction(Player player, Entity entity, Tile startingTile, Action requiredAction = null) : base(player, requiredAction)
+            {
+                this.entity = entity;
                 tile = startingTile;
-                model = scriptableEntity.entityModel;
-                name = scriptableEntity.entityName;
-                health = scriptableEntity.health;
-                direction = startingDirection;
-                permanentEffects = new List<EntityEffect>();
-                entitySpawned = Entity.noEntity;
-                this.scriptableEntity = scriptableEntity;
             }
 
             protected override bool Perform(){
-                if(scriptableEntity == null){
-                    entitySpawned = new Entity(player, model, name, tile, health, maxMovement, permanentEffects, direction);
-                }
-                else{
-                    entitySpawned = new Entity(player, scriptableEntity, tile, direction);
-                }
-                
-                return player.TryToSpawnEntity(entitySpawned);
+
+                entity.TryToSetStartingTile(tile);
+                return player.TryToSpawnEntity(entity);
             }
 
             public override ActionState ToActionState()

@@ -314,6 +314,14 @@ namespace GameLogic{
 
             //TODO: Targets
 
+            var targetTile = Tile.noTile;
+
+            if (playCardFromHandUserAction.tileTargetNum > 0)
+            {
+                targetTile = board.GetTileWithNum((uint)playCardFromHandUserAction.tileTargetNum);
+            }
+            
+
             Debug.Log($"Card : {card}");
 
             if (!player.CanUseMana(card.cost.manaCost))
@@ -322,7 +330,7 @@ namespace GameLogic{
             }
 
             if (!player.CanPlayCard(card,
-                targetTile: Tile.noTile,
+                targetTile: targetTile,
                 targetEntity: Entity.noEntity))
             {
                 return false;
@@ -338,7 +346,7 @@ namespace GameLogic{
                 card,
                 out PlayerPlayCardAction playerPlayCardAction,
                 costAction: playerUseManaAction,
-                targetTile: Tile.noTile,
+                targetTile: targetTile,
                 targetEntity: Entity.noEntity
             );
             

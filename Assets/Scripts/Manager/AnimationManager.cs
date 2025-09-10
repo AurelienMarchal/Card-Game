@@ -480,7 +480,7 @@ public class AnimationManager : MonoBehaviour
     [Obsolete]
     public void PlayAnimationForAction(PlayerSpawnEntityAction playerSpawnEntityAction)
     {
-        SpawnEntity(playerSpawnEntityAction.entitySpawned);
+        //SpawnEntity(playerSpawnEntityAction.entitySpawned);
     }
 
     [Obsolete]
