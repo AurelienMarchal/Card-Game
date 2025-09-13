@@ -9,11 +9,12 @@ namespace GameLogic{
             }
 
 
-            public TileEffect(Tile tile){
+            public TileEffect(Tile tile, bool displayOnUI = true) : base(displayOnUI:displayOnUI){
                 associatedTile = tile;
             }
 
-            public override bool CanBeActivated(){
+            public override bool CanBeActivated()
+            {
                 return associatedTile != Tile.noTile;
             }
         }

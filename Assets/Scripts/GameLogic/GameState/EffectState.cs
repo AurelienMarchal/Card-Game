@@ -14,12 +14,6 @@ namespace GameLogic{
             
             //add displayOnUI
 
-            public CostState costState
-            {
-                get;
-                set;
-            }
-
             public string effectText{
                 get; 
                 set;

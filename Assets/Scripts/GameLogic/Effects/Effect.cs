@@ -74,7 +74,6 @@ namespace GameLogic{
 
             public virtual EffectState ToEffectState(){
                 EffectState effectState = new EffectState();
-                effectState.costState = null;
                 effectState.canBeActivated = CanBeActivated();
                 effectState.effectText = GetEffectText();
 

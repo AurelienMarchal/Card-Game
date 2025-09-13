@@ -543,8 +543,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5dfb32d74dd8647abe8c03e8fdcab3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scriptableHero1: {fileID: 11400000, guid: 67217814077e8754d98ee33efc505b6d, type: 2}
-  scriptableHero2: {fileID: 11400000, guid: aae452c6dbf01684688ec7386feb52e2, type: 2}
   boardManager: {fileID: 1703089466}
   animationManager: {fileID: 1768239575}
   playerManagers:

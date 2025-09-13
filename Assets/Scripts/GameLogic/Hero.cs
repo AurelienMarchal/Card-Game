@@ -152,7 +152,11 @@ namespace GameLogic{
             heroState.maxMovement = maxMovement;
             heroState.costToMoveState = costToMove.ToCostState();
 
-            heroState.weaponState = weapon.ToWeaponState();
+            if (weapon != Weapon.noWeapon)
+            {
+                heroState.weaponState = weapon.ToWeaponState();
+            }
+            
 
             heroState.effectStates = new List<EffectState>();
             heroState.buffStates = new List<BuffState>();

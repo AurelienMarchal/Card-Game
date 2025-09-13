@@ -541,7 +541,7 @@ namespace GameLogic{
         }
 
         public void AddEffect(EntityEffect entityEffect){
-            entityEffect.associatedEntity = this;
+            entityEffect.InitializeAssociatedEntity(this);
             effects.Add(entityEffect);
             UpdateTempBuffsAccordingToEffects();
         }

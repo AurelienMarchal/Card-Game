@@ -228,8 +228,8 @@ public class GameManager : MonoBehaviour
         var direction2 = Direction.South;
         var hero2 = new Hero(
             Game.currentGame.players[1],
-            EntityModel.MageHero,
-            "Mage",
+            EntityModel.BarbarianHero,
+            "Barbarian",
             startingTile2,
             new Health(new HeartType[] { HeartType.Red, HeartType.Red, HeartType.Red }),
             3,

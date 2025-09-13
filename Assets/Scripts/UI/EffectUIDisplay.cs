@@ -73,9 +73,9 @@ public class EffectUIDisplay : MonoBehaviour
         effectTextMeshProUGUI.text = effectState.effectText;
 
         //Peut etre a changer
-        button.interactable = effectState.canBeActivated;
+        //button.interactable = effectState.canBeActivated;
 
-
+        /*
         costUIDisplay.gameObject.SetActive(effectState.costState != null);
 
         if (effectState.costState != null)
@@ -83,6 +83,7 @@ public class EffectUIDisplay : MonoBehaviour
             costUIDisplay.costState = effectState.costState;
             costUIDisplay.UpdateVisuals();
         }
+        */
 
         /*
         switch (effect)

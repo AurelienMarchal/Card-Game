@@ -9,14 +9,24 @@ namespace GameLogic{
             
             public Entity associatedEntity{
                 get;
-                set;
+                protected set;
             }
 
-            public EntityEffect(Entity entity, bool displayOnUI = true) : base(displayOnUI:displayOnUI){
+            public EntityEffect(Entity entity, bool displayOnUI = true) : base(displayOnUI: displayOnUI)
+            {
                 associatedEntity = entity;
             }
 
-            public override bool CanBeActivated(){
+            public void InitializeAssociatedEntity(Entity entity)
+            {
+                if (associatedEntity == Entity.noEntity)
+                {
+                    associatedEntity = entity;
+                }
+            }
+
+            public override bool CanBeActivated()
+            {
                 return associatedEntity != Entity.noEntity;
             }
         }

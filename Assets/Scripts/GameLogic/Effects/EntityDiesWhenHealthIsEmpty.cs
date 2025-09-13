@@ -17,7 +17,7 @@ namespace GameLogic{
 
             public override bool CanBeActivated()
             {
-                return true;
+                return base.CanBeActivated() && true;
             }
 
 

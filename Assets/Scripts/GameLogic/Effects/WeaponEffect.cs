@@ -13,7 +13,7 @@ namespace GameLogic{
                 set;
             }
 
-            public WeaponEffect(Weapon weapon){
+            public WeaponEffect(Weapon weapon, bool displayOnUI = true) : base(displayOnUI:displayOnUI){
                 associatedWeapon = weapon;
             }
 
