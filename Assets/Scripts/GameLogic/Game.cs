@@ -473,20 +473,20 @@ namespace GameLogic{
             
             foreach(Effect effect in currentGame.effects){
                 if(effect.Trigger(action)){
-                    effect.TryToCreateEffectActivatedAction(action, out _);
+                    effect.TryToCreateEffectActivatedAction(out _, action);
                 }
             }
 
             foreach(Effect effect in currentGame.board.effects){
                 if(effect.Trigger(action)){
-                    effect.TryToCreateEffectActivatedAction(action, out _);
+                    effect.TryToCreateEffectActivatedAction(out _, action);
                 }
             }
 
             foreach(Player player in players){
                 foreach(Effect effect in player.effects){
                     if(effect.Trigger(action)){
-                        effect.TryToCreateEffectActivatedAction(action, out _);
+                        effect.TryToCreateEffectActivatedAction(out _, action);
                     }
                 }
             }
@@ -494,7 +494,7 @@ namespace GameLogic{
             foreach(Tile tile in currentGame.board.tiles){
                 foreach(Effect effect in tile.effects){
                     if(effect.Trigger(action)){
-                        effect.TryToCreateEffectActivatedAction(action, out _);
+                        effect.TryToCreateEffectActivatedAction(out _, action);
                     }
                 }
             }
@@ -506,7 +506,7 @@ namespace GameLogic{
                     //Debug.Log($"Checking Trigger for {entity} for effect {effect} with action {action}");
                     if(effect.Trigger(action)){
                         
-                        effect.TryToCreateEffectActivatedAction(action, out _);
+                        effect.TryToCreateEffectActivatedAction(out _, action);
                     }
                 }
             }

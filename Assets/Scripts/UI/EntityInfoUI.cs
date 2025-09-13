@@ -124,7 +124,7 @@ public class EntityInfoUI : MonoBehaviour
         var effectUIDisplay = effectCanvas.GetComponent<EffectUIDisplay>();
 
         if(effectUIDisplay != null){
-            effectUIDisplay.effect = effect;
+            //effectUIDisplay.effect = effect;
             effectUIDisplay.effectHoverEnterEvent.AddListener((effect) => effectHoverEnterEvent.Invoke(effect));
             effectUIDisplay.effectHoverExitEvent.AddListener((effect) => effectHoverExitEvent.Invoke(effect));
         }

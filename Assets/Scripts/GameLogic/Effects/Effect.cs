@@ -46,7 +46,7 @@ namespace GameLogic{
                 return result;
             }
 
-            public virtual bool TryToCreateEffectActivatedAction(Action requiredAction, out EffectActivatedAction effectActivatedAction){
+            public virtual bool TryToCreateEffectActivatedAction(out EffectActivatedAction effectActivatedAction, Action requiredAction = null){
                 effectActivatedAction = new EffectActivatedAction(this, requiredAction);
                 var canBeActivated = CanBeActivated();
                 if(canBeActivated){

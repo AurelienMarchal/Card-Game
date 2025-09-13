@@ -32,13 +32,6 @@ public class CardManager : MonoBehaviour
 
     public int positionInHand;
 
-    [SerializeField]
-    [Obsolete]
-    ScriptableActivableEffectCard scriptableActivableEffectCard;
-
-    [Obsolete]
-    ScriptableActivableEffectCard lastScriptableActivableEffectCard;
-
     [HideInInspector]
     public CardManagerEvent cardSelectedEvent = new CardManagerEvent();
 
@@ -119,23 +112,6 @@ public class CardManager : MonoBehaviour
     //[SerializeField]
     //TextMeshProUGUI cardCostTextMeshProUGUI;
 
-    [Obsolete]
-    private Card card_;
-
-    [Obsolete]
-    public Card card
-    {
-        get
-        {
-            return card_;
-        }
-        set
-        {
-            card_ = value;
-            UpdateAccordingToCard();
-        }
-    }
-
 
     private CardState cardState_;
 
@@ -195,27 +171,8 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    [Obsolete]
-    void UpdateAccordingToCard()
-    {
-        if (card != null)
-        {
-            cardTextTextMeshProUGUI.text = card.GetText();
-            cardNameTextMeshProUGUI.text = card.GetCardName();
-            costUIDisplay.cost = card.cost;
-        }
-    }
 
-    [Obsolete]
-    void UpdateAccordingToScriptableCard()
-    {
-        if (scriptableActivableEffectCard != null)
-        {
-            cardImage.sprite = scriptableActivableEffectCard.sprite;
-        }
-
-        //card = new Card(player, scriptableActivableEffectCard.scriptableActivableEffect.GetActivableEffect());
-    }
+    
 
     public static void UnselectEveryCard(){
         foreach(GameObject cardGO in GameObject.FindGameObjectsWithTag("Card")){

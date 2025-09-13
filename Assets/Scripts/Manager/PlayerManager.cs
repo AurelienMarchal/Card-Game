@@ -112,12 +112,7 @@ public class PlayerManager : MonoBehaviour
             return;
         }
 
-        var boardManager = FindFirstObjectByType<BoardManager>();
-
-        if (boardManager == null)
-        {
-            return;
-        }
+        
 
         //TODO: remove entitymanagers that are not in entitystates anymore
 
@@ -135,12 +130,7 @@ public class PlayerManager : MonoBehaviour
             }
             if (!found)
             {
-                //Create entity with SetActive(False) And Then SetActive(True) with UpdateVisuals
-                var entityManager = boardManager.SpawnEntity(entityState);
-                if (entityManager != null)
-                {
-                    entityManagers.Add(entityManager);
-                }
+                SpawnEntity(entityState);
             }
         }
 
@@ -155,6 +145,25 @@ public class PlayerManager : MonoBehaviour
         }
 
         handManager.UpdateVisuals();
+    }
+
+    public EntityManager SpawnEntity(EntityState entityState)
+    {
+
+        var boardManager = FindFirstObjectByType<BoardManager>();
+
+        if (boardManager == null)
+        {
+            return null;
+        }
+
+        var entityManager = boardManager.SpawnEntity(entityState);
+        if (entityManager != null)
+        {
+            entityManagers.Add(entityManager);
+        }
+
+        return entityManager;
     }
 
     public EntityManager GetEntityManagerFromEntityNum(uint entityNum)

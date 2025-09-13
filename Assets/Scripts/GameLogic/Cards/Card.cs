@@ -38,17 +38,15 @@ namespace GameLogic{
         }
 
 
-        //to remove ?
-        protected PlayerPlayCardAction playerPlayCardAction;
 
-
-        public Card(uint num,  Player player, Cost cost, bool needsEntityTarget = false, bool needsTileTarget = false)
+        public Card(uint num, Player player, Cost cost, bool needsEntityTarget = false, bool needsTileTarget = false)
         {
             this.num = num;
             this.player = player;
             this.cost = cost;
             this.needsEntityTarget = needsEntityTarget;
             this.needsTileTarget = needsTileTarget;
+            
         }
 
         public virtual bool CanBeActivated(Tile targetTile = null, Entity targetEntity = null){

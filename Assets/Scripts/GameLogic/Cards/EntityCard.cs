@@ -44,13 +44,17 @@ namespace GameLogic
 
         protected override bool Activate(Tile targetTile = null, Entity targetEntity = null)
         {
-            return player.TryToCreateSpawnEntityAction(entity, targetTile, playerPlayCardAction, out _);
+            //Marche pas si l'entity deja mis sur le board 
+            //l'entite spawné doit etre une copie de l'entite dans la carte
+            //l'entite dans ka carte ne doit pas avoir de num (ni de currentTilegr) 
+            return player.TryToCreateSpawnEntityAction(entity, targetTile, out _);
         }
 
         public override List<Tile> PossibleTileTargets()
         {
             //TODO : check if entity already on tile
             var toReturn = Game.currentGame.board.GetTileSquareAroundTile(entity.player.hero.currentTile, 5);
+            toReturn.Remove(entity.player.hero.currentTile);
             return toReturn;
         }
 

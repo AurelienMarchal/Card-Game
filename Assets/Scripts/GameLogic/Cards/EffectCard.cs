@@ -29,7 +29,7 @@ namespace GameLogic
 
         protected override bool Activate(Tile targetTile = null, Entity targetEntity = null)
         {
-            return effect.TryToCreateEffectActivatedAction(playerPlayCardAction, out EffectActivatedAction _);
+            return effect.TryToCreateEffectActivatedAction(out EffectActivatedAction _);
         }
 
         public override string GetText()

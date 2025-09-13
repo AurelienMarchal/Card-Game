@@ -206,11 +206,11 @@ namespace GameLogic{
                 return toReturn;
             }
 
-            var halfSquareSize = Math.Abs(squareSize) % 2 == 0 ? Math.Abs(squareSize) / 2 : Math.Abs(squareSize) + 1 / 2; 
+            var halfSquareSize = Math.Abs(squareSize) % 2 == 0 ? Math.Abs(squareSize) / 2 : (Math.Abs(squareSize) + 1) / 2; 
 
             for (int i = tile.gridX - halfSquareSize; i < tile.gridX + halfSquareSize; i++)
             {
-                for (int j = tile.gridX - halfSquareSize; j < tile.gridX + halfSquareSize; j++)
+                for (int j = tile.gridY - halfSquareSize; j < tile.gridY + halfSquareSize; j++)
                 {
                     var tileij = GetTileAt(i, j);
                     if (tileij != Tile.noTile)

@@ -18,6 +18,7 @@ namespace GameLogic.GameState
             { "PlayerPlayCard",             typeof(PlayerPlayCardActionState)},
             { "PlayerAddCardToHand",        typeof(PlayerAddCardToHandActionState) },
             { "PlayerDrawCard",             typeof(PlayerDrawCardActionState) },
+            { "PlayerSpawnEntity",          typeof(PlayerSpawnEntityActionState) },
             
             { "EntityMove",                 typeof(EntityMoveActionState) },
             { "EntityChangeDirection",      typeof(EntityChangeDirectionActionState) },

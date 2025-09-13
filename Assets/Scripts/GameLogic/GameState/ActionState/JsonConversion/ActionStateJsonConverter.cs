@@ -80,6 +80,12 @@ namespace GameLogic.GameState
                     jo["card"] = JToken.FromObject(playerDrawCardActionState.card);
                     jo["cardWasAddedToHand"] = playerDrawCardActionState.cardWasAddedToHand;
                 }
+
+                if (value is PlayerSpawnEntityActionState playerSpawnEntityActionState)
+                {
+                    jo["entitySpawned"] = JToken.FromObject(playerSpawnEntityActionState.entitySpawned);
+                    jo["tileNum"] = playerSpawnEntityActionState.tileNum;
+                }
             }
             if (value is EntityActionState entityActionState)
             {

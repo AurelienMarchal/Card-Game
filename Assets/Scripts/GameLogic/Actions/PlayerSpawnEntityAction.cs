@@ -43,7 +43,11 @@ namespace GameLogic{
 
             public override ActionState ToActionState()
             {
-                throw new System.NotImplementedException();
+                var actionState = new PlayerSpawnEntityActionState();
+                actionState.playerNum = player.playerNum;
+                actionState.entitySpawned = entity.ToEntityState();
+                actionState.tileNum = tile.num;
+                return actionState;
             }
         }
         }

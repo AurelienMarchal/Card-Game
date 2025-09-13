@@ -14,16 +14,6 @@ namespace GameLogic{
             this.weapon = weapon;
         }
 
-        public Hero(Player player, ScriptableHero scriptableHero, Tile startingTile, Direction startingDirection = Direction.North) : base(player, scriptableHero, startingTile, startingDirection){
-            movementLeft = maxMovement;
-            if(scriptableHero.scriptableWeapon == null){
-                weapon = Weapon.noWeapon;
-            }
-            else{
-                weapon = new Weapon(scriptableHero.scriptableWeapon);
-            }
-        }
-
         public Weapon weapon{
             get;
             protected set;

@@ -87,7 +87,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &8694653272665994130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,6 +120,7 @@ MonoBehaviour:
   cardArtWorks:
   - {fileID: 21300000, guid: 12e72fe4fc640c74bb834253dd235ccd, type: 3}
   - {fileID: 21300000, guid: d5a3f514df7109641a1fb69b53e9d13c, type: 3}
+  - {fileID: 21300000, guid: 74384b106301f074c96d01247b613c32, type: 3}
   positionInHand: 0
   scriptableActivableEffectCard: {fileID: 0}
   cardSelectedEvent:

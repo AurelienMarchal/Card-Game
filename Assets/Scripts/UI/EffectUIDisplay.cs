@@ -30,22 +30,6 @@ public class EffectUIDisplay : MonoBehaviour
     [SerializeField]
     CostUIDisplay costUIDisplay;
 
-    [Obsolete]
-    private Effect effect_;
-
-    [Obsolete]
-    public Effect effect
-    {
-        get
-        {
-            return effect_;
-        }
-        set
-        {
-            effect_ = value;
-            UpdateFromNewEffect();
-        }
-    }
 
     private EffectState effectState_;
     public EffectState effectState
@@ -103,7 +87,7 @@ public class EffectUIDisplay : MonoBehaviour
         /*
         switch (effect)
         {
-            case ActivableEffect activableEffect:
+            case EntityEffect activableEffect:
 
                 costUIDisplay.cost = activableEffect.cost;
                 button.onClick.AddListener(OnButtonClick);
@@ -116,40 +100,13 @@ public class EffectUIDisplay : MonoBehaviour
         */
     }
 
-    [Obsolete]
-    void UpdateFromNewEffect()
-    {
-        if (effect == null)
-        {
-            return;
-        }
-
-
-        effectTextMeshProUGUI.text = effect.GetEffectText();
-
-        button.interactable = effect is ActivableEffect;
-
-        costUIDisplay.gameObject.SetActive(effect is ActivableEffect);
-
-        switch (effect)
-        {
-            case ActivableEffect activableEffect:
-
-                costUIDisplay.cost = activableEffect.cost;
-                button.onClick.AddListener(OnButtonClick);
-
-                break;
-            default:
-
-                break;
-        }
-    }
+    
 
     private void OnButtonClick()
     {
         /*
         Debug.Log($"Effect : {effect}");
-        if (effect is ActivableEffect activableEffect){
+        if (effect is EntityEffect activableEffect){
             activableEffect.associatedEntity.TryToCreateEntityUseMovementAction(activableEffect.cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
             activableEffect.associatedEntity.TryToCreateEntityPayHeartCostAction(activableEffect.cost.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction, entityUseMovementAction);
             if(!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed){
@@ -158,24 +115,6 @@ public class EffectUIDisplay : MonoBehaviour
             activableEffect.TryToCreateEffectActivatedAction(entityPayHeartCostAction, out _);
         }
         */
-
-    }
-
-    [Obsolete]
-    void UpdateFromEffect()
-    {
-        if (effect == null)
-        {
-            return;
-        }
-
-        effectTextMeshProUGUI.text = effect.GetEffectText();
-        if (effect is ActivableEffect activableEffect)
-        {
-            button.interactable = activableEffect.CanBeActivated() && Game.currentGame.currentPlayer == activableEffect.associatedEntity.player;
-        }
-
-
 
     }
 

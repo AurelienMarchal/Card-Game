@@ -83,6 +83,8 @@ public class GameManager : MonoBehaviour
                     boardManager.ResetAllTileLayer();
                     ResetAllEntityLayer();
                     entityInfoUI.gameObject.SetActive(false);
+                    boardManager.DisplayTilesUIInfo(currentCardSelected.cardState.possibleTileTargets.ToArray());
+                    //same with entity
                     break;
 
                 default: break;
@@ -108,12 +110,6 @@ public class GameManager : MonoBehaviour
         }
 
     }
-
-    [SerializeField]
-    ScriptableHero scriptableHero1;
-
-    [SerializeField]
-    ScriptableHero scriptableHero2;
 
     [SerializeField]
     BoardManager boardManager;
@@ -210,8 +206,16 @@ public class GameManager : MonoBehaviour
         // --------- Testing ---------
         var startingTile1 = Game.currentGame.board.GetTileAt(2, 2);
         var direction1 = Direction.East;
-        var hero1 = new Hero(Game.currentGame.players[0], scriptableHero1, startingTile1, direction1);
-        hero1.effects.Add(new MoveToChangeTileTypeEffect(hero1, TileType.Nature));
+        var hero1 = new Hero(
+            Game.currentGame.players[0],
+            EntityModel.MageHero,
+            "Mage",
+            startingTile1,
+            new Health(new HeartType[] { HeartType.Red, HeartType.Red, HeartType.Red }),
+            3,
+            new List<EntityEffect> {new MoveToChangeTileTypeEffect(null, TileType.Nature)},
+            direction1);
+        
         hero1.num = 0;
         Game.currentGame.players[0].entities.Add(hero1);
         Game.currentGame.players[0].hero = hero1;
@@ -222,7 +226,15 @@ public class GameManager : MonoBehaviour
 
         var startingTile2 = Game.currentGame.board.GetTileAt(2, 3);
         var direction2 = Direction.South;
-        var hero2 = new Hero(Game.currentGame.players[1], scriptableHero2, startingTile2, direction2);
+        var hero2 = new Hero(
+            Game.currentGame.players[1],
+            EntityModel.MageHero,
+            "Mage",
+            startingTile2,
+            new Health(new HeartType[] { HeartType.Red, HeartType.Red, HeartType.Red }),
+            3,
+            new List<EntityEffect> {new MoveToChangeTileTypeEffect(null, TileType.Cursed)},
+            direction2);
         //hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
         hero2.num = 0;
         Game.currentGame.players[1].entities.Add(hero2);
@@ -273,7 +285,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case UIState.AnimationPlaying:
-                if (!animationManager.animationPlaying)
+                if (!animationManager.animationPlaying && Game.currentGame.actionStatesToSendQueue.Count == 0)
                 {
                     uiState = UIState.Default;
                     OnAnimationsFinished();
@@ -316,6 +328,7 @@ public class GameManager : MonoBehaviour
                     currentCardSelected = null;
                     
                     uiState = UIState.Default;
+                    
                 }
                 //Temp
                 foreach (var playerManager in playerManagers)
@@ -329,7 +342,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-        if (Game.currentGame.actionStatesToSendQueue.Count > 0 && uiState != UIState.AnimationPlaying /*temp*/)
+        if (Game.currentGame.actionStatesToSendQueue.Count > 0 && !animationManager.animationPlaying /*temp*/)
         {
             //test
             ActionState actionState = Game.currentGame.DequeueActionStateToSendQueue();
@@ -337,10 +350,15 @@ public class GameManager : MonoBehaviour
             Debug.Log("Serialized ActionState :" + serializedActionState);
             var deserializedActionState = JsonConvert.DeserializeObject<ActionState>(serializedActionState);
             Debug.Log("Deserialized ActionState :" + deserializedActionState);
+
+
+            if (uiState != UIState.AnimationPlaying)
+            {
+                uiState = UIState.AnimationPlaying;
+            }
+            
             HandleActionState(deserializedActionState);
-            uiState = UIState.AnimationPlaying;
-
-
+            
         }
 
         entityWasClickedThisFrame = false;

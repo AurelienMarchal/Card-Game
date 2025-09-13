@@ -8,13 +8,13 @@ namespace GameLogic{
     using GameAction;
 
     namespace GameEffect{
-        public class EntityHealsActivableEffect : ActivableEffect{
+        public class EntityHealsEntityEffect : EntityEffect{
             public int numberOfHeartsHealed{
                 get;
                 private set;
             }
 
-            public EntityHealsActivableEffect(int numberOfHeartsHealed, Entity entity, Cost cost) : base(entity, cost){
+            public EntityHealsEntityEffect(int numberOfHeartsHealed, Entity entity) : base(entity){
                 this.numberOfHeartsHealed = numberOfHeartsHealed;
             }
 

@@ -159,7 +159,7 @@ namespace GameLogic{
             return canSpawnEntityAt;
         }
         
-        public bool TryToCreateSpawnEntityAction(Entity entity, Tile startingTile, Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction)
+        public bool TryToCreateSpawnEntityAction(Entity entity, Tile startingTile, out PlayerSpawnEntityAction playerSpawnEntityAction, Action requiredAction = null)
         {
             playerSpawnEntityAction = new PlayerSpawnEntityAction(this, entity, startingTile, requiredAction);
             var canSpawnEntityAt = CanSpawnEntityAt(startingTile);

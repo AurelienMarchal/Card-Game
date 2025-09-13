@@ -8,14 +8,14 @@ namespace GameLogic{
     using GameAction;
 
     namespace GameEffect{
-        public class ChangeTileActivableEffect : ActivableEffect{
+        public class ChangeTileEntityEffect : EntityEffect{
 
             public TileType tileType{
                 get;
                 protected set;
             }
 
-            public ChangeTileActivableEffect(TileType tileType, Entity entity, Cost cost) : base(entity, cost){
+            public ChangeTileEntityEffect(TileType tileType, Entity entity) : base(entity){
                 this.tileType = tileType;
             }
 

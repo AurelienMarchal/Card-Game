@@ -8,7 +8,7 @@ namespace GameLogic{
     using GameAction;
 
     namespace GameEffect{
-        public class ThrowProjectileActivableEffect : ActivableEffect{
+        public class ThrowProjectileEntityEffect : EntityEffect{
 
             public Direction direction{
                 get;
@@ -36,7 +36,7 @@ namespace GameLogic{
             }
 
 
-            public ThrowProjectileActivableEffect(Entity casterEntity, Cost cost, Damage damage, int range) : base(casterEntity, cost){
+            public ThrowProjectileEntityEffect(Entity casterEntity, Damage damage, int range) : base(casterEntity){
                 this.damage = damage;
                 this.range = range;
                 entityHit = Entity.noEntity;

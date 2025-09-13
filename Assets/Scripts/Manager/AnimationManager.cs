@@ -91,6 +91,9 @@ public class AnimationManager : MonoBehaviour
             case PlayerAddCardToHandActionState playerAddCardToHandActionState:
                 PlayAnimationForActionState(playerAddCardToHandActionState);
                 break;
+            case PlayerSpawnEntityActionState playerSpawnEntityActionState:
+                PlayAnimationForActionState(playerSpawnEntityActionState);
+                break;
 
             case EntityMoveActionState entityMoveActionState:
                 PlayAnimationForActionState(entityMoveActionState);
@@ -188,6 +191,28 @@ public class AnimationManager : MonoBehaviour
         playerManager.handManager.UpdateVisuals();
 
     }
+    
+    public void PlayAnimationForActionState(PlayerSpawnEntityActionState playerSpawnEntityActionState)
+    {
+        var playerManager = gameManager.GetPlayerManagerFromPlayerNum(playerSpawnEntityActionState.playerNum);
+
+        if (playerManager == null)
+        {
+            return;
+        }
+
+        var entityManager = playerManager.SpawnEntity(playerSpawnEntityActionState.entitySpawned);
+
+        if (entityManager == null)
+        {
+            return;
+        }
+
+        playerManager.playerState.entityStates.Add(playerSpawnEntityActionState.entitySpawned);
+
+        entityManager.UpdateVisuals();
+
+    }
 
     public void PlayAnimationForActionState(EntityMoveActionState entityMoveActionState)
     {
@@ -198,7 +223,7 @@ public class AnimationManager : MonoBehaviour
         }
 
         entityManager.entityState.currentTileNum = entityMoveActionState.endTileNum;
-        
+
 
         var endTileManager = boardManager.GetTileManagerFromTileNum(entityMoveActionState.endTileNum);
         if (endTileManager == null)

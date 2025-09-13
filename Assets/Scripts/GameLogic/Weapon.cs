@@ -46,28 +46,7 @@ namespace GameLogic{
             AddDefaultPermanentEffects();
         }
 
-        public Weapon(ScriptableWeapon scriptableWeapon){
-            name = scriptableWeapon.weaponName;
-            atkDamage = scriptableWeapon.atkDamage;
-            costToUse = scriptableWeapon.costToUse;
-            range = scriptableWeapon.range;
-            effects = new List<WeaponEffect>();
-            AddEffectList(scriptableWeapon.scriptableEffects);
-            AddDefaultPermanentEffects();
-        }
-
-        public void AddEffectList(List<ScriptableEffect> scriptableEffects){
-            foreach (var scriptableEffect in scriptableEffects){
-                AddEffect(scriptableEffect);
-            }
-        }
-
-        public void AddEffect(ScriptableEffect scriptableEffect){
-            if (scriptableEffect.GetEffect() is WeaponEffect weaponEffect)
-            {
-                AddEffect(weaponEffect);
-            }
-        }
+    
 
         public void AddEffect(WeaponEffect weaponEffect){
             weaponEffect.associatedWeapon = this;

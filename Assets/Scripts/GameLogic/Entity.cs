@@ -192,31 +192,6 @@ namespace GameLogic{
             Debug.Log($"{this} effects : [{String.Join(", ", effects)}]");
         }
 
-        [Obsolete]
-        public Entity(Player player, ScriptableEntity scriptableEntity, Tile startingTile, Direction startingDirection = Direction.North)
-        {
-            this.player = player;
-            model = scriptableEntity.entityModel;
-            name = scriptableEntity.entityName;
-            currentTile = startingTile;
-            health = scriptableEntity.health.Clone() as Health;
-            //Debug.Log($"Cloning health successfull : {health != scriptableEntity.health}");
-            maxMovement = scriptableEntity.maxMovement;
-            movementLeft = 0;
-            direction = startingDirection;
-            baseCostToAtk = new Cost(mouvement: 1);
-            baseRange = 0;
-            baseAtkDamage = new Damage(0);
-            effects = new List<EntityEffect>();
-            tempBuffs = new List<EntityBuff>();
-            permanentBuffs = new List<EntityBuff>();
-            affectedByEffects = new List<Effect>();
-            AddEffectList(scriptableEntity.scriptableEffects);
-            AddDefaultPermanentEffects();
-
-            Debug.Log($"{this} effects : [{String.Join(", ", effects)}]");
-        }
-
         protected virtual Cost CalculateCostToMove(){
             var weightedDownBuffCount = NumberOfBuffs<WeightedDownBuff>();
             return new Cost(mouvement: 1 + weightedDownBuffCount);
@@ -563,19 +538,6 @@ namespace GameLogic{
 
         public void ResetMovement(){
             movementLeft = maxMovement;
-        }
-
-        public void AddEffectList(List<ScriptableEffect> scriptableEffects){
-            foreach (var scriptableEffect in scriptableEffects){
-                AddEffect(scriptableEffect);
-            }
-        }
-
-        public void AddEffect(ScriptableEffect scriptableEffect){
-            if (scriptableEffect.GetEffect() is EntityEffect entityEffect)
-            {
-                AddEffect(entityEffect);
-            }
         }
 
         public void AddEffect(EntityEffect entityEffect){
