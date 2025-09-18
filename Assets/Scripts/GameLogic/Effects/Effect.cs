@@ -14,18 +14,27 @@ namespace GameLogic{
         //TODO: Effects with targets
         public class Effect{
             
-            public bool displayOnUI{
+            public Guid id{
                 get;
                 private set;
             }
 
-            public List<EntityBuff> entityBuffs{
+            public bool displayOnUI
+            {
+                get;
+                private set;
+            }
+
+            [Obsolete]
+            public List<EntityBuff> entityBuffs
+            {
                 get;
                 private set;
             }
 
             public Effect(bool displayOnUI = true){
                 this.displayOnUI = displayOnUI;
+                id = Guid.NewGuid();
                 entityBuffs = new List<EntityBuff>();
             }
 
@@ -65,31 +74,37 @@ namespace GameLogic{
                 return "No Effect";
             }
 
-            public virtual void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected){
+            [Obsolete]
+            public virtual void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected)
+            {
 
                 tilesAffected = new Tile[0];
                 entitiesAffected = new Entity[0];
 
             }
 
-            public virtual EffectState ToEffectState(){
+            [Obsolete]
+            public virtual EffectState ToEffectState()
+            {
                 EffectState effectState = new EffectState();
                 effectState.canBeActivated = CanBeActivated();
                 effectState.effectText = GetEffectText();
 
                 effectState.entitiesAffectedNums = new List<uint>();
                 effectState.tilesAffectedNums = new List<uint>();
-                
+
                 GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected);
 
-                foreach (Entity entity in entitiesAffected){
+                foreach (Entity entity in entitiesAffected)
+                {
                     effectState.entitiesAffectedNums.Add(entity.num);
                 }
 
-                foreach (Tile tile in tilesAffected){
+                foreach (Tile tile in tilesAffected)
+                {
                     effectState.tilesAffectedNums.Add(tile.num);
                 }
-                
+
                 return effectState;
             }
         }

@@ -2,6 +2,7 @@
 namespace GameLogic{
 
     using GameState;
+    using UnityEditor;
 
     namespace GameBuff{
         public class Buff{
@@ -10,12 +11,26 @@ namespace GameLogic{
                 get;
                 private set;
             }
-
-            public Buff(string name) {
-                this.name = name;
+            
+            public string assiociatedEffectId{
+                get;
+                private set;
             }
 
-            public virtual string GetText(){
+            public Buff(string name)
+            {
+                this.name = name;
+                assiociatedEffectId = null;
+            }
+            
+            public Buff(string name, string assiociatedEffectId)
+            {
+                this.name = name;
+                this.assiociatedEffectId = assiociatedEffectId;
+            }
+
+            public virtual string GetText()
+            {
                 return string.Empty;
             }
 

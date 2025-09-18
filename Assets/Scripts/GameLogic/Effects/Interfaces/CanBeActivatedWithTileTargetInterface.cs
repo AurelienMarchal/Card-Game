@@ -13,7 +13,7 @@ namespace GameLogic
 
             protected void ActivateWithTileTarget(Tile tile);
 
-            public virtual bool TryToActivateWithTileTarget(Tile tile){
+            public bool TryToActivateWithTileTarget(Tile tile){
                 var result = CanBeActivatedWithTileTarget(tile);
                 if(result){
                     ActivateWithTileTarget(tile);

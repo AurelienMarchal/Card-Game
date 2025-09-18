@@ -8,8 +8,11 @@ namespace GameLogic
     using GameBuff;
     namespace GameEffect
     {
-        public interface GivesTempBuff
+        public interface GivesTempBuffInterface
         {
+
+            public void UpdateTempBuffs();
+
             public List<Buff> GetTempBuffs();
         }
     }

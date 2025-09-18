@@ -7,9 +7,11 @@ namespace GameLogic
 {
     namespace GameEffect
     {
-        public interface AffectesEntitiesInterface 
-        {
-            public Entity GetEntitiesAffected();
+        public interface AffectsEntitiesInterface 
+        {   
+
+            public void UpdateEntitiesAffected();
+            public List<Entity> GetEntitiesAffected();
         }
     }
 }

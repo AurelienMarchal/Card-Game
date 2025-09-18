@@ -7,7 +7,8 @@ namespace GameLogic
     {
         public interface AffectsTilesInterface
         {
-            public Entity GetTilesAffected();
+            public void UpdateTilesAffected();
+            public List<Tile> GetTilesAffected();
         }
     }
 }

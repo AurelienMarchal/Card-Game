@@ -394,10 +394,12 @@ namespace GameLogic{
             return canDepile;
         }
 
-        private void DepileActionPile(){
+        private void DepileActionPile()
+        {
             var c = 0;
             depileStarted = true;
-            while(actionPile.Count > 0 && c < 1000){
+            while (actionPile.Count > 0 && c < 1000)
+            {
                 var action = actionPile[^1];
 
                 Debug.Log("Depile start");
@@ -413,20 +415,23 @@ namespace GameLogic{
 
                 //Debug.Log($"newAction : {newAction}");
 
-                if(action == newAction){
+                if (action == newAction)
+                {
 
                     Debug.Log("Trying to perform action");
                     var wasPerformed = action.TryToPerform();
 
-                    if(wasPerformed){
+                    if (wasPerformed)
+                    {
                         Debug.Log($"{action} was performed");
                     }
-                    else{
+                    else
+                    {
                         Debug.Log($"{action} was not performed");
                     }
 
                     //depiledActionQueue.Add(action);
-                    
+
                     actionPile.Remove(action);
 
                     if (action.wasPerformed || action.wasCancelled)
@@ -436,11 +441,11 @@ namespace GameLogic{
                         {
                             actionStatesToSendQueue.Add(action.ToActionState());
                         }
-                        catch(System.NotImplementedException exeption)
+                        catch (System.NotImplementedException exeption)
                         {
                             Debug.LogError(exeption);
                         }
-                        
+
                     }
 
                     if (wasPerformed)
@@ -450,7 +455,8 @@ namespace GameLogic{
                     }
                 }
 
-                else{
+                else
+                {
                     c++;
                 }
 
@@ -460,6 +466,8 @@ namespace GameLogic{
             //Debug.Log($"GameAction.Action performed pile : {string.Join( ",", depiledActionQueue)}");
 
             depileStarted = false;
+
+            
         }
 
         //TODO Put effects in a Dictionnary<ActionType, List<Effect>> 

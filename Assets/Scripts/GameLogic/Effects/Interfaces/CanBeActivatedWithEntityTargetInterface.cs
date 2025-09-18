@@ -14,7 +14,7 @@ namespace GameLogic
 
             protected void ActivateWithEntityTarget(Entity entity);
 
-            public virtual bool TryToActivateWithEntityTarget(Entity entity){
+            public bool TryToActivateWithEntityTarget(Entity entity){
                 var result = CanBeActivatedWithEntityTarget(entity);
                 if(result){
                     ActivateWithEntityTarget(entity);
