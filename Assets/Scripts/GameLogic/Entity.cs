@@ -54,12 +54,9 @@ namespace GameLogic{
         }
 
         public Cost costToAtk{
-            get{
-                return CalculateCostToAtk();
-            }
+            get;
+            protected set;
         }
-
-        
 
         public Cost baseCostToAtk{
             get;
@@ -67,9 +64,8 @@ namespace GameLogic{
         }
 
         public int range{
-            get{
-                return CalculateRange();
-            }
+            get;
+            protected set;
         }
 
         public int baseRange{
@@ -77,10 +73,10 @@ namespace GameLogic{
             protected set;
         }
 
-        public Damage atkDamage{
-            get{
-                return CalculateAtkDamage();
-            }
+        public Damage atkDamage
+        {
+            get;
+            protected set;
         }
 
         public Damage baseAtkDamage{
@@ -142,7 +138,7 @@ namespace GameLogic{
             protected set;
         }
 
-        public EntityBuff[] buffs{
+        public List<EntityBuff> buffs{
             get{
                 var dynamicList = new List<EntityBuff>();
                 if(tempBuffs != null){
@@ -151,7 +147,7 @@ namespace GameLogic{
                 if(permanentBuffs != null){
                     dynamicList.AddRange(permanentBuffs);
                 }
-                return dynamicList.ToArray();
+                return dynamicList;
             }
         }
 
@@ -163,11 +159,6 @@ namespace GameLogic{
         protected List<EntityBuff> permanentBuffs{
             get;
             set;
-        }
-
-        public List<Effect> affectedByEffects{
-            get;
-            private set;
         }
 
         public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North){
@@ -185,7 +176,6 @@ namespace GameLogic{
             effects = new List<EntityEffect>();
             tempBuffs = new List<EntityBuff>();
             permanentBuffs = new List<EntityBuff>();
-            affectedByEffects = new List<Effect>();
             AddEffectList(permanentEffects);
             AddDefaultPermanentEffects();
 
@@ -540,16 +530,181 @@ namespace GameLogic{
             movementLeft = maxMovement;
         }
 
-        public void AddEffect(EntityEffect entityEffect){
+        //same with baseAtk
+
+        public bool TryToIncreaseAtkDamage(int atkIncrease)
+        {
+            var canIncreaseAtkDamage = CanIncreaseAtkDamage(atkIncrease);
+
+            if (canIncreaseAtkDamage)
+            {
+                IncreaseAtkDamage(atkIncrease);
+            }
+
+            return canIncreaseAtkDamage;
+        }
+
+        public bool CanIncreaseAtkDamage(int atkIncrease)
+        {
+            return atkIncrease != 0;
+        }
+
+        protected void IncreaseAtkDamage(int atkIncrease)
+        {
+            atkDamage = new Damage(Math.Clamp(atkDamage.amount + atkIncrease, 0, 10));
+        }
+
+        //same with baseRange
+
+        public bool TryToIncreaseRange(int increase)
+        {
+            var canIncreaseRange = CanIncreaseRange(increase);
+
+            if (canIncreaseRange)
+            {
+                IncreaseRange(increase);
+            }
+
+            return canIncreaseRange;
+        }
+
+        public bool CanIncreaseRange(int increase)
+        {
+            return increase != 0;
+        }
+
+        protected void IncreaseRange(int increase)
+        {
+            range = Math.Clamp(range + increase, 0, 10);
+        }
+
+        //same with baseCostToAtk
+
+        public bool TryToIncreaseCostToAtk(int mouvementCostIncrease, int manaCostIncrease, HeartType[] heartCostIncrease)
+        {
+            var canIncreaseCostToAtk = CanIncreaseCostToAtk(mouvementCostIncrease, manaCostIncrease, heartCostIncrease);
+
+            if (canIncreaseCostToAtk)
+            {
+                IncreaseCostToAtk(mouvementCostIncrease, manaCostIncrease, heartCostIncrease);
+            }
+
+            return canIncreaseCostToAtk;
+        }
+
+        public bool CanIncreaseCostToAtk(int mouvementCostIncrease, int manaCostIncrease, HeartType[] heartCostIncrease)
+        {
+            return mouvementCostIncrease != 0 || manaCostIncrease != 0 || (heartCostIncrease != null && heartCostIncrease.Length > 0);
+        }
+
+        protected void IncreaseCostToAtk(int mouvementCostIncrease, int manaCostIncrease, HeartType[] heartCostIncrease)
+        {
+            costToAtk = new Cost(
+                costToAtk.heartCost, //TODO
+                Math.Clamp(costToAtk.manaCost + manaCostIncrease, 0, 10),
+                Math.Clamp(costToAtk.mouvementCost + mouvementCostIncrease, 0, 12)
+            );
+        }
+
+        //same for costToMove
+
+        //same for baseCostToMove
+
+
+        public int GetAtkIncreaseAccordingToBuffs()
+        {
+            var atkIncreaseAccordingToBuffs = 0;
+            foreach (var buff in buffs)
+            {
+                if (buff is AtkBuff atkBuff)
+                {
+                    atkIncreaseAccordingToBuffs += atkBuff.amount;
+                }
+            }
+
+            return atkIncreaseAccordingToBuffs;
+        }
+
+        public int GetRangeIncreaseAccordingToBuffs()
+        {
+            var rangeIncreaseAccordingToBuffs = 0;
+            foreach (var buff in buffs)
+            {
+                if (buff is RangeBuff rangeBuff)
+                {
+                    rangeIncreaseAccordingToBuffs += rangeBuff.amount;
+                }
+            }
+
+            return rangeIncreaseAccordingToBuffs;
+        }
+
+        public int GetMouvementCostIncreaseAccordingToBuffs()
+        {
+            var mouvementCostIncreaseAccordingToBuffs = 0;
+            foreach (var buff in buffs)
+            {
+                if (buff is WeightedDownBuff weightedDownBuff)
+                {
+                    mouvementCostIncreaseAccordingToBuffs ++;
+                }
+            }
+
+            return mouvementCostIncreaseAccordingToBuffs;
+        }
+
+        public void AddPermanentBuff(EntityBuff entityBuff)
+        {
+            permanentBuffs.Add(entityBuff);
+        }
+
+        public void AddTempBuff(EntityBuff entityBuff)
+        {
+            tempBuffs.Add(entityBuff);
+        }
+
+        public void RemoveTempBuff(EntityBuff entityBuff)
+        {
+            if (tempBuffs.Contains(entityBuff))
+            {   
+                tempBuffs.Remove(entityBuff);
+            }
+        }
+
+        public void RemoveTempBuffByEffectId(string effectId)
+        {
+            var i = 0;
+            while (i < tempBuffs.Count)
+            {
+                var buff = tempBuffs[i];
+                if (buff.assiociatedEffectId == effectId)
+                {
+                    tempBuffs.RemoveAt(i);
+                }
+                else
+                {
+                    i++;
+                }
+            }
+        }
+
+        public void RemoveAllPermanentBuff()
+        {
+            permanentBuffs.Clear();
+        }
+
+
+        public void AddEffect(EntityEffect entityEffect)
+        {
             entityEffect.InitializeAssociatedEntity(this);
             effects.Add(entityEffect);
-            UpdateTempBuffsAccordingToEffects();
+            //UpdateTempBuffsAccordingToEffects();
         }
 
         public void RemoveEffect(EntityEffect entityEffect){
             if(effects.Contains(entityEffect)){
                 effects.Remove(entityEffect);
-                UpdateTempBuffsAccordingToEffects();
+                //UpdateTempBuffsAccordingToEffects();
             }
         }
 
@@ -568,19 +723,6 @@ namespace GameLogic{
         public override string ToString()
         {
             return $"Entity {name}";
-        }
-
-        public void UpdateTempBuffsAccordingToEffects(){
-
-            tempBuffs.Clear();
-
-            foreach(var effect in affectedByEffects){
-                foreach (var buff in effect.entityBuffs){
-                    tempBuffs.Add(buff);
-                }
-            }
-
-            //Debug.Log($"{this} tempbuffs : [{String.Join(", ", tempBuffs)}]");
         }
 
         private int NumberOfBuffs<B>() where B : EntityBuff{

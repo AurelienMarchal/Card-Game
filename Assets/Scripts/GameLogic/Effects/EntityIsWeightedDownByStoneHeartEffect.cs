@@ -43,6 +43,7 @@ namespace GameLogic{
 
             protected override void Activate()
             {
+                /*
                 var stoneHeartCount = 0;
                 foreach (var heart in associatedEntity.health.hearts){
                     if(heart == HeartType.Stone){
@@ -60,6 +61,7 @@ namespace GameLogic{
                 }
                 
                 associatedEntity.UpdateTempBuffsAccordingToEffects();
+                */
             }
 
             public override void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected){

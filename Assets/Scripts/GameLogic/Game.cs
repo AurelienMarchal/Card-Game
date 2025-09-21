@@ -480,30 +480,59 @@ namespace GameLogic{
             
             
             foreach(Effect effect in currentGame.effects){
-                if(effect.Trigger(action)){
+
+                if (effect is CanBeTriggeredInterface canBeTriggeredInterface)
+                {
+                    canBeTriggeredInterface.TryToTrigger(action);
+                }
+                /*
+                if (effect.Trigger(action))
+                {
                     effect.TryToCreateEffectActivatedAction(out _, action);
                 }
+                */
             }
 
             foreach(Effect effect in currentGame.board.effects){
-                if(effect.Trigger(action)){
+                if (effect is CanBeTriggeredInterface canBeTriggeredInterface)
+                {
+                    canBeTriggeredInterface.TryToTrigger(action);
+                }
+                /*
+                if (effect.Trigger(action))
+                {
                     effect.TryToCreateEffectActivatedAction(out _, action);
                 }
+                */
             }
 
             foreach(Player player in players){
                 foreach(Effect effect in player.effects){
-                    if(effect.Trigger(action)){
+                    if (effect is CanBeTriggeredInterface canBeTriggeredInterface)
+                    {
+                        canBeTriggeredInterface.TryToTrigger(action);
+                    }
+                    /*
+                    if (effect.Trigger(action))
+                    {
                         effect.TryToCreateEffectActivatedAction(out _, action);
                     }
+                    */
                 }
             }
 
             foreach(Tile tile in currentGame.board.tiles){
                 foreach(Effect effect in tile.effects){
-                    if(effect.Trigger(action)){
+                    if (effect is CanBeTriggeredInterface canBeTriggeredInterface)
+                    {
+                        canBeTriggeredInterface.TryToTrigger(action);
+                    }
+                    /*
+                    if (effect.Trigger(action))
+                    {
                         effect.TryToCreateEffectActivatedAction(out _, action);
                     }
+                    */
                 }
             }
 
@@ -511,11 +540,19 @@ namespace GameLogic{
 
             foreach(Entity entity in currentGame.board.entities){
                 foreach(Effect effect in entity.effects){
+                    if (effect is CanBeTriggeredInterface canBeTriggeredInterface)
+                    {
+                        canBeTriggeredInterface.TryToTrigger(action);
+                    }
+                    /*
+
                     //Debug.Log($"Checking Trigger for {entity} for effect {effect} with action {action}");
-                    if(effect.Trigger(action)){
-                        
+                    if (effect.Trigger(action))
+                    {
+
                         effect.TryToCreateEffectActivatedAction(out _, action);
                     }
+                    */
                 }
             }
         }
@@ -587,7 +624,7 @@ namespace GameLogic{
             gameState.effectStates = new List<EffectState>();
             foreach (Effect effect in effects)
             {
-                gameState.effectStates.Add(effect.ToEffectState());
+                //gameState.effectStates.Add(effect.ToEffectState());
             }
 
 
