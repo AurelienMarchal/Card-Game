@@ -8,20 +8,30 @@ namespace GameLogic{
     using GameAction;
 
     namespace GameEffect{
-        public class EntityDiesWhenHealthIsEmpty : EntityEffect
+        public class EntityDiesWhenHealthIsEmpty : EntityEffect, CanBeActivatedInterface
         {
             public EntityDiesWhenHealthIsEmpty(Entity entity) : base(entity, displayOnUI:false)
             {
             
             }
 
-            public override bool CanBeActivated()
+            public override string GetEffectName()
             {
-                return base.CanBeActivated() && true;
+                return "Entity dies when health is empty";
+            }
+
+            public override string GetEffectText()
+            {
+                return GetEffectName();
+            }
+
+            public bool CanBeActivated()
+            {
+                return associatedEntity != Entity.noEntity;
             }
 
 
-            public override bool Trigger(Action action)
+            public bool CheckTriggerToActivate(Action action)
             {   
                 switch(action){
                     case EntityLooseHeartAction entityLooseHeartAction:
@@ -48,7 +58,7 @@ namespace GameLogic{
                 }
             }
 
-            protected override void Activate()
+            public void Activate()
             {
                 Game.currentGame.PileAction(new EntityDieAction(associatedEntity));
             }

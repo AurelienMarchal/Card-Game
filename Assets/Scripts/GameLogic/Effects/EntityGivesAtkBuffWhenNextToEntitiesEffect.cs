@@ -35,24 +35,6 @@ namespace GameLogic{
                 tilesAffected = new List<Tile>();
             }
 
-            public override bool Trigger(Action action){
-                switch (action){
-                    case StartGameAction startGameAction:
-                        return startGameAction.wasPerformed;
-
-                    case PlayerSpawnEntityAction playerSpawnEntityAction:
-                        return playerSpawnEntityAction.entity == associatedEntity && playerSpawnEntityAction.wasPerformed;
-
-                    case EntityMoveAction entityMoveAction:
-                        return entityMoveAction.wasPerformed;
-
-                    case EntityDieAction entityDieAction:
-                        return entityDieAction.wasPerformed;
-                }
-
-                return false;
-            }
-
 
             public void UpdateTilesAffected()
             {
@@ -83,7 +65,7 @@ namespace GameLogic{
                 }
             }
             
-            public void UpdateEntitiesAffected()
+            public override void UpdateEntitiesAffected()
             {
                 entitiesAffected.Clear();
 
@@ -107,7 +89,7 @@ namespace GameLogic{
                 return $"Gives {amount} ATK to entities next to {associatedEntity.name}";
             }
 
-            public List<Entity> GetEntitiesAffected()
+            public override List<Entity> GetEntitiesAffected()
             {
                 return entitiesAffected;
             }
@@ -122,7 +104,40 @@ namespace GameLogic{
                 return tempBuffs;
             }
 
-            
+            public override bool CheckTriggerToUpdateEntitiesAffected(Action action)
+            {
+                switch (action)
+                {
+                    case PlayerSpawnEntityAction playerSpawnEntityAction:
+                        return playerSpawnEntityAction.wasPerformed;
+                    case EntityMoveAction entityMoveAction:
+                        return entityMoveAction.wasPerformed;
+                    case EntityDieAction entityDieAction:
+                        return entityDieAction.wasPerformed;
+                }
+
+                return false;
+            }
+
+            public bool CheckTriggerToUpdateTilesAffected(Action action)
+            {
+                switch (action)
+                {
+                    case PlayerSpawnEntityAction playerSpawnEntityAction:
+                        return playerSpawnEntityAction.wasPerformed && playerSpawnEntityAction.entity == associatedEntity;
+                    case EntityMoveAction entityMoveAction:
+                        return entityMoveAction.wasPerformed && entityMoveAction.entity == associatedEntity;
+                    case EntityDieAction entityDieAction:
+                        return entityDieAction.wasPerformed && entityDieAction.entity == associatedEntity;
+                }
+
+                return false;
+            } 
+
+            public bool CheckTriggerToUpdateTempBuffs(Action action)
+            {
+                return false;
+            }
         }
     }
 }

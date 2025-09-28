@@ -6,7 +6,7 @@ namespace GameLogic{
     namespace GameEffect{
 
         using GameAction;
-        public class MoveToChangeTileTypeEffect : EntityEffect
+        public class MoveToChangeTileTypeEffect : EntityEffect, CanBeActivatedInterface
         {
 
             public TileType tileType{
@@ -19,16 +19,18 @@ namespace GameLogic{
                 this.tileType = tileType;
             }
 
-            protected override void Activate(){
-                Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType, effectActivatedAction));
-            }
-
-            public override bool CanBeActivated()
+            void CanBeActivatedInterface.Activate()
             {
-                return base.CanBeActivated();
+                Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType));
             }
 
-            public override bool Trigger(Action action)
+            bool CanBeActivatedInterface.CanBeActivated()
+            {
+                return associatedEntity != Entity.noEntity;
+            }
+            
+
+            public bool CheckTriggerToActivate(Action action)
             {
                 switch(action){
                     case EntityMoveAction entityMoveAction: 
@@ -44,8 +46,6 @@ namespace GameLogic{
             public override string GetEffectText(){
                 return $"Every time {associatedEntity} moves, the tile under it is transformed into a {tileType.ToTileString()}";
             }
-
-            
         }
     }
 }

@@ -8,28 +8,40 @@ namespace GameLogic{
     using GameAction;
 
     namespace GameEffect{
-        public class EntityHealsEntityEffect : EntityEffect{
+        public class PlayerHealEntityEffect : PlayerEffect, CanBeActivatedWithEntityTargetInterface{
             public int numberOfHeartsHealed{
                 get;
                 private set;
             }
 
-            public EntityHealsEntityEffect(int numberOfHeartsHealed, Entity entity) : base(entity){
+
+            public PlayerHealEntityEffect(Player player, int numberOfHeartsHealed) : base(player)
+            {
                 this.numberOfHeartsHealed = numberOfHeartsHealed;
             }
 
-            public override bool CanBeActivated()
+            public bool CanBeActivated()
             {
-                return base.CanBeActivated() && numberOfHeartsHealed > 0;
+                return numberOfHeartsHealed > 0;
             }
-
-            protected override void Activate(){
-                Game.currentGame.PileAction(new EntityHealsAction(numberOfHeartsHealed, associatedEntity));
-            }
-
 
             public override string GetEffectText(){
-                return $"{associatedEntity} heals for {numberOfHeartsHealed}";
+                return $"Heals for {numberOfHeartsHealed}";
+            }
+
+            public List<Entity> PossibleEntityTargets()
+            {
+                return new List<Entity> (associatedPlayer.entities);
+            }
+
+            public bool CanBeActivatedWithEntityTarget(Entity entity)
+            {
+                return entity != Entity.noEntity;
+            }
+
+            void CanBeActivatedWithEntityTargetInterface.ActivateWithEntityTarget(Entity entity)
+            {
+                Game.currentGame.PileAction(new EntityHealsAction(numberOfHeartsHealed, entity));
             }
         }
     }

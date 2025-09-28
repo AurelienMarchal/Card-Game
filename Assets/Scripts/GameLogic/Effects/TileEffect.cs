@@ -1,21 +1,39 @@
 
-namespace GameLogic{
 
-    namespace GameEffect{
-        public class TileEffect : Effect{
-            public Tile associatedTile{
+
+namespace GameLogic{
+    using System.Collections.Generic;
+    using GameAction;
+
+    namespace GameEffect
+    {
+        public abstract class TileEffect : Effect, AffectsTilesInterface
+        {
+            public Tile associatedTile
+            {
                 get;
                 protected set;
             }
 
 
-            public TileEffect(Tile tile, bool displayOnUI = true) : base(displayOnUI:displayOnUI){
+            public TileEffect(Tile tile, bool displayOnUI = true) : base(displayOnUI: displayOnUI)
+            {
                 associatedTile = tile;
             }
 
-            public override bool CanBeActivated()
+            public virtual bool CheckTriggerToUpdateTilesAffected(Action action)
             {
-                return associatedTile != Tile.noTile;
+                return false;
+            }
+
+            public virtual List<Tile> GetTilesAffected()
+            {
+                return new List<Tile> { associatedTile };
+            }
+
+            public virtual void UpdateTilesAffected()
+            {
+
             }
         }
     }

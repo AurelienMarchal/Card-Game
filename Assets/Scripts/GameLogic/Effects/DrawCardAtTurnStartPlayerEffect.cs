@@ -4,22 +4,33 @@ namespace GameLogic{
 
     namespace GameEffect{
 
-        public class DrawCardAtTurnStartPlayerEffect : PlayerEffect
+        public class DrawCardAtTurnStartPlayerEffect : PlayerEffect, CanBeActivatedInterface
         {
             public DrawCardAtTurnStartPlayerEffect(Player player) : base(player)
             {
             }
-            
-            protected override void Activate(){
-                Game.currentGame.PileAction(new PlayerDrawCardAction(associatedPlayer, effectActivatedAction));
+
+            public override string GetEffectName()
+            {
+                return "Draw card at the start of the turn";
             }
 
-            public override bool CanBeActivated()
+            public override string GetEffectText()
+            {
+                return GetEffectName();
+            }
+            
+            public void Activate()
+            {
+                Game.currentGame.PileAction(new PlayerDrawCardAction(associatedPlayer));
+            }
+
+            public bool CanBeActivated()
             {
                 return associatedPlayer.CanDraw();
             }
 
-            public override bool Trigger(Action action)
+            public bool CheckTriggerToActivate(Action action)
             {
                 switch (action)
                 {

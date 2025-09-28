@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 
 namespace GameLogic{
@@ -8,20 +6,33 @@ namespace GameLogic{
     using GameAction;
 
     namespace GameEffect{
-        public class ChangeTileEntityEffect : EntityEffect{
+        public class ChangeTileEntityEffect : EntityEffect, CanBeActivatedInterface, AffectsTilesInterface{
 
             public TileType tileType{
                 get;
                 protected set;
             }
 
-            public ChangeTileEntityEffect(TileType tileType, Entity entity) : base(entity){
+            public Tile tile;
+
+            public ChangeTileEntityEffect(TileType tileType, Entity entity) : base(entity) {
                 this.tileType = tileType;
+                tile = associatedEntity.currentTile;
             }
 
-            protected override void Activate()
+            public void Activate()
             {
-                Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType, effectActivatedAction));
+                Game.currentGame.PileAction(new TileChangeTypeAction(associatedEntity.currentTile, tileType));
+            }
+
+            public bool CanBeActivated()
+            {
+                return associatedEntity != Entity.noEntity && tile != Tile.noTile && tile.tileType != tileType;
+            }
+
+            public override string GetEffectName()
+            {
+                return "Change tile type under entity";
             }
 
             public override string GetEffectText()
@@ -29,10 +40,35 @@ namespace GameLogic{
                 return $"Change tile under {associatedEntity} to {tileType.ToTileString()}";
             }
 
-            public override void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected)
+            public bool CheckTriggerToActivate(Action action)
             {
-                entitiesAffected = new Entity[0];
-                tilesAffected = new Tile[]{associatedEntity.currentTile};
+                return false;
+            }
+
+            public bool CheckTriggerToUpdateTilesAffected(Action action)
+            {
+                switch (action)
+                {
+                    case PlayerSpawnEntityAction playerSpawnEntityAction:
+                        return playerSpawnEntityAction.wasPerformed && playerSpawnEntityAction.entity == associatedEntity;
+                    case EntityMoveAction entityMoveAction:
+                        return entityMoveAction.wasPerformed && entityMoveAction.entity == associatedEntity;
+                    case EntityDieAction entityDieAction:
+                        return entityDieAction.wasPerformed && entityDieAction.entity == associatedEntity;
+
+                }
+
+                return false;
+            }
+
+            public void UpdateTilesAffected()
+            {
+                tile = associatedEntity.currentTile;
+            }
+
+            public List<Tile> GetTilesAffected()
+            {
+                return new List<Tile> { tile };
             }
         }
     }

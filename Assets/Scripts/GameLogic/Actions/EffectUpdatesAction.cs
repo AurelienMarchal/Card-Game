@@ -4,20 +4,18 @@ namespace GameLogic{
     using GameLogic.GameState;
 
     namespace GameAction{
-        public class EffectActivatedAction : Action
+        public class EffectUpdatesAction : EffectAction
         {
-
-            Effect effect;
 
             //Targets
 
-            public EffectActivatedAction(Effect effect, Action requiredAction = null) : base(requiredAction)
+            public EffectUpdatesAction(Effect effect, Action requiredAction = null) : base(effect, requiredAction)
             {
-                this.effect = effect;
             }
             protected override bool Perform()
             {
-                return effect.TryToActivate();
+                effect.Update();
+                return true;
             }
             
             public override ActionState ToActionState()

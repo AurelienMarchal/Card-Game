@@ -4,11 +4,8 @@ namespace GameLogic{
     using GameLogic.GameState;
 
     namespace GameAction{
-        public class EffectActivatedWithEntityTargetAction : Action
+        public class EffectActivatesWithEntityTargetAction : EffectAction
         {
-
-            Effect effect;
-
             public Entity targetEntity
             {
                 get; private set;
@@ -16,9 +13,9 @@ namespace GameLogic{
 
             //Targets
 
-            public EffectActivatedWithEntityTargetAction(Effect effect, Entity targetEntity, Action requiredAction = null) : base(requiredAction)
+            public EffectActivatesWithEntityTargetAction(Effect effect, Entity targetEntity, Action requiredAction = null) : base(effect, requiredAction)
             {
-                this.effect = effect;
+                
                 this.targetEntity = targetEntity;
             }
             protected override bool Perform()

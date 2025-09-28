@@ -4,19 +4,15 @@ namespace GameLogic{
     using GameLogic.GameState;
 
     namespace GameAction{
-        public class EffectActivatedWithTileTargetAction : Action
+        public class EffectActivatesWithTileTargetAction : EffectAction
         {
-
-            Effect effect;
-
             public Tile targetTile
             {
                 get; private set;
             }
 
-            public EffectActivatedWithTileTargetAction(Effect effect, Tile targetTile, Action requiredAction = null) : base(requiredAction)
+            public EffectActivatesWithTileTargetAction(Effect effect, Tile targetTile, Action requiredAction = null) : base(effect, requiredAction)
             {
-                this.effect = effect;
                 this.targetTile = targetTile;
             }
             protected override bool Perform()

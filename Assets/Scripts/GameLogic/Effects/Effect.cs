@@ -7,7 +7,6 @@ using UnityEngine;
 namespace GameLogic{
 
     using GameAction;
-    using GameBuff;
     using GameState;
 
     namespace GameEffect{
@@ -25,52 +24,19 @@ namespace GameLogic{
                 private set;
             }
 
-            [Obsolete]
-            public List<EntityBuff> entityBuffs
+            public Effect(bool displayOnUI = true)
             {
-                get;
-                private set;
-            }
-
-            public Effect(bool displayOnUI = true){
                 this.displayOnUI = displayOnUI;
                 id = Guid.NewGuid();
-                entityBuffs = new List<EntityBuff>();
             }
 
-            protected EffectActivatedAction effectActivatedAction;
-
-            public virtual bool CanBeActivated(){
-                return false;
+            public virtual string GetEffectName()
+            {
+                return "No Name";
             }
-
-            protected virtual void Activate(){
-            }
-
-            public virtual bool TryToActivate(){
-                var result = CanBeActivated();
-                if(result){
-                    Activate();
-                }
-                return result;
-            }
-
-            public virtual bool TryToCreateEffectActivatedAction(out EffectActivatedAction effectActivatedAction, Action requiredAction = null){
-                effectActivatedAction = new EffectActivatedAction(this, requiredAction);
-                var canBeActivated = CanBeActivated();
-                if(canBeActivated){
-                    this.effectActivatedAction = effectActivatedAction;
-                    Game.currentGame.PileAction(effectActivatedAction);
-                }
-                
-                return canBeActivated;
-            }
-
-            public virtual bool Trigger(Action action){
-                return false;
-            }
-
-            public virtual string GetEffectText(){
+            
+            public virtual string GetEffectText()
+            {
                 return "No Effect";
             }
 
@@ -87,7 +53,7 @@ namespace GameLogic{
             public virtual EffectState ToEffectState()
             {
                 EffectState effectState = new EffectState();
-                effectState.canBeActivated = CanBeActivated();
+                //effectState.canBeActivated = CanBeActivated();
                 effectState.effectText = GetEffectText();
 
                 effectState.entitiesAffectedNums = new List<uint>();

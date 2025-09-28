@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameLogic.GameAction;
 using UnityEngine;
 
 namespace GameLogic{
 
     namespace GameEffect{
-        public class EntityEffect : Effect{
+        public abstract class EntityEffect : Effect, AffectsEntitiesInterface{
             
             public Entity associatedEntity{
                 get;
@@ -17,17 +18,19 @@ namespace GameLogic{
                 associatedEntity = entity;
             }
 
-            public void InitializeAssociatedEntity(Entity entity)
+            public virtual bool CheckTriggerToUpdateEntitiesAffected(Action action)
             {
-                if (associatedEntity == Entity.noEntity)
-                {
-                    associatedEntity = entity;
-                }
+                return false;
             }
 
-            public override bool CanBeActivated()
+            public virtual void UpdateEntitiesAffected()
             {
-                return associatedEntity != Entity.noEntity;
+                
+            }
+
+            public virtual List<Entity> GetEntitiesAffected()
+            {
+                return new List<Entity> { associatedEntity };
             }
         }
     }

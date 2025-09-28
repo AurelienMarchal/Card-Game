@@ -7,6 +7,8 @@ namespace GameLogic{
 
     using GameState;
     using GameEffect;
+    using System.Linq;
+
     public class Board {
 
         public int gridHeight{
@@ -31,12 +33,13 @@ namespace GameLogic{
 
         private List<Entity> entities_;
 
-        public List<Entity> entities{
-            get{
+        //temp
+        public List<Entity> entities {
+            get {
                 entities_.Clear();
-                if(Game.currentGame != null){
-                    foreach(Player player in Game.currentGame.players){
-                        foreach(Entity entity in player.entities){
+                if (Game.currentGame != null) {
+                    foreach (Player player in Game.currentGame.players) {
+                        foreach (Entity entity in player.entities) {
                             //Debug.Log($"{player} has {entity}");
                             entities_.Add(entity);
                         }
@@ -45,7 +48,7 @@ namespace GameLogic{
 
                 return entities_;
             }
-            
+
         }
 
 
@@ -142,23 +145,47 @@ namespace GameLogic{
 
             return Entity.noEntity;
         }
+        
+        public Entity[] GetEntitiesAtTiles(Tile[] tiles){
 
-        public Entity GetFirstEntityInDirectionWithRange(Tile startTile, Direction direction, int range, out Tile[] tilesRanged){
+            var currentEntities = entities;
+
+            var entitiesToReturn = new List<Entity>();
+
+            foreach (var entity in currentEntities)
+            {
+                if (entity.currentTile == Tile.noTile)
+                {
+                    continue;
+                }
+                if (tiles.Contains(entity.currentTile))
+                {
+                    entitiesToReturn.Add(entity);
+                }
+            }
+
+            return entitiesToReturn.ToArray();
+        }
+
+        public Entity GetFirstEntityInDirectionWithRange(Tile startTile, Direction direction, int range, out Tile[] tilesRanged)
+        {
 
             var tile = startTile;
 
             var tileList = new List<Tile>();
 
-            while(range > 0 && tile != Tile.noTile){
+            while (range > 0 && tile != Tile.noTile)
+            {
                 tileList.Add(tile);
                 var entityAtTile = GetEntityAtTile(tile);
-                if(entityAtTile != Entity.noEntity){
+                if (entityAtTile != Entity.noEntity)
+                {
                     tilesRanged = tileList.ToArray();
                     return entityAtTile;
                 }
 
                 tile = NextTileInDirection(tile, direction);
-                range --;
+                range--;
             }
 
             tilesRanged = tileList.ToArray();
@@ -190,6 +217,25 @@ namespace GameLogic{
             tilesRanged = tileList.ToArray();
             return entityList.ToArray();
         }
+        
+        public Tile[] GetAllTilesInDirectionWithRange(Tile startTile, Direction direction, int range){
+
+            var tile = startTile;
+
+            var tileList = new List<Tile>();
+
+            //Debug.Log($"startTile {tile}, {direction}");
+
+            while(range > 0 && tile != Tile.noTile){
+                //Debug.Log($"startTile {tile}, {direction}");
+                tileList.Add(tile);
+
+                tile = NextTileInDirection(tile, direction);
+                range --;
+            }
+
+            return tileList.ToArray();
+        }
 
         public List<Tile> GetTileSquareAroundTile(Tile tile, int squareSize)
         {
@@ -206,7 +252,7 @@ namespace GameLogic{
                 return toReturn;
             }
 
-            var halfSquareSize = Math.Abs(squareSize) % 2 == 0 ? Math.Abs(squareSize) / 2 : (Math.Abs(squareSize) + 1) / 2; 
+            var halfSquareSize = Math.Abs(squareSize) % 2 == 0 ? Math.Abs(squareSize) / 2 : (Math.Abs(squareSize) + 1) / 2;
 
             for (int i = tile.gridX - halfSquareSize; i < tile.gridX + halfSquareSize; i++)
             {

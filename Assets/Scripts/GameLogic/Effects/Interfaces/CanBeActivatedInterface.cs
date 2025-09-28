@@ -5,16 +5,21 @@ namespace GameLogic
 {
     namespace GameEffect
     {
+
+        using GameAction;
         public interface CanBeActivatedInterface
         {
 
+            public bool CheckTriggerToActivate(Action action);
             public bool CanBeActivated();
 
-            protected void Activate();
+            public void Activate();
 
-            public bool TryToActivate(){
+            public bool TryToActivate()
+            {
                 var result = CanBeActivated();
-                if(result){
+                if (result)
+                {
                     Activate();
                 }
                 return result;

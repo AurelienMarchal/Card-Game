@@ -477,82 +477,74 @@ namespace GameLogic{
 
         void CheckTriggers(Action action){
 
-            
-            
-            foreach(Effect effect in currentGame.effects){
 
-                if (effect is CanBeTriggeredInterface canBeTriggeredInterface)
-                {
-                    canBeTriggeredInterface.TryToTrigger(action);
-                }
-                /*
-                if (effect.Trigger(action))
-                {
-                    effect.TryToCreateEffectActivatedAction(out _, action);
-                }
-                */
+
+            foreach (Effect effect in currentGame.effects)
+            {
+                CheckTriggers(effect, action);
             }
 
             foreach(Effect effect in currentGame.board.effects){
-                if (effect is CanBeTriggeredInterface canBeTriggeredInterface)
-                {
-                    canBeTriggeredInterface.TryToTrigger(action);
-                }
-                /*
-                if (effect.Trigger(action))
-                {
-                    effect.TryToCreateEffectActivatedAction(out _, action);
-                }
-                */
+                CheckTriggers(effect, action);
             }
-
-            foreach(Player player in players){
-                foreach(Effect effect in player.effects){
-                    if (effect is CanBeTriggeredInterface canBeTriggeredInterface)
-                    {
-                        canBeTriggeredInterface.TryToTrigger(action);
-                    }
-                    /*
-                    if (effect.Trigger(action))
-                    {
-                        effect.TryToCreateEffectActivatedAction(out _, action);
-                    }
-                    */
-                }
-            }
-
+            
             foreach(Tile tile in currentGame.board.tiles){
                 foreach(Effect effect in tile.effects){
-                    if (effect is CanBeTriggeredInterface canBeTriggeredInterface)
-                    {
-                        canBeTriggeredInterface.TryToTrigger(action);
-                    }
-                    /*
-                    if (effect.Trigger(action))
-                    {
-                        effect.TryToCreateEffectActivatedAction(out _, action);
-                    }
-                    */
+                    CheckTriggers(effect, action);
                 }
             }
 
-            //Debug.Log($"Cheking triggers for board entities : [{String.Join(", ", currentGame.board.entities)}]");
+            foreach (Player player in players)
+            {
+                foreach (Effect effect in player.effects)
+                {
+                    CheckTriggers(effect, action);
+                }
 
-            foreach(Entity entity in currentGame.board.entities){
-                foreach(Effect effect in entity.effects){
-                    if (effect is CanBeTriggeredInterface canBeTriggeredInterface)
+                foreach (Entity entity in player.entities)
+                {
+                    foreach (Effect effect in entity.effects)
                     {
-                        canBeTriggeredInterface.TryToTrigger(action);
+                        CheckTriggers(effect, action);
                     }
-                    /*
+                }
+            }
+        }
 
-                    //Debug.Log($"Checking Trigger for {entity} for effect {effect} with action {action}");
-                    if (effect.Trigger(action))
+        void CheckTriggers(Effect effect, Action action)
+        {
+
+            if (effect is GivesTempBuffInterface givesTempBuffEffect)
+            {
+                if (givesTempBuffEffect.CheckTriggerToUpdateTempBuffs(action))
+                {
+                    PileAction(new EffectUpdatesTempBuffsAction(effect, action));
+                }
+            }
+
+            if (effect is AffectsTilesInterface affectsTilesEffect)
+            {
+                if (affectsTilesEffect.CheckTriggerToUpdateTilesAffected(action))
+                {
+                    PileAction(new EffectUpdatesTilesAffectedAction(effect, action));
+                }
+            }
+
+            if (effect is AffectsEntitiesInterface affectsEntitiesEffect)
+            {
+                if (affectsEntitiesEffect.CheckTriggerToUpdateEntitiesAffected(action))
+                {
+                    PileAction(new EffectUpdatesEntitiesAffectedAction(effect, action));   
+                }
+            }
+            if (effect is CanBeActivatedInterface canBeActivatedEffect)
+            {
+                if (canBeActivatedEffect.CheckTriggerToActivate(action))
+                {
+                    if (canBeActivatedEffect.CanBeActivated())
                     {
-
-                        effect.TryToCreateEffectActivatedAction(out _, action);
+                        PileAction(new EffectActivatesAction(effect, action));
                     }
-                    */
                 }
             }
         }

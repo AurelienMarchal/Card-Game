@@ -170,9 +170,16 @@ namespace GameLogic{
             maxMovement = startingMaxMovement;
             movementLeft = 0;
             direction = startingDirection;
+            
             baseCostToAtk = new Cost(mouvement: 1);
+            costToAtk = baseCostToAtk;
+
             baseRange = 0;
+            range = baseRange;
+
             baseAtkDamage = new Damage(0);
+            atkDamage = baseAtkDamage;
+
             effects = new List<EntityEffect>();
             tempBuffs = new List<EntityBuff>();
             permanentBuffs = new List<EntityBuff>();
@@ -600,7 +607,7 @@ namespace GameLogic{
         protected void IncreaseCostToAtk(int mouvementCostIncrease, int manaCostIncrease, HeartType[] heartCostIncrease)
         {
             costToAtk = new Cost(
-                costToAtk.heartCost, //TODO
+                heartCostIncrease == null || heartCostIncrease.Length == 0 ? costToAtk.heartCost : heartCostIncrease, //TODO
                 Math.Clamp(costToAtk.manaCost + manaCostIncrease, 0, 10),
                 Math.Clamp(costToAtk.mouvementCost + mouvementCostIncrease, 0, 12)
             );

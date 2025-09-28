@@ -7,24 +7,23 @@ namespace GameLogic{
     using GameAction;
 
     namespace GameEffect{
-        public class ChangeWillGetCurseTypeIntoCursedTileEffect : TileEffect
+        public class ChangeWillGetCurseTypeIntoCursedTileEffect : TileEffect, CanBeActivatedInterface, AffectsTilesInterface
         {
 
             public ChangeWillGetCurseTypeIntoCursedTileEffect(Tile tile) : base(tile){
             }
 
-            protected override void Activate()
+            public void Activate()
             {
-                Game.currentGame.PileAction(new TileChangeTypeAction(associatedTile, TileType.Cursed, effectActivatedAction));
+                Game.currentGame.PileAction(new TileChangeTypeAction(associatedTile, TileType.Cursed));
             }
 
-            public override bool CanBeActivated()
+            public bool CanBeActivated()
             {
-                return base.CanBeActivated() && associatedTile.tileType == TileType.WillGetCursed;
+                return associatedTile != Tile.noTile && associatedTile.tileType == TileType.WillGetCursed;
             }
 
-
-            public override bool Trigger(Action action)
+            public bool CheckTriggerToActivate(Action action)
             {
                 switch(action){
                     case PlayerEndTurnAction playerEndTurnAction:
