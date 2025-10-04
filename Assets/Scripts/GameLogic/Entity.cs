@@ -669,11 +669,16 @@ namespace GameLogic{
         {
             tempBuffs.Add(entityBuff);
         }
+        
+        public void AddTempBuffs(List<EntityBuff> entityBuffs)
+        {
+            tempBuffs.AddRange(entityBuffs);
+        }
 
         public void RemoveTempBuff(EntityBuff entityBuff)
         {
             if (tempBuffs.Contains(entityBuff))
-            {   
+            {
                 tempBuffs.Remove(entityBuff);
             }
         }

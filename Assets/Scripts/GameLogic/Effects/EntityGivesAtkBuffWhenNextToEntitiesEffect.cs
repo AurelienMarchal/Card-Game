@@ -11,7 +11,7 @@ namespace GameLogic{
 
     namespace GameEffect{
 //TODO
-        public class EntityGivesAtkBuffWhenNextToEntitiesEffect : EntityEffect, AffectsEntitiesInterface, AffectsTilesInterface, GivesTempBuffInterface{
+        public class EntityGivesAtkBuffWhenNextToEntitiesEffect : EntityEffect, AffectsEntitiesInterface, AffectsTilesInterface, GivesTempEntityBuffInterface{
             public int amount{
                 get;
                 private set;
@@ -20,13 +20,13 @@ namespace GameLogic{
             private List<Entity> entitiesAffected;
             private List<Tile> tilesAffected;
 
-            private List<Buff> tempBuffs;
+            private List<EntityBuff> tempBuffs;
 
             public EntityGivesAtkBuffWhenNextToEntitiesEffect(int amount, Entity entity, bool displayOnUI = true) : base(entity, displayOnUI)
             {
                 this.amount = amount;
 
-                tempBuffs = new List<Buff>
+                tempBuffs = new List<EntityBuff>
                 {
                     new AtkBuff(amount)
                 };
@@ -79,7 +79,7 @@ namespace GameLogic{
                 }
             }
             
-            public void UpdateTempBuffs()
+            public void UpdateTempEntityBuffs()
             {
                 
             }
@@ -99,7 +99,7 @@ namespace GameLogic{
                 return tilesAffected;
             }
 
-            public List<Buff> GetTempBuffs()
+            public List<EntityBuff> GetTempEntityBuffs()
             {
                 return tempBuffs;
             }
@@ -134,7 +134,7 @@ namespace GameLogic{
                 return false;
             } 
 
-            public bool CheckTriggerToUpdateTempBuffs(Action action)
+            public bool CheckTriggerToUpdateTempEntityBuffs(Action action)
             {
                 return false;
             }

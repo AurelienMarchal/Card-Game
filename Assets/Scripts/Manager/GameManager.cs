@@ -236,7 +236,7 @@ public class GameManager : MonoBehaviour
             "Barbarian",
             startingTile2,
             new Health(
-                12, new HeartType[] {HeartType.Red,HeartType.Red,HeartType.Red}
+                12, new HeartType[] {HeartType.Red,HeartType.Red,HeartType.Red, HeartType.Stone, HeartType.Stone}
             ),
             3,
             new List<EntityEffect> {new MoveToChangeTileTypeEffect(null, TileType.Cursed)},

@@ -514,9 +514,9 @@ namespace GameLogic{
         void CheckTriggers(Effect effect, Action action)
         {
 
-            if (effect is GivesTempBuffInterface givesTempBuffEffect)
+            if (effect is GivesTempEntityBuffInterface givesTempBuffEffect)
             {
-                if (givesTempBuffEffect.CheckTriggerToUpdateTempBuffs(action))
+                if (givesTempBuffEffect.CheckTriggerToUpdateTempEntityBuffs(action))
                 {
                     PileAction(new EffectUpdatesTempBuffsAction(effect, action));
                 }

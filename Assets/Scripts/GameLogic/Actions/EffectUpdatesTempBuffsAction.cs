@@ -12,9 +12,17 @@ namespace GameLogic{
             }
             protected override bool Perform()
             {
-                if (effect is GivesTempBuffInterface givesTempBuffEffect)
+                if (effect is GivesTempEntityBuffInterface givesTempBuffEffect)
                 {
-                    givesTempBuffEffect.UpdateTempBuffs();
+                    givesTempBuffEffect.UpdateTempEntityBuffs();
+                    if (effect is AffectsEntitiesInterface affectsEntitiesEffect)
+                    {
+                        foreach (var affectedEntity in affectsEntitiesEffect.GetEntitiesAffected())
+                        {
+                            affectedEntity.RemoveTempBuffByEffectId(effect.id.ToString());
+                            affectedEntity.AddTempBuffs(givesTempBuffEffect.GetTempEntityBuffs());
+                        }
+                    }
                     return true;
                 }
                 return false;

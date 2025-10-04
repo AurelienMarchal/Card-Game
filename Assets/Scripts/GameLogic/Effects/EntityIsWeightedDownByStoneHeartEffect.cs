@@ -9,17 +9,17 @@ namespace GameLogic{
     using GameBuff;
 
     namespace GameEffect{
-        public class EntityIsWeightedDownByStoneHeartEffect : EntityEffect, GivesTempBuffInterface
+        public class EntityIsWeightedDownByStoneHeartEffect : EntityEffect, GivesTempEntityBuffInterface
         {
 
-            List<Buff> entityBuffs; 
+            List<EntityBuff> entityBuffs; 
 
             public EntityIsWeightedDownByStoneHeartEffect(Entity entity) : base(entity, false)
             {
-                entityBuffs = new List<Buff>();
+                entityBuffs = new List<EntityBuff>();
             }
 
-            public bool CheckTriggerToUpdateTempBuffs(Action action)
+            public bool CheckTriggerToUpdateTempEntityBuffs(Action action)
             {
 
                 switch (action){
@@ -42,12 +42,12 @@ namespace GameLogic{
                 return false;
             }
 
-            public List<Buff> GetTempBuffs()
+            public List<EntityBuff> GetTempEntityBuffs()
             {
                 return entityBuffs;
             }
 
-            public void UpdateTempBuffs()
+            public void UpdateTempEntityBuffs()
             {
                 
                 var stoneHeartCount = 0;
