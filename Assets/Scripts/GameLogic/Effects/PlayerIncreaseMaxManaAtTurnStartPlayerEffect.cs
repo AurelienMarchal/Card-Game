@@ -4,22 +4,22 @@ namespace GameLogic{
 
     namespace GameEffect{
 
-        public class PlayerIncreaseMaxManaAtTurnStartPlayerEffect : PlayerEffect
+        public class PlayerIncreaseMaxManaAtTurnStartPlayerEffect : PlayerEffect, CanBeActivatedInterface
         {
             public PlayerIncreaseMaxManaAtTurnStartPlayerEffect(Player player) : base(player)
             {
             }
             
-            protected override void Activate(){
-                Game.currentGame.PileAction(new PlayerIncreaseMaxManaAction(associatedPlayer, effectActivatedAction));
+            void CanBeActivatedInterface.Activate(){
+                Game.currentGame.PileAction(new PlayerIncreaseMaxManaAction(associatedPlayer));
             }
 
-            public override bool CanBeActivated()
+            public bool CanBeActivated()
             {
                 return true;
             }
 
-            public override bool Trigger(Action action)
+            public bool CheckTriggerToActivate(Action action)
             {
                 switch (action)
                 {

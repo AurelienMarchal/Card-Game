@@ -6,13 +6,18 @@ namespace GameLogic{
     
 
     namespace GameEffect{
-        public class UntilEndOfPlayerTurnEntityEffect : EntityEffect
+        public class UntilEndOfPlayerTurnEntityEffect : EntityEffect, CanBeActivatedInterface
         {
             public UntilEndOfPlayerTurnEntityEffect(Entity entity, bool displayOnUI = true) : base(entity, displayOnUI)
             {
             }
 
-            public override bool Trigger(Action action)
+            public bool CanBeActivated()
+            {
+                return true;
+            }
+
+            public bool CheckTriggerToActivate(Action action)
             {
                 switch (action){
                     case PlayerEndTurnAction playerEndTurnAction:
@@ -22,9 +27,9 @@ namespace GameLogic{
                 }
             }
 
-            protected override void Activate()
+            void CanBeActivatedInterface.Activate()
             {
-                Game.currentGame.PileAction(new RemoveEntityEffectFromEntityAction(associatedEntity, this, null));
+                Game.currentGame.PileAction(new RemoveEntityEffectFromEntityAction(associatedEntity, this));
             }
         }
     }

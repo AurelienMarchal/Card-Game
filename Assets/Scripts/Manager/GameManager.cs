@@ -211,10 +211,14 @@ public class GameManager : MonoBehaviour
             EntityModel.MageHero,
             "Mage",
             startingTile1,
-            new Health(new HeartType[] { HeartType.Red, HeartType.Red, HeartType.Red }),
+            new Health(
+                12, new HeartType[] {HeartType.Red,HeartType.Red,HeartType.Red}
+            ),
             3,
-            new List<EntityEffect> {new MoveToChangeTileTypeEffect(null, TileType.Nature)},
+            new List<EntityEffect> {},
             direction1);
+
+        hero1.AddEffect(new MoveToChangeTileTypeEffect(hero1, TileType.Nature));
         
         hero1.num = 0;
         Game.currentGame.players[0].entities.Add(hero1);
@@ -231,7 +235,9 @@ public class GameManager : MonoBehaviour
             EntityModel.BarbarianHero,
             "Barbarian",
             startingTile2,
-            new Health(new HeartType[] { HeartType.Red, HeartType.Red, HeartType.Red }),
+            new Health(
+                12, new HeartType[] {HeartType.Red,HeartType.Red,HeartType.Red}
+            ),
             3,
             new List<EntityEffect> {new MoveToChangeTileTypeEffect(null, TileType.Cursed)},
             direction2);

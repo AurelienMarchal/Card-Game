@@ -42,6 +42,11 @@ namespace GameLogic{
 
             public bool CheckTriggerToActivate(Action action)
             {
+                switch (action)
+                {
+                    case EntityMoveAction entityMoveAction:
+                        return entityMoveAction.wasPerformed && entityMoveAction.entity == associatedEntity;
+                }
                 return false;
             }
 

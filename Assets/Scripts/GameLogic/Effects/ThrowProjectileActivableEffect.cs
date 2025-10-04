@@ -8,80 +8,133 @@ namespace GameLogic{
     using GameAction;
 
     namespace GameEffect{
-        public class ThrowProjectileEntityEffect : EntityEffect{
+        public class ThrowProjectileEntityEffect : EntityEffect, AffectsTilesInterface, CanBeActivatedInterface
+        {
 
-            public Direction direction{
+            public Direction direction
+            {
                 get;
                 protected set;
             }
 
-            public Damage damage{
+            public Damage damage
+            {
                 get;
                 protected set;
             }
 
-            public int range{
-                get;
-                protected set;
-            }
-            
-            public Entity entityHit{
+            public int range
+            {
                 get;
                 protected set;
             }
 
-            public Tile tileReached{
+            public Entity entityHit
+            {
                 get;
                 protected set;
             }
 
+            public Tile tileReached
+            {
+                get;
+                protected set;
+            }
 
-            public ThrowProjectileEntityEffect(Entity casterEntity, Damage damage, int range) : base(casterEntity){
+            List<Tile> tilesInRange;
+
+            List<Entity> entitiesInRange;
+
+
+            public ThrowProjectileEntityEffect(Entity casterEntity, Damage damage, int range) : base(casterEntity)
+            {
                 this.damage = damage;
                 this.range = range;
                 entityHit = Entity.noEntity;
                 tileReached = Tile.noTile;
+                tilesInRange = new List<Tile>();
+                entitiesInRange = new List<Entity>();
             }
 
-            protected override void Activate(){
-                GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected);
-                if(entitiesAffected.Length > 0 && entitiesAffected[0] != Entity.noEntity){
-                    entityHit = entitiesAffected[0];
-                    tileReached = entityHit.currentTile;
-                    Game.currentGame.PileAction(new EntityTakeDamageAction(entityHit, damage, effectActivatedAction));
-                }
-            }
-
-
-            public override bool CanBeActivated(){
-                return base.CanBeActivated() && Game.currentGame.board.NextTileInDirection(associatedEntity.currentTile, associatedEntity.direction) != Tile.noTile;
-            }
-
-            public override void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected)
+            void CanBeActivatedInterface.Activate()
             {
-                if(associatedEntity == Entity.noEntity){
-                    tilesAffected = new Tile[0];
-                    entitiesAffected = new Entity[0];
-                    return;
+                
+                if (entitiesInRange.Count > 0 && entitiesInRange[0] != Entity.noEntity)
+                {
+                    entityHit = entitiesInRange[0];
+                    tileReached = entityHit.currentTile;
+                    Game.currentGame.PileAction(new EntityTakeDamageAction(entityHit, damage));
                 }
+            }
 
-                var nextTile = Game.currentGame.board.NextTileInDirection(associatedEntity.currentTile, associatedEntity.direction);
-                var entityRanged = Game.currentGame.board.GetFirstEntityInDirectionWithRange(nextTile, associatedEntity.direction, range, out tilesAffected);
 
-                if(entityRanged != Entity.noEntity){
-                    entitiesAffected = new Entity[1]{entityRanged};
-                    return;
-                }
-                else{
-                    entitiesAffected = new Entity[0];
-                    return;
-                }
+            public bool CanBeActivated()
+            {
+                return associatedEntity != Entity.noEntity && Game.currentGame.board.NextTileInDirection(associatedEntity.currentTile, associatedEntity.direction) != Tile.noTile;
+            }
+
+            public bool CheckTriggerToActivate(Action action)
+            {
+                return false;
             }
 
             public override string GetEffectText()
             {
                 return $"Deal {damage} with range {range}";
             }
+
+            public bool CheckTriggerToUpdateTilesAffected(Action action)
+            {
+                switch (action)
+                {
+                    case PlayerSpawnEntityAction playerSpawnEntityAction:
+                        return playerSpawnEntityAction.wasPerformed;
+                    case EntityMoveAction entityMoveAction:
+                        return entityMoveAction.wasPerformed;
+                    case EntityDieAction entityDieAction:
+                        return entityDieAction.wasPerformed;
+                }
+
+                return false;
+            }
+
+            public void UpdateTilesAffected()
+            {
+                tilesInRange.Clear();
+                entitiesInRange.Clear();
+
+                var nextTile = Game.currentGame.board.NextTileInDirection(associatedEntity.currentTile, associatedEntity.direction);
+                var entityRanged = Game.currentGame.board.GetFirstEntityInDirectionWithRange(nextTile, associatedEntity.direction, range, out Tile[] tilesRanged);
+                tilesInRange.AddRange(tilesRanged);
+
+                if (entityRanged != Entity.noEntity)
+                { 
+                    entitiesInRange.Add(entityRanged);
+                }
+                
+            }
+
+            public List<Tile> GetTilesAffected()
+            {
+                return tilesInRange;
+            }
+            
+            public override bool CheckTriggerToUpdateEntitiesAffected(Action action)
+            {
+                return false;
+            }
+
+            public override void UpdateEntitiesAffected()
+            {
+                
+            }
+
+            public override List<Entity> GetEntitiesAffected()
+            {
+                return entitiesInRange;
+            }
+
+            
         }
     }
 }

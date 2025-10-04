@@ -10,17 +10,12 @@ namespace GameLogic{
             
             public Weapon associatedWeapon{
                 get;
-                set;
+                private set;
             }
 
             public WeaponEffect(Weapon weapon, bool displayOnUI = true) : base(displayOnUI:displayOnUI){
                 associatedWeapon = weapon;
             }
-
-            public override bool CanBeActivated(){
-                return associatedWeapon != Weapon.noWeapon;
-            }
-            
 
         }
     }

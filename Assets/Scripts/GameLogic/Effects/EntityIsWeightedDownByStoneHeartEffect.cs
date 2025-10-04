@@ -9,15 +9,17 @@ namespace GameLogic{
     using GameBuff;
 
     namespace GameEffect{
-        public class EntityIsWeightedDownByStoneHeartEffect : EntityEffect
+        public class EntityIsWeightedDownByStoneHeartEffect : EntityEffect, GivesTempBuffInterface
         {
+
+            List<Buff> entityBuffs; 
+
             public EntityIsWeightedDownByStoneHeartEffect(Entity entity) : base(entity, false)
             {
-            
-            
+                entityBuffs = new List<Buff>();
             }
 
-            public override bool Trigger(Action action)
+            public bool CheckTriggerToUpdateTempBuffs(Action action)
             {
 
                 switch (action){
@@ -40,10 +42,14 @@ namespace GameLogic{
                 return false;
             }
 
-
-            protected override void Activate()
+            public List<Buff> GetTempBuffs()
             {
-                /*
+                return entityBuffs;
+            }
+
+            public void UpdateTempBuffs()
+            {
+                
                 var stoneHeartCount = 0;
                 foreach (var heart in associatedEntity.health.hearts){
                     if(heart == HeartType.Stone){
@@ -55,18 +61,7 @@ namespace GameLogic{
                 for (int i = 0; i < stoneHeartCount; i++){
                     entityBuffs.Add(new WeightedDownBuff());
                 }
-
-                if(!associatedEntity.affectedByEffects.Contains(this)){
-                    associatedEntity.affectedByEffects.Add(this);
-                }
                 
-                associatedEntity.UpdateTempBuffsAccordingToEffects();
-                */
-            }
-
-            public override void GetTilesAndEntitiesAffected(out Entity[] entitiesAffected, out Tile[] tilesAffected){
-                tilesAffected = new Tile[0];
-                entitiesAffected = new Entity[1]{associatedEntity};
             }
         }
     }

@@ -14,7 +14,13 @@ namespace GameLogic{
             }
             protected override bool Perform()
             {
-                return effect.TryToActivate();
+                if (effect is CanBeActivatedInterface canBeActivatedEffect)
+                {
+                    return canBeActivatedEffect.TryToActivate();
+                }
+
+                return false;
+                
             }
             
             public override ActionState ToActionState()

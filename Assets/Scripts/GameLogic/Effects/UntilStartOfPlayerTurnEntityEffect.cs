@@ -4,26 +4,30 @@ namespace GameLogic{
 
         using GameAction;
 
-        public class UntilStartOfPlayerTurnEntityEffect : EntityEffect
+        public class UntilStartOfPlayerTurnEntityEffect : EntityEffect, CanBeActivatedInterface
         {
             public UntilStartOfPlayerTurnEntityEffect(Entity entity, bool displayOnUI = true) : base(entity, displayOnUI)
             {
             }
 
+            public bool CanBeActivated()
+            {
+                return true;
+            }
 
-            public override bool Trigger(Action action)
+            public bool CheckTriggerToActivate(Action action)
             {
                 switch (action){
                     case PlayerStartTurnAction playerStartTurnAction:
-                        return associatedEntity.player == playerStartTurnAction.player;
+                        return playerStartTurnAction.wasPerformed && associatedEntity.player == playerStartTurnAction.player;
 
                     default: return false;
                 }
             }
 
-            protected override void Activate()
+            void CanBeActivatedInterface.Activate()
             {
-                Game.currentGame.PileAction(new RemoveEntityEffectFromEntityAction(associatedEntity, this, null));
+                Game.currentGame.PileAction(new RemoveEntityEffectFromEntityAction(associatedEntity, this));
             }
         }
     }

@@ -1,16 +1,10 @@
 namespace GameLogic{
 
     namespace GameEffect{
-
         using GameAction;
-        
+        using UnityEngine;
 
-        public class TileGivesHeartTypeEffect : TileEffect{
-
-            public Entity affectedEntity{
-                get;
-                protected set;
-            }
+        public class TileGivesHeartTypeEffect : TileEffect, CanBeActivatedInterface{
 
             public TileType tileType{
                 get;
@@ -22,30 +16,31 @@ namespace GameLogic{
                 protected set;
             }
 
-            public TileGivesHeartTypeEffect(Tile tile, TileType tileType, HeartType heartType) : base(tile){
+            Entity entityThatJustWalkedOnTop = Entity.noEntity;
+
+            public TileGivesHeartTypeEffect(Tile tile, TileType tileType, HeartType heartType) : base(tile)
+            {
                 this.tileType = tileType;
                 this.heartType = heartType;
-                affectedEntity = Entity.noEntity;
             }
 
-            public override bool CanBeActivated(){
-                return base.CanBeActivated() && associatedTile.tileType == tileType && affectedEntity != Entity.noEntity;
+            public bool CanBeActivated(){
+                return associatedTile != Tile.noTile && associatedTile.tileType == tileType && entityThatJustWalkedOnTop != Entity.noEntity;
             }
 
-            protected override void Activate()
-            {   
-
-                Game.currentGame.PileAction(new EntityGainHeartAction(affectedEntity, heartType, effectActivatedAction));
-                affectedEntity = Entity.noEntity;
+            void CanBeActivatedInterface.Activate()
+            {
+                Game.currentGame.PileAction(new EntityGainHeartAction(entityThatJustWalkedOnTop, heartType));
+                //entityThatJustWalkedOnTop = Entity.noEntity;
             }
 
-            public override bool Trigger(Action action)
+            public bool CheckTriggerToActivate(Action action)
             {
                 switch(action){
                     case EntityMoveAction entityMoveAction:
                             var condition = entityMoveAction.wasPerformed && entityMoveAction.endTile == associatedTile;
                             if(condition){
-                                affectedEntity = entityMoveAction.entity;
+                                entityThatJustWalkedOnTop = entityMoveAction.entity;
                             }
                             return condition;
 

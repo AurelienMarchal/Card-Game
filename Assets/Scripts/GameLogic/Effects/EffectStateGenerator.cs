@@ -13,7 +13,7 @@ namespace GameLogic
                 var effectState = new EffectState();
 
                 
-                effectState.canBeActivated = effect.CanBeActivated();
+                //effectState.canBeActivated = effect.CanBeActivated();
                 effectState.effectText = effect.GetEffectText();
 
                 

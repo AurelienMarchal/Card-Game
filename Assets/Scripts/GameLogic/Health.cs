@@ -1,7 +1,6 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
+
 
 namespace GameLogic{
 
@@ -10,10 +9,18 @@ namespace GameLogic{
     public class Health : ICloneable{
         public HeartType[] hearts;
 
-        public Health(int maxNumberOfHeart = 12){
+        public Health(int maxNumberOfHeart = 12, HeartType[] startingHearts = null){
             hearts = new HeartType[maxNumberOfHeart];
             for(var i = 0; i < maxNumberOfHeart; i++){
-                hearts[i] = HeartType.NoHeart;
+                if (startingHearts != null && i < startingHearts.Length)
+                {
+                    hearts[i] = startingHearts[i];
+                }
+                else
+                {
+                    hearts[i] = HeartType.NoHeart;
+                }
+                
             }
         }
 
@@ -21,9 +28,12 @@ namespace GameLogic{
             this.hearts = hearts;
         }
 
-        public bool IsEmpty(){
-            foreach(HeartType heart in hearts){
-                if(heart != HeartType.NoHeart && heart != HeartType.RedEmpty){
+        public bool IsEmpty()
+        {
+            foreach (HeartType heart in hearts)
+            {
+                if (heart != HeartType.NoHeart && heart != HeartType.RedEmpty)
+                {
                     return false;
                 }
             }

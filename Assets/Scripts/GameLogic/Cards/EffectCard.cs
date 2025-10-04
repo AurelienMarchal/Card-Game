@@ -23,14 +23,16 @@ namespace GameLogic
 
         public override bool CanBeActivated(Tile targetTile = null, Entity targetEntity = null)
         {
-            var canBeActivated = effect.CanBeActivated();
-            return canBeActivated;
+            //var canBeActivated = effect.CanBeActivated();
+            //return canBeActivated;
+            return false;
         }
 
         protected override bool Activate(Tile targetTile = null, Entity targetEntity = null)
         {
-            
-            return effect.TryToCreateEffectActivatesAction(out EffectActivatesAction _);
+
+            //return effect.TryToCreateEffectActivatesAction(out EffectActivatesAction _);
+            return false;
         }
 
         public override string GetText()

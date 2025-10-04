@@ -21,7 +21,12 @@ namespace GameLogic{
                 {
                     return canBeActivatedWithTileTargetInterface.TryToActivateWithTileTarget(targetTile);
                 }
-                return effect.TryToActivate();
+                else if (effect is CanBeActivatedInterface canBeActivatedEffect)
+                {
+                    return canBeActivatedEffect.TryToActivate();
+                }
+
+                return false;
             }
             
             public override ActionState ToActionState()

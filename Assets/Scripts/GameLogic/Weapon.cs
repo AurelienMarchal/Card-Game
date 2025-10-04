@@ -49,7 +49,6 @@ namespace GameLogic{
     
 
         public void AddEffect(WeaponEffect weaponEffect){
-            weaponEffect.associatedWeapon = this;
             effects.Add(weaponEffect);
         }
 

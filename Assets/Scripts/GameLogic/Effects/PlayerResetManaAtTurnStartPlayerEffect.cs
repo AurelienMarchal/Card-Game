@@ -4,22 +4,22 @@ namespace GameLogic{
 
     namespace GameEffect{
 
-        public class PlayerResetManaAtTurnStartPlayerEffect : PlayerEffect
+        public class PlayerResetManaAtTurnStartPlayerEffect : PlayerEffect, CanBeActivatedInterface
         {
             public PlayerResetManaAtTurnStartPlayerEffect(Player player) : base(player)
             {
             }
             
-            protected override void Activate(){
-                Game.currentGame.PileAction(new PlayerResetManaAction(associatedPlayer, effectActivatedAction));
+            void CanBeActivatedInterface.Activate(){
+                Game.currentGame.PileAction(new PlayerResetManaAction(associatedPlayer));
             }
 
-            public override bool CanBeActivated()
+            public bool CanBeActivated()
             {
                 return true;
             }
 
-            public override bool Trigger(Action action)
+            public bool CheckTriggerToActivate(Action action)
             {
                 switch (action)
                 {
