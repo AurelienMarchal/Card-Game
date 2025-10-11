@@ -22,7 +22,7 @@ namespace GameLogic
             this.entity = entity;
         }
 
-        public override bool CanBeActivated(Tile targetTile = null, Entity targetEntity = null)
+        public override bool CanBeActivated(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity)
         {
             if (targetTile == null)
             {
@@ -42,7 +42,7 @@ namespace GameLogic
             return true;
         }
 
-        protected override bool Activate(Tile targetTile = null, Entity targetEntity = null)
+        protected override bool Activate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity)
         {
             //Marche pas si l'entity deja mis sur le board 
             //l'entite spawné doit etre une copie de l'entite dans la carte

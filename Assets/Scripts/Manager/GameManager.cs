@@ -560,15 +560,15 @@ public class GameManager : MonoBehaviour
     {
         if (!cardState.needsEntityTarget && !cardState.needsTileTarget)
         {
-            SendUserAction(new PlayCardFromHandUserAction(playerNum, cardPositionInHand, 0, 0, 0));
+            SendUserAction(new PlayCardFromHandUserAction(playerNum, cardPositionInHand));
         }
-        else if (cardState.needsEntityTarget)
+        else if (cardState.needsEntityTarget && targetEntityState != null)
         {
-
+            SendUserAction(new PlayCardFromHandUserAction(playerNum, cardPositionInHand, entityTargetPlayerNum: (int)targetEntityState.playerNum, entityTargetNum: (int)targetEntityState.num));
         }
         else if (cardState.needsTileTarget && targetTileState != null)
         {
-            SendUserAction(new PlayCardFromHandUserAction(playerNum, cardPositionInHand, 0, 0, tileTargetNum: (int)targetTileState.num));
+            SendUserAction(new PlayCardFromHandUserAction(playerNum, cardPositionInHand, tileTargetNum: (int)targetTileState.num));
         }
 
         return false;

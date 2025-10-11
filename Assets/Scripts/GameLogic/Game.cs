@@ -91,10 +91,8 @@ namespace GameLogic{
             depileStarted = false;
             for (uint i = 0; i < numberOfPlayer; i++)
             {
-                players[i] = new Player(i, new uint[]{0, 0, 0, 3, 2, 1, 2}, random);
+                players[i] = new Player(i, new uint[]{0, 0, 0, 0, 0, 1, 2}, random);
             }
-            
-            
         }
 
         public void StartGame(){
@@ -315,13 +313,23 @@ namespace GameLogic{
 
             var targetTile = Tile.noTile;
 
-            if (playCardFromHandUserAction.tileTargetNum > 0)
+            if (playCardFromHandUserAction.tileTargetNum >= 0)
             {
                 targetTile = board.GetTileWithNum((uint)playCardFromHandUserAction.tileTargetNum);
             }
+
+            var targetEntity = Entity.noEntity;
+
+            if(playCardFromHandUserAction.entityTargetNum >= 0 && playCardFromHandUserAction.entityTargetPlayerNum >= 0)
+            {
+                targetEntity = GetEntityByEntityNumAndPlayerNum(
+                    (uint)playCardFromHandUserAction.entityTargetPlayerNum,
+                    (uint)playCardFromHandUserAction.entityTargetNum
+                );
+            }
             
 
-            Debug.Log($"Card : {card}");
+            Debug.Log($"Card : {card}, Target Entity : {targetEntity}, Traget Tile : {targetTile}");
 
             if (!player.CanUseMana(card.cost.manaCost))
             {
@@ -330,7 +338,7 @@ namespace GameLogic{
 
             if (!player.CanPlayCard(card,
                 targetTile: targetTile,
-                targetEntity: Entity.noEntity))
+                targetEntity: targetEntity))
             {
                 return false;
             }
@@ -346,7 +354,7 @@ namespace GameLogic{
                 out PlayerPlayCardAction playerPlayCardAction,
                 costAction: playerUseManaAction,
                 targetTile: targetTile,
-                targetEntity: Entity.noEntity
+                targetEntity: targetEntity
             );
             
             return playerPlayCardAction.wasPerformed; 

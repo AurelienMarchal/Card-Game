@@ -8,14 +8,14 @@ namespace GameLogic{
     using GameAction;
 
     namespace GameEffect{
-        public class PlayerHealEntityEffect : PlayerEffect, CanBeActivatedWithEntityTargetInterface{
+        public class PlayerHealsTargetEntityEffect : PlayerEffect, CanBeActivatedWithEntityTargetInterface{
             public int numberOfHeartsHealed{
                 get;
                 private set;
             }
 
 
-            public PlayerHealEntityEffect(Player player, int numberOfHeartsHealed) : base(player)
+            public PlayerHealsTargetEntityEffect(Player player, int numberOfHeartsHealed) : base(player)
             {
                 this.numberOfHeartsHealed = numberOfHeartsHealed;
             }

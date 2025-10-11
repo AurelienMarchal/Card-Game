@@ -37,8 +37,6 @@ namespace GameLogic{
             protected set;
         }
 
-
-
         public Card(uint num, Player player, Cost cost, bool needsEntityTarget = false, bool needsTileTarget = false)
         {
             this.num = num;
@@ -49,11 +47,11 @@ namespace GameLogic{
             
         }
 
-        public virtual bool CanBeActivated(Tile targetTile = null, Entity targetEntity = null){
+        public virtual bool CanBeActivated(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
             return false;
         }
 
-        protected virtual bool Activate(Tile targetTile = null, Entity targetEntity = null)
+        protected virtual bool Activate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity)
         {
             return false;
         }
