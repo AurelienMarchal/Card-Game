@@ -146,18 +146,6 @@ namespace GameLogic{
         {
             return card.TryToActivate(targetTile, targetEntity);
         }
-
-        public bool TryToCreateSpawnEntityAction(EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, Direction startingDirection, List<EntityEffect> permanentEffects, Action requiredAction, out PlayerSpawnEntityAction playerSpawnEntityAction, Weapon weapon = Weapon.noWeapon)
-        {
-            playerSpawnEntityAction = new PlayerSpawnEntityAction(this, model, name, startingTile, startingHealth, startingMaxMovement, permanentEffects, startingDirection, weapon, requiredAction);
-            var canSpawnEntityAt = CanSpawnEntityAt(startingTile);
-            if (canSpawnEntityAt)
-            {
-                Game.currentGame.PileAction(playerSpawnEntityAction);
-            }
-
-            return canSpawnEntityAt;
-        }
         
         public bool TryToCreateSpawnEntityAction(Entity entity, Tile startingTile, out PlayerSpawnEntityAction playerSpawnEntityAction, Action requiredAction = null)
         {

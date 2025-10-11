@@ -16,12 +16,6 @@ namespace GameLogic{
                 get;
                 private set;
             }
-
-            public Buff(string name)
-            {
-                this.name = name;
-                assiociatedEffectId = null;
-            }
             
             public Buff(string name, string assiociatedEffectId)
             {

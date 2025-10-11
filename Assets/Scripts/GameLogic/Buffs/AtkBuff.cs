@@ -10,10 +10,9 @@ namespace GameLogic{
                 private set;
             }
 
-            public AtkBuff(int amount) : base("Atk Buff"){
+            public AtkBuff(int amount, string assiociatedEffectId) : base("Atk Buff", assiociatedEffectId){
                 this.amount = amount;
             }
-
 
             public override string GetText(){
                 return $"Atk {(Math.Sign(amount) >= 0 ? "increased" : "decreased")} by {amount}";

@@ -7,7 +7,7 @@ namespace GameLogic{
     namespace GameBuff{
         public class WeightedDownBuff : EntityBuff
         {
-            public WeightedDownBuff() : base("Weighted Down"){
+            public WeightedDownBuff(string assiociatedEffectId) : base("Weighted Down", assiociatedEffectId){
             }
 
             public override string GetText()

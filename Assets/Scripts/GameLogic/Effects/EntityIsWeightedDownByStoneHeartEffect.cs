@@ -33,7 +33,7 @@ namespace GameLogic{
                         return entityTakeDamageAction.entity == associatedEntity && entityTakeDamageAction.wasPerformed;
                     
                     case EntityPayHeartCostAction entityPayHeartCostAction:
-                        return entityPayHeartCostAction.entity == associatedEntity && entityPayHeartCostAction.wasPerformed; 
+                        return entityPayHeartCostAction.entity == associatedEntity && entityPayHeartCostAction.wasPerformed && (entityPayHeartCostAction.heartCost != null || entityPayHeartCostAction.heartCost.Length > 0) ; 
 
                     case EntityGainHeartAction entityGainHeartAction:
                         return entityGainHeartAction.entity == associatedEntity && entityGainHeartAction.heartType == HeartType.Stone && entityGainHeartAction.wasPerformed;
@@ -59,7 +59,7 @@ namespace GameLogic{
 
                 entityBuffs.Clear();
                 for (int i = 0; i < stoneHeartCount; i++){
-                    entityBuffs.Add(new WeightedDownBuff());
+                    entityBuffs.Add(new WeightedDownBuff(id.ToString()));
                 }
                 
             }

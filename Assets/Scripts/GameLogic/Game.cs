@@ -91,7 +91,7 @@ namespace GameLogic{
             depileStarted = false;
             for (uint i = 0; i < numberOfPlayer; i++)
             {
-                players[i] = new Player(i, new uint[]{0, 0, 0, 3, 2, 1, 0}, random);
+                players[i] = new Player(i, new uint[]{0, 0, 0, 3, 2, 1, 2}, random);
             }
             
             
@@ -237,16 +237,15 @@ namespace GameLogic{
                 return false;
             }
 
-            var costWasPaid = entity.TryToCreateEntityUseMovementAction(
-                tile.Distance(entity.currentTile) * entity.costToMove.mouvementCost,
-                out EntityUseMovementAction useMovementAction);
+            entity.TryToCreateEntityUseMovementAction(entity.costToMove.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
+            entity.TryToCreateEntityPayHeartCostAction(entity.costToMove.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
 
-            if (!costWasPaid)
+            if (!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed)
             {
                 return false;
             }
 
-            entity.TryToCreateEntityMoveAction(tile, useMovementAction, out EntityMoveAction entityMoveAction);
+            entity.TryToCreateEntityMoveAction(tile, entityUseMovementAction, out EntityMoveAction entityMoveAction);
 
             return entityMoveAction.wasPerformed;
         }
@@ -276,7 +275,7 @@ namespace GameLogic{
 
             //Temp attackedEntities[0] maybe some attacks can hit multiple entities
             // remove CanAttackByChangingDirection just need CanAttack
-            if (!entity.CanAttackByChangingDirection(attackedEntities[0]))
+            if (!entity.CanAttack(attackedEntities[0]))
             {
                 return false;
             }
@@ -514,11 +513,23 @@ namespace GameLogic{
         void CheckTriggers(Effect effect, Action action)
         {
 
-            if (effect is GivesTempEntityBuffInterface givesTempBuffEffect)
+
+            if (effect is CanBeActivatedInterface canBeActivatedEffect)
             {
-                if (givesTempBuffEffect.CheckTriggerToUpdateTempEntityBuffs(action))
+                if (canBeActivatedEffect.CheckTriggerToActivate(action))
                 {
-                    PileAction(new EffectUpdatesTempBuffsAction(effect, action));
+                    if (canBeActivatedEffect.CanBeActivated())
+                    {
+                        PileAction(new EffectActivatesAction(effect, action));
+                    }
+                }
+            }
+            
+            if (effect is AffectsEntitiesInterface affectsEntitiesEffect)
+            {
+                if (affectsEntitiesEffect.CheckTriggerToUpdateEntitiesAffected(action))
+                {
+                    PileAction(new EffectUpdatesEntitiesAffectedAction(effect, action));   
                 }
             }
 
@@ -530,21 +541,11 @@ namespace GameLogic{
                 }
             }
 
-            if (effect is AffectsEntitiesInterface affectsEntitiesEffect)
+            if (effect is GivesTempEntityBuffInterface givesTempBuffEffect)
             {
-                if (affectsEntitiesEffect.CheckTriggerToUpdateEntitiesAffected(action))
+                if (givesTempBuffEffect.CheckTriggerToUpdateTempEntityBuffs(action))
                 {
-                    PileAction(new EffectUpdatesEntitiesAffectedAction(effect, action));   
-                }
-            }
-            if (effect is CanBeActivatedInterface canBeActivatedEffect)
-            {
-                if (canBeActivatedEffect.CheckTriggerToActivate(action))
-                {
-                    if (canBeActivatedEffect.CanBeActivated())
-                    {
-                        PileAction(new EffectActivatesAction(effect, action));
-                    }
+                    PileAction(new EffectUpdatesTempBuffsAction(effect, action));
                 }
             }
         }

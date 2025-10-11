@@ -10,7 +10,7 @@ namespace GameLogic{
                 private set;
             }
 
-            public RangeBuff(int amount) : base("Range Buff"){
+            public RangeBuff(int amount, string assiociatedEffectId) : base("Range Buff", assiociatedEffectId){
                 this.amount = amount;
             }
 

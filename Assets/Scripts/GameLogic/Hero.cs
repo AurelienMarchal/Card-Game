@@ -9,7 +9,21 @@ namespace GameLogic{
     using GameState;
     public class Hero : Entity{
 
-        public Hero(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North, Weapon weapon = Weapon.noWeapon) : base(player, model, name, startingTile, startingHealth, startingMaxMovement, permanentEffects, startingDirection){
+        public Hero(
+            Player player,
+            EntityModel model,
+            string name,
+            Tile startingTile,
+            Health startingHealth,
+            int startingMaxMovement,
+            Damage baseAtkDamage,
+            int baseRange,
+            Cost baseCostToAtk,
+            Cost baseCostToMove,
+            Direction startingDirection = Direction.North,
+            Weapon weapon = Weapon.noWeapon) :
+            base(player, model, name, startingTile, startingHealth, startingMaxMovement, baseAtkDamage, baseRange, baseCostToAtk, baseCostToMove, startingDirection)
+        {
             movementLeft = maxMovement;
             this.weapon = weapon;
         }
@@ -58,29 +72,36 @@ namespace GameLogic{
             return (weapon != null ? weapon.atkDamage : new Damage(0)) + base.CalculateAtkDamage();
         }
 
-        public override bool CanAttack(Entity entity){
+        /*
+        public override bool CanAttack(Entity entity)
+        {
 
-            if(entity == this){
+            if (entity == this)
+            {
                 return false;
             }
 
-            if(weapon == Weapon.noWeapon){
+            if (weapon == Weapon.noWeapon)
+            {
                 return false;
             }
 
-            if(entity.currentTile.gridX != currentTile.gridX && entity.currentTile.gridY != currentTile.gridY){
+            if (entity.currentTile.gridX != currentTile.gridX && entity.currentTile.gridY != currentTile.gridY)
+            {
                 return false;
             }
 
-            if(entity.currentTile.Distance(currentTile) > range){
+            if (entity.currentTile.Distance(currentTile) > range)
+            {
                 return false;
             }
 
-            if(DirectionsExtensions.FromCoordinateDifference(
+            if (DirectionsExtensions.FromCoordinateDifference(
                 entity.currentTile.gridX - currentTile.gridX,
                 entity.currentTile.gridY - currentTile.gridY
-                ) != direction){
-                    return false;
+                ) != direction)
+            {
+                return false;
             }
 
             return true;
@@ -122,8 +143,11 @@ namespace GameLogic{
             return CanPayHeartCost(weapon.costToUse.heartCost) && CanUseMovement(weapon.costToUse.mouvementCost);
         }
 
-        public override void GetTilesAndEntitiesAffectedByAtk(out Entity[] entitiesAffected, out Tile[] tilesAffected){
-            if(weapon == Weapon.noWeapon){
+        
+        public override void GetTilesAndEntitiesAffectedByAtk(out Entity[] entitiesAffected, out Tile[] tilesAffected)
+        {
+            if (weapon == Weapon.noWeapon)
+            {
                 entitiesAffected = new Entity[0];
                 tilesAffected = new Tile[0];
                 return;
@@ -132,6 +156,7 @@ namespace GameLogic{
             weapon.GetTilesAndEntitiesAffectedByAtk(currentTile, direction, out entitiesAffected, out tilesAffected);
 
         }
+        */
 
 
         public HeroState ToHeroState(){

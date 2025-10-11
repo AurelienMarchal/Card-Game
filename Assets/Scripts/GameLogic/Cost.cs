@@ -47,13 +47,19 @@ namespace GameLogic{
 
         //Make + overload 
 
-        public CostState ToCostState(){
+        public CostState ToCostState()
+        {
             CostState costState = new CostState();
             costState.mouvementCost = mouvementCost;
             costState.manaCost = manaCost;
             costState.heartCost = new List<HeartType>();
             costState.heartCost.AddRange(heartCost);
             return costState;
+        }
+
+        public override string ToString()
+        {
+            return $"Cost : (mouvement : {mouvementCost}, mana : {manaCost}, hearts : {heartCost})";
         }
     }
 }

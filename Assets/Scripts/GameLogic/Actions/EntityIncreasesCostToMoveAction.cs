@@ -8,7 +8,7 @@ namespace GameLogic{
 
     namespace GameAction{
 
-        public class EntityIncreasesCostToAtkAction : EntityAction
+        public class EntityIncreasesCostToMoveAction : EntityAction
         {
 
             public int mouvementCostIncrease
@@ -29,7 +29,7 @@ namespace GameLogic{
                 private set;
             }
 
-            public EntityIncreasesCostToAtkAction(Entity entity, int mouvementCostIncrease, int manaCostIncrease, HeartType[] heartCostIncrease, Action requiredAction = null) : base(entity, requiredAction)
+            public EntityIncreasesCostToMoveAction(Entity entity, int mouvementCostIncrease, int manaCostIncrease, HeartType[] heartCostIncrease, Action requiredAction = null) : base(entity, requiredAction)
             {
                 this.mouvementCostIncrease = mouvementCostIncrease;
                 this.manaCostIncrease = manaCostIncrease;
@@ -38,7 +38,7 @@ namespace GameLogic{
 
             protected override bool Perform()
             {
-                return entity.TryToIncreaseCostToAtk(mouvementCostIncrease, manaCostIncrease, heartCostIncrease);
+                return entity.TryToIncreaseCostToMove(mouvementCostIncrease, manaCostIncrease, heartCostIncrease);
             }
 
             public override ActionState ToActionState()

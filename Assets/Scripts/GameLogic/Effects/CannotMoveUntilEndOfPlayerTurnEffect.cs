@@ -13,7 +13,7 @@ namespace GameLogic{
 
             public CannotMoveUntilEndOfPlayerTurnEffect(Entity entity, bool displayOnUI = true) : base(entity, displayOnUI)
             {
-                buffs = new List<EntityBuff> { new EntityCannotMoveBuff() };
+                buffs = new List<EntityBuff> { new EntityCannotMoveBuff(id.ToString()) };
             }
 
             public bool CheckTriggerToUpdateTempEntityBuffs(Action action)

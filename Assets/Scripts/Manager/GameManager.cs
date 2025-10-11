@@ -212,10 +212,14 @@ public class GameManager : MonoBehaviour
             "Mage",
             startingTile1,
             new Health(
-                12, new HeartType[] {HeartType.Red,HeartType.Red,HeartType.Red}
+                12, new HeartType[] { HeartType.Red, HeartType.Red, HeartType.Red }
             ),
             3,
-            new List<EntityEffect> {},
+            new Damage(1),
+            1,
+            new Cost(mouvement: 1),
+            new Cost(mouvement: 1),
+            
             direction1);
 
         hero1.AddEffect(new MoveToChangeTileTypeEffect(hero1, TileType.Nature));
@@ -239,7 +243,10 @@ public class GameManager : MonoBehaviour
                 12, new HeartType[] {HeartType.Red,HeartType.Red,HeartType.Red, HeartType.Stone, HeartType.Stone}
             ),
             3,
-            new List<EntityEffect> {new MoveToChangeTileTypeEffect(null, TileType.Cursed)},
+            new Damage(1),
+            1,
+            new Cost(mouvement: 1),
+            new Cost(mouvement: 1),
             direction2);
         //hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
         hero2.num = 0;

@@ -53,16 +53,6 @@ namespace GameLogic{
             protected set;
         }
 
-        public Cost costToAtk{
-            get;
-            protected set;
-        }
-
-        public Cost baseCostToAtk{
-            get;
-            protected set;
-        }
-
         public int range{
             get;
             protected set;
@@ -84,16 +74,31 @@ namespace GameLogic{
             protected set;
         }
         
+        public Cost costToAtk{
+            get;
+            protected set;
+        }
 
-        public int maxMovement{
+        public Cost baseCostToAtk{
             get;
             protected set;
         }
 
         public Cost costToMove{
-            get{
-                return CalculateCostToMove();
-            }
+            get;
+            protected set;
+        }
+
+        public Cost baseCostToMove{
+            get;
+            protected set;
+        }
+        
+
+        public int maxMovement
+        {
+            get;
+            protected set;
         }
 
         public Tile[] tilesToMoveTo
@@ -153,15 +158,26 @@ namespace GameLogic{
 
         protected List<EntityBuff> tempBuffs{
             get;
-            set;
+            private set;
         }
 
         protected List<EntityBuff> permanentBuffs{
             get;
-            set;
+            private set;
         }
 
-        public Entity(Player player, EntityModel model, string name, Tile startingTile, Health startingHealth, int startingMaxMovement, List<EntityEffect> permanentEffects, Direction startingDirection = Direction.North){
+        public Entity(
+            Player player,
+            EntityModel model,
+            string name,
+            Tile startingTile,
+            Health startingHealth,
+            int startingMaxMovement,
+            Damage baseAtkDamage,
+            int baseRange,
+            Cost baseCostToAtk,
+            Cost baseCostToMove,
+            Direction startingDirection = Direction.North){
             this.player = player;
             this.model = model;
             this.name = name;
@@ -171,25 +187,25 @@ namespace GameLogic{
             movementLeft = 0;
             direction = startingDirection;
             
-            baseCostToAtk = new Cost(mouvement: 1);
-            costToAtk = baseCostToAtk;
-
-            baseRange = 0;
+            
+            this.baseRange = baseRange;
             range = baseRange;
-
-            baseAtkDamage = new Damage(0);
-            atkDamage = baseAtkDamage;
+            this.baseAtkDamage = baseAtkDamage;
+            atkDamage = new Damage(baseAtkDamage.amount);
+            this.baseCostToAtk = baseCostToAtk;
+            costToAtk = new Cost(baseCostToAtk.heartCost, baseCostToAtk.mouvementCost, baseCostToAtk.manaCost);
+            this.baseCostToMove = baseCostToMove;
+            costToMove = new Cost(baseCostToMove.heartCost, baseCostToMove.mouvementCost, baseCostToMove.manaCost);
 
             effects = new List<EntityEffect>();
             tempBuffs = new List<EntityBuff>();
             permanentBuffs = new List<EntityBuff>();
-            AddEffectList(permanentEffects);
             AddDefaultPermanentEffects();
-
-            Debug.Log($"{this} effects : [{String.Join(", ", effects)}]");
         }
 
-        protected virtual Cost CalculateCostToMove(){
+        [Obsolete]
+        protected virtual Cost CalculateCostToMove()
+        {
             var weightedDownBuffCount = NumberOfBuffs<WeightedDownBuff>();
             return new Cost(mouvement: 1 + weightedDownBuffCount);
         }
@@ -398,14 +414,17 @@ namespace GameLogic{
         public virtual bool CanAttack(Entity entity){
 
             if(entity == this){
+                
                 return false;
             }
 
             if(entity.currentTile.gridX != currentTile.gridX && entity.currentTile.gridY != currentTile.gridY){
+                
                 return false;
             }
 
             if(entity.currentTile.Distance(currentTile) > range){
+                
                 return false;
             }
 
@@ -413,6 +432,7 @@ namespace GameLogic{
                 entity.currentTile.gridX - currentTile.gridX,
                 entity.currentTile.gridY - currentTile.gridY
                 ) != direction){
+                    
                     return false;
             }
 
@@ -456,7 +476,8 @@ namespace GameLogic{
                 out tilesAffected
             );
 
-            if(entityInFront == Entity.noEntity){
+            if (entityInFront == Entity.noEntity)
+            {
                 entitiesAffected = new Entity[0];
                 return;
             }
@@ -608,14 +629,44 @@ namespace GameLogic{
         {
             costToAtk = new Cost(
                 heartCostIncrease == null || heartCostIncrease.Length == 0 ? costToAtk.heartCost : heartCostIncrease, //TODO
-                Math.Clamp(costToAtk.manaCost + manaCostIncrease, 0, 10),
-                Math.Clamp(costToAtk.mouvementCost + mouvementCostIncrease, 0, 12)
+                Math.Clamp(costToMove.mouvementCost + mouvementCostIncrease, 0, 12),
+                Math.Clamp(costToMove.manaCost + manaCostIncrease, 0, 10)
             );
         }
 
         //same for costToMove
 
         //same for baseCostToMove
+
+        public bool TryToIncreaseCostToMove(int mouvementCostIncrease, int manaCostIncrease, HeartType[] heartCostIncrease)
+        {
+            var canIncreaseCostToMove = CanIncreaseCostToMove(mouvementCostIncrease, manaCostIncrease, heartCostIncrease);
+
+            if (canIncreaseCostToMove)
+            {
+                IncreaseCostToMove(mouvementCostIncrease, manaCostIncrease, heartCostIncrease);
+            }
+
+            return canIncreaseCostToMove;
+        }
+
+        public bool CanIncreaseCostToMove(int mouvementCostIncrease, int manaCostIncrease, HeartType[] heartCostIncrease)
+        {
+            return mouvementCostIncrease != 0 || manaCostIncrease != 0 || (heartCostIncrease != null && heartCostIncrease.Length > 0);
+        }
+
+        protected void IncreaseCostToMove(int mouvementCostIncrease, int manaCostIncrease, HeartType[] heartCostIncrease)
+        {
+            //Debug.Log($"Increasing Cost To Move by {mouvementCostIncrease} mouvement, {manaCostIncrease} mouvement and {heartCostIncrease} hearts");
+            //Debug.Log($"Previous Cost to Move : {costToMove}");
+            costToMove = new Cost(
+                heartCostIncrease == null || heartCostIncrease.Length == 0 ? costToMove.heartCost : heartCostIncrease, //TODO
+                Math.Clamp(costToMove.mouvementCost + mouvementCostIncrease, 0, 12),
+                Math.Clamp(costToMove.manaCost + manaCostIncrease, 0, 10)
+            );
+
+            //Debug.Log($"New Cost to Move : {costToMove}");
+        }
 
 
         public int GetAtkIncreaseAccordingToBuffs()
@@ -646,19 +697,36 @@ namespace GameLogic{
             return rangeIncreaseAccordingToBuffs;
         }
 
-        public int GetMouvementCostIncreaseAccordingToBuffs()
+        public int GetMouvementCostToMoveIncreaseAccordingToBuffs()
         {
             var mouvementCostIncreaseAccordingToBuffs = 0;
             foreach (var buff in buffs)
             {
                 if (buff is WeightedDownBuff weightedDownBuff)
                 {
-                    mouvementCostIncreaseAccordingToBuffs ++;
+                    mouvementCostIncreaseAccordingToBuffs++;
                 }
             }
 
             return mouvementCostIncreaseAccordingToBuffs;
         }
+
+        public Heart[] GetHeartCostToMoveIncreaseAccordingToBuffs()
+        {
+            return null;
+        }
+
+        public int GetMouvementCostToAtkIncreaseAccordingToBuffs()
+        {
+            return 0;
+        }
+
+        public Heart[] GetHeartCostToAtkIncreaseAccordingToBuffs()
+        {
+            return null;
+        }
+        
+        
 
         public void AddPermanentBuff(EntityBuff entityBuff)
         {

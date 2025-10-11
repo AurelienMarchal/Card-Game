@@ -28,7 +28,7 @@ namespace GameLogic{
 
                 tempBuffs = new List<EntityBuff>
                 {
-                    new AtkBuff(amount)
+                    new AtkBuff(amount, id.ToString())
                 };
 
                 entitiesAffected = new List<Entity>();
@@ -67,6 +67,7 @@ namespace GameLogic{
             
             public override void UpdateEntitiesAffected()
             {
+                
                 entitiesAffected.Clear();
 
                 foreach (var tile in tilesAffected)
