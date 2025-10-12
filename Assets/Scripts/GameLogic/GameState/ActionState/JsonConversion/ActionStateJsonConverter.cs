@@ -139,6 +139,22 @@ namespace GameLogic.GameState
                 {
                     jo["newMaxMovement"] = entityIncreaseMaxMovementActionState.newMaxMovement;
                 }
+                if (entityActionState is EntityIncreasesAtkDamageActionState entityIncreasesAtkDamageActionState)
+                {
+                    jo["newAtkDamage"] = JToken.FromObject(entityIncreasesAtkDamageActionState.newAtkDamage);
+                }
+                if (entityActionState is EntityIncreasesRangeActionState entityIncreasesRangeActionState)
+                {
+                    jo["newRange"] = entityIncreasesRangeActionState.newRange;
+                }
+                if (entityActionState is EntityIncreasesCostToAtkActionState entityIncreasesCostToAtkActionState)
+                {
+                    jo["newCost"] = JToken.FromObject(entityIncreasesCostToAtkActionState.newCost);
+                }
+                if (entityActionState is EntityIncreasesCostToMoveActionState entityIncreasesCostToMoveActionState)
+                {
+                    jo["newCost"] = JToken.FromObject(entityIncreasesCostToMoveActionState.newCost);
+                }
                 
             }
             if (value is TileActionState tileActionState)

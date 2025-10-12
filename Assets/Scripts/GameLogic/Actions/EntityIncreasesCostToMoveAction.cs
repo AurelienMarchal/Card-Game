@@ -43,7 +43,12 @@ namespace GameLogic{
 
             public override ActionState ToActionState()
             {
-                throw new NotImplementedException();
+                var actionState = new EntityIncreasesCostToMoveActionState();
+                actionState.entityNum = entity.num;
+                actionState.playerNum = entity.player.playerNum;
+                actionState.newCost = entity.costToMove.ToCostState();
+                
+                return actionState;
             }
         }
     }

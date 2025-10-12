@@ -128,6 +128,18 @@ public class AnimationManager : MonoBehaviour
             case EntityResetMovementActionState entityResetMovementActionState:
                 PlayAnimationForActionState(entityResetMovementActionState);
                 break;
+            case EntityIncreasesAtkDamageActionState entityIncreasesAtkDamageActionState:
+                PlayAnimationForActionState(entityIncreasesAtkDamageActionState);
+                break;
+            case EntityIncreasesRangeActionState entityIncreasesRangeActionState:
+                PlayAnimationForActionState(entityIncreasesRangeActionState);
+                break;
+            case EntityIncreasesCostToAtkActionState entityIncreasesCostToAtkActionState:
+                PlayAnimationForActionState(entityIncreasesCostToAtkActionState);
+                break;
+            case EntityIncreasesCostToMoveActionState entityIncreasesCostToMoveActionState:
+                PlayAnimationForActionState(entityIncreasesCostToMoveActionState);
+                break;
             
 
             case TileChangeTypeActionState tileChangeTypeActionState:
@@ -364,6 +376,53 @@ public class AnimationManager : MonoBehaviour
 
         entityManager.entityState.healthState = entityPayHeartCostActionState.newHealthState;
         entityManager.UpdateHealthUIDisplay();
+    }
+
+    public void PlayAnimationForActionState(EntityIncreasesAtkDamageActionState entityIncreasesAtkDamageActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityIncreasesAtkDamageActionState.playerNum, entityIncreasesAtkDamageActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+        
+        entityManager.entityState.atkDamageState = entityIncreasesAtkDamageActionState.newAtkDamage;
+        entityManager.UpdateHealthUIDisplay();
+    }
+
+    public void PlayAnimationForActionState(EntityIncreasesRangeActionState entityIncreasesRangeActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityIncreasesRangeActionState.playerNum, entityIncreasesRangeActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+        
+        entityManager.entityState.range = entityIncreasesRangeActionState.newRange;
+        entityManager.UpdateHealthUIDisplay();
+    }
+
+    public void PlayAnimationForActionState(EntityIncreasesCostToAtkActionState entityIncreasesCostToAtkActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityIncreasesCostToAtkActionState.playerNum, entityIncreasesCostToAtkActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+        
+        entityManager.entityState.costToAtkState = entityIncreasesCostToAtkActionState.newCost;
+        entityManager.UpdateHealthUIDisplay();
+    }
+    public void PlayAnimationForActionState(EntityIncreasesCostToMoveActionState entityIncreasesCostToMoveActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityIncreasesCostToMoveActionState.playerNum, entityIncreasesCostToMoveActionState.entityNum);
+        if (entityManager == null)
+        {
+            return;
+        }
+        
+        entityManager.entityState.costToMoveState = entityIncreasesCostToMoveActionState.newCost;
+        entityManager.UpdateMovementUIDisplay();
     }
 
     public void PlayAnimationForActionState(TileChangeTypeActionState tileChangeTypeActionState)

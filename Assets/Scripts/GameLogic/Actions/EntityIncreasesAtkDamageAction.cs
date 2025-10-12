@@ -28,9 +28,10 @@ namespace GameLogic{
 
             public override ActionState ToActionState()
             {
-                var actionState = new EntityActionState();
+                var actionState = new EntityIncreasesAtkDamageActionState();
                 actionState.entityNum = entity.num;
                 actionState.playerNum = entity.player.playerNum;
+                actionState.newAtkDamage = entity.atkDamage.ToDamageState();
                 
                 return actionState;
             }

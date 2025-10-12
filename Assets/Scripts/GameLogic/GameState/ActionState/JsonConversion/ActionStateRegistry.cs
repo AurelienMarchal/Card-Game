@@ -6,7 +6,7 @@ namespace GameLogic.GameState
     public static class ActionStateRegistry
     {
         public static readonly Dictionary<string, Type> Types = new()
-        {   
+        {
             { "StartGame",                  typeof(StartGameActionState) },
             { "StartTurn",                  typeof(StartTurnActionState) },
 
@@ -19,7 +19,7 @@ namespace GameLogic.GameState
             { "PlayerAddCardToHand",        typeof(PlayerAddCardToHandActionState) },
             { "PlayerDrawCard",             typeof(PlayerDrawCardActionState) },
             { "PlayerSpawnEntity",          typeof(PlayerSpawnEntityActionState) },
-            
+
             { "EntityMove",                 typeof(EntityMoveActionState) },
             { "EntityChangeDirection",      typeof(EntityChangeDirectionActionState) },
             { "EntityAttack",               typeof(EntityAttackActionState) },
@@ -31,9 +31,13 @@ namespace GameLogic.GameState
             { "EntityPayHeartCost",         typeof(EntityPayHeartCostActionState) },
             { "EntityResetMovement",        typeof(EntityResetMovementActionState) },
             { "EntityIncreaseMaxMovement",  typeof(EntityIncreaseMaxMovementActionState) },
-            
+            { "EntityIncreasesAtkDamage",   typeof(EntityIncreasesAtkDamageActionState) },
+            { "EntityIncreasesRange",       typeof(EntityIncreasesRangeActionState) },
+            { "EntityIncreasesCostToAtk",   typeof(EntityIncreasesCostToAtkActionState) },
+            { "EntityIncreasesCostToMove",  typeof(EntityIncreasesCostToMoveActionState) },
+
             { "TileChangeType",             typeof(TileChangeTypeActionState) },
-            
+
         };
     }
 }
