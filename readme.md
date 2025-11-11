@@ -11,7 +11,7 @@ Every `entity` has a max `energy` count. At the begining of each turn, every `en
 
 :heart::green_heart::white_heart::blue_heart:
 
-Every `entity` has a certain combinaison of hearts. When they have no more hearts or have only empty red hearts they die.
+- Every `entity` has a certain combinaison of hearts. When they have no more hearts or have only empty red hearts they die.
 
 ## Attacks
 
@@ -19,7 +19,7 @@ Every `entity` has a certain combinaison of hearts. When they have no more heart
 
 ## Weapons 
 
-- Weapons have a range stat, an attack stat (and a durability ?) and cost of utilisation (how much energy is required to attack with it). Entities can attack with weapons if their target are in the range of their weapon. They deal the amount of attack of the weapon when they successfully attack.
+- Weapons have a range stat, an attack stat (and a durability ?) and cost to atk (how much energy is required to attack with it). Entities can attack with weapons if their target are in the range of their weapon. They deal the amount of attack of the weapon when they successfully attack.
 
 
 # Ideas
