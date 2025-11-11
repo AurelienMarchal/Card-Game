@@ -4355,9 +4355,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabCorrespondingToEntityModels:
   - entityModel: 0
-    prefab: {fileID: 7063583469523896447, guid: 4fc92913f9324cc4b8c15d5e27972fa2, type: 3}
+    prefab: {fileID: 7023015418650435001, guid: 4fc92913f9324cc4b8c15d5e27972fa2, type: 3}
   - entityModel: 1
-    prefab: {fileID: 8248790379275647968, guid: 6d7f5810e8784d44ca735393b0069474, type: 3}
+    prefab: {fileID: 2126541487683671256, guid: 6ac8d9832c2c08c468243bcaa928ba39, type: 3}
   - entityModel: 2
     prefab: {fileID: 1828033751355200758, guid: f523666c8b14089418959782c6927bc6, type: 3}
   - entityModel: 3
