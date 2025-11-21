@@ -72,7 +72,7 @@ namespace GameLogic{
             tileState.effectStates = new List<EffectState>();
 
             foreach (Effect effect in effects){
-                tileState.effectStates.Add(effect.ToEffectState());
+                tileState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
             }
             
 

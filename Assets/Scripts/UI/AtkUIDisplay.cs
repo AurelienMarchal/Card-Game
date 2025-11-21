@@ -121,7 +121,7 @@ public class AtkUIDisplay : MonoBehaviour
         atkTextMeshProUGUI.text = $"{entity.atkDamage.amount}";
         rangeTextMeshProUGUI.text = $"{entity.range}";
         costUIDisplay.cost = entity.costToAtk;
-        atkButton.enabled = entity.CanPayAtkCost() && Game.currentGame.currentPlayer == entity.player;
+        //atkButton.enabled = entity.CanPayAtkCost() && Game.currentGame.currentPlayer == entity.player;
 
         if(entity is Hero hero){
             weaponImage.gameObject.SetActive(hero.weapon != null);

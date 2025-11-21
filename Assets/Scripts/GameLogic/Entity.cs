@@ -463,9 +463,7 @@ namespace GameLogic{
             return true;
         }
 
-        public virtual bool CanPayAtkCost(){
-            return CanPayHeartCost(costToAtk.heartCost) && CanUseMovement(costToAtk.mouvementCost);
-        }
+        
 
         public virtual void GetTilesAndEntitiesAffectedByAtk(out Entity[] entitiesAffected, out Tile[] tilesAffected){
             
@@ -486,12 +484,16 @@ namespace GameLogic{
 
         }
 
-
-        public bool TakeDamage(Damage damage){
+        public bool TakeDamage(Damage damage)
+        {
             Debug.Log($"{this} taking {damage} damage");
             var isDead = health.TakeDamage(damage);
             Debug.Log($"{this} current {health}");
             return isDead;
+        }
+        
+        public virtual bool CanPayCost(Cost cost){
+            return CanPayHeartCost(cost.heartCost) && CanUseMovement(cost.mouvementCost);
         }
 
         public bool TryToCreateEntityUseMovementAction(int movement,  out EntityUseMovementAction entityUseMovementAction, Action requiredAction = null){
@@ -845,7 +847,7 @@ namespace GameLogic{
 
             foreach (Effect effect in effects)
             {
-                entityState.effectStates.Add(effect.ToEffectState());
+                entityState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
             }
 
             foreach (Buff buff in buffs){

@@ -625,7 +625,7 @@ namespace GameLogic{
             gameState.effectStates = new List<EffectState>();
             foreach (Effect effect in effects)
             {
-                //gameState.effectStates.Add(effect.ToEffectState());
+                //gameState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
             }
 
 

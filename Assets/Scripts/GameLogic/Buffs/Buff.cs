@@ -40,7 +40,7 @@ namespace GameLogic{
                 BuffState buffState = new BuffState();
                 buffState.name = name;
                 buffState.text = GetText();
-                buffState.isPositive = buffState.isPositive;
+                buffState.isPositive = IsPositive();
 
                 return buffState;
             }

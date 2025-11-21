@@ -187,7 +187,7 @@ namespace GameLogic{
             heroState.buffStates = new List<BuffState>();
 
             foreach (Effect effect in effects){
-                heroState.effectStates.Add(effect.ToEffectState());
+                heroState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
             }
 
             foreach (Buff buff in buffs){

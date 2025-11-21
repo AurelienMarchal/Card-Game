@@ -238,7 +238,7 @@ namespace GameLogic{
 
             playerState.effectStates = new List<EffectState>();
             foreach (Effect effect in effects){
-                playerState.effectStates.Add(effect.ToEffectState());
+                playerState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
             }
 
 

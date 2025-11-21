@@ -248,7 +248,7 @@ public class GameManager : MonoBehaviour
             new Cost(mouvement: 1),
             new Cost(mouvement: 1),
             direction2);
-        //hero2.effects.Add(new MoveToChangeTileTypeEffect(hero2, TileType.CurseSource));
+        hero2.effects.Add(new SimpleDamagingEffect(hero2, new Cost(mouvement: 2), new Damage(2), 2));
         hero2.num = 0;
         Game.currentGame.players[1].entities.Add(hero2);
         Game.currentGame.players[1].hero = hero2;
@@ -812,7 +812,11 @@ public class GameManager : MonoBehaviour
 
     private void OnEffectHoverEnter(EffectState effectState)
     {
-        boardManager.DisplayTilesUIInfo(effectState.tilesAffectedNums.ToArray());
+        if (effectState.affectsTiles && effectState.tilesAffected != null)
+        {
+            boardManager.DisplayTilesUIInfo(effectState.tilesAffected.ToArray());
+        }
+        
     }
 
 

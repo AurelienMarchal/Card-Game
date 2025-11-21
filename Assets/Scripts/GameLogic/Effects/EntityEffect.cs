@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace GameLogic{
 
+    using GameState;
+
     namespace GameEffect{
         public abstract class EntityEffect : Effect, AffectsEntitiesInterface{
             
@@ -16,6 +18,13 @@ namespace GameLogic{
             public EntityEffect(Entity entity, bool displayOnUI = true) : base(displayOnUI: displayOnUI)
             {
                 associatedEntity = entity;
+                metaData["associatedEntityNum"] = entity.num;
+                metaData["associatedEntityPlayerNum"] = entity.player.playerNum;
+            }
+
+            public EntityEffect(EffectState effectState) : base (effectState)
+            {
+                
             }
 
             public virtual bool CheckTriggerToUpdateEntitiesAffected(Action action)

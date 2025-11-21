@@ -95,7 +95,7 @@ namespace GameLogic{
             weaponState.atkDamageState = atkDamage.ToDamageState();
             weaponState.effectStates = new List<EffectState>();
             foreach (Effect effect in effects){
-                weaponState.effectStates.Add(effect.ToEffectState());
+                weaponState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
             }
 
             return weaponState;
