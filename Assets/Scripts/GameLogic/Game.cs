@@ -194,6 +194,9 @@ namespace GameLogic{
                 case PlayCardFromHandUserAction playCardFromHandUserAction:
                     return HandleUserAction(playCardFromHandUserAction);
 
+                case ActivateEntityEffectUserAction activateEntityEffectUserAction:
+                    return HandleUserAction(activateEntityEffectUserAction);
+
                 default:
                     break;
             }
@@ -320,14 +323,14 @@ namespace GameLogic{
 
             var targetEntity = Entity.noEntity;
 
-            if(playCardFromHandUserAction.entityTargetNum >= 0 && playCardFromHandUserAction.entityTargetPlayerNum >= 0)
+            if (playCardFromHandUserAction.entityTargetNum >= 0 && playCardFromHandUserAction.entityTargetPlayerNum >= 0)
             {
                 targetEntity = GetEntityByEntityNumAndPlayerNum(
                     (uint)playCardFromHandUserAction.entityTargetPlayerNum,
                     (uint)playCardFromHandUserAction.entityTargetNum
                 );
             }
-            
+
 
             Debug.Log($"Card : {card}, Target Entity : {targetEntity}, Traget Tile : {targetTile}");
 
@@ -356,8 +359,74 @@ namespace GameLogic{
                 targetTile: targetTile,
                 targetEntity: targetEntity
             );
+
+            return playerPlayCardAction.wasPerformed;
+        }
+        
+        public bool HandleUserAction(ActivateEntityEffectUserAction activateEntityEffectUserAction)
+        {
+
+            Entity entity = GetEntityByEntityNumAndPlayerNum(
+                activateEntityEffectUserAction.playerNum,
+                activateEntityEffectUserAction.entityNum
+            );
+
+            if (entity == Entity.noEntity)
+            {
+                return false;
+            }
+
+            Debug.Log($"Trying to activate effect {activateEntityEffectUserAction.effectId} of entity {entity}");
+
+            EntityEffect foundEffect = null;
+
+            //temp
+            foreach (var entityEffect in entity.effects)
+            {
+                if (entityEffect.id.ToString() == activateEntityEffectUserAction.effectId)
+                {
+                    foundEffect = entityEffect;
+                    break;
+                }
+            }
+
+            if (foundEffect == null)
+            {
+                return false;
+            }
+
+            if (foundEffect is HasCostInterface hasCostEffect)
+            {
+                var cost = hasCostEffect.GetCost();
+
+                if (!entity.CanPayCost(cost))
+                {
+                    return false;
+                }
+
+                entity.TryToCreateEntityUseMovementAction(cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
+                entity.TryToCreateEntityPayHeartCostAction(cost.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction);
+
+                if (!entityUseMovementAction.wasPerformed || !entityPayHeartCostAction.wasPerformed)
+                {
+                    return false;
+                }
+            }
             
-            return playerPlayCardAction.wasPerformed; 
+            if(foundEffect is CanBeActivatedInterface canBeActivatedEffect)
+            {
+                if (!canBeActivatedEffect.CanBeActivated())
+                {
+                    return false;
+                }
+
+                var effectActivateAction = new EffectActivatesAction(foundEffect);
+                PileAction(effectActivateAction);
+
+                return effectActivateAction.wasPerformed;
+            }
+
+            return false;
         }
 
 

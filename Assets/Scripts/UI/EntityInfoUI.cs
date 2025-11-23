@@ -45,6 +45,10 @@ public class EntityInfoUI : MonoBehaviour
 
     public EffectStateEvent effectHoverExitEvent = new EffectStateEvent();
 
+    public EffectStateEvent effectPointerDownEvent = new EffectStateEvent();
+
+    public EffectStateEvent effectClickedEvent = new EffectStateEvent();
+
     public UnityEvent weaponHoverEnterEvent = new UnityEvent();
 
     public UnityEvent weaponHoverExitEvent = new UnityEvent();
@@ -100,6 +104,8 @@ public class EntityInfoUI : MonoBehaviour
             effectUIDisplay.effectState = effectState;
             effectUIDisplay.effectHoverEnterEvent.AddListener((effect) => effectHoverEnterEvent.Invoke(effect));
             effectUIDisplay.effectHoverExitEvent.AddListener((effect) => effectHoverExitEvent.Invoke(effect));
+            effectUIDisplay.effectPointerDownEvent.AddListener((effect) => effectPointerDownEvent.Invoke(effect));
+            effectUIDisplay.effectClickedEvent.AddListener((effect) => effectClickedEvent.Invoke(effect));
         }
     }
 
@@ -184,6 +190,8 @@ public class EntityInfoUI : MonoBehaviour
     void OnDestroy(){
         effectHoverEnterEvent.RemoveAllListeners();
         effectHoverExitEvent.RemoveAllListeners();
+        effectPointerDownEvent.RemoveAllListeners();
+        effectClickedEvent.RemoveAllListeners();
         weaponUsedUnityEvent.RemoveAllListeners();
         weaponHoverEnterEvent.RemoveAllListeners();
         weaponHoverExitEvent.RemoveAllListeners();

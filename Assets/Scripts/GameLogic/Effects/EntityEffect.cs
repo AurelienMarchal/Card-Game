@@ -21,6 +21,7 @@ namespace GameLogic{
                 metaData["associatedEntityNum"] = entity.num;
                 metaData["associatedEntityPlayerNum"] = entity.player.playerNum;
             }
+            
 
             public EntityEffect(EffectState effectState) : base (effectState)
             {

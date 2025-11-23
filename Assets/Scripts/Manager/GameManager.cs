@@ -275,6 +275,8 @@ public class GameManager : MonoBehaviour
         entityInfoUI.weaponUsedUnityEvent.AddListener(OnWeaponUsed);
         entityInfoUI.effectHoverEnterEvent.AddListener(OnEffectHoverEnter);
         entityInfoUI.effectHoverExitEvent.AddListener(OnEffectHoverExit);
+        entityInfoUI.effectPointerDownEvent.AddListener(OnEffectPointerDown);
+        entityInfoUI.effectClickedEvent.AddListener(OnEffectClicked);
         //entityInfoUI.weaponHoverEnterEvent.AddListener(OnWeaponHoverEnter);
         //entityInfoUI.weaponHoverExitEvent.AddListener(OnWeaponHoverExit);
 
@@ -285,7 +287,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    
+
 
     // Update is called once per frame
     void Update()
@@ -823,6 +825,27 @@ public class GameManager : MonoBehaviour
     private void OnEffectHoverExit(EffectState effect)
     {
         boardManager.ResetAllTileLayerDisplayUIInfo();
+    }
+
+    private void OnEffectClicked(EffectState effect)
+    {
+        if (!effect.isActivableEffect)
+        {
+            return;
+        }
+
+        SendUserAction(
+            new ActivateEntityEffectUserAction(
+                currentEntitySelected.entityState.playerNum,
+                currentEntitySelected.entityState.num,
+                effect.id
+            )
+        );
+    }
+
+    private void OnEffectPointerDown(EffectState effect)
+    {
+        
     }
 
     private void OnCardSelected(CardManager cardManager, uint playerNum)

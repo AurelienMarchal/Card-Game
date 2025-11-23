@@ -9,10 +9,6 @@ namespace GameLogic{
             {
                 this.entityNum = entityNum;
             }
-
-            public EntityUserAction(uint playerNum) : base(playerNum)
-            {
-            }
         }
     }
 }

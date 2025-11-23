@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameLogic
 {
@@ -7,7 +8,7 @@ namespace GameLogic
     using GameEffect;
     using GameAction;
 
-    public class SimpleDamagingEffect : EntityEffect, DealsDamageInterface, HasCostInterface, HasRangeInterface, CanBeActivatedInterface
+    public class SimpleDamagingEffect : EntityEffect, AffectsTilesInterface, DealsDamageInterface, HasCostInterface, HasRangeInterface, CanBeActivatedInterface
     {
 
         private Cost cost
@@ -40,6 +41,7 @@ namespace GameLogic
 
         void CanBeActivatedInterface.Activate()
         {
+
             if (entitiesInRange.Count > 0 && entitiesInRange[0] != Entity.noEntity)
             {
                 var entityHit = entitiesInRange[0];
@@ -50,7 +52,7 @@ namespace GameLogic
 
         public bool CanBeActivated()
         {
-            return false;
+            return true;
         }
 
         public override string GetEffectText()

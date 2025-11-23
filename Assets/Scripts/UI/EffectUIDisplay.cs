@@ -50,16 +50,13 @@ public class EffectUIDisplay : MonoBehaviour
 
     public EffectStateEvent effectHoverExitEvent = new EffectStateEvent();
 
+    public EffectStateEvent effectPointerDownEvent = new EffectStateEvent();
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+    public EffectStateEvent effectClickedEvent = new EffectStateEvent();
 
-    // Update is called once per frame
-    void Update()
+    void Awake()
     {
-        //UpdateFromEffect();
+        button.onClick.AddListener(OnClick);
     }
 
     private void UpdateFromEffectState()
@@ -72,51 +69,18 @@ public class EffectUIDisplay : MonoBehaviour
 
         effectTextMeshProUGUI.text = effectState.effectText;
 
-        //Peut etre a changer
-        //button.interactable = effectState.canBeActivated;
 
-        /*
-        costUIDisplay.gameObject.SetActive(effectState.costState != null);
+        //Temp
+        button.interactable = effectState.isActivableEffect && effectState.canBeActivated && ((effectState.hasCost && effectState.costCanBePaid) || !effectState.hasCost);
+        
+        costUIDisplay.gameObject.SetActive(effectState.cost != null);
 
-        if (effectState.costState != null)
+        if (effectState.cost != null)
         {
-            costUIDisplay.costState = effectState.costState;
+            costUIDisplay.costState = effectState.cost;
             costUIDisplay.UpdateVisuals();
         }
-        */
-
-        /*
-        switch (effect)
-        {
-            case EntityEffect activableEffect:
-
-                costUIDisplay.cost = activableEffect.cost;
-                button.onClick.AddListener(OnButtonClick);
-
-                break;
-            default:
-
-                break;
-        }
-        */
-    }
-
-    
-
-    private void OnButtonClick()
-    {
-        /*
-        Debug.Log($"Effect : {effect}");
-        if (effect is EntityEffect activableEffect){
-            activableEffect.associatedEntity.TryToCreateEntityUseMovementAction(activableEffect.cost.mouvementCost, out EntityUseMovementAction entityUseMovementAction);
-            activableEffect.associatedEntity.TryToCreateEntityPayHeartCostAction(activableEffect.cost.heartCost, out EntityPayHeartCostAction entityPayHeartCostAction, entityUseMovementAction);
-            if(!entityPayHeartCostAction.wasPerformed || !entityUseMovementAction.wasPerformed){
-                return;
-            }
-            activableEffect.TryToCreateEffectActivatedAction(entityPayHeartCostAction, out _);
-        }
-        */
-
+        
     }
 
     public void OnHoverEnter()
@@ -129,10 +93,24 @@ public class EffectUIDisplay : MonoBehaviour
         effectHoverExitEvent.Invoke(effectState);
     }
 
+    public void OnPointerDown()
+    {
+        effectPointerDownEvent.Invoke(effectState);
+    }
+
+    public void OnClick()
+    {
+        effectClickedEvent.Invoke(effectState);
+    }
+
+
 
     void OnDestroy()
     {
         effectHoverEnterEvent.RemoveAllListeners();
         effectHoverExitEvent.RemoveAllListeners();
+        effectClickedEvent.RemoveAllListeners();
+        effectPointerDownEvent.RemoveAllListeners();
+        button.onClick.RemoveListener(OnClick);
     }
 }

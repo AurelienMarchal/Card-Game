@@ -118,10 +118,20 @@ namespace GameLogic
                 {
                     effectState.hasCost = true;
                     effectState.cost = hasCostEffect.GetCost().ToCostState();
+
+                    if (effect is EntityEffect entityEffect)
+                    {
+                        effectState.costCanBePaid = entityEffect.associatedEntity.CanPayCost(hasCostEffect.GetCost());
+                    }
+                    else
+                    {
+                        effectState.costCanBePaid = false;
+                    }
                 }
                 else
                 {
-                    effectState.dealsDamage = false;
+                    effectState.hasCost = false;
+                    effectState.costCanBePaid = false;
                 }
 
                 if (effect is HasRangeInterface hasRangeEffect)

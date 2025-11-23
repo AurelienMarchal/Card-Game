@@ -60,6 +60,12 @@ namespace GameLogic{
                 get;
                 set;
             }
+
+            public bool costCanBePaid
+            {
+                get;
+                set;
+            }
             
             public bool hasRange
             {
