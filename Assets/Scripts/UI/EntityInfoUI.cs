@@ -90,12 +90,12 @@ public class EntityInfoUI : MonoBehaviour
     }
 
     void AddEffectCanvasFromEffectState(EffectState effectState){
-        /*
+        
         if (!effectState.displayOnUI)
         {
             return;
         }
-        */
+        
 
         var effectCanvas = Instantiate(effectCanvasPrefab, effectScrollViewContent.transform);
         var effectUIDisplay = effectCanvas.GetComponent<EffectUIDisplay>();

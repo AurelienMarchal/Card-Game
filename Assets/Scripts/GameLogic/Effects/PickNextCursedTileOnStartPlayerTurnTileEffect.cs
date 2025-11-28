@@ -39,6 +39,11 @@ namespace GameLogic{
                 return false;
             }
 
+            public Type[] ActionTypeTriggersToActivate()
+            {
+                return new Type[1]{typeof(PlayerStartTurnAction)};
+            }
+
             public override bool CheckTriggerToUpdateTilesAffected(Action action)
             {
 
@@ -53,6 +58,11 @@ namespace GameLogic{
                         return tileChangeTypeAction.wasPerformed;
                 }
                 return false;
+            }
+
+            public override System.Type[] ActionTypeTriggersToUpdateTilesAffected()
+            {
+                return new Type[1]{typeof(TileChangeTypeAction)};
             }
 
             public override List<Tile> GetTilesAffected()
@@ -111,6 +121,8 @@ namespace GameLogic{
                     }
                 }
             }
+
+            
         }
     }
 

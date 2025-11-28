@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
     {
 
         Game.currentGame.SetUpGame(playerManagers.Length, boardHeight, boardWidth);
-        //Game.currentGame.board = Game.currentGame.board;
+        
 
         currentTileSelected = null;
         currentEntitySelected = null;

@@ -9,17 +9,18 @@ namespace GameLogic{
     using GameBuff;
 
     namespace GameEffect{
-        public class EntityIsWeightedDownByStoneHeartEffect : EntityEffect, GivesTempEntityBuffInterface
+        //TODO : Become a GameEffect
+        public class EntityIsWeightedDownByStoneHeartEffect : EntityEffect, GivesTempBuffInterface
         {
 
-            List<EntityBuff> entityBuffs; 
+            List<Buff> Buffs; 
 
             public EntityIsWeightedDownByStoneHeartEffect(Entity entity) : base(entity, false)
             {
-                entityBuffs = new List<EntityBuff>();
+                Buffs = new List<Buff>();
             }
 
-            public bool CheckTriggerToUpdateTempEntityBuffs(Action action)
+            public bool CheckTriggerToUpdateTempBuffs(Action action)
             {
 
                 switch (action){
@@ -42,12 +43,22 @@ namespace GameLogic{
                 return false;
             }
 
-            public List<EntityBuff> GetTempEntityBuffs()
+            public System.Type[] ActionTypeTriggersToUpdateTempBuffs()
             {
-                return entityBuffs;
+                return new System.Type[5]{
+                    typeof(StartGameAction), 
+                    typeof(PlayerSpawnEntityAction), 
+                    typeof(EntityTakeDamageAction), 
+                    typeof(EntityPayHeartCostAction), 
+                    typeof(EntityGainHeartAction)};
             }
 
-            public void UpdateTempEntityBuffs()
+            public List<Buff> GetTempBuffs()
+            {
+                return Buffs;
+            }
+
+            public void UpdateTempBuffs()
             {
                 
                 var stoneHeartCount = 0;
@@ -57,9 +68,9 @@ namespace GameLogic{
                     }
                 }
 
-                entityBuffs.Clear();
+                Buffs.Clear();
                 for (int i = 0; i < stoneHeartCount; i++){
-                    entityBuffs.Add(new WeightedDownBuff(id.ToString()));
+                    Buffs.Add(new WeightedDownBuff(id.ToString()));
                 }
                 
             }

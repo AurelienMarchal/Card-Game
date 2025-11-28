@@ -70,6 +70,11 @@ namespace GameLogic{
                 Game.currentGame.PileActions(actions.ToArray());
             }
 
+            public Type[] ActionTypeTriggersToActivate()
+            {
+                return new Type[1]{typeof(PlayerEndTurnAction)};
+            }
+
             public bool CanBeActivated()
             {
                 return associatedEntity != Entity.noEntity;
@@ -91,6 +96,8 @@ namespace GameLogic{
                 entitiesInExplosionRange.AddRange(Game.currentGame.board.GetEntitiesAtTiles(tilesInExplosionRange.ToArray()));
             }
 
+
+            //Not necessary
             public override bool CheckTriggerToUpdateEntitiesAffected(Action action)
             {
                 switch (action)
@@ -104,6 +111,11 @@ namespace GameLogic{
                 }
 
                 return false;
+            }
+
+            public override System.Type[] ActionTypeTriggersToUpdateEntitiesAffected()
+            {
+                return new Type[3]{typeof(PlayerSpawnEntityAction), typeof(EntityMoveAction), typeof(EntityDieAction)};
             }
 
             public override List<Entity> GetEntitiesAffected()
@@ -124,6 +136,11 @@ namespace GameLogic{
                 }
 
                 return false;
+            }
+
+            public Type[] ActionTypeTriggersToUpdateTilesAffected()
+            {
+                return new Type[3]{typeof(PlayerSpawnEntityAction), typeof(EntityMoveAction), typeof(EntityDieAction)};
             }
 
             public void UpdateTilesAffected()

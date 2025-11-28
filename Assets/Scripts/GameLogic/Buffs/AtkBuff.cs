@@ -3,7 +3,7 @@ using System;
 namespace GameLogic{
 
     namespace GameBuff{
-        public class AtkBuff : EntityBuff
+        public class AtkBuff : Buff
         {
             public int amount{
                 get;

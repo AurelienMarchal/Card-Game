@@ -26,6 +26,11 @@ namespace GameLogic{
                 return false;
             }
 
+            public virtual System.Type[] ActionTypeTriggersToUpdateTilesAffected()
+            {
+                return null;
+            }
+
             public virtual List<Tile> GetTilesAffected()
             {
                 return new List<Tile> { associatedTile };
@@ -35,6 +40,8 @@ namespace GameLogic{
             {
 
             }
+
+            
         }
     }
 }

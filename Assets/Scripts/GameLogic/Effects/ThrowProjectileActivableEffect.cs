@@ -78,6 +78,11 @@ namespace GameLogic{
                 return false;
             }
 
+            public System.Type[] ActionTypeTriggersToActivate()
+            {
+                return null;
+            }
+
             public override string GetEffectText()
             {
                 return $"Deal {damage} with range {range}";
@@ -87,6 +92,8 @@ namespace GameLogic{
             {
                 switch (action)
                 {
+                    case StartGameAction startGameAction:
+                    return startGameAction.wasPerformed;
                     case PlayerSpawnEntityAction playerSpawnEntityAction:
                         return playerSpawnEntityAction.wasPerformed;
                     case EntityMoveAction entityMoveAction:
@@ -96,6 +103,11 @@ namespace GameLogic{
                 }
 
                 return false;
+            }
+
+            public System.Type[] ActionTypeTriggersToUpdateTilesAffected()
+            {
+                return new System.Type[4]{typeof(PlayerSpawnEntityAction), typeof(EntityMoveAction), typeof(EntityDieAction), typeof(StartGameAction)};
             }
 
             public void UpdateTilesAffected()

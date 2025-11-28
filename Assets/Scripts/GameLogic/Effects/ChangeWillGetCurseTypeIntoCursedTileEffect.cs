@@ -7,7 +7,9 @@ namespace GameLogic{
     using GameAction;
 
     namespace GameEffect{
-        public class ChangeWillGetCurseTypeIntoCursedTileEffect : TileEffect, CanBeActivatedInterface, AffectsTilesInterface
+
+        //TODO : Become a GameEffect
+        public class ChangeWillGetCurseTypeIntoCursedTileEffect : TileEffect, CanBeActivatedInterface
         {
 
             public ChangeWillGetCurseTypeIntoCursedTileEffect(Tile tile) : base(tile){
@@ -31,6 +33,11 @@ namespace GameLogic{
 
                     default : return false;
                 }
+            }
+
+            public System.Type[] ActionTypeTriggersToActivate()
+            {
+                return new System.Type[1]{typeof(PlayerEndTurnAction)};
             }
         }
     }

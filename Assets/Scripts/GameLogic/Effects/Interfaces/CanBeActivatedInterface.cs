@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-
+using System;
 
 namespace GameLogic
 {
@@ -11,6 +10,8 @@ namespace GameLogic
         {
 
             public bool CheckTriggerToActivate(Action action);
+
+            public Type[] ActionTypeTriggersToActivate();
             public bool CanBeActivated();
 
             public void Activate();

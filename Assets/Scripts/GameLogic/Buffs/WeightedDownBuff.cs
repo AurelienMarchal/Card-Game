@@ -5,7 +5,7 @@ using UnityEngine;
 namespace GameLogic{
 
     namespace GameBuff{
-        public class WeightedDownBuff : EntityBuff
+        public class WeightedDownBuff : Buff
         {
             public WeightedDownBuff(string assiociatedEffectId) : base("Weighted Down", assiociatedEffectId){
             }

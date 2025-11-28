@@ -4,20 +4,28 @@ using UnityEngine;
 
 
 namespace GameLogic{
-
+    using System.Collections.Generic;
     using GameAction;
 
     namespace GameEffect{
-        public class EntityDiesWhenHealthIsEmpty : EntityEffect, CanBeActivatedInterface
+        public class EntityDiesWhenHealthIsEmpty : Effect, CanBeActivatedInterface
         {
-            public EntityDiesWhenHealthIsEmpty(Entity entity) : base(entity, displayOnUI:false)
+
+            List<Entity> entitiesWithEmptyHealth
             {
-            
+                get;
+                set;
+            }
+
+
+            public EntityDiesWhenHealthIsEmpty() : base(displayOnUI:false)
+            {
+                entitiesWithEmptyHealth = new List<Entity>();
             }
 
             public override string GetEffectName()
             {
-                return "Entity dies when health is empty";
+                return "Entities dies when health is empty";
             }
 
             public override string GetEffectText()
@@ -27,7 +35,7 @@ namespace GameLogic{
 
             public bool CanBeActivated()
             {
-                return associatedEntity != Entity.noEntity;
+                return entitiesWithEmptyHealth.Count > 0;
             }
 
 
@@ -35,32 +43,59 @@ namespace GameLogic{
             {   
                 switch(action){
                     case EntityLooseHeartAction entityLooseHeartAction:
-                        if(entityLooseHeartAction.entity == associatedEntity){
-                            return associatedEntity.health.IsEmpty();
+                        if (entityLooseHeartAction.entity.health.IsEmpty())
+                        {
+                            if (!entitiesWithEmptyHealth.Contains(entityLooseHeartAction.entity))
+                            {
+                                entitiesWithEmptyHealth.Add(entityLooseHeartAction.entity);
+                            }
+                            return true;
                         }
+                        
                         return false;
-                    
-
                     case EntityPayHeartCostAction entityPayHeartCostAction:
-                        if(entityPayHeartCostAction.entity == associatedEntity){
-                            return associatedEntity.health.IsEmpty();
+                        if (entityPayHeartCostAction.entity.health.IsEmpty())
+                        {
+                            if (!entitiesWithEmptyHealth.Contains(entityPayHeartCostAction.entity))
+                            {
+                                entitiesWithEmptyHealth.Add(entityPayHeartCostAction.entity);
+                            }
+                            return true;
                         }
+                        
                         return false;
 
                     case EntityTakeDamageAction entityTakeDamageAction:
-                        if(entityTakeDamageAction.entity == associatedEntity){
-                            return associatedEntity.health.IsEmpty();
+                        if (entityTakeDamageAction.entity.health.IsEmpty())
+                        {
+                            if (!entitiesWithEmptyHealth.Contains(entityTakeDamageAction.entity))
+                            {
+                                entitiesWithEmptyHealth.Add(entityTakeDamageAction.entity);
+                            }
+                            return true;
                         }
+                        
                         return false;
-
-
                     default : return false;
                 }
             }
 
+            public System.Type[] ActionTypeTriggersToActivate()
+            {
+                return new System.Type[3]{typeof(EntityLooseHeartAction), typeof(EntityPayHeartCostAction), typeof(EntityTakeDamageAction)};
+            }
+
             public void Activate()
             {
-                Game.currentGame.PileAction(new EntityDieAction(associatedEntity));
+                foreach (var entity in entitiesWithEmptyHealth)
+                {
+                    if (entity.health.IsEmpty())
+                    {
+                        Game.currentGame.PileAction(new EntityDieAction(entity));
+                    }
+                }
+
+                entitiesWithEmptyHealth.Clear();
             }
         }
     }

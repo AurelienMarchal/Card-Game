@@ -50,6 +50,11 @@ namespace GameLogic{
                 return false;
             }
 
+            public System.Type[] ActionTypeTriggersToActivate()
+            {
+                return new System.Type[1]{typeof(EntityMoveAction)};
+            }
+
             public bool CheckTriggerToUpdateTilesAffected(Action action)
             {
                 switch (action)
@@ -66,6 +71,11 @@ namespace GameLogic{
                 return false;
             }
 
+            public System.Type[] ActionTypeTriggersToUpdateTilesAffected()
+            {
+                return new System.Type[3]{typeof(PlayerSpawnEntityAction), typeof(EntityMoveAction), typeof(EntityDieAction)};
+            }
+
             public void UpdateTilesAffected()
             {
                 tile = associatedEntity.currentTile;
@@ -75,6 +85,10 @@ namespace GameLogic{
             {
                 return new List<Tile> { tile };
             }
+
+            
+
+            
         }
     }
 }

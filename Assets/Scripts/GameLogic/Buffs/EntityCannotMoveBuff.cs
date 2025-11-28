@@ -4,7 +4,7 @@
 namespace GameLogic{
 
     namespace GameBuff{
-        public class EntityCannotMoveBuff : EntityBuff{
+        public class EntityCannotMoveBuff : Buff{
             public EntityCannotMoveBuff(string assiociatedEffectId) : base("Cannot move", assiociatedEffectId)
             {
             }

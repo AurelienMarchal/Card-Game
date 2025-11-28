@@ -137,7 +137,7 @@ namespace GameLogic{
                 set;
             }
 
-            public bool givesTempEntityBuff
+            public bool givesTempBuff
             {
                 get;
                 set;

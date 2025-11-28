@@ -4,7 +4,7 @@ using System;
 namespace GameLogic{
 
     namespace GameBuff{
-        public class RangeBuff : EntityBuff{
+        public class RangeBuff : Buff{
             public int amount{
                 get;
                 private set;

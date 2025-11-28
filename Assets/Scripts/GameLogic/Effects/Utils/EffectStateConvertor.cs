@@ -94,14 +94,14 @@ namespace GameLogic
                     effectState.isActivableWithTileTargetEffect = false;
                 }
 
-                if (effect is GivesTempEntityBuffInterface givesTempEntityBuffEntity)
+                if (effect is GivesTempBuffInterface givesTempBuffEntity)
                 {
-                    effectState.givesTempEntityBuff = true;
+                    effectState.givesTempBuff = true;
                     //TODO
                 }
                 else
                 {
-                    effectState.givesTempEntityBuff = false;
+                    effectState.givesTempBuff = false;
                 }
 
                 if (effect is DealsDamageInterface dealsDamageEffect)

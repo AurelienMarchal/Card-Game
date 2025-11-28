@@ -12,6 +12,8 @@ namespace GameLogic{
             {
             }
 
+            
+
             public bool CanBeActivated()
             {
                 return true;
@@ -25,6 +27,11 @@ namespace GameLogic{
 
                     default: return false;
                 }
+            }
+
+            public System.Type[] ActionTypeTriggersToActivate()
+            {
+                return new System.Type[1]{typeof(PlayerEndTurnAction)};
             }
 
             void CanBeActivatedInterface.Activate()

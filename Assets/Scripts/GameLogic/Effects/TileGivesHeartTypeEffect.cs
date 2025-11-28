@@ -1,8 +1,12 @@
+
+
 namespace GameLogic{
 
     namespace GameEffect{
         using GameAction;
-        using UnityEngine;
+        
+
+        //TODO : Become a GameEffect
 
         public class TileGivesHeartTypeEffect : TileEffect, CanBeActivatedInterface{
 

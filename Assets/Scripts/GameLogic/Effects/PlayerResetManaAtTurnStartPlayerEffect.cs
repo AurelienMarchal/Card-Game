@@ -4,6 +4,8 @@ namespace GameLogic{
 
     namespace GameEffect{
 
+        //TODO : Become a GameEffect
+
         public class PlayerResetManaAtTurnStartPlayerEffect : PlayerEffect, CanBeActivatedInterface
         {
             public PlayerResetManaAtTurnStartPlayerEffect(Player player) : base(player)
@@ -29,6 +31,11 @@ namespace GameLogic{
 
                     default: return false;
                 }
+            }
+
+            public System.Type[] ActionTypeTriggersToActivate()
+            {
+                return new System.Type[1]{typeof(PlayerStartTurnAction)};
             }
         }
     }

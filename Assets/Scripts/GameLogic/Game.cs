@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 namespace GameLogic{
@@ -10,7 +11,7 @@ namespace GameLogic{
     using GameAction;
     using UserAction;
     using GameState;
-
+    
 
     public sealed class Game{
 
@@ -41,14 +42,35 @@ namespace GameLogic{
             private set;
         }
 
+        //Holds every effect
         public List<Effect> effects{
             get;
             private set;
         }
 
+        //Dict Effect by effect id
+        public Dictionary<Guid, List<Effect>> effectsById{
+            get;
+            private set;
+        }
+
+        //Dict Effect by effect triggers
+        public Dictionary<Type, List<Effect>> effectsThatCanBeActivated{
+            get;
+            private set;
+        }
+
+        //Same with the rest
+
+        //Dict Effect by entity
+
+        //Dict Effect by tile
+
+        
+
         private List<Action> actionPile;
 
-        [System.Obsolete]
+        [Obsolete]
         public List<Action> depiledActionQueue
         {
             get;
@@ -517,7 +539,7 @@ namespace GameLogic{
                         {
                             actionStatesToSendQueue.Add(action.ToActionState());
                         }
-                        catch (System.NotImplementedException exeption)
+                        catch (NotImplementedException exeption)
                         {
                             Debug.LogError(exeption);
                         }
@@ -526,7 +548,7 @@ namespace GameLogic{
 
                     if (wasPerformed)
                     {
-                        Debug.Log("Checking Trigger");
+                        //Debug.Log("Checking Trigger");
                         CheckTriggers(action);
                     }
                 }
@@ -590,7 +612,6 @@ namespace GameLogic{
         void CheckTriggers(Effect effect, Action action)
         {
 
-
             if (effect is CanBeActivatedInterface canBeActivatedEffect)
             {
                 if (canBeActivatedEffect.CheckTriggerToActivate(action))
@@ -618,9 +639,9 @@ namespace GameLogic{
                 }
             }
 
-            if (effect is GivesTempEntityBuffInterface givesTempBuffEffect)
+            if (effect is GivesTempBuffInterface givesTempBuffEffect)
             {
-                if (givesTempBuffEffect.CheckTriggerToUpdateTempEntityBuffs(action))
+                if (givesTempBuffEffect.CheckTriggerToUpdateTempBuffs(action))
                 {
                     PileAction(new EffectUpdatesTempBuffsAction(effect, action));
                 }
@@ -639,7 +660,7 @@ namespace GameLogic{
             return actionState;
         }
 
-        [System.Obsolete]
+        [Obsolete]
         private Action DequeueDepiledActionQueue()
         {
             if (depiledActionQueue.Count == 0)
@@ -652,7 +673,7 @@ namespace GameLogic{
             return action;
         }
 
-        [System.Obsolete]
+        [Obsolete]
         public ActionState DequeueDepiledActionQueueAndGetActionState()
         {
             var action = DequeueDepiledActionQueue();
@@ -664,16 +685,43 @@ namespace GameLogic{
 
         }
 
+        public void AddEffect(Effect effect)
+        {
+            effects.Add(effect);
+            if(effect is CanBeActivatedInterface canBeActivatedEffect)
+            {
+                var actionTypeTriggersToActivate = canBeActivatedEffect.ActionTypeTriggersToActivate();
+                if(actionTypeTriggersToActivate != null)
+                {
+                        foreach (var actionTypeTrigger in actionTypeTriggersToActivate)
+                    {
+                        if (!effectsThatCanBeActivated.ContainsKey(actionTypeTrigger))
+                        {
+                            effectsThatCanBeActivated.Add(actionTypeTrigger, new List<Effect>());
+                        }
+                        effectsThatCanBeActivated[actionTypeTrigger].Add(effect);
+                    }
+                }
+            }
+
+            //Same with the rest
+        }
+
+        public void RemoveEffect(Effect effect)
+        {
+            effects.Remove(effect);
+        }
+
         private void SetupPermanentEffects()
         {
-
+            effects.Add(new EntityDiesWhenHealthIsEmpty());
         }
 
 
         //Big TODO
         public void FromGameState()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public GameState.GameState ToGameState()

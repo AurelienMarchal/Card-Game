@@ -21,15 +21,15 @@ namespace GameLogic
 
                 var actionsToPile = new List<Action>();
 
-                if (effect is GivesTempEntityBuffInterface givesTempBuffEffect)
+                if (effect is GivesTempBuffInterface givesTempBuffEffect)
                 {
-                    givesTempBuffEffect.UpdateTempEntityBuffs();
+                    givesTempBuffEffect.UpdateTempBuffs();
                     if (effect is AffectsEntitiesInterface affectsEntitiesEffect)
                     {
                         foreach (var affectedEntity in affectsEntitiesEffect.GetEntitiesAffected())
                         {
                             affectedEntity.RemoveTempBuffByEffectId(effect.id.ToString());
-                            affectedEntity.AddTempBuffs(givesTempBuffEffect.GetTempEntityBuffs());
+                            affectedEntity.AddTempBuffs(givesTempBuffEffect.GetTempBuffs());
 
                             var atkIncreaseAccordingToBuffs = affectedEntity.GetAtkIncreaseAccordingToBuffs();
 
@@ -47,7 +47,6 @@ namespace GameLogic
                             if (rangeDiff != 0)
                             {
                                 actionsToPile.Add(new EntityIncreasesRangeAction(affectedEntity, rangeDiff, this));
-
                             }
 
                             var mouvementCostToMoveIncreaseAccordingToBuffs = affectedEntity.GetMouvementCostToMoveIncreaseAccordingToBuffs();

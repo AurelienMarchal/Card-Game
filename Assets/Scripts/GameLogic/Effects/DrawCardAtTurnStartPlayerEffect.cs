@@ -4,6 +4,7 @@ namespace GameLogic{
 
     namespace GameEffect{
 
+        //TODO : Become a GameEffect
         public class DrawCardAtTurnStartPlayerEffect : PlayerEffect, CanBeActivatedInterface
         {
             public DrawCardAtTurnStartPlayerEffect(Player player) : base(player)
@@ -40,6 +41,11 @@ namespace GameLogic{
 
                     default: return false;
                 }
+            }
+
+            public System.Type[] ActionTypeTriggersToActivate()
+            {
+                return new System.Type[1]{typeof(PlayerStartTurnAction)};
             }
         }
     }

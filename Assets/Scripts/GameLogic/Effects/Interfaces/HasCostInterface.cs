@@ -1,4 +1,4 @@
-
+using System;
 
 namespace GameLogic
 {
@@ -8,6 +8,8 @@ namespace GameLogic
         public interface HasCostInterface
         {
             public bool CheckTriggerToUpdateCost(Action action);
+
+            public Type[] ActionTypeTriggersToUpdateCost();
 
             public void UpdateCost();
             public Cost GetCost();

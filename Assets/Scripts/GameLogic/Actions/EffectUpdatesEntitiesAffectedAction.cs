@@ -22,7 +22,7 @@ namespace GameLogic{
 
                     
                     //if gives temp buff, update temp buff for entities
-                    if (effect is GivesTempEntityBuffInterface givesTempBuffEffect)
+                    if (effect is GivesTempBuffInterface givesTempBuffEffect)
                     {
 
                         var actionsToPile = new List<Action>();
@@ -30,7 +30,7 @@ namespace GameLogic{
                         {
                             if (!previousAffectedEntities.Contains(currentAffectedEntity))
                             {
-                                currentAffectedEntity.AddTempBuffs(givesTempBuffEffect.GetTempEntityBuffs());
+                                currentAffectedEntity.AddTempBuffs(givesTempBuffEffect.GetTempBuffs());
 
                             }
                             else

@@ -49,8 +49,6 @@ namespace GameLogic{
             {
                 return "No Effect";
             }
-
-            
         }
     }
 }

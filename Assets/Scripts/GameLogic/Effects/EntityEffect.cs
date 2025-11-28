@@ -32,6 +32,11 @@ namespace GameLogic{
             {
                 return false;
             }
+            
+            public virtual System.Type[] ActionTypeTriggersToUpdateEntitiesAffected()
+            {
+                return null;
+            }
 
             public virtual void UpdateEntitiesAffected()
             {
@@ -42,6 +47,8 @@ namespace GameLogic{
             {
                 return new List<Entity> { associatedEntity };
             }
+
+            
         }
     }
 }

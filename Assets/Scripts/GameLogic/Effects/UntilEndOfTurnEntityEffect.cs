@@ -24,6 +24,11 @@ namespace GameLogic{
                 }
             }
 
+            public System.Type[] ActionTypeTriggersToActivate()
+            {
+                return new System.Type[1]{typeof(PlayerEndTurnAction)};
+            }
+
             void CanBeActivatedInterface.Activate()
             {
                 Game.currentGame.PileAction(new RemoveEntityEffectFromEntityAction(associatedEntity, this));

@@ -6,17 +6,19 @@ namespace GameLogic{
     using GameLogic.GameAction;
 
     namespace GameEffect{
-        public class CannotMoveUntilEndOfPlayerTurnEffect : UntilEndOfPlayerTurnEntityEffect, GivesTempEntityBuffInterface{
+        public class CannotMoveUntilEndOfPlayerTurnEffect : UntilEndOfPlayerTurnEntityEffect, GivesTempBuffInterface{
 
-            List<EntityBuff> buffs;
+            List<Buff> buffs;
 
 
             public CannotMoveUntilEndOfPlayerTurnEffect(Entity entity, bool displayOnUI = true) : base(entity, displayOnUI)
             {
-                buffs = new List<EntityBuff> { new EntityCannotMoveBuff(id.ToString()) };
+                buffs = new List<Buff> { new EntityCannotMoveBuff(id.ToString()) };
             }
 
-            public bool CheckTriggerToUpdateTempEntityBuffs(Action action)
+            
+
+            public bool CheckTriggerToUpdateTempBuffs(Action action)
             {
                 switch (action)
                 {
@@ -25,6 +27,11 @@ namespace GameLogic{
                 }
 
                 return false;
+            }
+
+            public System.Type[] ActionTypeTriggersToUpdateTempBuffs()
+            {
+                return new System.Type[1]{typeof(PlayerEndTurnAction)};
             }
 
             public override string GetEffectName()
@@ -37,12 +44,12 @@ namespace GameLogic{
                 return $"{associatedEntity} cannot move until the end of the turn";
             }
 
-            public List<EntityBuff> GetTempEntityBuffs()
+            public List<Buff> GetTempBuffs()
             {
                 return buffs;
             }
 
-            public void UpdateTempEntityBuffs()
+            public void UpdateTempBuffs()
             {
                 buffs.Clear();
                 //finished

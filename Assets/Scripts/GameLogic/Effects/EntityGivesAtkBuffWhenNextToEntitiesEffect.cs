@@ -11,7 +11,7 @@ namespace GameLogic{
 
     namespace GameEffect{
 //TODO
-        public class EntityGivesAtkBuffWhenNextToEntitiesEffect : EntityEffect, AffectsEntitiesInterface, AffectsTilesInterface, GivesTempEntityBuffInterface{
+        public class EntityGivesAtkBuffWhenNextToEntitiesEffect : EntityEffect, AffectsEntitiesInterface, AffectsTilesInterface, GivesTempBuffInterface{
             public int amount{
                 get;
                 private set;
@@ -20,13 +20,13 @@ namespace GameLogic{
             private List<Entity> entitiesAffected;
             private List<Tile> tilesAffected;
 
-            private List<EntityBuff> tempBuffs;
+            private List<Buff> tempBuffs;
 
             public EntityGivesAtkBuffWhenNextToEntitiesEffect(int amount, Entity entity, bool displayOnUI = true) : base(entity, displayOnUI)
             {
                 this.amount = amount;
 
-                tempBuffs = new List<EntityBuff>
+                tempBuffs = new List<Buff>
                 {
                     new AtkBuff(amount, id.ToString())
                 };
@@ -80,7 +80,7 @@ namespace GameLogic{
                 }
             }
             
-            public void UpdateTempEntityBuffs()
+            public void UpdateTempBuffs()
             {
                 
             }
@@ -100,11 +100,13 @@ namespace GameLogic{
                 return tilesAffected;
             }
 
-            public List<EntityBuff> GetTempEntityBuffs()
+            public List<Buff> GetTempBuffs()
             {
                 return tempBuffs;
             }
 
+
+            //Not necessary
             public override bool CheckTriggerToUpdateEntitiesAffected(Action action)
             {
                 switch (action)
@@ -120,6 +122,11 @@ namespace GameLogic{
                 return false;
             }
 
+            public override System.Type[] ActionTypeTriggersToUpdateEntitiesAffected()
+            {
+                return new Type[3]{typeof(PlayerSpawnEntityAction), typeof(EntityMoveAction), typeof(EntityDieAction)};
+            }
+
             public bool CheckTriggerToUpdateTilesAffected(Action action)
             {
                 switch (action)
@@ -133,11 +140,21 @@ namespace GameLogic{
                 }
 
                 return false;
-            } 
+            }
 
-            public bool CheckTriggerToUpdateTempEntityBuffs(Action action)
+            public Type[] ActionTypeTriggersToUpdateTilesAffected()
+            {
+                return new Type[3]{typeof(PlayerSpawnEntityAction), typeof(EntityMoveAction), typeof(EntityDieAction)};
+            }
+
+            public bool CheckTriggerToUpdateTempBuffs(Action action)
             {
                 return false;
+            }
+
+            public Type[] ActionTypeTriggersToUpdateTempBuffs()
+            {
+                return null;
             }
         }
     }

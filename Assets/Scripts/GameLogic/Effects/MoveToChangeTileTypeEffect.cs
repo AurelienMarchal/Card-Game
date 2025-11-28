@@ -42,10 +42,16 @@ namespace GameLogic{
                     default : return false;
                 }
             }
+            public System.Type[] ActionTypeTriggersToActivate()
+            {
+                return new System.Type[1]{typeof(EntityMoveAction)};
+            }
 
             public override string GetEffectText(){
                 return $"Every time {associatedEntity} moves, the tile under it is transformed into a {tileType.ToTileString()}";
             }
+
+            
         }
     }
 }

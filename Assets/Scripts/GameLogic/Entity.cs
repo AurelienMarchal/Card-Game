@@ -143,9 +143,9 @@ namespace GameLogic{
             protected set;
         }
 
-        public List<EntityBuff> buffs{
+        public List<Buff> buffs{
             get{
-                var dynamicList = new List<EntityBuff>();
+                var dynamicList = new List<Buff>();
                 if(tempBuffs != null){
                     dynamicList.AddRange(tempBuffs);
                 }
@@ -156,12 +156,12 @@ namespace GameLogic{
             }
         }
 
-        protected List<EntityBuff> tempBuffs{
+        protected List<Buff> tempBuffs{
             get;
             private set;
         }
 
-        protected List<EntityBuff> permanentBuffs{
+        protected List<Buff> permanentBuffs{
             get;
             private set;
         }
@@ -198,8 +198,8 @@ namespace GameLogic{
             costToMove = new Cost(baseCostToMove.heartCost, baseCostToMove.mouvementCost, baseCostToMove.manaCost);
 
             effects = new List<EntityEffect>();
-            tempBuffs = new List<EntityBuff>();
-            permanentBuffs = new List<EntityBuff>();
+            tempBuffs = new List<Buff>();
+            permanentBuffs = new List<Buff>();
             AddDefaultPermanentEffects();
         }
 
@@ -217,7 +217,8 @@ namespace GameLogic{
                 currentTile = tile;
             }
         }
-
+        
+        //To Remove
         public virtual bool TryToCreateEntityMoveAction(Tile tile, Action requiredAction, out EntityMoveAction entityMoveAction)
         {
             var newdirection = DirectionsExtensions.FromCoordinateDifference(tile.gridX - currentTile.gridX, tile.gridY - currentTile.gridY);
@@ -310,6 +311,7 @@ namespace GameLogic{
             currentTile = tile;
         }
 
+        //To Remove
         public virtual bool TryToCreateEntityChangeDirectionAction(Direction newDirection, Action requiredAction, out EntityChangeDirectionAction entityChangeDirectionAction){
             entityChangeDirectionAction = new EntityChangeDirectionAction(this, newDirection, requiredAction);
             var result = CanChangeDirection(newDirection);
@@ -369,6 +371,7 @@ namespace GameLogic{
             currentTile = tile;
         }
 
+        //To Remove
         public bool TryToCreateEntityAttackAction(Entity entity,  out EntityAttackAction entityAttackAction, Action requiredAction = null){
             var newdirection = DirectionsExtensions.FromCoordinateDifference(entity.currentTile.gridX - currentTile.gridX, entity.currentTile.gridY - currentTile.gridY);
             TryToCreateEntityChangeDirectionAction(newdirection, requiredAction, out EntityChangeDirectionAction entityChangeDirectionAction);
@@ -496,6 +499,7 @@ namespace GameLogic{
             return CanPayHeartCost(cost.heartCost) && CanUseMovement(cost.mouvementCost);
         }
 
+        //To Remove
         public bool TryToCreateEntityUseMovementAction(int movement,  out EntityUseMovementAction entityUseMovementAction, Action requiredAction = null){
             entityUseMovementAction = new EntityUseMovementAction(movement, this, requiredAction);
             var canUseMovement = CanUseMovement(movement);
@@ -522,6 +526,7 @@ namespace GameLogic{
             movementLeft = Math.Clamp(movementLeft - movement, 0, maxMovement);
         }
 
+        //To Remove
         public virtual bool TryToCreateEntityPayHeartCostAction(HeartType[] heartCost, out EntityPayHeartCostAction entityPayHeartCostAction, Action requiredAction = null){
             entityPayHeartCostAction = new EntityPayHeartCostAction(this, heartCost, requiredAction);
             var canPayHeartCost = CanPayHeartCost(heartCost);
@@ -730,26 +735,26 @@ namespace GameLogic{
         
         
 
-        public void AddPermanentBuff(EntityBuff entityBuff)
+        public void AddPermanentBuff(Buff Buff)
         {
-            permanentBuffs.Add(entityBuff);
+            permanentBuffs.Add(Buff);
         }
 
-        public void AddTempBuff(EntityBuff entityBuff)
+        public void AddTempBuff(Buff Buff)
         {
-            tempBuffs.Add(entityBuff);
+            tempBuffs.Add(Buff);
         }
         
-        public void AddTempBuffs(List<EntityBuff> entityBuffs)
+        public void AddTempBuffs(List<Buff> Buffs)
         {
-            tempBuffs.AddRange(entityBuffs);
+            tempBuffs.AddRange(Buffs);
         }
 
-        public void RemoveTempBuff(EntityBuff entityBuff)
+        public void RemoveTempBuff(Buff Buff)
         {
-            if (tempBuffs.Contains(entityBuff))
+            if (tempBuffs.Contains(Buff))
             {
-                tempBuffs.Remove(entityBuff);
+                tempBuffs.Remove(Buff);
             }
         }
 
@@ -797,7 +802,7 @@ namespace GameLogic{
 
         protected void AddDefaultPermanentEffects(){
             //EntityRestoreMovementAtTurnStart
-            effects.Add(new EntityDiesWhenHealthIsEmpty(this));
+            
             effects.Add(new EntityIsWeightedDownByStoneHeartEffect(this));
         }
 
@@ -806,7 +811,7 @@ namespace GameLogic{
             return $"Entity {name}";
         }
 
-        private int NumberOfBuffs<B>() where B : EntityBuff{
+        private int NumberOfBuffs<B>() where B : Buff{
             var count = 0;
             foreach(var buff in buffs){
                 if(buff is B b){

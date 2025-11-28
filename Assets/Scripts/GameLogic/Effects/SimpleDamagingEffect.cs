@@ -11,17 +11,17 @@ namespace GameLogic
     public class SimpleDamagingEffect : EntityEffect, AffectsTilesInterface, DealsDamageInterface, HasCostInterface, HasRangeInterface, CanBeActivatedInterface
     {
 
-        private Cost cost
+        private Cost baseCost
         {
             get; set;
         }
 
-        private Damage damage
+        private Damage baseDamage
         {
             get; set;
         }
 
-        private int range
+        private int baseRange
         {
             get; set;
         }
@@ -30,11 +30,11 @@ namespace GameLogic
 
         List<Entity> entitiesInRange;
 
-        public SimpleDamagingEffect(Entity entity, Cost cost, Damage damage, int range, bool displayOnUI = true) : base(entity, displayOnUI)
+        public SimpleDamagingEffect(Entity entity, Cost baseCost, Damage baseDamage, int baseRange, bool displayOnUI = true) : base(entity, displayOnUI)
         {
-            this.cost = cost;
-            this.damage = damage;
-            this.range = range;
+            this.baseCost = baseCost;
+            this.baseDamage = baseDamage;
+            this.baseRange = baseRange;
             tilesInRange = new List<Tile>();
             entitiesInRange = new List<Entity>();
         }
@@ -46,7 +46,7 @@ namespace GameLogic
             {
                 var entityHit = entitiesInRange[0];
                 var tileReached = entityHit.currentTile;
-                Game.currentGame.PileAction(new EntityTakeDamageAction(entityHit, damage));
+                Game.currentGame.PileAction(new EntityTakeDamageAction(entityHit, baseDamage));
             }
         }
 
@@ -57,7 +57,7 @@ namespace GameLogic
 
         public override string GetEffectText()
         {
-            return $"Deal {damage} with range {range}";
+            return $"Deal {GetDamage()} with baseRange {GetRange()}";
         }
 
         public override string GetEffectName()
@@ -70,10 +70,17 @@ namespace GameLogic
             return false;
         }
 
+        public System.Type[] ActionTypeTriggersToActivate()
+        {
+            return null;
+        }
+
         public bool CheckTriggerToUpdateTilesAffected(Action action)
         {
             switch (action)
             {
+                case StartGameAction startGameAction:
+                    return startGameAction.wasPerformed;
                 case PlayerSpawnEntityAction playerSpawnEntityAction:
                     return playerSpawnEntityAction.wasPerformed;
                 case EntityMoveAction entityMoveAction:
@@ -84,15 +91,22 @@ namespace GameLogic
 
             return false;
         }
-        
-        public override bool CheckTriggerToUpdateEntitiesAffected(Action action)
+
+        public System.Type[] ActionTypeTriggersToUpdateTilesAffected()
         {
-            return false;
+            return new System.Type[4]{typeof(PlayerSpawnEntityAction), typeof(EntityMoveAction), typeof(EntityDieAction), typeof(StartGameAction)};
         }
+        
+
 
         public bool CheckTriggerToUpdateCost(Action action)
         {
             return false;
+        }
+
+        public System.Type[] ActionTypeTriggersToUpdateCost()
+        {
+            return null;
         }
 
         public bool CheckTriggerToUpdateDamage(Action action)
@@ -100,24 +114,34 @@ namespace GameLogic
             return false;
         }
 
+        public System.Type[] ActionTypeTriggersToUpdateDamage()
+        {
+            return null;
+        }
+
         public bool CheckTriggerToUpdateRange(Action action)
         {
             return false;
         }
 
+        public System.Type[] ActionTypeTriggersToUpdateRange()
+        {
+            return null;
+        }
+
         public Cost GetCost()
         {
-            return cost;
+            return baseCost;
         }
 
         public Damage GetDamage()
         {
-            return damage;
+            return baseDamage;
         }
 
         public int GetRange()
         {
-            return range;
+            return baseRange;
         }
 
         public List<Tile> GetTilesAffected()
@@ -151,7 +175,7 @@ namespace GameLogic
             entitiesInRange.Clear();
 
             var nextTile = Game.currentGame.board.NextTileInDirection(associatedEntity.currentTile, associatedEntity.direction);
-            var entityRanged = Game.currentGame.board.GetFirstEntityInDirectionWithRange(nextTile, associatedEntity.direction, range, out Tile[] tilesRanged);
+            var entityRanged = Game.currentGame.board.GetFirstEntityInDirectionWithRange(nextTile, associatedEntity.direction, baseRange, out Tile[] tilesRanged);
             tilesInRange.AddRange(tilesRanged);
 
             if (entityRanged != Entity.noEntity)
@@ -159,10 +183,14 @@ namespace GameLogic
                 entitiesInRange.Add(entityRanged);
             }
         }
+
+        
         
         public override void UpdateEntitiesAffected()
         {
             
         }
+
+        
     }
 }
