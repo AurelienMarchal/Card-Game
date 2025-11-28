@@ -51,6 +51,11 @@ namespace GameLogic{
                     default : return false;
                 }
             }
+
+            public System.Type[] ActionTypeTriggersToActivate()
+            {
+                return new System.Type[1]{typeof(EntityMoveAction)};
+            }
         }
 
     }
