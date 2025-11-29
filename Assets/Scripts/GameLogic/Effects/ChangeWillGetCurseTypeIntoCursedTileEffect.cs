@@ -29,7 +29,7 @@ namespace GameLogic{
             {
                 switch(action){
                     case PlayerEndTurnAction playerEndTurnAction:
-                        return playerEndTurnAction.wasPerformed;
+                        return playerEndTurnAction.wasPerformed && associatedTile != Tile.noTile && associatedTile.tileType == TileType.WillGetCursed;
 
                     default : return false;
                 }

@@ -24,7 +24,9 @@ namespace GameLogic
                 )
             )
         {
-            entity.AddEffect(new EntityGivesAtkBuffWhenNextToEntitiesEffect(2, entity));
+
+            //TODO
+            //entity.AddEffect(new EntityGivesAtkBuffWhenNextToEntitiesEffect(2, entity));
         }
 
 

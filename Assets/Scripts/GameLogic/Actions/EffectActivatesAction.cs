@@ -7,8 +7,6 @@ namespace GameLogic{
         public class EffectActivatesAction : EffectAction
         {
 
-            //Targets
-
             public EffectActivatesAction(Effect effect, Action requiredAction = null) : base(effect, requiredAction)
             {
             }

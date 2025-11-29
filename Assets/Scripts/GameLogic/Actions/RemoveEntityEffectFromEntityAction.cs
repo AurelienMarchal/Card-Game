@@ -19,10 +19,7 @@ namespace GameLogic{
 
             protected override bool Perform()
             {
-                if(entity.effects.Contains(effect)){
-                    entity.RemoveEffect(effect);
-                    return true;
-                }
+                //TODO
 
                 return false;
             }

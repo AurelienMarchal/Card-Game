@@ -33,7 +33,7 @@ namespace GameLogic{
                 switch (action)
                 {
                     case PlayerStartTurnAction playerStartTurnAction:
-                        return playerStartTurnAction.wasPerformed;
+                        return associatedTile != Tile.noTile && associatedTile.tileType == TileType.CurseSource && playerStartTurnAction.wasPerformed;
                 }
 
                 return false;

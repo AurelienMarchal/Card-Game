@@ -138,11 +138,6 @@ namespace GameLogic{
         public const Entity noEntity = null;
         public const int maxMovementCap = 10;
 
-        public List<EntityEffect> effects{
-            get;
-            protected set;
-        }
-
         public List<Buff> buffs{
             get{
                 var dynamicList = new List<Buff>();
@@ -197,10 +192,9 @@ namespace GameLogic{
             this.baseCostToMove = baseCostToMove;
             costToMove = new Cost(baseCostToMove.heartCost, baseCostToMove.mouvementCost, baseCostToMove.manaCost);
 
-            effects = new List<EntityEffect>();
             tempBuffs = new List<Buff>();
             permanentBuffs = new List<Buff>();
-            AddDefaultPermanentEffects();
+            
         }
 
         [Obsolete]
@@ -781,31 +775,6 @@ namespace GameLogic{
         }
 
 
-        public void AddEffect(EntityEffect entityEffect)
-        {
-            effects.Add(entityEffect);
-            //UpdateTempBuffsAccordingToEffects();
-        }
-
-        public void RemoveEffect(EntityEffect entityEffect){
-            if(effects.Contains(entityEffect)){
-                effects.Remove(entityEffect);
-                //UpdateTempBuffsAccordingToEffects();
-            }
-        }
-
-        public void AddEffectList(List<EntityEffect> entityEffects){
-            foreach (var effect in entityEffects){
-                AddEffect(effect);
-            }
-        }
-
-        protected void AddDefaultPermanentEffects(){
-            //EntityRestoreMovementAtTurnStart
-            
-            effects.Add(new EntityIsWeightedDownByStoneHeartEffect(this));
-        }
-
         public override string ToString()
         {
             return $"Entity {name}";
@@ -849,11 +818,6 @@ namespace GameLogic{
 
             entityState.effectStates = new List<EffectState>();
             entityState.buffStates = new List<BuffState>();
-
-            foreach (Effect effect in effects)
-            {
-                entityState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
-            }
 
             foreach (Buff buff in buffs){
                 entityState.buffStates.Add(buff.ToBuffState());

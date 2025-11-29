@@ -26,14 +26,10 @@ namespace GameLogic{
             private set;
         }
 
-        public List<Effect> effects{
-            get;
-            protected set;
-        }
-
         private List<Entity> entities_;
 
-        //temp
+        //TEMP
+        //TO REMOVE !! 
         public List<Entity> entities {
             get {
                 entities_.Clear();
@@ -59,8 +55,6 @@ namespace GameLogic{
             entities_ = new List<Entity>();
 
             tiles = new Tile[gridHeight * gridWidth];
-            effects = new List<Effect>();
-            SetupPermanentEffects();
 
             for(var i = 0; i < gridWidth; i++){
                 for(var j = 0; j < gridHeight; j++){
@@ -268,12 +262,6 @@ namespace GameLogic{
 
             return toReturn;
         }
-
-        private void SetupPermanentEffects()
-        {
-
-        }
-
 
         public BoardState ToBoardState(){
             BoardState boardState = new BoardState();

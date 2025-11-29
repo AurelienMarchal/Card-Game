@@ -50,11 +50,6 @@ namespace GameLogic{
             private set;
         }
 
-        public List<Effect> effects{
-            get;
-            protected set;
-        }
-
         public Player(uint num, uint[] deckList, System.Random random){
             //temp
             maxMana = 0;
@@ -64,8 +59,6 @@ namespace GameLogic{
             deck = new Deck(deckList, this, random);
             hand = new Hand(this);
             entities = new List<Entity>();
-            effects = new List<Effect>();
-            SetupPermanentEffects();
         }
 
 
@@ -91,6 +84,7 @@ namespace GameLogic{
             maxMana = Math.Clamp(maxMana+1, 0, maxManaCap);
         }
         
+        //To remove
         public bool TryToCreatePlayerUseManaAction(int mana, out PlayerUseManaAction useManaAction){
             useManaAction = new PlayerUseManaAction(this, mana);
             var canUseMana =  CanUseMana(mana);
@@ -124,6 +118,7 @@ namespace GameLogic{
             Debug.Log($"{this} using {mana} mana. {manaLeft} mana left");
         }
 
+        //To remove
         public bool TryToCreatePlayerPlayCardAction(Card card, out PlayerPlayCardAction playerPlayCardAction, Action costAction, Tile targetTile = null, Entity targetEntity = null)
         {
 
@@ -147,6 +142,8 @@ namespace GameLogic{
             return card.TryToActivate(targetTile, targetEntity);
         }
         
+
+        //To remove
         public bool TryToCreateSpawnEntityAction(Entity entity, Tile startingTile, out PlayerSpawnEntityAction playerSpawnEntityAction, Action requiredAction = null)
         {
             playerSpawnEntityAction = new PlayerSpawnEntityAction(this, entity, startingTile, requiredAction);
@@ -158,8 +155,6 @@ namespace GameLogic{
 
             return canSpawnEntityAt;
         }
-
-        
 
         public bool TryToSpawnEntity(Entity entity)
         {
@@ -207,14 +202,6 @@ namespace GameLogic{
             return deck.CanDraw();
         }
 
-        private void SetupPermanentEffects()
-        {   
-            effects.Add(new PlayerResetManaAtTurnStartPlayerEffect(this));
-            effects.Add(new PlayerIncreaseMaxManaAtTurnStartPlayerEffect(this));
-            
-            effects.Add(new DrawCardAtTurnStartPlayerEffect(this));
-        }
-
         public override string ToString(){
             return $"Player {playerNum}";
         }
@@ -237,9 +224,6 @@ namespace GameLogic{
             playerState.maxManaCap = maxManaCap;
 
             playerState.effectStates = new List<EffectState>();
-            foreach (Effect effect in effects){
-                playerState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
-            }
 
 
             return playerState;

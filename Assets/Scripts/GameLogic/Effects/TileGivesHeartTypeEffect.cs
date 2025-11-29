@@ -42,7 +42,7 @@ namespace GameLogic{
             {
                 switch(action){
                     case EntityMoveAction entityMoveAction:
-                            var condition = entityMoveAction.wasPerformed && entityMoveAction.endTile == associatedTile;
+                            var condition = entityMoveAction.wasPerformed && entityMoveAction.endTile == associatedTile && associatedTile != Tile.noTile && associatedTile.tileType == tileType;
                             if(condition){
                                 entityThatJustWalkedOnTop = entityMoveAction.entity;
                             }

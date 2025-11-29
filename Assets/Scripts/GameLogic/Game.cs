@@ -11,7 +11,6 @@ namespace GameLogic{
     using GameAction;
     using UserAction;
     using GameState;
-    
 
     public sealed class Game{
 
@@ -42,20 +41,68 @@ namespace GameLogic{
             private set;
         }
 
-        //Holds every effect
-        public List<Effect> effects{
-            get;
-            private set;
-        }
-
         //Dict Effect by effect id
-        public Dictionary<Guid, List<Effect>> effectsById{
+        public Dictionary<Guid, Effect> effectsById{
             get;
             private set;
         }
 
-        //Dict Effect by effect triggers
-        public Dictionary<Type, List<Effect>> effectsThatCanBeActivated{
+        public Dictionary<Type, List<CanBeActivatedInterface>> canActivateByTriggerEffects{
+            get;
+            private set;
+        }
+
+        //------- Effects by Interface -------
+
+        public Dictionary<Type, List<AffectsEntitiesInterface>> canUpdateEntitiesAffectedByTriggerEffects{
+            get;
+            private set;
+        }
+
+        public Dictionary<Type, List<AffectsTilesInterface>> canUpdateTilesAffectedByTriggerEffects{
+            get;
+            private set;
+        }
+
+        public Dictionary<Type, List<GivesTempBuffInterface>> canUpdateTempBuffsByTriggerEffects{
+            get;
+            private set;
+        }
+
+        public Dictionary<Type, List<DealsDamageInterface>> canUpdateDamageByTriggerEffects{
+            get;
+            private set;
+        }
+
+        public Dictionary<Type, List<HasRangeInterface>> canUpdateRangeByTriggerEffects{
+            get;
+            private set;
+        }
+
+        public Dictionary<Type, List<HasCostInterface>> canUpdateCostByTriggerEffects{
+            get;
+            private set;
+        }
+
+        //------- Effects by Game Object -------
+
+        public Dictionary<Entity, List<EntityEffect>> entityEffects{
+            get;
+            private set;
+        }
+
+        public Dictionary<Player, List<PlayerEffect>> playerEffects{
+            get;
+            private set;
+        }
+
+        public Dictionary<Tile, List<TileEffect>> tilesEffects{
+            get;
+            private set;
+        }
+
+        public List<BoardEffect> boardEffects
+        {
             get;
             private set;
         }
@@ -104,17 +151,39 @@ namespace GameLogic{
             board = new Board(boardHeight, boardWidth);
             players = new Player[numberOfPlayer];
             actionPile = new List<Action>();
+
+
+            effectsById = new Dictionary<Guid, Effect>();
+
+            entityEffects = new Dictionary<Entity, List<EntityEffect>>();
+            playerEffects = new Dictionary<Player, List<PlayerEffect>>();
+            tilesEffects = new Dictionary<Tile, List<TileEffect>>();
+            boardEffects = new List<BoardEffect>();
+
+            canActivateByTriggerEffects = new Dictionary<Type, List<CanBeActivatedInterface>>();
+            canUpdateEntitiesAffectedByTriggerEffects = new Dictionary<Type, List<AffectsEntitiesInterface>>();
+            canUpdateTilesAffectedByTriggerEffects = new Dictionary<Type, List<AffectsTilesInterface>>();
+            canUpdateTempBuffsByTriggerEffects = new Dictionary<Type, List<GivesTempBuffInterface>>();
+            canUpdateDamageByTriggerEffects = new Dictionary<Type, List<DealsDamageInterface>>();
+            canUpdateRangeByTriggerEffects = new Dictionary<Type, List<HasRangeInterface>>();
+            canUpdateCostByTriggerEffects = new Dictionary<Type, List<HasCostInterface>>();
             
             //depiledActionQueue = new List<Action>();
             actionStatesToSendQueue = new List<ActionState>();
             random = new System.Random(0);
-            effects = new List<Effect>();
-            SetupPermanentEffects();
+            
+
+
+            
             depileStarted = false;
             for (uint i = 0; i < numberOfPlayer; i++)
             {
                 players[i] = new Player(i, new uint[]{0, 0, 0, 0, 0, 1, 2}, random);
             }
+
+            SetupPermanentGameEffects();
+            SetupPermanentPlayerEffects();
+            SetupPermanentBoardEffects();
         }
 
         public void StartGame(){
@@ -400,16 +469,15 @@ namespace GameLogic{
 
             Debug.Log($"Trying to activate effect {activateEntityEffectUserAction.effectId} of entity {entity}");
 
-            EntityEffect foundEffect = null;
+            Effect foundEffect = null;
 
             //temp
-            foreach (var entityEffect in entity.effects)
+            var guid = new Guid(activateEntityEffectUserAction.effectId);
+
+            if (effectsById.ContainsKey(guid))
             {
-                if (entityEffect.id.ToString() == activateEntityEffectUserAction.effectId)
-                {
-                    foundEffect = entityEffect;
-                    break;
-                }
+                //Hum
+                foundEffect = effectsById[guid];
             }
 
             if (foundEffect == null)
@@ -522,6 +590,7 @@ namespace GameLogic{
                     if (wasPerformed)
                     {
                         Debug.Log($"{action} was performed");
+                        CheckForEffectsToAdd(action);
                     }
                     else
                     {
@@ -575,40 +644,115 @@ namespace GameLogic{
 
         void CheckTriggers(Action action){
 
+            Type actionType = action.GetType();
 
+            if (canActivateByTriggerEffects.ContainsKey(actionType)){
+                List<CanBeActivatedInterface> canActivateByActionTypeTriggerEffects = canActivateByTriggerEffects[actionType];
 
-            foreach (Effect effect in currentGame.effects)
-            {
-                CheckTriggers(effect, action);
-            }
-
-            foreach(Effect effect in currentGame.board.effects){
-                CheckTriggers(effect, action);
-            }
-            
-            foreach(Tile tile in currentGame.board.tiles){
-                foreach(Effect effect in tile.effects){
-                    CheckTriggers(effect, action);
-                }
-            }
-
-            foreach (Player player in players)
-            {
-                foreach (Effect effect in player.effects)
+                foreach (var canActivateByActionTypeTriggerEffect in canActivateByActionTypeTriggerEffects)
                 {
-                    CheckTriggers(effect, action);
-                }
-
-                foreach (Entity entity in player.entities)
-                {
-                    foreach (Effect effect in entity.effects)
+                    if (canActivateByActionTypeTriggerEffect.CheckTriggerToActivate(action))
                     {
-                        CheckTriggers(effect, action);
+                        //hum
+                        PileAction(new EffectActivatesAction((Effect)canActivateByActionTypeTriggerEffect, action));
                     }
                 }
+
             }
+
+            if (canUpdateEntitiesAffectedByTriggerEffects.ContainsKey(actionType)){
+                List<AffectsEntitiesInterface> canUpdateEntitiesAffectedByActionTypeTriggerEffects = canUpdateEntitiesAffectedByTriggerEffects[actionType];
+
+                foreach (var canUpdateEntitiesAffectedByActionTypeTriggerEffect in canUpdateEntitiesAffectedByActionTypeTriggerEffects)
+                {
+                    if (canUpdateEntitiesAffectedByActionTypeTriggerEffect.CheckTriggerToUpdateEntitiesAffected(action))
+                    {
+                        //hum
+                        PileAction(new EffectUpdatesEntitiesAffectedAction((Effect)canUpdateEntitiesAffectedByActionTypeTriggerEffect, action));
+                    }
+                }
+
+            }
+
+            if (canUpdateTilesAffectedByTriggerEffects.ContainsKey(actionType)){
+                List<AffectsTilesInterface> canUpdateTilesAffectedByActionTypeTriggerEffects = canUpdateTilesAffectedByTriggerEffects[actionType];
+
+                foreach (var canUpdateTilesAffectedByActionTypeTriggerEffect in canUpdateTilesAffectedByActionTypeTriggerEffects)
+                {
+                    if (canUpdateTilesAffectedByActionTypeTriggerEffect.CheckTriggerToUpdateTilesAffected(action))
+                    {
+                        //hum
+                        PileAction(new EffectUpdatesTilesAffectedAction((Effect)canUpdateTilesAffectedByActionTypeTriggerEffect, action));
+                    }
+                }
+
+            }
+
+            if (canUpdateTempBuffsByTriggerEffects.ContainsKey(actionType)){
+                List<GivesTempBuffInterface> canUpdateTempBuffsByActionTypeTriggerEffects = canUpdateTempBuffsByTriggerEffects[actionType];
+
+                foreach (var canUpdateTempBuffsByActionTypeTriggerEffect in canUpdateTempBuffsByActionTypeTriggerEffects)
+                {
+                    if (canUpdateTempBuffsByActionTypeTriggerEffect.CheckTriggerToUpdateTempBuffs(action))
+                    {
+                        //hum
+                        PileAction(new EffectUpdatesTempBuffsAction((Effect)canUpdateTempBuffsByActionTypeTriggerEffect, action));
+                    }
+                }
+
+            }
+
+            if (canUpdateDamageByTriggerEffects.ContainsKey(actionType)){
+                List<DealsDamageInterface> canUpdateDamageByActionTypeTriggerEffects = canUpdateDamageByTriggerEffects[actionType];
+
+                foreach (var canUpdateDamageByActionTypeTriggerEffect in canUpdateDamageByActionTypeTriggerEffects)
+                {
+                    if (canUpdateDamageByActionTypeTriggerEffect.CheckTriggerToUpdateDamage(action))
+                    {
+                        //hum
+                        //PileAction(new EffectUpdateDamage((Effect)canUpdateDamageByActionTypeTriggerEffect, action));
+                    }
+                }
+
+            }
+
+            if (canUpdateRangeByTriggerEffects.ContainsKey(actionType)){
+                List<HasRangeInterface> canUpdateRangeByActionTypeTriggerEffects = canUpdateRangeByTriggerEffects[actionType];
+
+                foreach (var canUpdateRangeByActionTypeTriggerEffect in canUpdateRangeByActionTypeTriggerEffects)
+                {
+                    if (canUpdateRangeByActionTypeTriggerEffect.CheckTriggerToUpdateRange(action))
+                    {
+                        //hum
+                        //PileAction(new EffectUpdateRange((Effect)canUpdateRangeByActionTypeTriggerEffect, action));
+                    }
+                }
+
+            }
+
+            if (canUpdateCostByTriggerEffects.ContainsKey(actionType)){
+                List<HasCostInterface> canUpdateCostByActionTypeTriggerEffects = canUpdateCostByTriggerEffects[actionType];
+
+                foreach (var canUpdateCostByActionTypeTriggerEffect in canUpdateCostByActionTypeTriggerEffects)
+                {
+                    if (canUpdateCostByActionTypeTriggerEffect.CheckTriggerToUpdateCost(action))
+                    {
+                        //hum
+                        //PileAction(new EffectUpdateCost((Effect)canUpdateCostByActionTypeTriggerEffect, action));
+                    }
+                }
+
+            }
+
+            /*
+            foreach (Effect effect in currentGame.effectsById.Values)
+            {
+                CheckTriggers(effect, action);
+            }
+            */
         }
 
+        [Obsolete]
         void CheckTriggers(Effect effect, Action action)
         {
 
@@ -685,36 +829,224 @@ namespace GameLogic{
 
         }
 
+        private void CheckForEffectsToAdd(Action action)
+        {
+            switch (action)
+            {
+                case PlayerSpawnEntityAction playerSpawnEntityAction:
+                    SetupPermanentEntityEffects(playerSpawnEntityAction.entity);
+                    break;
+
+                //case AddEffectAction
+                
+            }
+        }
+
         public void AddEffect(Effect effect)
         {
-            effects.Add(effect);
-            if(effect is CanBeActivatedInterface canBeActivatedEffect)
+            if (effectsById.ContainsKey(effect.id))
             {
-                var actionTypeTriggersToActivate = canBeActivatedEffect.ActionTypeTriggersToActivate();
+                return;
+            }
+
+            effectsById.Add(effect.id, effect);
+
+            if(effect is CanBeActivatedInterface canBeActivatedByTriggerEffect)
+            {
+                var actionTypeTriggersToActivate = canBeActivatedByTriggerEffect.ActionTypeTriggersToActivate();
                 if(actionTypeTriggersToActivate != null)
                 {
-                        foreach (var actionTypeTrigger in actionTypeTriggersToActivate)
+                    foreach (var actionTypeTrigger in actionTypeTriggersToActivate)
                     {
-                        if (!effectsThatCanBeActivated.ContainsKey(actionTypeTrigger))
+                        if (!canActivateByTriggerEffects.ContainsKey(actionTypeTrigger))
                         {
-                            effectsThatCanBeActivated.Add(actionTypeTrigger, new List<Effect>());
+                            canActivateByTriggerEffects.Add(actionTypeTrigger, new List<CanBeActivatedInterface>());
                         }
-                        effectsThatCanBeActivated[actionTypeTrigger].Add(effect);
+                        canActivateByTriggerEffects[actionTypeTrigger].Add(canBeActivatedByTriggerEffect);
                     }
                 }
             }
 
-            //Same with the rest
+            if(effect is AffectsEntitiesInterface canUpdateEntitiesAffectedByTriggerEffect)
+            {
+                var actionTypeTriggersToActivate = canUpdateEntitiesAffectedByTriggerEffect.ActionTypeTriggersToUpdateEntitiesAffected();
+                if(actionTypeTriggersToActivate != null)
+                {
+                    foreach (var actionTypeTrigger in actionTypeTriggersToActivate)
+                    {
+                        if (!canUpdateEntitiesAffectedByTriggerEffects.ContainsKey(actionTypeTrigger))
+                        {
+                            canUpdateEntitiesAffectedByTriggerEffects.Add(actionTypeTrigger, new List<AffectsEntitiesInterface>());
+                        }
+                        canUpdateEntitiesAffectedByTriggerEffects[actionTypeTrigger].Add(canUpdateEntitiesAffectedByTriggerEffect);
+                    }
+                }
+            }
+
+            if(effect is AffectsTilesInterface canUpdateTilesAffectedByTriggerEffect)
+            {
+                var actionTypeTriggersToActivate = canUpdateTilesAffectedByTriggerEffect.ActionTypeTriggersToUpdateTilesAffected();
+                if(actionTypeTriggersToActivate != null)
+                {
+                    foreach (var actionTypeTrigger in actionTypeTriggersToActivate)
+                    {
+                        if (!canUpdateTilesAffectedByTriggerEffects.ContainsKey(actionTypeTrigger))
+                        {
+                            canUpdateTilesAffectedByTriggerEffects.Add(actionTypeTrigger, new List<AffectsTilesInterface>());
+                        }
+                        canUpdateTilesAffectedByTriggerEffects[actionTypeTrigger].Add(canUpdateTilesAffectedByTriggerEffect);
+                    }
+                }
+            }
+
+            if(effect is GivesTempBuffInterface canUpdateTempBuffsByTriggerEffect)
+            {
+                var actionTypeTriggersToActivate = canUpdateTempBuffsByTriggerEffect.ActionTypeTriggersToUpdateTempBuffs();
+                if(actionTypeTriggersToActivate != null)
+                {
+                    foreach (var actionTypeTrigger in actionTypeTriggersToActivate)
+                    {
+                        if (!canUpdateTempBuffsByTriggerEffects.ContainsKey(actionTypeTrigger))
+                        {
+                            canUpdateTempBuffsByTriggerEffects.Add(actionTypeTrigger, new List<GivesTempBuffInterface>());
+                        }
+                        canUpdateTempBuffsByTriggerEffects[actionTypeTrigger].Add(canUpdateTempBuffsByTriggerEffect);
+                    }
+                }
+            }
+
+            if(effect is DealsDamageInterface canUpdateDamageByTriggerEffect)
+            {
+                var actionTypeTriggersToActivate = canUpdateDamageByTriggerEffect.ActionTypeTriggersToUpdateDamage();
+                if(actionTypeTriggersToActivate != null)
+                {
+                    foreach (var actionTypeTrigger in actionTypeTriggersToActivate)
+                    {
+                        if (!canUpdateDamageByTriggerEffects.ContainsKey(actionTypeTrigger))
+                        {
+                            canUpdateDamageByTriggerEffects.Add(actionTypeTrigger, new List<DealsDamageInterface>());
+                        }
+                        canUpdateDamageByTriggerEffects[actionTypeTrigger].Add(canUpdateDamageByTriggerEffect);
+                    }
+                }
+            }
+
+            if(effect is HasRangeInterface canUpdateRangeByTriggerEffect)
+            {
+            var actionTypeTriggersToActivate = canUpdateRangeByTriggerEffect.ActionTypeTriggersToUpdateRange();
+                if(actionTypeTriggersToActivate != null)
+                {
+                    foreach (var actionTypeTrigger in actionTypeTriggersToActivate)
+                    {
+                        if (!canUpdateRangeByTriggerEffects.ContainsKey(actionTypeTrigger))
+                        {
+                            canUpdateRangeByTriggerEffects.Add(actionTypeTrigger, new List<HasRangeInterface>());
+                        }
+                        canUpdateRangeByTriggerEffects[actionTypeTrigger].Add(canUpdateRangeByTriggerEffect);
+                    }
+                }
+            }
+
+            if(effect is HasCostInterface canUpdateCostByTriggerEffect)
+            {
+            var actionTypeTriggersToActivate = canUpdateCostByTriggerEffect.ActionTypeTriggersToUpdateCost();
+                if(actionTypeTriggersToActivate != null)
+                {
+                    foreach (var actionTypeTrigger in actionTypeTriggersToActivate)
+                    {
+                        if (!canUpdateCostByTriggerEffects.ContainsKey(actionTypeTrigger))
+                        {
+                            canUpdateCostByTriggerEffects.Add(actionTypeTrigger, new List<HasCostInterface>());
+                        }
+                        canUpdateCostByTriggerEffects[actionTypeTrigger].Add(canUpdateCostByTriggerEffect);
+                    }
+                }
+            }
+        }
+
+        public void AddEffect(EntityEffect entityEffect)
+        {
+            if (!entityEffects.ContainsKey(entityEffect.associatedEntity))
+            {
+                entityEffects.Add(entityEffect.associatedEntity, new List<EntityEffect>());
+            }
+            entityEffects[entityEffect.associatedEntity].Add(entityEffect);
+            AddEffect((Effect)entityEffect);
+        }
+
+        public void AddEffect(PlayerEffect playerEffect)
+        {
+            AddEffect((Effect)playerEffect);
+            //TODO
+        }
+
+        public void AddEffect(BoardEffect boardEffect)
+        {
+            AddEffect((Effect)boardEffect);
+            //TODO
+        }
+
+        public void AddEffect(TileEffect tileEffect)
+        {
+            AddEffect((Effect)tileEffect);
+            //TODO
         }
 
         public void RemoveEffect(Effect effect)
         {
-            effects.Remove(effect);
+            if (effectsById.ContainsKey(effect.id))
+            {
+                effectsById.Remove(effect.id);
+            }
+
+            //Remove everywhere
         }
 
-        private void SetupPermanentEffects()
+        private void SetupPermanentGameEffects()
         {
-            effects.Add(new EntityDiesWhenHealthIsEmpty());
+            AddEffect(new EntityDiesWhenHealthIsEmpty());
+        }
+
+        private void SetupPermanentPlayerEffects()
+        {
+            foreach (var player in players)
+            {
+                SetupPermanentPlayerEffects(player);
+            }
+        }
+
+        private void SetupPermanentPlayerEffects(Player player)
+        {   
+            AddEffect(new PlayerResetManaAtTurnStartPlayerEffect(player));
+            AddEffect(new PlayerIncreaseMaxManaAtTurnStartPlayerEffect(player));
+            AddEffect(new DrawCardAtTurnStartPlayerEffect(player));
+            foreach (var entity in player.entities)
+            {
+                SetupPermanentEntityEffects(entity);
+            }
+        }
+
+        private void SetupPermanentEntityEffects(Entity entity)
+        {
+            AddEffect(new EntityIsWeightedDownByStoneHeartEffect(entity));
+        }
+
+        private void SetupPermanentBoardEffects()
+        {
+            
+            foreach (var tile in board.tiles)
+            {
+                SetupPermanentTileEffects(tile);
+            }
+        }
+
+        private void SetupPermanentTileEffects(Tile tile)
+        {
+            AddEffect(new PickNextCursedTileOnStartPlayerTurnTileEffect(tile));
+            AddEffect(new ChangeWillGetCurseTypeIntoCursedTileEffect(tile));
+            AddEffect(new CurseTileGivesCurseHeartEffect(tile));
+            AddEffect(new CurseSourceTileGivesCurseHeartEffect(tile));
+            AddEffect(new NatureTileGivesNatureHeartEffect(tile));
         }
 
 
@@ -740,9 +1072,9 @@ namespace GameLogic{
             }
 
             gameState.effectStates = new List<EffectState>();
-            foreach (Effect effect in effects)
+            foreach (Effect effect in effectsById.Values)
             {
-                //gameState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
+                gameState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
             }
 
 
