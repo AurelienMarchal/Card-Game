@@ -49,6 +49,11 @@ namespace GameLogic{
             {
                 return "No Effect";
             }
+
+            public override string ToString()
+            {
+                return $"{GetType()}: (name : {GetEffectName()}, text: {GetEffectText()})";
+            }
         }
     }
 }

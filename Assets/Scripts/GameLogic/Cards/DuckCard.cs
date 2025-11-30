@@ -2,6 +2,7 @@
 
 namespace GameLogic
 {
+    using System.Collections.Generic;
     using GameEffect;
     public class DuckCard : EntityCard
     {
@@ -38,6 +39,11 @@ namespace GameLogic
         public override string GetText()
         {
             return "Coin coin";
+        }
+
+        public override List<Effect> GetEffects()
+        {
+            return new List<Effect>{new EntityGivesAtkBuffWhenNextToEntitiesEffect(2, entity)};
         }
     }
     

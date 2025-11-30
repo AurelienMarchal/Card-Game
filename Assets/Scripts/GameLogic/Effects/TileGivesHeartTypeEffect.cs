@@ -30,6 +30,7 @@ namespace GameLogic{
 
             public bool CanBeActivated(){
                 return associatedTile != Tile.noTile && associatedTile.tileType == tileType && entityThatJustWalkedOnTop != Entity.noEntity;
+
             }
 
             void CanBeActivatedInterface.Activate()

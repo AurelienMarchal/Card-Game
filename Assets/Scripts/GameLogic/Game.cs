@@ -837,11 +837,17 @@ namespace GameLogic{
                     SetupPermanentEntityEffects(playerSpawnEntityAction.entity);
                     break;
 
+                //Maybe add effects when adding cards to the deck
+                case PlayerPlayCardAction playerPlayCardAction:
+                    
+                    AddEffects(playerPlayCardAction.card.GetEffects());
+                    break;
+
                 //case AddEffectAction
                 
             }
         }
-
+        
         public void AddEffect(Effect effect)
         {
             if (effectsById.ContainsKey(effect.id))
@@ -850,6 +856,8 @@ namespace GameLogic{
             }
 
             effectsById.Add(effect.id, effect);
+
+            
 
             if(effect is CanBeActivatedInterface canBeActivatedByTriggerEffect)
             {
@@ -964,8 +972,42 @@ namespace GameLogic{
             }
         }
 
+        public void AddEffects(List<Effect> effects)
+        {
+            if(effects == null)
+            {
+                return;
+            }
+
+            foreach (var effect in effects)
+            {
+                switch (effect)
+                {
+                    
+                    case PlayerEffect playerEffect:
+                        AddEffect(playerEffect);
+                        break;
+                    case EntityEffect entityEffect:
+                        AddEffect(entityEffect);
+                        break;
+                    case BoardEffect boardEffect:
+                        AddEffect(boardEffect);
+                        break;
+                    case TileEffect tileEffect:
+                        AddEffect(tileEffect);
+                        break;
+                    default:
+                        AddEffect(effect);
+                        break;
+                }
+                
+            }
+        }
+
         public void AddEffect(EntityEffect entityEffect)
         {
+            //Debug.Log($"Adding Entity Effect : {entityEffect}");
+
             if (!entityEffects.ContainsKey(entityEffect.associatedEntity))
             {
                 entityEffects.Add(entityEffect.associatedEntity, new List<EntityEffect>());
@@ -1020,13 +1062,9 @@ namespace GameLogic{
             AddEffect(new PlayerResetManaAtTurnStartPlayerEffect(player));
             AddEffect(new PlayerIncreaseMaxManaAtTurnStartPlayerEffect(player));
             AddEffect(new DrawCardAtTurnStartPlayerEffect(player));
-            foreach (var entity in player.entities)
-            {
-                SetupPermanentEntityEffects(entity);
-            }
         }
 
-        private void SetupPermanentEntityEffects(Entity entity)
+        public void SetupPermanentEntityEffects(Entity entity)
         {
             AddEffect(new EntityIsWeightedDownByStoneHeartEffect(entity));
         }
@@ -1075,6 +1113,45 @@ namespace GameLogic{
             foreach (Effect effect in effectsById.Values)
             {
                 gameState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
+            }
+
+            //Temp
+            foreach (var listEntityEffectsByEntity in entityEffects)
+            {
+                PlayerState playerStateFound = null;
+                foreach (PlayerState playerState in gameState.playerStates)
+                {
+                    if(playerState.playerNum == listEntityEffectsByEntity.Key.player.playerNum)
+                    {
+                        playerStateFound = playerState;
+                        break;
+                    }
+                }
+
+                if(playerStateFound == null)
+                {
+                    continue;
+                }
+
+                EntityState entityStateFound = null;
+
+                foreach (var entityState in playerStateFound.entityStates)
+                {
+                    if(entityState.num == listEntityEffectsByEntity.Key.num)
+                    {
+                        entityStateFound = entityState;
+                    }
+                }
+
+                if(entityStateFound == null)
+                {
+                    continue;
+                }
+
+                foreach (var entityEffect in listEntityEffectsByEntity.Value)
+                {
+                    entityStateFound.effectStates.Add(EffectStateGenerator.GenerateEffectState(entityEffect));
+                }
             }
 
 

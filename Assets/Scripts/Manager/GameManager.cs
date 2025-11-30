@@ -227,6 +227,7 @@ public class GameManager : MonoBehaviour
         hero1.num = 0;
         Game.currentGame.players[0].entities.Add(hero1);
         Game.currentGame.players[0].hero = hero1;
+        Game.currentGame.SetupPermanentEntityEffects(hero1);
 
         //playerManagers[0].player.TryToSpawnEntity(hero1);
 
@@ -252,6 +253,8 @@ public class GameManager : MonoBehaviour
         hero2.num = 0;
         Game.currentGame.players[1].entities.Add(hero2);
         Game.currentGame.players[1].hero = hero2;
+        Game.currentGame.SetupPermanentEntityEffects(hero2);
+        
 
 
         //playerManagers[1].player.TryToSpawnEntity(hero2);

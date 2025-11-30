@@ -66,6 +66,11 @@ namespace GameLogic{
             return "No name card";
         }
 
+        public virtual List<Effect> GetEffects()
+        {
+            return null;
+        }
+
         public bool TryToActivate(Tile targetTile = Tile.noTile, Entity targetEntity = Entity.noEntity){
             var canBeActivated = CanBeActivated(targetTile, targetEntity);
             
