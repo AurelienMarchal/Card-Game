@@ -38,6 +38,7 @@ namespace GameLogic{
                 turnLeft = turnNb;
                 range = explosionRange;
                 this.damage = damage;
+                entitiesInExplosionRange = new List<Entity>();
                 tilesInExplosionRange = new List<Tile>();
             }
 
@@ -66,6 +67,7 @@ namespace GameLogic{
                 foreach(Entity entity in entitiesInExplosionRange){
                     actions.Add(new EntityTakeDamageAction(entity, damage));
                 }
+
 
                 Game.currentGame.PileActions(actions.ToArray());
             }

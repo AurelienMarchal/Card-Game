@@ -30,7 +30,6 @@ public class ComplexAnimation {
         actions.RemoveAt(0);
     }
 
-
     private void ActionsFinished(){
         Debug.Log("Action finished");
     }

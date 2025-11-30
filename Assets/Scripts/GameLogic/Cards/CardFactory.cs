@@ -11,7 +11,7 @@ namespace GameLogic
             {
                 case 1 : return new HealTargetEntityCard(player);
                 case 2 : return new DuckCard(player);
-                
+                case 3 : return new BombCard(player);
                 
                 default: return new Card(cardNum, player, new Cost(mana:1));
             }

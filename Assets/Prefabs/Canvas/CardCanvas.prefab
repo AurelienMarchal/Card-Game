@@ -121,8 +121,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 12e72fe4fc640c74bb834253dd235ccd, type: 3}
   - {fileID: 21300000, guid: d5a3f514df7109641a1fb69b53e9d13c, type: 3}
   - {fileID: 21300000, guid: 74384b106301f074c96d01247b613c32, type: 3}
+  - {fileID: 21300000, guid: 6284fa4475e8c5f45b18674f2772deae, type: 3}
   positionInHand: 0
-  scriptableActivableEffectCard: {fileID: 0}
   cardSelectedEvent:
     m_PersistentCalls:
       m_Calls: []
