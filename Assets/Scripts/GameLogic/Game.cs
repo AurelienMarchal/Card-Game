@@ -1114,6 +1114,7 @@ namespace GameLogic{
             {
                 gameState.effectStates.Add(EffectStateGenerator.GenerateEffectState(effect));
             }
+            
 
             //Temp
             foreach (var listEntityEffectsByEntity in entityEffects)

@@ -118,6 +118,9 @@ public class GameManager : MonoBehaviour
     AnimationManager animationManager;
 
     [SerializeField]
+    ComplexAnimationManager complexAnimationManager;
+
+    [SerializeField]
     PlayerManager[] playerManagers;
 
     [SerializeField]
@@ -286,6 +289,9 @@ public class GameManager : MonoBehaviour
         Game.currentGame.PileAction(new StartGameAction());
         gameState = Game.currentGame.ToGameState();
         UpdateVisuals();
+
+
+        complexAnimationManager.QueueComplexAnimation(new DeathComplexAnimation(GetEntityManagerFromPlayernumAndEntityNum(0, 0)));
 
 
     }
