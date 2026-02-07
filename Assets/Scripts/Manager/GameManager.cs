@@ -118,7 +118,7 @@ public class GameManager : MonoBehaviour
     AnimationManager animationManager;
 
     [SerializeField]
-    ComplexAnimationManager complexAnimationManager;
+    ComplexAnimationFactory complexAnimationFactory;
 
     [SerializeField]
     PlayerManager[] playerManagers;
@@ -289,11 +289,6 @@ public class GameManager : MonoBehaviour
         Game.currentGame.PileAction(new StartGameAction());
         gameState = Game.currentGame.ToGameState();
         UpdateVisuals();
-
-
-        complexAnimationManager.QueueComplexAnimation(new DeathComplexAnimation(GetEntityManagerFromPlayernumAndEntityNum(0, 0)));
-
-
     }
 
 
@@ -371,9 +366,9 @@ public class GameManager : MonoBehaviour
             //test
             ActionState actionState = Game.currentGame.DequeueActionStateToSendQueue();
             string serializedActionState = JsonConvert.SerializeObject(actionState);
-            Debug.Log("Serialized ActionState :" + serializedActionState);
+            //Debug.Log("Serialized ActionState :" + serializedActionState);
             var deserializedActionState = JsonConvert.DeserializeObject<ActionState>(serializedActionState);
-            Debug.Log("Deserialized ActionState :" + deserializedActionState);
+            //Debug.Log("Deserialized ActionState :" + deserializedActionState);
 
 
             if (uiState != UIState.AnimationPlaying)
@@ -455,7 +450,8 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log("Playing animation for " + JsonConvert.SerializeObject(actionState));
-        animationManager.HandleActionState(actionState);
+       // animationManager.HandleActionState(actionState);
+        complexAnimationFactory.HandleActionState(actionState);
     }
 
     void UpdateAccordingToGameState()

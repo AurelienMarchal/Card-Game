@@ -541,7 +541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardManager: {fileID: 1703089466}
   animationManager: {fileID: 1768239575}
-  complexAnimationManager: {fileID: 1768239577}
+  complexAnimationFactory: {fileID: 1768239578}
   playerManagers:
   - {fileID: 1094126359}
   - {fileID: 2112426987}
@@ -3523,6 +3523,63 @@ RectTransform:
   m_AnchoredPosition: {x: -4.52, y: 2}
   m_SizeDelta: {x: 240, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &1489179927
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 194062, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
+      propertyPath: m_Name
+      value: FX_BloodSplatter
+      objectReference: {fileID: 0}
+    - target: {fileID: 420266, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.08841
+      objectReference: {fileID: 0}
+    - target: {fileID: 420266, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 420266, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.08841
+      objectReference: {fileID: 0}
+    - target: {fileID: 420266, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 420266, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 420266, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 420266, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 420266, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 420266, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 420266, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8c27aeead6d968e4ba986702d6b84335, type: 3}
 --- !u!1 &1507039369
 GameObject:
   m_ObjectHideFlags: 0
@@ -4524,6 +4581,7 @@ GameObject:
   - component: {fileID: 1768239576}
   - component: {fileID: 1768239575}
   - component: {fileID: 1768239577}
+  - component: {fileID: 1768239578}
   m_Layer: 0
   m_Name: AnimationManager
   m_TagString: Untagged
@@ -4538,7 +4596,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1768239574}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5bf02876ddbed90458e5696ab4f1ae78, type: 3}
   m_Name: 
@@ -4581,6 +4639,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd72d18f0580374a9c6f84a7987ffcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComplexAnimationManager
+--- !u!114 &1768239578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768239574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 181994d945e2ac44d8ee9c8027fe8dff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ComplexAnimationFactory
+  gameManager: {fileID: 229934140}
+  boardManager: {fileID: 1703089466}
+  prefabCorrespondingToEntityModels:
+  - entityModel: 0
+    prefab: {fileID: 0}
+  - entityModel: 1
+    prefab: {fileID: 0}
+  - entityModel: 2
+    prefab: {fileID: 1828033751355200758, guid: f523666c8b14089418959782c6927bc6, type: 3}
+  - entityModel: 3
+    prefab: {fileID: 5183758551557738019, guid: 7b61617aaf3962f40b5c72493a007b47, type: 3}
+  complexAnimationManager: {fileID: 1768239577}
 --- !u!1 &1770629971
 GameObject:
   m_ObjectHideFlags: 0
@@ -7765,3 +7847,4 @@ SceneRoots:
   - {fileID: 1770629975}
   - {fileID: 1094126360}
   - {fileID: 2112426988}
+  - {fileID: 1489179927}

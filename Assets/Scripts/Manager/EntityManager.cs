@@ -19,9 +19,6 @@ public class EntityManager : MonoBehaviour
     float yOffset;
 
     [SerializeField]
-    Animator animator;
-
-    [SerializeField]
     GameObject entityInfoCanvasPrefab;
 
     GameObject entityInfoCanvasInstance;
@@ -161,7 +158,7 @@ public class EntityManager : MonoBehaviour
             }
         }
 
-        animator.SetBool("isWalking", goalTileManager != null);
+        
 
         if(infoUITimer > 0f){
             infoUITimer = Mathf.Max(infoUITimer - Time.deltaTime, 0f);

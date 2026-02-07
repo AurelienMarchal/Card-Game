@@ -20,14 +20,16 @@ public class DeathComplexAnimation : ComplexAnimation
         {
             case 0:
                 if (animator)
-                {
+                {   
+                    animator.SetBool("isIdle", false);
                     animator.SetTrigger("deathTrigger");
+                    
                     currentlyAffecting.Add(entityManager);
                 }
                 
                 break;
             case 1:
-                Object.Destroy(entityManager.gameObject);
+                //Object.Destroy(entityManager.gameObject);
                 currentlyAffecting.Remove(entityManager);
                 break;
         }
