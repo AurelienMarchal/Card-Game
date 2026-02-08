@@ -4,16 +4,16 @@ public class WalkingComplexAnimation : ComplexAnimation
 {
     EntityManager entityManager;
 
-    TileManager goalTileManager;
+    [SerializeField]
+    public TileManager goalTileManager;
 
     Animator animator;
 
-    public WalkingComplexAnimation(EntityManager entityManager, TileManager goalTileManager) : base(1)
+    protected override void Init()
     {
-        this.entityManager = entityManager;
-        this.goalTileManager = goalTileManager;
-        
-        animator = entityManager.gameObject.GetComponent<Animator>();
+        base.Init();
+        entityManager = gameObject.GetComponentInParent<EntityManager>();
+        animator = gameObject.GetComponentInParent<Animator>();
     }
 
     public override void PlayStep()
@@ -33,12 +33,14 @@ public class WalkingComplexAnimation : ComplexAnimation
                 
                 break;
             case 1:
-                animator.SetBool("isIdle", true);
                 animator.SetBool("isWalking", false);
+                break;
+
+            case 2:
+                animator.SetBool("isIdle", true);
                 currentlyAffecting.Remove(entityManager);
                 break;
         }
-        
     }
 
     public override bool StepFinished()
@@ -47,6 +49,9 @@ public class WalkingComplexAnimation : ComplexAnimation
         {
             case 0 : 
                 return entityManager.goalTileManager == null;
+
+            case 1 : 
+                return animator == null || animator.GetCurrentAnimatorStateInfo(0).IsName("ToIdle");
         }
 
         return true;

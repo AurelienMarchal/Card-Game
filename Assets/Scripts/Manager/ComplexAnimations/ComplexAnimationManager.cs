@@ -26,9 +26,13 @@ public class ComplexAnimationManager : MonoBehaviour
                 {
                     var finished = complexeAnimation.NextStep();
 
+                    Debug.Log($"Going to next step {complexeAnimation.step} of {complexeAnimation}");
+
                     if (finished)
                     {
+                        Debug.Log($"Removing {complexeAnimation}");
                         complexAnimationsPlaying.RemoveAt(i);
+                        Destroy(complexeAnimation.gameObject);
                         i--;
                     }
                     else

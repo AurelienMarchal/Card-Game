@@ -350,6 +350,7 @@ GameObject:
   - component: {fileID: 1841034305716781379}
   - component: {fileID: 8009822040519355808}
   - component: {fileID: 4893103272194530854}
+  - component: {fileID: 5465526550040421327}
   m_Layer: 3
   m_Name: BarbarianHero
   m_TagString: Entity
@@ -415,7 +416,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   yOffset: 0
-  animator: {fileID: 8009822040519355808}
   entityInfoCanvasPrefab: {fileID: 6479235720520980047, guid: 4688df96d40664e4695728a5e755fb21, type: 3}
   walkingSpeed: 4
   timeToDislayInfoUI: 1
@@ -478,6 +478,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &5465526550040421327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095390294829881914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46d66fbd6aabf3844bd409ad1569f633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationEventTransmitter
 --- !u!1 &2198249215596292197
 GameObject:
   m_ObjectHideFlags: 0

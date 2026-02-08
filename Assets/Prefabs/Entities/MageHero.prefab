@@ -1457,6 +1457,7 @@ GameObject:
   - component: {fileID: 3269146747170740972}
   - component: {fileID: 2535810826460735747}
   - component: {fileID: 4032033111174479848}
+  - component: {fileID: -2754435115580042737}
   m_Layer: 3
   m_Name: MageHero
   m_TagString: Entity
@@ -1524,7 +1525,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   yOffset: 0
-  animator: {fileID: 4032033111174479848}
   entityInfoCanvasPrefab: {fileID: 6479235720520980047, guid: 4688df96d40664e4695728a5e755fb21, type: 3}
   walkingSpeed: 2
   timeToDislayInfoUI: 1
@@ -1587,6 +1587,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-2754435115580042737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7023015418650435001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46d66fbd6aabf3844bd409ad1569f633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationEventTransmitter
 --- !u!1 &7038928477923046153
 GameObject:
   m_ObjectHideFlags: 0

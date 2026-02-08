@@ -2,16 +2,15 @@ using UnityEngine;
 
 public class DeathComplexAnimation : ComplexAnimation
 {
-    
     EntityManager entityManager;
 
     Animator animator;
 
-    public DeathComplexAnimation(EntityManager entityManager) : base(1)
+    protected override void Init() 
     {
-        this.entityManager = entityManager;
-        
-        animator = entityManager.gameObject.GetComponent<Animator>();
+        base.Init();
+        entityManager = gameObject.GetComponentInParent<EntityManager>();
+        animator = gameObject.GetComponentInParent<Animator>();
     }
 
     public override void PlayStep()
@@ -21,15 +20,14 @@ public class DeathComplexAnimation : ComplexAnimation
             case 0:
                 if (animator)
                 {   
-                    animator.SetBool("isIdle", false);
-                    animator.SetTrigger("deathTrigger");
                     
+                    animator.SetTrigger("deathTrigger");
+                    animator.SetBool("isIdle", false);
                     currentlyAffecting.Add(entityManager);
                 }
                 
                 break;
             case 1:
-                //Object.Destroy(entityManager.gameObject);
                 currentlyAffecting.Remove(entityManager);
                 break;
         }
@@ -41,7 +39,7 @@ public class DeathComplexAnimation : ComplexAnimation
         switch (step)
         {
             case 0 : 
-                return animator == null || !AnimatorIsPlaying(animator);
+                return animator == null || !AnimatorIsPlaying(animator) ;
         }
 
         return true;

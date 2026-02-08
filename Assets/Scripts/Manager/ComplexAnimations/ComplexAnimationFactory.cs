@@ -16,6 +16,15 @@ public class ComplexAnimationFactory : MonoBehaviour
     [SerializeField]
     ComplexAnimationManager complexAnimationManager;
 
+    [SerializeField]
+    GameObject deathAnimationPrefab;
+
+    [SerializeField]
+    GameObject walkingAnimationPrefab;
+
+    [SerializeField]
+    GameObject entityTakesDamageAnimationPrefab;
+
 
     public void HandleActionState(ActionState actionState)
     {
@@ -95,6 +104,8 @@ public class ComplexAnimationFactory : MonoBehaviour
             return;
         }
 
+        GameObject instance;
+
         switch (entityActionState)
         {
             case EntityMoveActionState entityMoveActionState:
@@ -103,9 +114,13 @@ public class ComplexAnimationFactory : MonoBehaviour
                 {
                     return;
                 }
-                complexAnimationManager.QueueComplexAnimation(
-                    new WalkingComplexAnimation(entityManager, tileManager)
-                );
+
+                instance = Instantiate(walkingAnimationPrefab, entityManager.transform);
+
+                var walkingComplexAnimation = instance.GetComponent<WalkingComplexAnimation>();
+                walkingComplexAnimation.goalTileManager = tileManager;
+
+                complexAnimationManager.QueueComplexAnimation(walkingComplexAnimation);
 
                 break;
             case EntityChangeDirectionActionState entityChangeDirectionActionState:
@@ -116,14 +131,16 @@ public class ComplexAnimationFactory : MonoBehaviour
             case EntityUseMovementActionState entityUseMovementActionState:
                 break;
             case EntityTakesDamageActionState entityTakesDamageActionState:
-                complexAnimationManager.QueueComplexAnimation(
-                    new EntityTakesDamageComplexAnimation(entityManager)
-                );
+                instance = Instantiate(entityTakesDamageAnimationPrefab, entityManager.transform);
+                var entityTakesDamageComplexAnimation = instance.GetComponent<EntityTakesDamageComplexAnimation>();
+                complexAnimationManager.QueueComplexAnimation(entityTakesDamageComplexAnimation);
+
+
                 break;
             case EntityDieActionState entityDieActionState:
-                complexAnimationManager.QueueComplexAnimation(
-                    new DeathComplexAnimation(entityManager)
-                );
+                instance = Instantiate(deathAnimationPrefab, entityManager.transform);
+                var deathComplexAnimation = instance.GetComponent<DeathComplexAnimation>();
+                complexAnimationManager.QueueComplexAnimation(deathComplexAnimation);
                 break;
             case EntityGainHeartActionState entityGainHeartActionState:
                 break;

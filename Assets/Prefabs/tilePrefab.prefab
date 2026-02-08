@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8590907606997501930}
   - component: {fileID: 7085895210408258742}
   - component: {fileID: 812710983738385408}
+  - component: {fileID: 6482428660088040110}
   m_Layer: 6
   m_Name: tilePrefab
   m_TagString: Tile
@@ -62,6 +63,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -84,9 +90,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8590907606997501930
 MonoBehaviour:
@@ -107,10 +115,19 @@ MonoBehaviour:
   willGetCursedTileMat: {fileID: 2100000, guid: c1db317c17e5f1c489c15719f051c6f4, type: 2}
   curseSourceTileMat: {fileID: 2100000, guid: 45db1d82c3fe2314d9264d26405c9cdf, type: 2}
   infoQuad: {fileID: 7800553069055270707}
-  selectedEvent:
+  tileSelectedEvent:
     m_PersistentCalls:
       m_Calls: []
-  clickedEvent:
+  tileMouseDownEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  tileMouseUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  tileHoverEnterEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  tileHoverExitEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7085895210408258742
@@ -150,6 +167,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.0000005, y: 1.5, z: 2.0000005}
   m_Center: {x: 0, y: 0.75, z: 0}
+--- !u!114 &6482428660088040110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6804961759484753834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46d66fbd6aabf3844bd409ad1569f633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationEventTransmitter
 --- !u!1 &7800553069055270707
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,6 +237,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -229,7 +263,9 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}

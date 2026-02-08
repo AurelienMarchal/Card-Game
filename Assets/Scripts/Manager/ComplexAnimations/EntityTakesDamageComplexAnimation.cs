@@ -4,14 +4,27 @@ public class EntityTakesDamageComplexAnimation : ComplexAnimation
 {
     EntityManager entityManager;
 
-
     Animator animator;
+    
+    [SerializeField]
+    ParticleSystem bloodParticuleSystem; 
 
-    public EntityTakesDamageComplexAnimation(EntityManager entityManager) : base(1)
+    protected override void Init() 
     {
-        this.entityManager = entityManager;
-        
-        animator = entityManager.gameObject.GetComponent<Animator>();
+        base.Init();
+        entityManager = gameObject.GetComponentInParent<EntityManager>();
+        animator = gameObject.GetComponentInParent<Animator>();
+        var animationEventTransmitter = entityManager.gameObject.GetComponentInParent<AnimationEventTransmitter>();
+        if (animationEventTransmitter)
+        {
+            animationEventTransmitter.transmittedAnimationEvent.AddListener(OnAnimationEvent);
+        }
+    }
+
+    private void OnAnimationEvent(AnimationEvent animationEvent)
+    {
+        Debug.Log($"Received animationEvent {animationEvent}");
+        bloodParticuleSystem.Play();
     }
 
     public override void PlayStep()
@@ -28,6 +41,7 @@ public class EntityTakesDamageComplexAnimation : ComplexAnimation
                 }
                 
                 break;
+
             case 1:
                 animator.SetBool("isIdle", true);
                 currentlyAffecting.Remove(entityManager);
@@ -41,7 +55,7 @@ public class EntityTakesDamageComplexAnimation : ComplexAnimation
         switch (step)
         {
             case 0 :
-                return animator == null || !AnimatorIsPlaying(animator);
+                return animator == null || animator.GetCurrentAnimatorStateInfo(0).IsName("ToIdle");
         }
 
         return true;

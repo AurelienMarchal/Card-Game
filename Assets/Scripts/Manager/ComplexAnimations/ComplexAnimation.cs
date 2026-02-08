@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ComplexAnimation {
+public class ComplexAnimation : MonoBehaviour{
 
     public List<MonoBehaviour> currentlyAffecting{
         get;
@@ -10,25 +10,26 @@ public abstract class ComplexAnimation {
 
     public int step{
         get;
-        private set;
-    }
-
-    public int finalStep{
-        get;
-        private set;
+        set;
     }
 
     public bool isPlaying
     {
         get
         {
-            return step > 0 && step <= finalStep;
+            return step >= 0 && step <= finalStep;
         }
     }
 
-    //for each animation set a startup frame number an active frame number and a recovry frame numberm
-    public ComplexAnimation(int finalStep){
-        this.finalStep = finalStep;
+    [SerializeField] int finalStep;
+
+    void Awake()
+    {
+        Init();
+    }
+
+    protected virtual void Init()
+    {
         step = -1;
         currentlyAffecting = new List<MonoBehaviour>();
     }
@@ -39,9 +40,15 @@ public abstract class ComplexAnimation {
         return step > finalStep;   
     }
 
-    public abstract bool StepFinished();
+    public virtual bool StepFinished()
+    {
+        return true;
+    }
 
-    public abstract void PlayStep();
+    public virtual void PlayStep()
+    {
+
+    }
 
     protected static bool AnimatorIsPlaying(Animator animator){
         return animator.GetCurrentAnimatorStateInfo(0).length >
