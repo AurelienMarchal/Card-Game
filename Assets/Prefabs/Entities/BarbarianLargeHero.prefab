@@ -321,6 +321,7 @@ GameObject:
   - component: {fileID: 7556796783508882001}
   - component: {fileID: 9211663313087865083}
   - component: {fileID: -6485980335287364962}
+  - component: {fileID: -7924206111273409702}
   m_Layer: 3
   m_Name: BarbarianLargeHero
   m_TagString: Entity
@@ -466,6 +467,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d66fbd6aabf3844bd409ad1569f633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationEventTransmitter
+  transmittedAnimationEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &-7924206111273409702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2126541487683671256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b061fa4c96fc4f9429a89e4f0963ea18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ComplexAnimationPrefabRegistry
+  entries:
+  - actionStateTypeName: EntityMove
+    complexAnimationPrefab: {fileID: 8455036957262115405, guid: 8a0dd599075818044b110f51a7c1540c, type: 3}
+  - actionStateTypeName: EntityDie
+    complexAnimationPrefab: {fileID: 4302063254112212114, guid: 5c4ff8816119acf4bb3ae214fcdbce8a, type: 3}
+  - actionStateTypeName: EntityTakesDamage
+    complexAnimationPrefab: {fileID: 1372848344901423426, guid: 5fff7a83b6291934489fe3bac93bdbac, type: 3}
 --- !u!1 &2510106913772865506
 GameObject:
   m_ObjectHideFlags: 0

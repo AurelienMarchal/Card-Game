@@ -118,7 +118,7 @@ public class GameManager : MonoBehaviour
     AnimationManager animationManager;
 
     [SerializeField]
-    ComplexAnimationFactory complexAnimationFactory;
+    ComplexAnimationManager complexAnimationManager;
 
     [SerializeField]
     PlayerManager[] playerManagers;
@@ -451,7 +451,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Playing animation for " + JsonConvert.SerializeObject(actionState));
        // animationManager.HandleActionState(actionState);
-        complexAnimationFactory.HandleActionState(actionState);
+        complexAnimationManager.HandleActionState(actionState);
     }
 
     void UpdateAccordingToGameState()

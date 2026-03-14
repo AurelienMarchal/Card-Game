@@ -541,7 +541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardManager: {fileID: 1703089466}
   animationManager: {fileID: 1768239575}
-  complexAnimationManager: {fileID: 1768239577}
+  complexAnimationFactory: {fileID: 1768239578}
   playerManagers:
   - {fileID: 1094126359}
   - {fileID: 2112426987}
@@ -827,7 +827,7 @@ Transform:
   m_GameObject: {fileID: 328048200}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10, y: 3, z: -5}
+  m_LocalPosition: {x: 7, y: 3, z: -5}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2231,7 +2231,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.46174863, y: -0, z: -0, w: 0.8870109}
-  m_LocalPosition: {x: 10, y: 18.5, z: -8.5}
+  m_LocalPosition: {x: 7, y: 18.5, z: -8.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4378,8 +4378,8 @@ MonoBehaviour:
   - entityModel: 3
     prefab: {fileID: 5183758551557738019, guid: 7b61617aaf3962f40b5c72493a007b47, type: 3}
   tilePrefab: {fileID: 6804961759484753834, guid: 7ccda6a9a4fefcd42ab7a527ae0738a9, type: 3}
-  tileSizeX: 3
-  tileSizeZ: 3
+  tileSizeX: 2
+  tileSizeZ: 2
   entityY: 1.5
   entitySelectedEvent:
     m_PersistentCalls:
@@ -4524,6 +4524,7 @@ GameObject:
   - component: {fileID: 1768239576}
   - component: {fileID: 1768239575}
   - component: {fileID: 1768239577}
+  - component: {fileID: 1768239578}
   m_Layer: 0
   m_Name: AnimationManager
   m_TagString: Untagged
@@ -4581,8 +4582,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd72d18f0580374a9c6f84a7987ffcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComplexAnimationManager
+--- !u!114 &1768239578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768239574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 181994d945e2ac44d8ee9c8027fe8dff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ComplexAnimationFactory
   gameManager: {fileID: 229934140}
   boardManager: {fileID: 1703089466}
+  prefabCorrespondingToEntityModels:
+  - entityModel: 0
+    prefab: {fileID: 0}
+  - entityModel: 1
+    prefab: {fileID: 0}
+  - entityModel: 2
+    prefab: {fileID: 1828033751355200758, guid: f523666c8b14089418959782c6927bc6, type: 3}
+  - entityModel: 3
+    prefab: {fileID: 5183758551557738019, guid: 7b61617aaf3962f40b5c72493a007b47, type: 3}
+  complexAnimationManager: {fileID: 1768239577}
+  deathAnimationPrefab: {fileID: 4302063254112212114, guid: 5c4ff8816119acf4bb3ae214fcdbce8a, type: 3}
+  walkingAnimationPrefab: {fileID: 8455036957262115405, guid: 8a0dd599075818044b110f51a7c1540c, type: 3}
+  entityTakesDamageAnimationPrefab: {fileID: 1372848344901423426, guid: 5fff7a83b6291934489fe3bac93bdbac, type: 3}
 --- !u!1 &1770629971
 GameObject:
   m_ObjectHideFlags: 0
@@ -5063,7 +5089,7 @@ Transform:
   m_GameObject: {fileID: 1885251745}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 10, y: 3, z: 25}
+  m_LocalPosition: {x: 6.97, y: 3, z: 18.5}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []

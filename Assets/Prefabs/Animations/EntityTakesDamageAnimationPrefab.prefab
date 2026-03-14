@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 520469141859449633}
   - component: {fileID: 3806390260413029151}
-  - component: {fileID: 1983004426468159718}
   m_Layer: 0
   m_Name: EntityTakesDamageAnimationPrefab
   m_TagString: Untagged
@@ -48,19 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EntityTakesDamageComplexAnimation
   finalStep: 1
   bloodParticuleSystem: {fileID: 6325465545598664197}
---- !u!114 &1983004426468159718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1372848344901423426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a82c9fc24e74864f9bbcc57f84a7f39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ComplexAnimationTestManager
-  complexAnimation: {fileID: 3806390260413029151}
 --- !u!1001 &6325465545614167203
 PrefabInstance:
   m_ObjectHideFlags: 0

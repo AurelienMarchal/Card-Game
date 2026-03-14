@@ -1,11 +1,22 @@
 using System.Collections.Generic;
+using GameLogic.GameState;
 using UnityEngine;
 
 public class ComplexAnimationManager : MonoBehaviour
+
+
 {
+
+    [SerializeField]
+    GameManager gameManager;
+
+    [SerializeField]
+    BoardManager boardManager;
     List<ComplexAnimation> complexAnimationsPlaying;
 
     List<ComplexAnimation> complexAnimationsQueue;
+
+    
     void Start()
     {   
         complexAnimationsQueue = new List<ComplexAnimation>();
@@ -57,8 +68,80 @@ public class ComplexAnimationManager : MonoBehaviour
     }
 
 
-    public void QueueComplexAnimation(ComplexAnimation complexAnimation)
+    private void QueueComplexAnimation(ComplexAnimation complexAnimation)
     {
         complexAnimationsQueue.Add(complexAnimation);
+    }
+
+    public void HandleActionState(ActionState actionState)
+    {
+        if (actionState == null)
+        {
+            return;
+        }
+
+        switch (actionState)
+        {
+            case StartGameActionState startGameActionState:
+                
+                
+                break;
+
+            case StartTurnActionState startTurnActionState:
+                
+                break;
+
+
+            case PlayerActionState playerActionState:
+                //HandlePlayerActionState(playerActionState);
+                break;
+
+            case EntityActionState entityActionState:
+                var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityActionState.playerNum, entityActionState.entityNum);
+                if (!entityManager)
+                {
+                    return;
+                }
+
+                var complexAnimationPrefabRegistry = entityManager.GetComponent<ComplexAnimationPrefabRegistry>();
+
+                if (!complexAnimationPrefabRegistry)
+                {
+                    return;
+                }
+
+                var complexAnimationPrefab = complexAnimationPrefabRegistry.GetComplexAnimationPrefab(entityActionState.GetType());
+
+                if (!complexAnimationPrefab)
+                {
+                    Debug.LogWarning($"No complexAnimationPrefab in EntityManager {entityManager.entityState.name} for entityActionState {entityActionState}");
+                    return;
+                }
+
+                var complexAnimationInstance = Instantiate(complexAnimationPrefab, entityManager.transform);
+
+                var complexAnimation = complexAnimationInstance.GetComponent<ComplexAnimation>();
+
+                if (!complexAnimation)
+                {
+                    Destroy(complexAnimationInstance);
+                    return;
+                }
+
+                var didiInit = complexAnimation.Init(actionState);
+
+                if (!didiInit)
+                {
+                    Debug.LogWarning($"Something wen wrong when initing {complexAnimation} for actionState {entityActionState}");
+                }
+
+                QueueComplexAnimation(complexAnimation);
+
+                break;
+
+            case TileActionState tileActionState:
+                //HandleTileActionState(tileActionState);
+                break;
+        }
     }
 }

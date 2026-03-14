@@ -1,3 +1,4 @@
+using GameLogic.GameState;
 using UnityEngine;
 
 public class EntityTakesDamageComplexAnimation : ComplexAnimation
@@ -9,9 +10,9 @@ public class EntityTakesDamageComplexAnimation : ComplexAnimation
     [SerializeField]
     ParticleSystem bloodParticuleSystem; 
 
-    protected override void Init() 
+    public override bool Init(ActionState actionState) 
     {
-        base.Init();
+        base.Init(actionState);
         entityManager = gameObject.GetComponentInParent<EntityManager>();
         animator = gameObject.GetComponentInParent<Animator>();
         var animationEventTransmitter = entityManager.gameObject.GetComponentInParent<AnimationEventTransmitter>();
@@ -19,6 +20,8 @@ public class EntityTakesDamageComplexAnimation : ComplexAnimation
         {
             animationEventTransmitter.transmittedAnimationEvent.AddListener(OnAnimationEvent);
         }
+
+        return animator != null && entityManager != null;
     }
 
     private void OnAnimationEvent(AnimationEvent animationEvent)
@@ -32,13 +35,12 @@ public class EntityTakesDamageComplexAnimation : ComplexAnimation
         switch (step)
         {
             case 0:
-                if (animator)
-                {   
-                    animator.SetBool("isIdle", false);
-                    animator.SetInteger("hitVersion", Random.Range(0, 1));
-                    animator.SetTrigger("hitTrigger");
-                    currentlyAffecting.Add(entityManager);
-                }
+            
+                animator.SetBool("isIdle", false);
+                animator.SetInteger("hitVersion", Random.Range(0, 1));
+                animator.SetTrigger("hitTrigger");
+                currentlyAffecting.Add(entityManager);
+                
                 
                 break;
 
@@ -55,7 +57,7 @@ public class EntityTakesDamageComplexAnimation : ComplexAnimation
         switch (step)
         {
             case 0 :
-                return animator == null || animator.GetCurrentAnimatorStateInfo(0).IsName("ToIdle");
+                return animator.GetCurrentAnimatorStateInfo(0).IsName("ToIdle");
         }
 
         return true;

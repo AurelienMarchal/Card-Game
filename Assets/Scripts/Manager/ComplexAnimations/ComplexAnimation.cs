@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GameLogic.GameState;
 using UnityEngine;
 
 public class ComplexAnimation : MonoBehaviour{
@@ -23,15 +24,12 @@ public class ComplexAnimation : MonoBehaviour{
 
     [SerializeField] int finalStep;
 
-    void Awake()
-    {
-        Init();
-    }
-
-    protected virtual void Init()
+    public virtual bool Init(ActionState actionState)
     {
         step = -1;
         currentlyAffecting = new List<MonoBehaviour>();
+
+        return true;
     }
 
     public bool NextStep()
