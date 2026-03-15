@@ -489,6 +489,8 @@ MonoBehaviour:
     complexAnimationPrefab: {fileID: 4302063254112212114, guid: 5c4ff8816119acf4bb3ae214fcdbce8a, type: 3}
   - actionStateTypeName: EntityTakesDamage
     complexAnimationPrefab: {fileID: 1372848344901423426, guid: 5fff7a83b6291934489fe3bac93bdbac, type: 3}
+  - actionStateTypeName: EntityChangeDirection
+    complexAnimationPrefab: {fileID: 6864856491433496006, guid: 69afd6206e20dac4e98878ae4dc7b780, type: 3}
 --- !u!1 &2510106913772865506
 GameObject:
   m_ObjectHideFlags: 0

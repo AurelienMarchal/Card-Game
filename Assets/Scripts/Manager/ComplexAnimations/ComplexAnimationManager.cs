@@ -97,51 +97,99 @@ public class ComplexAnimationManager : MonoBehaviour
                 break;
 
             case EntityActionState entityActionState:
-                var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityActionState.playerNum, entityActionState.entityNum);
-                if (!entityManager)
-                {
-                    return;
-                }
-
-                var complexAnimationPrefabRegistry = entityManager.GetComponent<ComplexAnimationPrefabRegistry>();
-
-                if (!complexAnimationPrefabRegistry)
-                {
-                    return;
-                }
-
-                var complexAnimationPrefab = complexAnimationPrefabRegistry.GetComplexAnimationPrefab(entityActionState.GetType());
-
-                if (!complexAnimationPrefab)
-                {
-                    Debug.LogWarning($"No complexAnimationPrefab in EntityManager {entityManager.entityState.name} for entityActionState {entityActionState}");
-                    return;
-                }
-
-                var complexAnimationInstance = Instantiate(complexAnimationPrefab, entityManager.transform);
-
-                var complexAnimation = complexAnimationInstance.GetComponent<ComplexAnimation>();
-
-                if (!complexAnimation)
-                {
-                    Destroy(complexAnimationInstance);
-                    return;
-                }
-
-                var didiInit = complexAnimation.Init(actionState);
-
-                if (!didiInit)
-                {
-                    Debug.LogWarning($"Something wen wrong when initing {complexAnimation} for actionState {entityActionState}");
-                }
-
-                QueueComplexAnimation(complexAnimation);
+                HandleEntityActionState(entityActionState);
 
                 break;
 
             case TileActionState tileActionState:
-                //HandleTileActionState(tileActionState);
+                HandleTileActionState(tileActionState);
                 break;
         }
+    }
+
+    private void HandleEntityActionState(EntityActionState entityActionState)
+    {
+        var entityManager = gameManager.GetEntityManagerFromPlayernumAndEntityNum(entityActionState.playerNum, entityActionState.entityNum);
+        if (!entityManager)
+        {
+            return;
+        }
+
+        var complexAnimationPrefabRegistry = entityManager.GetComponent<ComplexAnimationPrefabRegistry>();
+
+        if (!complexAnimationPrefabRegistry)
+        {
+            return;
+        }
+
+        var complexAnimationPrefab = complexAnimationPrefabRegistry.GetComplexAnimationPrefab(entityActionState.GetType());
+
+        if (!complexAnimationPrefab)
+        {
+            Debug.LogWarning($"No complexAnimationPrefab in EntityManager {entityManager.entityState.name} for entityActionState {entityActionState}");
+            return;
+        }
+
+        var complexAnimationInstance = Instantiate(complexAnimationPrefab, entityManager.transform);
+
+        var complexAnimation = complexAnimationInstance.GetComponent<ComplexAnimation>();
+
+        if (!complexAnimation)
+        {
+            Destroy(complexAnimationInstance);
+            return;
+        }
+
+        var didiInit = complexAnimation.Init(entityActionState);
+
+        if (!didiInit)
+        {
+            Debug.LogWarning($"Something went wrong when initing {complexAnimation} for actionState {entityActionState}");
+        }
+
+        QueueComplexAnimation(complexAnimation);
+    }
+
+    private void HandleTileActionState(TileActionState tileActionState)
+    {
+        var tileManager = boardManager.GetTileManagerFromTileNum(tileActionState.tileNum);
+        if (!tileManager)
+        {
+            return;
+        }
+
+        var complexAnimationPrefabRegistry = tileManager.GetComponent<ComplexAnimationPrefabRegistry>();
+
+        if (!complexAnimationPrefabRegistry)
+        {
+            return;
+        }
+
+        var complexAnimationPrefab = complexAnimationPrefabRegistry.GetComplexAnimationPrefab(tileActionState.GetType());
+
+        if (!complexAnimationPrefab)
+        {
+            Debug.LogWarning($"No complexAnimationPrefab in TileManager {tileManager.tileState.tileType} for tileActionState {tileActionState}");
+            return;
+        }
+
+        var complexAnimationInstance = Instantiate(complexAnimationPrefab, tileManager.transform);
+
+        var complexAnimation = complexAnimationInstance.GetComponent<ComplexAnimation>();
+
+        if (!complexAnimation)
+        {
+            Destroy(complexAnimationInstance);
+            return;
+        }
+
+        var didiInit = complexAnimation.Init(tileActionState);
+
+        if (!didiInit)
+        {
+            Debug.LogWarning($"Something went wrong when initing {complexAnimation} for actionState {tileActionState}");
+        }
+
+        QueueComplexAnimation(complexAnimation);
     }
 }

@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 3291049527025219285}
   - component: {fileID: -633309772589260357}
   - component: {fileID: 1616353268422022378}
+  - component: {fileID: -8308246621150517974}
   m_Layer: 3
   m_Name: DuckMinion
   m_TagString: Entity
@@ -296,6 +297,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d66fbd6aabf3844bd409ad1569f633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationEventTransmitter
+  transmittedAnimationEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &-8308246621150517974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828033751355200758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b061fa4c96fc4f9429a89e4f0963ea18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ComplexAnimationPrefabRegistry
+  entries:
+  - actionStateTypeName: EntityChangeDirection
+    complexAnimationPrefab: {fileID: 6864856491433496006, guid: 69afd6206e20dac4e98878ae4dc7b780, type: 3}
 --- !u!1 &3106219550512834026
 GameObject:
   m_ObjectHideFlags: 0

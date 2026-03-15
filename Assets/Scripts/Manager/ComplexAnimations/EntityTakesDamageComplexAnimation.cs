@@ -13,6 +13,7 @@ public class EntityTakesDamageComplexAnimation : ComplexAnimation
     public override bool Init(ActionState actionState) 
     {
         base.Init(actionState);
+        finalStep = 1;
         entityManager = gameObject.GetComponentInParent<EntityManager>();
         animator = gameObject.GetComponentInParent<Animator>();
         var animationEventTransmitter = entityManager.gameObject.GetComponentInParent<AnimationEventTransmitter>();

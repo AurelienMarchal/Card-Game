@@ -22,7 +22,7 @@ public class ComplexAnimation : MonoBehaviour{
         }
     }
 
-    [SerializeField] int finalStep;
+    protected int finalStep;
 
     public virtual bool Init(ActionState actionState)
     {

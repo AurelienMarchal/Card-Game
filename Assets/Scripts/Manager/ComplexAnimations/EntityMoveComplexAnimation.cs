@@ -13,7 +13,7 @@ public class EntityMoveComplexAnimation : ComplexAnimation
     public override bool Init(ActionState actionState) 
     {
         base.Init(actionState);
-
+        finalStep = 2;
         var entityMoveActionState = (EntityMoveActionState)actionState;
 
         if (entityMoveActionState == null)

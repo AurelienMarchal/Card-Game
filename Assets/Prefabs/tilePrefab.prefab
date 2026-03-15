@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7085895210408258742}
   - component: {fileID: 812710983738385408}
   - component: {fileID: 6482428660088040110}
+  - component: {fileID: -3940142060580072913}
   m_Layer: 6
   m_Name: tilePrefab
   m_TagString: Tile
@@ -182,6 +183,21 @@ MonoBehaviour:
   transmittedAnimationEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-3940142060580072913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6804961759484753834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b061fa4c96fc4f9429a89e4f0963ea18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ComplexAnimationPrefabRegistry
+  entries:
+  - actionStateTypeName: TileChangeType
+    complexAnimationPrefab: {fileID: 97573574547185241, guid: c59095f8331a9f44ca16d59fc93cf338, type: 3}
 --- !u!1 &7800553069055270707
 GameObject:
   m_ObjectHideFlags: 0

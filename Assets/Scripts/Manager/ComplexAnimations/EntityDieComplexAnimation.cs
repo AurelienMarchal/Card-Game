@@ -11,6 +11,7 @@ public class EntityDieComplexAnimation : ComplexAnimation
     public override bool Init(ActionState actionState) 
     {
         base.Init(actionState);
+        finalStep = 1;
         entityManager = gameObject.GetComponentInParent<EntityManager>();
         animator = gameObject.GetComponentInParent<Animator>();
 
